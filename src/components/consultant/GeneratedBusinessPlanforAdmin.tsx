@@ -195,14 +195,14 @@ const GeneratedBusinessPlanforAdmin = ({
           <>
             <button
               onClick={handleShareClick}
-              className="w-14 h-14 bg-blue-600 rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center text-white cursor-pointer"
+              className="w-14 h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"
               aria-label="Share business plan"
             >
               <IoIosShareAlt className="w-6 h-6" />
             </button>
             <button
               onClick={handleDownloadClick}
-              className="w-14 h-14 bg-green-600 rounded-full shadow-lg hover:bg-green-700 transition-colors flex items-center justify-center text-white cursor-pointer"
+              className="w-14 h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"
               aria-label="Download business plan"
             >
               <GoDownload className="w-6 h-6" />

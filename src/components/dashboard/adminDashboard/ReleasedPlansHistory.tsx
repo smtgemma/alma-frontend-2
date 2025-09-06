@@ -89,7 +89,7 @@ const ReleasedPlansHistory = () => {
   const currentPlans = filteredPlans.slice(startIndex, endIndex);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 md:px-6 py-4 md:py-6">
       {/* Released Plans History Section */}
       <div className="">
         <div className="flex items-center justify-between mb-4">
@@ -101,8 +101,8 @@ const ReleasedPlansHistory = () => {
           </div>
 
           {/* Search Bar */}
-          <div className="rounded-[41px]">
-            <div className="  bg-white">
+          <div className="">
+            <div className=" rounded-[41px] bg-white">
               <BsSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"

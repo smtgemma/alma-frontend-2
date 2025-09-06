@@ -269,7 +269,7 @@ const PendingPlans = () => {
       </div>
 
       {/* Metrics Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-lg ">
           <HiOutlineUserGroup className="w-8 h-8 text-primary" />
           <h3 className="text-lg font-semibold text-gray-900 my-2">
@@ -313,7 +313,7 @@ const PendingPlans = () => {
             Released Plan History
           </h3>
           <Link href="/admin/released-plans-history">
-            <button className="mt-2 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+            <button className="mt-2 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors cursor-pointer">
               View History
             </button>
           </Link>

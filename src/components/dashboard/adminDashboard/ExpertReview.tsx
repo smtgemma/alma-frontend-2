@@ -155,9 +155,9 @@ const ExpertReview = () => {
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
+                {/* <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
                   Send Email
-                </th>
+                </th> */}
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
                   View
                 </th>
@@ -199,7 +199,7 @@ const ExpertReview = () => {
                       {review.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <Link
                       href={`https://mail.google.com/mail/?view=cm&fs=1&to=${
                         review.user?.email
@@ -219,7 +219,7 @@ Best regards,
                         Send
                       </button>
                     </Link>
-                  </td>
+                  </td> */}
 
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                     <Link
