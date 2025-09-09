@@ -14,6 +14,7 @@ import {
   Cell,
   LineChart,
   Line,
+  Label,
 } from "recharts";
 
 // Default pie chart data (fallback)
@@ -31,6 +32,38 @@ const formatCurrency = (value: number) => {
     return `$${(value / 1000).toFixed(0)}K`;
   }
   return `$${value.toLocaleString()}`;
+};
+
+// Custom label component for pie chart - values inside segments
+const CustomLabel = (props: any) => {
+  const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props;
+  
+  if (!percent || percent < 0.05) return null; // Don't show labels for very small segments
+  
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <g>
+      <text 
+        x={x} 
+        y={y} 
+        fill="white" 
+        textAnchor="middle" 
+        dominantBaseline="central"
+        fontSize="18"
+        fontWeight="bold"
+        style={{ 
+          textShadow: '2px 2px 4px rgba(0,0,0,0.9)',
+          pointerEvents: 'none'
+        }}
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    </g>
+  );
 };
 
 export default function BalanceSheet({
@@ -148,7 +181,7 @@ export default function BalanceSheet({
         <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
           Balance Sheet
         </h2>
-        <div className="flex justify-center">
+        <div className="flex justify-center items-start gap-8">
           <div className="relative w-96 h-96">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -160,6 +193,8 @@ export default function BalanceSheet({
                   outerRadius={175}
                   paddingAngle={2}
                   dataKey="value"
+                  label={CustomLabel}
+                  labelLine={false}
                 >
                   {pieChartData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -176,27 +211,24 @@ export default function BalanceSheet({
                 <div className="text-lg font-semibold text-gray-800">Sheet</div>
               </div>
             </div>
-            {/* Dynamic Percentage labels */}
-            {pieChartData.map((item, index) => {
-              const positions = [
-                { top: "top-16", right: "right-20" },
-                { bottom: "bottom-20", left: "left-12" },
-                { bottom: "bottom-22", left: "left-60" },
-              ];
-              const position = positions[index] || positions[0];
-              return (
+          </div>
+          
+          {/* Legend */}
+          <div className="flex flex-col gap-3 mt-8">
+            {pieChartData.map((item, index) => (
+              <div key={index} className="flex items-center gap-3">
                 <div
-                  key={index}
-                  className={`absolute text-white font-bold text-5xl ${Object.entries(
-                    position
-                  )
-                    .map(([key, value]) => `${key}-${value}`)
-                    .join(" ")}`}
-                >
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: item.fill }}
+                ></div>
+                <span className="text-sm font-medium text-gray-700">
+                  {item.name}
+                </span>
+                <span className="text-sm font-bold text-gray-900">
                   {item.value}%
-                </div>
-              );
-            })}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
