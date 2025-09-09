@@ -34,26 +34,28 @@ const GeneratedPlanForAdminPage = () => {
 
   // Countdown effect - MUST be at the top level
   useEffect(() => {
-    // Calculate end time only once (2 days from now)
-    if (!endTimeRef.current) {
-      let startTime: Date;
+    // Only proceed if we have plan data
+    if (!planInfo?.data?.createdAt) return;
 
-      // If we have plan creation time, use that as start time
-      if (planInfo?.data?.createdAt) {
-        startTime = new Date(planInfo.data.createdAt);
-        // console.log("Using plan creation time:", startTime.toLocaleString());
-      } else {
-        // Fallback to current time
-        startTime = new Date();
-        // console.log(
-        //   "Using current time as fallback:",
-        //   startTime.toLocaleString()
-        // );
-      }
+    // Create a unique key for this plan's timer
+    const timerKey = `plan_timer_${id}`;
 
+    // Check if we already have a stored end time for this plan
+    const storedEndTime = localStorage.getItem(timerKey);
+
+    if (storedEndTime) {
+      // Use the stored end time
+      endTimeRef.current = new Date(storedEndTime);
+      // console.log("Using stored end time:", endTimeRef.current.toLocaleString());
+    } else {
+      // Calculate end time from plan creation time (2 days from creation)
+      const startTime = new Date(planInfo.data.createdAt);
       const endTime = new Date(startTime.getTime() + 48 * 60 * 60 * 1000); // 48 hours in milliseconds
       endTimeRef.current = endTime;
-      // console.log("Countdown started, end time:", endTime.toLocaleString());
+
+      // Store the end time in localStorage for persistence
+      localStorage.setItem(timerKey, endTime.toISOString());
+      // console.log("Stored new end time:", endTime.toLocaleString());
     }
 
     const timer = setInterval(() => {
@@ -80,13 +82,17 @@ const GeneratedPlanForAdminPage = () => {
         // Time's up
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         clearInterval(timer);
-        // console.log("Countdown finished!");
+
+        // Clear the stored timer data when countdown finishes
+        const timerKey = `plan_timer_${id}`;
+        localStorage.removeItem(timerKey);
+        // console.log("Countdown finished and timer data cleared!");
       }
     }, 1000);
 
     // Cleanup timer on component unmount
     return () => clearInterval(timer);
-  }, [planInfo?.data?.createdAt]); // Re-run if plan creation time changes
+  }, [planInfo?.data?.createdAt, id]); // Re-run if plan creation time or id changes
 
   // Extract data from planInfo - MUST be at the top level
   const {
@@ -136,7 +142,7 @@ const GeneratedPlanForAdminPage = () => {
     return (
       <div>
         {/* <Navbar /> */}
-        <div className="max-w-[1440px] mx-4 xl:mx-auto pt-28">
+        <div className="max-w-[1440px] mx-auto xl:mx-auto pt-28">
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <h2 className="text-xl font-semibold text-red-600 mb-2">
@@ -162,10 +168,13 @@ const GeneratedPlanForAdminPage = () => {
   return (
     <div>
       <Navbar />
-      <div id="businessplan" className="max-w-[1440px] mx-4 xl:mx-auto">
+      <div
+        id="businessplan"
+        className="max-w-[1440px] mx-auto xl:mx-auto px-4 md:px-8"
+      >
         <header className="   py-6 ">
           <div className="">
-            <div className="flex justify-between mt-14">
+            <div className="flex flex-col lg:flex-row justify-between mt-14">
               {/* Subtitle and Note */}
               <div className="mt-4 sm:mt-6">
                 <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2">
@@ -186,41 +195,41 @@ const GeneratedPlanForAdminPage = () => {
                 <div className="flex space-x-2">
                   <div className="flex items-center">
                     <div className="border-b-2 border-red-500 px-1 py-2">
-                      <span className="text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
+                      <span className="text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
                         {timeLeft.days.toString().padStart(2, "0")}
                       </span>
                     </div>
-                    <span className="text-sm font-medium text-gray-600 ml-2">
+                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
                       Days
                     </span>
                   </div>
                   <div className="flex items-center">
                     <div className="border-b-2 border-red-500 px-1 py-2">
-                      <span className="text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
+                      <span className="text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
                         {timeLeft.hours.toString().padStart(2, "0")}
                       </span>
                     </div>
-                    <span className="text-sm font-medium text-gray-600 ml-2">
+                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
                       Hours
                     </span>
                   </div>
                   <div className="flex items-center">
                     <div className="border-b-2 border-red-500 px-1 py-2">
-                      <span className="text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
+                      <span className="text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
                         {timeLeft.minutes.toString().padStart(2, "0")}
                       </span>
                     </div>
-                    <span className="text-sm font-medium text-gray-600 ml-2">
+                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
                       Minutes
                     </span>
                   </div>
                   <div className="flex items-center">
                     <div className="border-b-2 border-red-500 px-1 py-2">
-                      <span className="text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
+                      <span className="text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
                         {timeLeft.seconds.toString().padStart(2, "0")}
                       </span>
                     </div>
-                    <span className="text-sm font-medium text-gray-600 ml-2">
+                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
                       Seconds
                     </span>
                     {/* Will delete this later */}

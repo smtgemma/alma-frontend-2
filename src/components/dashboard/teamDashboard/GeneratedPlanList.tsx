@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { BsSearch, BsArrowUp, BsArrowDown } from 'react-icons/bs';
+import React, { useState } from "react";
+import { BsSearch, BsArrowUp, BsArrowDown } from "react-icons/bs";
 
 interface Plan {
   id: number;
   dateTime: string;
   planName: string;
-  status: 'Completed' | 'In Review' | 'Pending';
+  status: "Completed" | "In Review" | "Pending";
 }
 
 interface GeneratedPlanListProps {
@@ -19,62 +19,271 @@ interface GeneratedPlanListProps {
   onBackToList: () => void;
 }
 
-export default function GeneratedPlanList({ user, onBackToList }: GeneratedPlanListProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState<'dateTime' | 'planName' | 'status' | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+export default function GeneratedPlanList({
+  user,
+  onBackToList,
+}: GeneratedPlanListProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortField, setSortField] = useState<
+    "dateTime" | "planName" | "status" | null
+  >(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   // Dynamic plan data based on user
   const getUserPlans = (userId: number): Plan[] => {
     const planTemplates: Record<number, Plan[]> = {
-      1: [ // Jerome Bell
-        { id: 1, dateTime: 'Jun 25, 2025', planName: 'TechStart Pro', status: 'Completed' as const },
-        { id: 2, dateTime: 'Jun 24, 2025', planName: 'EcoSolutions', status: 'In Review' as const },
-        { id: 3, dateTime: 'Jun 23, 2025', planName: 'HealthTech Plus', status: 'Pending' as const },
-        { id: 4, dateTime: 'Jun 22, 2025', planName: 'FinTech Revolution', status: 'Completed' as const },
-        { id: 5, dateTime: 'Jun 21, 2025', planName: 'EduTech Platform', status: 'In Review' as const },
-        { id: 6, dateTime: 'Jun 20, 2025', planName: 'Green Energy Hub', status: 'Pending' as const },
-        { id: 7, dateTime: 'Jun 19, 2025', planName: 'Smart City Solutions', status: 'Completed' as const },
-        { id: 8, dateTime: 'Jun 18, 2025', planName: 'AI Healthcare', status: 'In Review' as const },
+      1: [
+        // Jerome Bell
+        {
+          id: 1,
+          dateTime: "Jun 25, 2025",
+          planName: "TechStart Pro",
+          status: "Completed" as const,
+        },
+        {
+          id: 2,
+          dateTime: "Jun 24, 2025",
+          planName: "EcoSolutions",
+          status: "In Review" as const,
+        },
+        {
+          id: 3,
+          dateTime: "Jun 23, 2025",
+          planName: "HealthTech Plus",
+          status: "Pending" as const,
+        },
+        {
+          id: 4,
+          dateTime: "Jun 22, 2025",
+          planName: "FinTech Revolution",
+          status: "Completed" as const,
+        },
+        {
+          id: 5,
+          dateTime: "Jun 21, 2025",
+          planName: "EduTech Platform",
+          status: "In Review" as const,
+        },
+        {
+          id: 6,
+          dateTime: "Jun 20, 2025",
+          planName: "Green Energy Hub",
+          status: "Pending" as const,
+        },
+        {
+          id: 7,
+          dateTime: "Jun 19, 2025",
+          planName: "Smart City Solutions",
+          status: "Completed" as const,
+        },
+        {
+          id: 8,
+          dateTime: "Jun 18, 2025",
+          planName: "AI Healthcare",
+          status: "In Review" as const,
+        },
       ],
-      2: [ // Brooklyn Simmons
-        { id: 1, dateTime: 'Jun 25, 2025', planName: 'InnovateX', status: 'Completed' as const },
-        { id: 2, dateTime: 'Jun 24, 2025', planName: 'InnovateX', status: 'In Review' as const },
-        { id: 3, dateTime: 'Jun 23, 2025', planName: 'InnovateX', status: 'Pending' as const },
-        { id: 4, dateTime: 'Jun 22, 2025', planName: 'InnovateX', status: 'Completed' as const },
-        { id: 5, dateTime: 'Jun 21, 2025', planName: 'InnovateX', status: 'In Review' as const },
-        { id: 6, dateTime: 'Jun 20, 2025', planName: 'InnovateX', status: 'Pending' as const },
-        { id: 7, dateTime: 'Jun 19, 2025', planName: 'InnovateX', status: 'Completed' as const },
-        { id: 8, dateTime: 'Jun 18, 2025', planName: 'InnovateX', status: 'In Review' as const },
-        { id: 9, dateTime: 'Jun 17, 2025', planName: 'InnovateX', status: 'Pending' as const },
-        { id: 10, dateTime: 'Jun 16, 2025', planName: 'InnovateX', status: 'Completed' as const },
-        { id: 11, dateTime: 'Jun 15, 2025', planName: 'InnovateX', status: 'In Review' as const },
-        { id: 12, dateTime: 'Jun 14, 2025', planName: 'InnovateX', status: 'Pending' as const },
+      2: [
+        // Brooklyn Simmons
+        {
+          id: 1,
+          dateTime: "Jun 25, 2025",
+          planName: "InnovateX",
+          status: "Completed" as const,
+        },
+        {
+          id: 2,
+          dateTime: "Jun 24, 2025",
+          planName: "InnovateX",
+          status: "In Review" as const,
+        },
+        {
+          id: 3,
+          dateTime: "Jun 23, 2025",
+          planName: "InnovateX",
+          status: "Pending" as const,
+        },
+        {
+          id: 4,
+          dateTime: "Jun 22, 2025",
+          planName: "InnovateX",
+          status: "Completed" as const,
+        },
+        {
+          id: 5,
+          dateTime: "Jun 21, 2025",
+          planName: "InnovateX",
+          status: "In Review" as const,
+        },
+        {
+          id: 6,
+          dateTime: "Jun 20, 2025",
+          planName: "InnovateX",
+          status: "Pending" as const,
+        },
+        {
+          id: 7,
+          dateTime: "Jun 19, 2025",
+          planName: "InnovateX",
+          status: "Completed" as const,
+        },
+        {
+          id: 8,
+          dateTime: "Jun 18, 2025",
+          planName: "InnovateX",
+          status: "In Review" as const,
+        },
+        {
+          id: 9,
+          dateTime: "Jun 17, 2025",
+          planName: "InnovateX",
+          status: "Pending" as const,
+        },
+        {
+          id: 10,
+          dateTime: "Jun 16, 2025",
+          planName: "InnovateX",
+          status: "Completed" as const,
+        },
+        {
+          id: 11,
+          dateTime: "Jun 15, 2025",
+          planName: "InnovateX",
+          status: "In Review" as const,
+        },
+        {
+          id: 12,
+          dateTime: "Jun 14, 2025",
+          planName: "InnovateX",
+          status: "Pending" as const,
+        },
       ],
-      3: [ // Guy Hawkins
-        { id: 1, dateTime: 'Jun 25, 2025', planName: 'London Ventures', status: 'Completed' as const },
-        { id: 2, dateTime: 'Jun 24, 2025', planName: 'UK Tech Hub', status: 'In Review' as const },
-        { id: 3, dateTime: 'Jun 23, 2025', planName: 'British Innovation', status: 'Pending' as const },
-        { id: 4, dateTime: 'Jun 22, 2025', planName: 'London Startup', status: 'Completed' as const },
-        { id: 5, dateTime: 'Jun 21, 2025', planName: 'UK Digital', status: 'In Review' as const },
+      3: [
+        // Guy Hawkins
+        {
+          id: 1,
+          dateTime: "Jun 25, 2025",
+          planName: "London Ventures",
+          status: "Completed" as const,
+        },
+        {
+          id: 2,
+          dateTime: "Jun 24, 2025",
+          planName: "UK Tech Hub",
+          status: "In Review" as const,
+        },
+        {
+          id: 3,
+          dateTime: "Jun 23, 2025",
+          planName: "British Innovation",
+          status: "Pending" as const,
+        },
+        {
+          id: 4,
+          dateTime: "Jun 22, 2025",
+          planName: "London Startup",
+          status: "Completed" as const,
+        },
+        {
+          id: 5,
+          dateTime: "Jun 21, 2025",
+          planName: "UK Digital",
+          status: "In Review" as const,
+        },
       ],
-      4: [ // Jenny Wilson
-        { id: 1, dateTime: 'Jun 25, 2025', planName: 'Maple Leaf Tech', status: 'Completed' as const },
-        { id: 2, dateTime: 'Jun 24, 2025', planName: 'Canadian Innovation', status: 'In Review' as const },
-        { id: 3, dateTime: 'Jun 23, 2025', planName: 'Toronto Ventures', status: 'Pending' as const },
-        { id: 4, dateTime: 'Jun 22, 2025', planName: 'Canada Tech Hub', status: 'Completed' as const },
-        { id: 5, dateTime: 'Jun 21, 2025', planName: 'North Star Solutions', status: 'In Review' as const },
-        { id: 6, dateTime: 'Jun 20, 2025', planName: 'Canadian Startup', status: 'Pending' as const },
-        { id: 7, dateTime: 'Jun 19, 2025', planName: 'Maple Innovation', status: 'Completed' as const },
-        { id: 8, dateTime: 'Jun 18, 2025', planName: 'Toronto Tech', status: 'In Review' as const },
-        { id: 9, dateTime: 'Jun 17, 2025', planName: 'Canada Digital', status: 'Pending' as const },
-        { id: 10, dateTime: 'Jun 16, 2025', planName: 'North Ventures', status: 'Completed' as const },
-        { id: 11, dateTime: 'Jun 15, 2025', planName: 'Maple Solutions', status: 'In Review' as const },
-        { id: 12, dateTime: 'Jun 14, 2025', planName: 'Canadian Hub', status: 'Pending' as const },
-        { id: 13, dateTime: 'Jun 13, 2025', planName: 'Toronto Innovation', status: 'Completed' as const },
-        { id: 14, dateTime: 'Jun 12, 2025', planName: 'Canada Ventures', status: 'In Review' as const },
-        { id: 15, dateTime: 'Jun 11, 2025', planName: 'Maple Tech', status: 'Pending' as const },
-      ]
+      4: [
+        // Jenny Wilson
+        {
+          id: 1,
+          dateTime: "Jun 25, 2025",
+          planName: "Maple Leaf Tech",
+          status: "Completed" as const,
+        },
+        {
+          id: 2,
+          dateTime: "Jun 24, 2025",
+          planName: "Canadian Innovation",
+          status: "In Review" as const,
+        },
+        {
+          id: 3,
+          dateTime: "Jun 23, 2025",
+          planName: "Toronto Ventures",
+          status: "Pending" as const,
+        },
+        {
+          id: 4,
+          dateTime: "Jun 22, 2025",
+          planName: "Canada Tech Hub",
+          status: "Completed" as const,
+        },
+        {
+          id: 5,
+          dateTime: "Jun 21, 2025",
+          planName: "North Star Solutions",
+          status: "In Review" as const,
+        },
+        {
+          id: 6,
+          dateTime: "Jun 20, 2025",
+          planName: "Canadian Startup",
+          status: "Pending" as const,
+        },
+        {
+          id: 7,
+          dateTime: "Jun 19, 2025",
+          planName: "Maple Innovation",
+          status: "Completed" as const,
+        },
+        {
+          id: 8,
+          dateTime: "Jun 18, 2025",
+          planName: "Toronto Tech",
+          status: "In Review" as const,
+        },
+        {
+          id: 9,
+          dateTime: "Jun 17, 2025",
+          planName: "Canada Digital",
+          status: "Pending" as const,
+        },
+        {
+          id: 10,
+          dateTime: "Jun 16, 2025",
+          planName: "North Ventures",
+          status: "Completed" as const,
+        },
+        {
+          id: 11,
+          dateTime: "Jun 15, 2025",
+          planName: "Maple Solutions",
+          status: "In Review" as const,
+        },
+        {
+          id: 12,
+          dateTime: "Jun 14, 2025",
+          planName: "Canadian Hub",
+          status: "Pending" as const,
+        },
+        {
+          id: 13,
+          dateTime: "Jun 13, 2025",
+          planName: "Toronto Innovation",
+          status: "Completed" as const,
+        },
+        {
+          id: 14,
+          dateTime: "Jun 12, 2025",
+          planName: "Canada Ventures",
+          status: "In Review" as const,
+        },
+        {
+          id: 15,
+          dateTime: "Jun 11, 2025",
+          planName: "Maple Tech",
+          status: "Pending" as const,
+        },
+      ],
     };
 
     return planTemplates[userId] || [];
@@ -82,40 +291,43 @@ export default function GeneratedPlanList({ user, onBackToList }: GeneratedPlanL
 
   const plans: Plan[] = getUserPlans(user.id);
 
-  const handleSort = (field: 'dateTime' | 'planName' | 'status') => {
+  const handleSort = (field: "dateTime" | "planName" | "status") => {
     if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortDirection('asc');
+      setSortDirection("asc");
     }
   };
 
-  const getSortIcon = (field: 'dateTime' | 'planName' | 'status') => {
+  const getSortIcon = (field: "dateTime" | "planName" | "status") => {
     if (sortField !== field) {
       return <BsArrowUp className="text-gray-400 text-xs" />;
     }
-    return sortDirection === 'asc' ? 
-      <BsArrowUp className="text-gray-600 text-xs" /> : 
-      <BsArrowDown className="text-gray-600 text-xs" />;
+    return sortDirection === "asc" ? (
+      <BsArrowUp className="text-gray-600 text-xs" />
+    ) : (
+      <BsArrowDown className="text-gray-600 text-xs" />
+    );
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Completed':
-        return 'bg-green-100 text-green-800';
-      case 'In Review':
-        return 'bg-red-100 text-red-800';
-      case 'Pending':
-        return 'bg-yellow-100 text-yellow-800';
+      case "Completed":
+        return "bg-green-100 text-green-800";
+      case "In Review":
+        return "bg-red-100 text-red-800";
+      case "Pending":
+        return "bg-yellow-100 text-yellow-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
-  const filteredPlans = plans.filter(plan =>
-    plan.planName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    plan.status.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPlans = plans.filter(
+    (plan) =>
+      plan.planName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      plan.status.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -153,34 +365,34 @@ export default function GeneratedPlanList({ user, onBackToList }: GeneratedPlanL
           <table className="w-full">
             <thead className="bg-[#475466] text-white">
               <tr>
-                <th 
+                <th
                   className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer hover:bg-gray-700"
-                  onClick={() => handleSort('dateTime')}
+                  onClick={() => handleSort("dateTime")}
                 >
                   <div className="flex items-center gap-2">
                     Date & Time
-                    {getSortIcon('dateTime')}
+                    {getSortIcon("dateTime")}
                   </div>
                 </th>
-                <th 
+                <th
                   className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer hover:bg-gray-700"
-                  onClick={() => handleSort('planName')}
+                  onClick={() => handleSort("planName")}
                 >
                   <div className="flex items-center gap-2">
                     Plan Name
-                    {getSortIcon('planName')}
+                    {getSortIcon("planName")}
                   </div>
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                   Presentation
                 </th>
-                <th 
+                <th
                   className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer hover:bg-gray-700"
-                  onClick={() => handleSort('status')}
+                  onClick={() => handleSort("status")}
                 >
                   <div className="flex items-center gap-2">
                     Status
-                    {getSortIcon('status')}
+                    {getSortIcon("status")}
                   </div>
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
@@ -203,7 +415,11 @@ export default function GeneratedPlanList({ user, onBackToList }: GeneratedPlanL
                     </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(plan.status)}`}>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                        plan.status
+                      )}`}
+                    >
                       {plan.status}
                     </span>
                   </td>
@@ -227,11 +443,19 @@ export default function GeneratedPlanList({ user, onBackToList }: GeneratedPlanL
             <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">
               &lt; Previous
             </button>
-            <button className="px-3 py-1 text-sm bg-primary text-white rounded">1</button>
-            <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">2</button>
-            <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">3</button>
+            <button className="px-3 py-1 text-sm bg-primary text-white rounded">
+              1
+            </button>
+            <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">
+              2
+            </button>
+            <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">
+              3
+            </button>
             <span className="px-2 text-gray-600">...</span>
-            <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">16</button>
+            <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">
+              16
+            </button>
             <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">
               Next &gt;
             </button>

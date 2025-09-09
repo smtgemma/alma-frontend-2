@@ -269,7 +269,7 @@ const PendingPlans = () => {
       </div>
 
       {/* Metrics Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg ">
           <HiOutlineUserGroup className="w-8 h-8 text-primary" />
           <h3 className="text-lg font-semibold text-gray-900 my-2">
@@ -307,7 +307,7 @@ const PendingPlans = () => {
               0}
           </p>
         </div>
-        <div className="bg-white p-6 rounded-lg ">
+        {/* <div className="bg-white p-6 rounded-lg ">
           <HiDocumentText className="w-8 h-8 text-primary" />
           <h3 className="text-lg font-semibold text-gray-900 my-2">
             Released Plan History
@@ -317,7 +317,7 @@ const PendingPlans = () => {
               View History
             </button>
           </Link>
-        </div>
+        </div> */}
       </div>
 
       {/* Plans Section */}

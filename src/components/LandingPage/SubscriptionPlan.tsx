@@ -128,11 +128,8 @@ export default function SubscriptionPlan() {
               plans.map((plan: any) => (
                 <div
                   key={plan.id}
-                  className="bg-white rounded-[40px] p-8 md:p-16 shadow-lg relative flex flex-col border-2 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
-                  style={{
-                    boxShadow:
-                      "0 10px 15px -3px #4F46E540, 0 4px 6px -4px #4F46E540",
-                  }}
+                  className="bg-white rounded-[40px] p-8 md:p-16  relative flex flex-col border-3 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
+                  
                 >
                   <div className="text-start mb-6">
                     <h3 className="text-[19px] font-medium text-accent mb-4">

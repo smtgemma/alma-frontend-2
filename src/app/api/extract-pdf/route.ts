@@ -37,7 +37,9 @@ export async function POST(request: NextRequest) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 seconds timeout
 
-        aiResponse = await fetch(`http://172.252.13.69:2002${endpoint}`, {
+        // aiResponse = await fetch(`http://172.252.13.69:2002${endpoint}`, { 
+         // http://206.162.244.131:2002/extract-pdf?document_type=balance_sheet
+        aiResponse = await fetch(`http://206.162.244.131:2002${endpoint}`, {
           method: "POST",
           body: aiFormData,
           signal: controller.signal,

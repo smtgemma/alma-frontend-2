@@ -85,58 +85,135 @@ export default function AdminDashboardPage() {
     );
   }
 
-  // Mock data for testing (remove when real API data is available)
-  const mockData = {
+  // Transform API data to match frontend component expectations
+  const transformApiData = (apiData: any) => {
+    if (!apiData) return null;
+
+    const { cards, revenue, growth, currentPlans } = apiData;
+
+    // Transform cards data - pass direct object instead of array
+    const transformedCards = {
+      totalRegisteredUsers: cards?.totalRegisteredUsers || 0,
+      soloPlanUsers: cards?.soloPlanUsers || 0,
+      teamPlanUsers: cards?.teamPlanUsers || 0,
+      totalPlanGenerated: cards?.totalPlanGenerated || 0,
+    };
+
+    // Transform current plans data
+    const transformedCurrentPlans = {
+      solo: {
+        name: "Solo Plan",
+        price: 15,
+        users: cards?.soloPlanUsers || 0,
+      },
+      team: {
+        name: "Team Plan",
+        price: 25,
+        users: cards?.teamPlanUsers || 0,
+      },
+    };
+
+    return {
+      data: {
+        revenue: {
+          year: revenue?.year || new Date().getFullYear(),
+          soloMonthly: revenue?.soloMonthly || Array(12).fill(0),
+          teamMonthly: revenue?.teamMonthly || Array(12).fill(0),
+        },
+        growth: {
+          overallPct: `${growth?.overallPct || 0}%`,
+          soloUsersPct: `${growth?.soloUsersPct >= 0 ? "+" : ""}${
+            growth?.soloUsersPct || 0
+          }`,
+          teamUsersPct: `${growth?.teamUsersPct >= 0 ? "+" : ""}${
+            growth?.teamUsersPct || 0
+          }`,
+        },
+        cards: transformedCards,
+        currentPlans: transformedCurrentPlans,
+      },
+    };
+  };
+
+  // Use API data if available, otherwise use fallback data
+  const dashboardData = adminSummary?.data
+    ? transformApiData(adminSummary.data)
+    : {
+        data: {
+          revenue: {
+            year: new Date().getFullYear(),
+            soloMonthly: Array(12).fill(0),
+            teamMonthly: Array(12).fill(0),
+          },
+          growth: {
+            overallPct: "0%",
+            soloUsersPct: "+0",
+            teamUsersPct: "+0",
+          },
+          cards: {
+            totalRegisteredUsers: 0,
+            soloPlanUsers: 0,
+            teamPlanUsers: 0,
+            totalPlanGenerated: 0,
+          },
+          currentPlans: {
+            solo: { name: "Solo Plan", price: 15, users: 0 },
+            team: { name: "Team Plan", price: 25, users: 0 },
+          },
+        },
+      };
+
+  // Ensure dashboardData is never null
+  const safeDashboardData = dashboardData || {
     data: {
       revenue: {
-        year: 2025,
-        soloMonthly: [0, 0, 0, 0, 0, 0, 500, 2000, 0, 0, 0, 0], // Solo revenue for each month
-        teamMonthly: [0, 0, 0, 0, 0, 0, 800, 3000, 0, 0, 0, 0], // Team revenue for each month
+        year: new Date().getFullYear(),
+        soloMonthly: Array(12).fill(0),
+        teamMonthly: Array(12).fill(0),
       },
       growth: {
-        overallPct: "100%",
-        soloUsersPct: "+100",
-        teamUsersPct: "-100",
+        overallPct: "0%",
+        soloUsersPct: "+0",
+        teamUsersPct: "+0",
       },
-      cards: [
-        { title: "Total Users", value: "1,234", change: "+12%" },
-        { title: "Revenue", value: "€45,678", change: "+8%" },
-        { title: "Active Plans", value: "89", change: "+5%" },
-        { title: "Conversion Rate", value: "23%", change: "+2%" },
-      ],
+      cards: {
+        totalRegisteredUsers: 0,
+        soloPlanUsers: 0,
+        teamPlanUsers: 0,
+        totalPlanGenerated: 0,
+      },
       currentPlans: {
-        solo: { name: "Solo Plan", price: 15, users: 45 },
-        team: { name: "Team Plan", price: 25, users: 23 },
+        solo: { name: "Solo Plan", price: 15, users: 0 },
+        team: { name: "Team Plan", price: 25, users: 0 },
       },
     },
   };
-
-  // Use API data if available, otherwise use mock data
-  const dashboardData = adminSummary?.data ? adminSummary : mockData;
 
   // Debug: Log the API response to understand data structure
   console.log("Admin Summary API Response:", adminSummary);
   console.log("Revenue Data:", adminSummary?.data?.revenue);
   console.log("Growth Data:", adminSummary?.data?.growth);
-  console.log("Using Data:", dashboardData);
+  console.log("Using Data:", safeDashboardData);
 
   return (
     <div className="space-y-6">
       <AdminDashboardHeader />
       <div className="">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6 px-4 lg:px-6">Overview</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6 px-4 lg:px-6">
+          Overview
+        </h2>
 
         <div className="space-y-6">
-          <AdminSummaryCards cardInfo={dashboardData.data?.cards} />
+          <AdminSummaryCards cardInfo={safeDashboardData.data?.cards} />
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-y-6 md:gap-x-5 px-4 lg:px-6">
             <div className="col-span-3">
-              <AdminRevenueChart chartData={dashboardData.data?.revenue} />
+              <AdminRevenueChart chartData={safeDashboardData.data?.revenue} />
             </div>
             <div className="col-span-1">
-              <AdminGrowthChart growth={dashboardData.data?.growth} />
+              <AdminGrowthChart growth={safeDashboardData.data?.growth} />
             </div>
           </div>
-          <AdminPlanDetails planData={dashboardData.data?.currentPlans} />
+          <AdminPlanDetails planData={safeDashboardData.data?.currentPlans} />
         </div>
       </div>
     </div>

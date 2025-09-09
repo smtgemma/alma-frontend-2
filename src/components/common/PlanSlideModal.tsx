@@ -95,7 +95,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
               </div>
               <div>
                 <h3 className="text-black font-medium text-2xl ">
-                  Business AII Plan
+                  Business AI Plan
                 </h3>
               </div>
             </div>
@@ -332,7 +332,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
             </div>
             <div>
               <h3 className="text-black font-medium text-lg sm:text-xl lg:text-2xl">
-                Business AII Plan
+                Business AI Plan
               </h3>
             </div>
           </div>

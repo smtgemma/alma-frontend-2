@@ -1,7 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { BsCalendar2Check, BsCreditCard, BsPeople, BsPerson, BsCheckCircle, BsGear } from "react-icons/bs";
+import {
+  BsCalendar2Check,
+  BsCreditCard,
+  BsPeople,
+  BsPerson,
+  BsCheckCircle,
+  BsGear,
+} from "react-icons/bs";
 import { HiOutlineDocumentText } from "react-icons/hi";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -20,10 +27,8 @@ export default function AdminSideNavbarDashboard() {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
-  const { user } = useSelector(
-    (state: ReturnType<typeof store.getState>) => state.user
-  );
-
+  const { user } = useSelector((state: any) => state.user);
+  console.log(user);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isLogoutSelected, setIsLogoutSelected] = useState(false);
   const [currentSelectedPath, setCurrentSelectedPath] = useState(pathname);
@@ -96,25 +101,28 @@ export default function AdminSideNavbarDashboard() {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 bg-black opacity-50 z-40"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside className={clsx(
-        "bg-white border-r border-r-[#99A6B8] h-full flex flex-col transition-transform duration-300 ease-in-out",
-        "lg:w-64 lg:relative lg:translate-x-0",
-        isMobileMenuOpen 
-          ? "fixed top-0 left-0 w-64 z-50 translate-x-0" 
-          : "fixed top-0 left-0 w-64 z-50 -translate-x-full lg:translate-x-0"
-      )}>
+      <aside
+        className={clsx(
+          "bg-white border-r border-r-[#99A6B8] h-full flex flex-col transition-transform duration-300 ease-in-out",
+          "lg:w-64 lg:relative lg:translate-x-0",
+          isMobileMenuOpen
+            ? "fixed top-0 left-0 w-64 z-50 translate-x-0"
+            : "fixed top-0 left-0 w-64 z-50 -translate-x-full lg:translate-x-0"
+        )}
+      >
         {/* Profile Section */}
         <div className="flex flex-col justify-center items-center px-8 pt-14 pb-4">
           <div className="w-[110px] h-[110px] rounded-full overflow-hidden">
             <Image
-              src={getProfileImage()}
+              // src={getProfileImage()}
+              src="/images/dp.webp"
               alt="Admin"
               width={100}
               height={100}

@@ -41,7 +41,7 @@ const Faq = () => {
                 <div className="md:w-1/2">
                     <h2 className="text-primary text-[1.7rem] md:text-[2rem] font-semibold mb-2">Frequently<br /><span className=''>Asked Questions?</span></h2>
 
-                    <p className="text-[#475466] text-[16px] md:text-xl font-semibold ">Got questions? <br /> We've answered the most common ones.</p>
+                    <p className="text-[#475466] text-[16px] md:text-xl font-semibold ">Got questions? We've answered the most common ones.</p>
                 </div>
 
                 {/* Right Side */}

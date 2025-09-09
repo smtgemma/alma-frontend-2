@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { SuspendUserModal } from "../SuspendUserModal";
 import {
+  useAdminGetSingleBusinessPlanQuery,
   useSubscriptionDetailsQuery,
   useUserSuspendMutation,
 } from "@/redux/api/admin/adminAPI";
@@ -13,16 +14,26 @@ import Cookies from "js-cookie";
 import { toast } from "sonner";
 import Link from "next/link";
 import Image from "next/image";
+import PlanSlideModal from "@/components/common/PlanSlideModal";
 
 const UserProfile = ({ id }: { id: string }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<any>(null);
+  const [isSlideModalOpen, setIsSlideModalOpen] = useState(false);
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
 
   const { data: subscriptionDetails, isLoading } =
     useSubscriptionDetailsQuery(id);
   const [suspendUser] = useUserSuspendMutation();
+
+  // Fetch full plan data when a plan is selected
+  const { data: fullPlanData, isLoading: isFullPlanLoading } =
+    useAdminGetSingleBusinessPlanQuery(selectedPlanId || "", {
+      skip: !selectedPlanId,
+    });
 
   if (isLoading) {
     return <Loading />;
@@ -43,6 +54,19 @@ const UserProfile = ({ id }: { id: string }) => {
     user,
   } = subscriptionDetails.data;
   console.log(subscriptionDetails.data);
+
+  const handleViewPresentation = (plan: any) => {
+    console.log("Admin Dashboard Plan Data:", plan);
+    setSelectedPlanId(plan.id);
+    setSelectedPlan(plan);
+    setIsSlideModalOpen(true);
+  };
+
+  const handleCloseSlideModal = () => {
+    setIsSlideModalOpen(false);
+    setSelectedPlan(null);
+    setSelectedPlanId(null);
+  };
 
   // Filter plans based on search term
   const filteredPlans = generatedPlans.filter(
@@ -251,7 +275,10 @@ const UserProfile = ({ id }: { id: string }) => {
                       </div>
                     </td>
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
-                      <button className="bg-gray-100 text-info px-4 lg:px-6 py-1 rounded-[76px] text-xs sm:text-sm hover:bg-gray-200 transition-colors border border-[#99A6B8]">
+                      <button
+                        onClick={() => handleViewPresentation(plan)}
+                        className="bg-gray-100 text-info px-4 lg:px-6 py-1 rounded-[76px] text-xs sm:text-sm hover:bg-gray-200 transition-colors border border-[#99A6B8] cursor-pointer"
+                      >
                         View
                       </button>
                     </td>
@@ -373,6 +400,14 @@ const UserProfile = ({ id }: { id: string }) => {
           )
         }
         userName={`${user.firstName} ${user.lastName}`}
+      />
+
+      {/* Plan Slide Modal */}
+      <PlanSlideModal
+        isOpen={isSlideModalOpen}
+        onClose={handleCloseSlideModal}
+        plan={fullPlanData?.data || selectedPlan}
+        isLoading={isFullPlanLoading}
       />
     </div>
   );

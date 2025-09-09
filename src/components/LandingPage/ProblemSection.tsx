@@ -19,7 +19,7 @@ export default function ProblemSection() {
         The Problem Most Founders Ignore<br />and the Smart Fix
       </h2>
 
-      <div className=" bg-white rounded-[40px]  p-6 md:p-10 grid md:grid-cols-2 gap-6" style={{ boxShadow: '0 4px 6px 1px #4F46E540' }}>
+      <div className=" bg-white rounded-[40px]  p-6 md:p-10 grid md:grid-cols-2 gap-6" >
         <div className='p-6 md:p-12'>
           <h3 className="text-[1.7rem] md:text-[2rem] font-medium text-accent mb-4">
             Problems Every Founder Faces Without a Proper Plan

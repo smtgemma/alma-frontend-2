@@ -1,6 +1,5 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+import Link from "next/link";
+import React from "react";
 
 type SmartNavbarProps = {
   rightButtons?: React.ReactNode;
@@ -13,14 +12,20 @@ const SmartNavbar: React.FC<SmartNavbarProps> = ({ rightButtons }) => {
         {/* Logo */}
         <Link href="/">
           <div className="flex items-center gap-2">
-            <Image
+            <img
               src="/images/logo.png"
-              alt="Logo"
+              alt="Business AI Plan Logo"
               width={50}
               height={50}
               className="rounded-lg"
+              onError={(e) => {
+                console.error("Logo failed to load:", e);
+                e.currentTarget.style.display = "none";
+              }}
             />
-            <h3 className="text-black font-medium text-2xl">Business AI Plan</h3>
+            <h3 className="text-black font-medium text-2xl">
+              Business AI Plan
+            </h3>
           </div>
         </Link>
 

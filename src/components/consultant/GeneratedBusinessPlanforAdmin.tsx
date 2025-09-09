@@ -9,6 +9,7 @@ import AdminEditBusinessPlan from "./AdminEditBusinessPlan";
 import { generateEmpathyPDF } from "../generated-plans-graph/pdf-downloader/PdfDownload";
 import { generateWordDocument } from "./DocDownload";
 import DownloadOptionsModal from "./DownloadOptionsModal";
+import Link from "next/link";
 
 interface GeneratedBusinessPlanforAdminProps {
   executiveSummary: string;
@@ -193,13 +194,15 @@ const GeneratedBusinessPlanforAdmin = ({
         {shouldShowShareDownload ? (
           // Share and Download buttons for expert review
           <>
-            <button
-              onClick={handleShareClick}
-              className="w-14 h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"
-              aria-label="Share business plan"
-            >
-              <IoIosShareAlt className="w-6 h-6" />
-            </button>
+            <Link href="/admin/addto-expert">
+              <button
+                // onClick={handleShareClick}
+                className="w-14 h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"
+                aria-label="Share business plan"
+              >
+                <IoIosShareAlt className="w-6 h-6" />
+              </button>
+            </Link>
             <button
               onClick={handleDownloadClick}
               className="w-14 h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"

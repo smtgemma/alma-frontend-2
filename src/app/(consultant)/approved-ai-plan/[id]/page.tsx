@@ -29,26 +29,28 @@ const ApprovedAiPlanPage = () => {
 
   // Countdown effect
   useEffect(() => {
-    // Calculate end time only once (2 days from now)
-    if (!endTimeRef.current) {
-      let startTime: Date;
+    // Only proceed if we have plan data
+    if (!planInfo?.data?.createdAt) return;
 
-      // If we have plan creation time, use that as start time
-      if (planInfo?.data?.createdAt) {
-        startTime = new Date(planInfo.data.createdAt);
-        // console.log("Using plan creation time:", startTime.toLocaleString());
-      } else {
-        // Fallback to current time
-        startTime = new Date();
-        // console.log(
-        //   "Using current time as fallback:",
-        //   startTime.toLocaleString()
-        // );
-      }
+    // Create a unique key for this plan's timer
+    const timerKey = `plan_timer_${id}`;
 
+    // Check if we already have a stored end time for this plan
+    const storedEndTime = localStorage.getItem(timerKey);
+
+    if (storedEndTime) {
+      // Use the stored end time
+      endTimeRef.current = new Date(storedEndTime);
+      // console.log("Using stored end time:", endTimeRef.current.toLocaleString());
+    } else {
+      // Calculate end time from plan creation time (2 days from creation)
+      const startTime = new Date(planInfo.data.createdAt);
       const endTime = new Date(startTime.getTime() + 48 * 60 * 60 * 1000); // 48 hours in milliseconds
       endTimeRef.current = endTime;
-      // console.log("Countdown started, end time:", endTime.toLocaleString());
+
+      // Store the end time in localStorage for persistence
+      localStorage.setItem(timerKey, endTime.toISOString());
+      // console.log("Stored new end time:", endTime.toLocaleString());
     }
 
     const timer = setInterval(() => {
@@ -75,13 +77,17 @@ const ApprovedAiPlanPage = () => {
         // Time's up
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         clearInterval(timer);
-        // console.log("Countdown finished!");
+
+        // Clear the stored timer data when countdown finishes
+        const timerKey = `plan_timer_${id}`;
+        localStorage.removeItem(timerKey);
+        // console.log("Countdown finished and timer data cleared!");
       }
     }, 1000);
 
     // Cleanup timer on component unmount
     return () => clearInterval(timer);
-  }, [planInfo?.data?.createdAt]); // Re-run if plan creation time changes
+  }, [planInfo?.data?.createdAt, id]); // Re-run if plan creation time or id changes
 
   const {
     balanceSheet = [],
@@ -136,7 +142,7 @@ const ApprovedAiPlanPage = () => {
                     strategy, and <br /> investor readiness. Actionable insights
                     included.
                   </p>
-                  <Link href="/request-consultation">
+                  <Link href={`/request-consultation?planId=${planId}`}>
                     <button className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors font-medium">
                       View Expert Review
                     </button>

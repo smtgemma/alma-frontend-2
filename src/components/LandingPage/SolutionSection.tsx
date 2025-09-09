@@ -19,7 +19,7 @@ export default function SolutionSection() {
     <section className="max-w-[1440px] mx-auto bg-white px-6 md:px-8  pb-10">
       
 
-      <div className=" bg-white rounded-[40px]  p-6 md:p-10 grid md:grid-cols-2 gap-6" style={{ boxShadow: '0 4px 6px 1px #4F46E540' }}>
+      <div className=" bg-white rounded-[40px]  p-6 md:p-10 grid md:grid-cols-2 gap-6" > {/* style={{ boxShadow: '0 4px 6px 1px #4F46E540' }} */}
        
 
         <ul className="bg-card p-6 md:p-12 rounded-[20px] text-sm space-y-2 text-indigo-900 font-medium">

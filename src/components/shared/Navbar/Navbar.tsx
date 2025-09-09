@@ -43,8 +43,8 @@ const Navbar = () => {
     if (userData && !user) {
       // If user data exists in localStorage but not in Redux, restore it
       const parsedUser = JSON.parse(userData);
-        // console.log("🔧 Parsed user from localStorage:", parsedUser);
-        // console.log("🔧 Using token:", parsedUser?.accessToken || tokenData);
+      // console.log("🔧 Parsed user from localStorage:", parsedUser);
+      // console.log("🔧 Using token:", parsedUser?.accessToken || tokenData);
 
       // Always use accessToken from user object if available
       const tokenToUse = parsedUser?.accessToken || tokenData;
@@ -200,17 +200,21 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center justify-between gap-2">
             <div>
-              <Image
+              <img
                 src="/images/logo.png"
-                alt="Descriptive alt text"
+                alt="Business AI Plan Logo"
                 width={50}
                 height={50}
                 className="rounded-lg"
+                onError={(e) => {
+                  console.error("Logo failed to load:", e);
+                  e.currentTarget.style.display = "none";
+                }}
               />
             </div>
             <div>
               <h3 className="text-black font-medium text-2xl ">
-                Business AII Plan
+                Business AI Plan
               </h3>
             </div>
           </div>

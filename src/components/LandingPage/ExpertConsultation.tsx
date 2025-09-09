@@ -8,7 +8,7 @@ export default function ExpertConsultation() {
                 Expert’s Consultation
             </h2>
 
-            <div className=" bg-white rounded-[40px] p-6 md:p-10 grid md:grid-cols-2 gap-6" style={{ boxShadow: '0 4px 6px 1px #4F46E540' }}>
+            <div className=" bg-white rounded-[40px] p-6 md:p-10 grid md:grid-cols-2 gap-6">
                 <div className='p-6 md:p-12'>
                     <h3 className="text-[1.7rem] md:text-[2rem] font-medium text-primary mb-4">
 
@@ -20,7 +20,7 @@ export default function ExpertConsultation() {
                     </p>
                 </div>
 
-                <div className="bg-card flex items-center justify-center m-6 md:m-10 p-6 md:p-10 rounded-[20px]">
+                <div className="bg-card flex items-center justify-center mx-auto p-10 md:p-20 lg:p-24 rounded-[20px]">
 
                     <Image
                         src="/images/expert-img.jpg"

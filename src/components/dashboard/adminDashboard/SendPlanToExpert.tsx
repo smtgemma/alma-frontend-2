@@ -1,15 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { BsCalendar2Check, BsPeople, BsSearch, BsClock } from 'react-icons/bs';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { BsCalendar2Check, BsPeople, BsSearch, BsClock } from "react-icons/bs";
 
 export default function SendPlanToExpert() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,44 +16,49 @@ export default function SendPlanToExpert() {
     setIsLoading(true);
     try {
       // TODO: Implement API call to send invitation
-      console.log('Sending invitation to:', email);
-      
+      console.log("Sending invitation to:", email);
+
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Redirect back to manage users page
-      router.push('/dashboard/manage-users');
+      router.push("/dashboard/manage-users");
     } catch (error) {
-      console.error('Error sending invitation:', error);
+      console.error("Error sending invitation:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleCancel = () => {
-    router.push('/dashboard/manage-users');
+    router.push("/dashboard/manage-users");
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 md:px-6 py-6">
       {/* Summary Cards */}
-     
 
       {/* Add New User Section */}
       <div className="space-y-4">
         <h1 className="text-2xl font-bold text-gray-900">Expert's Review</h1>
-        
+
         {/* Add New User Card */}
         <div className="bg-white rounded-[20px] shadow-md border border-gray-100 p-6 mx-0 md:mx-28">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Enter Expert’s Email</h2>
-          
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Enter Expert’s Email
+          </h2>
+
           <p className="text-gray-600 mb-6 leading-relaxed">
-          Provide the expert’s email address to send the selected plan for review and feedback.
+            Provide the expert’s email address to send the selected plan for
+            review and feedback.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Email Address:
               </label>
               <input
@@ -82,7 +85,7 @@ export default function SendPlanToExpert() {
                 disabled={isLoading || !email.trim()}
                 className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
               >
-                {isLoading ? 'Sending...' : 'Send'}
+                {isLoading ? "Sending..." : "Send"}
               </button>
             </div>
           </form>
