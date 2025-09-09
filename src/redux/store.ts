@@ -18,7 +18,6 @@ import baseApi from "./api/baseApi";
 import aiApi from "./api/aiApi";
 import { pdfExtractionApi } from "./api/pdfExtraction/pdfExtractionApi";
 import { generatePlanApi } from "./api/plans/generatePlanApi";
-import { expertReviewApi } from "./api/expertReview/expertReviewApi";
 
 // Create a noop storage for SSR
 const createNoopStorage = () => ({
@@ -47,7 +46,6 @@ const persistConfig = {
     aiApi.reducerPath,
     pdfExtractionApi.reducerPath,
     generatePlanApi.reducerPath,
-    expertReviewApi.reducerPath,
   ],
 };
 
@@ -59,7 +57,6 @@ const rootReducer = combineReducers({
   [aiApi.reducerPath]: aiApi.reducer,
   [pdfExtractionApi.reducerPath]: pdfExtractionApi.reducer,
   [generatePlanApi.reducerPath]: generatePlanApi.reducer,
-  [expertReviewApi.reducerPath]: expertReviewApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
