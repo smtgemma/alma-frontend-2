@@ -8,8 +8,7 @@ export const expertReviewApi = baseApi.injectEndpoints({
         method: "POST",
         body: { planId },
       }),
-      invalidatesTags: ["Plans"],
-      // invalidatesTags: ["ExpertReview"],
+      invalidatesTags: ["ExpertReview"],
     }),
   }),
 });

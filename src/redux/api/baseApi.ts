@@ -1,8 +1,12 @@
 // src/features/api/baseApi.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query";
 import Cookies from "js-cookie";
-import { refreshAccessToken, isTokenExpired } from '@/utils/tokenRefresh';
+import { refreshAccessToken, isTokenExpired } from "@/utils/tokenRefresh";
 
 // Create base query with token refresh logic
 const baseQuery = fetchBaseQuery({
@@ -28,14 +32,14 @@ const baseQueryWithReauth: BaseQueryFn<
   // Check if token needs refresh before making the request
   const token = localStorage.getItem("token") || Cookies?.get("token");
   if (token && isTokenExpired(token)) {
-    console.log('Token is expired or expiring soon, refreshing...');
+    console.log("Token is expired or expiring soon, refreshing...");
     const newToken = await refreshAccessToken();
     if (!newToken) {
       // Refresh failed, the refreshAccessToken function will handle logout
       return {
         error: {
           status: 401,
-          data: { message: 'Authentication failed' },
+          data: { message: "Authentication failed" },
         } as FetchBaseQueryError,
       };
     }
@@ -46,8 +50,8 @@ const baseQueryWithReauth: BaseQueryFn<
 
   // If we get a 401, try to refresh the token
   if (result.error && result.error.status === 401) {
-    console.log('Got 401 error, attempting token refresh...');
-    
+    console.log("Got 401 error, attempting token refresh...");
+
     const newToken = await refreshAccessToken();
     if (newToken) {
       // Retry the original request with the new token
@@ -57,7 +61,7 @@ const baseQueryWithReauth: BaseQueryFn<
       return {
         error: {
           status: 401,
-          data: { message: 'Authentication failed' },
+          data: { message: "Authentication failed" },
         } as FetchBaseQueryError,
       };
     }
@@ -69,7 +73,7 @@ const baseQueryWithReauth: BaseQueryFn<
 export const baseApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
-  tagTypes: ["User", "Plans", "BusinessPlan", "Admin", "Team"],
+  tagTypes: ["User", "Plans", "BusinessPlan", "Admin", "Team", "ExpertReview"],
 });
 
 // Export hooks for usage in functional components
