@@ -175,7 +175,7 @@ export const authApi = baseApi.injectEndpoints({
           }
 
           const response = await fetch(
-            "http://172.252.13.71:1002/api/v1/users/me/uploads-profile-photo",
+            "http://206.162.244.131:1002/api/v1/users/me/uploads-profile-photo",
             {
               method: "POST",
               headers,
