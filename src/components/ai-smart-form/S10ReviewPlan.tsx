@@ -96,7 +96,8 @@ export default function S10ReviewPlan() {
   };
   const token = Cookies.get("token") || localStorage.getItem("token");
   console.log("Fetched token:", token);
-  const [isSubscribed, setIsSubscribed] = useState("INACTIVE");
+  const [isSubscribed, setIsSubscribed] = useState<string | null>(null);
+  const [isSubscriptionLoading, setIsSubscriptionLoading] = useState(true);
   useEffect(() => {
     const fetchSubscriptionData = async () => {
       try {
@@ -111,11 +112,32 @@ export default function S10ReviewPlan() {
         );
 
         if (res) {
-          console.log("Subscription data fetched successfully:", res.data);
-          setIsSubscribed(res.data?.data?.status);
+          console.log("=== SUBSCRIPTION DEBUG ===");
+          console.log("Full API response:", res.data);
+          console.log("Response structure:", JSON.stringify(res.data, null, 2));
+          console.log(
+            "Status from res.data?.data?.status:",
+            res.data?.data?.status
+          );
+          console.log("Status from res.data?.status:", res.data?.status);
+          console.log("Status type:", typeof res.data?.data?.status);
+          console.log("Status length:", res.data?.data?.status?.length);
+
+          const finalStatus =
+            res.data?.data?.status || res.data?.status || "INACTIVE";
+          console.log("Final status to set:", finalStatus);
+          console.log("Final status type:", typeof finalStatus);
+          console.log("Final status === 'ACTIVE':", finalStatus === "ACTIVE");
+
+          setIsSubscribed(finalStatus);
+          console.log("isSubscribed state set to:", finalStatus);
+          console.log("=== END SUBSCRIPTION DEBUG ===");
         }
       } catch (error) {
         console.error("Error fetching subscription data:", error);
+        setIsSubscribed("INACTIVE");
+      } finally {
+        setIsSubscriptionLoading(false);
       }
     };
 
@@ -183,26 +205,61 @@ export default function S10ReviewPlan() {
                   >
                     Back
                   </button>
-                  {isSubscribed == "ACTIVE" ? (
-                    <button
-                      type="button"
-                      onClick={handleGeneratePlan}
-                      disabled={isGeneratingPlan || isBusinessGenerating}
-                      className="w-full px-8 py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isGeneratingPlan || isBusinessGenerating
-                        ? "Generating Plan..."
-                        : "Generate Plan"}
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={handleSubscriptionPlan}
-                      className="w-full px-8 py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Generate Plan
-                    </button>
-                  )}
+                  {(() => {
+                    console.log("=== BUTTON RENDER DEBUG ===");
+                    console.log(
+                      "isSubscriptionLoading:",
+                      isSubscriptionLoading
+                    );
+                    console.log("Current isSubscribed value:", isSubscribed);
+                    console.log("isSubscribed type:", typeof isSubscribed);
+                    console.log(
+                      "isSubscribed === 'ACTIVE':",
+                      isSubscribed === "ACTIVE"
+                    );
+                    console.log(
+                      "isSubscribed == 'ACTIVE':",
+                      isSubscribed == "ACTIVE"
+                    );
+                    console.log(
+                      "Will show subscription flow:",
+                      isSubscribed !== "ACTIVE"
+                    );
+                    console.log("=== END BUTTON RENDER DEBUG ===");
+
+                    if (isSubscriptionLoading) {
+                      return (
+                        <button
+                          type="button"
+                          disabled
+                          className="w-full px-8 py-3 cursor-not-allowed bg-gray-300 text-gray-500 text-[1rem] font-semibold rounded-lg"
+                        >
+                          Loading...
+                        </button>
+                      );
+                    }
+
+                    return isSubscribed === "ACTIVE" ? (
+                      <button
+                        type="button"
+                        onClick={handleGeneratePlan}
+                        disabled={isGeneratingPlan || isBusinessGenerating}
+                        className="w-full px-8 py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isGeneratingPlan || isBusinessGenerating
+                          ? "Generating Plan..."
+                          : "Generate Plan"}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleSubscriptionPlan}
+                        className="w-full px-8 py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Generate Plan
+                      </button>
+                    );
+                  })()}
                 </div>
               </div>
             </div>

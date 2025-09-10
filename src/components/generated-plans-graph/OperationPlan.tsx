@@ -38,9 +38,9 @@ const formatCurrency = (value: number) => {
 // Custom label component for pie chart - values inside segments
 const CustomLabel = (props: any) => {
   const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props;
-  
+
   if (!percent || percent < 0.05) return null; // Don't show labels for very small segments
-  
+
   const RADIAN = Math.PI / 180;
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -48,17 +48,17 @@ const CustomLabel = (props: any) => {
 
   return (
     <g>
-      <text 
-        x={x} 
-        y={y} 
-        fill="white" 
-        textAnchor="middle" 
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor="middle"
         dominantBaseline="central"
         fontSize="18"
         fontWeight="bold"
-        style={{ 
-          textShadow: '2px 2px 4px rgba(0,0,0,0.9)',
-          pointerEvents: 'none'
+        style={{
+          textShadow: "2px 2px 4px rgba(0,0,0,0.9)",
+          pointerEvents: "none",
         }}
       >
         {`${(percent * 100).toFixed(0)}%`}
@@ -84,7 +84,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   }
   return null;
 };
-
+// banalnce sheet
 export default function OperationsDashboard({
   operationsPlan,
   keyRatios,
@@ -305,7 +305,10 @@ export default function OperationsDashboard({
         </h2> */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {operatingCostBreakdown.map((item, index) => (
-            <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div
+              key={index}
+              className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm"
+            >
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-semibold text-gray-900">
@@ -315,291 +318,541 @@ export default function OperationsDashboard({
                   ${formatCurrency(item.revenue)}
                 </div>
               </div>
-              
+
               {/* Basic Financials */}
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-800 mb-3">Financial Overview</h4>
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
+                  Financial Overview
+                </h4>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Revenue</span>
-                    <span className="text-sm font-bold text-green-600">${formatCurrency(item.revenue)}</span>
+                    <span className="text-sm font-bold text-green-600">
+                      ${formatCurrency(item.revenue)}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">COGS</span>
-                    <span className="text-sm font-medium">${formatCurrency(item.cogs)}</span>
+                    <span className="text-sm font-medium">
+                      ${formatCurrency(item.cogs)}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Employee Costs</span>
-                    <span className="text-sm font-medium">${formatCurrency(item.employee_costs)}</span>
+                    <span className="text-sm text-gray-600">
+                      Employee Costs
+                    </span>
+                    <span className="text-sm font-medium">
+                      ${formatCurrency(item.employee_costs)}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Marketing</span>
-                    <span className="text-sm font-medium">${formatCurrency(item.marketing)}</span>
+                    <span className="text-sm font-medium">
+                      ${formatCurrency(item.marketing)}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Rent</span>
-                    <span className="text-sm font-medium">${formatCurrency(item.rent)}</span>
+                    <span className="text-sm font-medium">
+                      ${formatCurrency(item.rent)}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Administration</span>
-                    <span className="text-sm font-medium">${formatCurrency(item.administration)}</span>
+                    <span className="text-sm text-gray-600">
+                      Administration
+                    </span>
+                    <span className="text-sm font-medium">
+                      ${formatCurrency(item.administration)}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Amortization</span>
-                    <span className="text-sm font-medium">${formatCurrency(item.amortization)}</span>
+                    <span className="text-sm font-medium">
+                      ${formatCurrency(item.amortization)}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Other Expenses</span>
-                    <span className="text-sm font-medium">${formatCurrency(item.other_expenses)}</span>
+                    <span className="text-sm text-gray-600">
+                      Other Expenses
+                    </span>
+                    <span className="text-sm font-medium">
+                      ${formatCurrency(item.other_expenses)}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Interest Expenses</span>
-                    <span className="text-sm font-medium">${formatCurrency(item.interest_expenses)}</span>
+                    <span className="text-sm text-gray-600">
+                      Interest Expenses
+                    </span>
+                    <span className="text-sm font-medium">
+                      ${formatCurrency(item.interest_expenses)}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Tax</span>
-                    <span className="text-sm font-medium">${formatCurrency(item.tax)}</span>
+                    <span className="text-sm font-medium">
+                      ${formatCurrency(item.tax)}
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Quarterly Breakdown */}
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-800 mb-3">Quarterly Breakdown</h4>
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
+                  Quarterly Breakdown
+                </h4>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Q1 Revenue</span>
-                    <span className="font-medium">${formatCurrency((item as any).quarterly_breakdown?.q1_revenue || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).quarterly_breakdown?.q1_revenue || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Q2 Revenue</span>
-                    <span className="font-medium">${formatCurrency((item as any).quarterly_breakdown?.q2_revenue || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).quarterly_breakdown?.q2_revenue || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Q3 Revenue</span>
-                    <span className="font-medium">${formatCurrency((item as any).quarterly_breakdown?.q3_revenue || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).quarterly_breakdown?.q3_revenue || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Q4 Revenue</span>
-                    <span className="font-medium">${formatCurrency((item as any).quarterly_breakdown?.q4_revenue || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).quarterly_breakdown?.q4_revenue || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Q1 Costs</span>
-                    <span className="font-medium">${formatCurrency((item as any).quarterly_breakdown?.q1_costs || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).quarterly_breakdown?.q1_costs || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Q2 Costs</span>
-                    <span className="font-medium">${formatCurrency((item as any).quarterly_breakdown?.q2_costs || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).quarterly_breakdown?.q2_costs || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Q3 Costs</span>
-                    <span className="font-medium">${formatCurrency((item as any).quarterly_breakdown?.q3_costs || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).quarterly_breakdown?.q3_costs || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Q4 Costs</span>
-                    <span className="font-medium">${formatCurrency((item as any).quarterly_breakdown?.q4_costs || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).quarterly_breakdown?.q4_costs || 0
+                      )}
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Employee Analytics */}
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-800 mb-3">Employee Analytics</h4>
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
+                  Employee Analytics
+                </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Management Costs</span>
-                    <span className="font-medium">${formatCurrency((item as any).employee_analytics?.management_costs || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).employee_analytics?.management_costs || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Operations Staff</span>
-                    <span className="font-medium">${formatCurrency((item as any).employee_analytics?.operations_staff || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).employee_analytics?.operations_staff || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Sales Team</span>
-                    <span className="font-medium">${formatCurrency((item as any).employee_analytics?.sales_team || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).employee_analytics?.sales_team || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Avg Salary/Employee</span>
-                    <span className="font-medium">${(item as any).employee_analytics?.avg_salary_per_employee || 'N/A'}</span>
+                    <span className="font-medium">
+                      $
+                      {(item as any).employee_analytics
+                        ?.avg_salary_per_employee || "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Total Headcount</span>
-                    <span className="font-medium">{(item as any).employee_analytics?.total_headcount || 'N/A'}</span>
+                    <span className="font-medium">
+                      {(item as any).employee_analytics?.total_headcount ||
+                        "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Cost/Employee</span>
-                    <span className="font-medium">${(item as any).employee_analytics?.cost_per_employee || 'N/A'}</span>
+                    <span className="font-medium">
+                      $
+                      {(item as any).employee_analytics?.cost_per_employee ||
+                        "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Productivity Ratio</span>
-                    <span className="font-medium">{(item as any).employee_analytics?.productivity_ratio || 'N/A'}</span>
+                    <span className="font-medium">
+                      {(item as any).employee_analytics?.productivity_ratio ||
+                        "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Overtime Costs</span>
-                    <span className="font-medium">${formatCurrency((item as any).employee_analytics?.overtime_costs || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).employee_analytics?.overtime_costs || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Benefits %</span>
-                    <span className="font-medium">{(item as any).employee_analytics?.benefits_percentage || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).employee_analytics?.benefits_percentage ||
+                        "N/A"}
+                      %
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Marketing Analytics */}
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-800 mb-3">Marketing Analytics</h4>
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
+                  Marketing Analytics
+                </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Digital Marketing</span>
-                    <span className="font-medium">${formatCurrency((item as any).marketing_analytics?.digital_marketing || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).marketing_analytics?.digital_marketing ||
+                          0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Traditional Marketing</span>
-                    <span className="font-medium">${formatCurrency((item as any).marketing_analytics?.traditional_marketing || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).marketing_analytics
+                          ?.traditional_marketing || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Events & Conferences</span>
-                    <span className="font-medium">${formatCurrency((item as any).marketing_analytics?.events_conferences || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).marketing_analytics?.events_conferences ||
+                          0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Content Creation</span>
-                    <span className="font-medium">${formatCurrency((item as any).marketing_analytics?.content_creation || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).marketing_analytics?.content_creation || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Paid Advertising</span>
-                    <span className="font-medium">${formatCurrency((item as any).marketing_analytics?.paid_advertising || 0)}</span>
+                    <span className="font-medium">
+                      $
+                      {formatCurrency(
+                        (item as any).marketing_analytics?.paid_advertising || 0
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Cost/Acquisition</span>
-                    <span className="font-medium">${(item as any).marketing_analytics?.cost_per_acquisition || 'N/A'}</span>
+                    <span className="font-medium">
+                      $
+                      {(item as any).marketing_analytics
+                        ?.cost_per_acquisition || "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Marketing ROI</span>
-                    <span className="font-medium">{(item as any).marketing_analytics?.marketing_roi || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).marketing_analytics?.marketing_roi ||
+                        "N/A"}
+                      %
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Lead Generation Cost</span>
-                    <span className="font-medium">${(item as any).marketing_analytics?.lead_generation_cost || 'N/A'}</span>
+                    <span className="font-medium">
+                      $
+                      {(item as any).marketing_analytics
+                        ?.lead_generation_cost || "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Conversion Cost</span>
-                    <span className="font-medium">${(item as any).marketing_analytics?.conversion_cost || 'N/A'}</span>
+                    <span className="font-medium">
+                      $
+                      {(item as any).marketing_analytics?.conversion_cost ||
+                        "N/A"}
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Operational Metrics */}
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-800 mb-3">Operational Metrics</h4>
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
+                  Operational Metrics
+                </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Cost/Unit Sold</span>
-                    <span className="font-medium">${(item as any).operational_metrics?.cost_per_unit_sold || 'N/A'}</span>
+                    <span className="font-medium">
+                      $
+                      {(item as any).operational_metrics?.cost_per_unit_sold ||
+                        "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Variable Cost Ratio</span>
-                    <span className="font-medium">{(item as any).operational_metrics?.variable_cost_ratio || 'N/A'}</span>
+                    <span className="font-medium">
+                      {(item as any).operational_metrics?.variable_cost_ratio ||
+                        "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Fixed Cost Coverage</span>
-                    <span className="font-medium">{(item as any).operational_metrics?.fixed_cost_coverage || 'N/A'}</span>
+                    <span className="font-medium">
+                      {(item as any).operational_metrics?.fixed_cost_coverage ||
+                        "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Operational Leverage</span>
-                    <span className="font-medium">{(item as any).operational_metrics?.operational_leverage || 'N/A'}</span>
+                    <span className="font-medium">
+                      {(item as any).operational_metrics
+                        ?.operational_leverage || "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Cost Efficiency Index</span>
-                    <span className="font-medium">{(item as any).operational_metrics?.cost_efficiency_index || 'N/A'}</span>
+                    <span className="font-medium">
+                      {(item as any).operational_metrics
+                        ?.cost_efficiency_index || "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Break Even Units</span>
-                    <span className="font-medium">{(item as any).operational_metrics?.break_even_units || 'N/A'}</span>
+                    <span className="font-medium">
+                      {(item as any).operational_metrics?.break_even_units ||
+                        "N/A"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Capacity Utilization</span>
-                    <span className="font-medium">{((item as any).operational_metrics?.capacity_utilization * 100 || 0).toFixed(1)}%</span>
+                    <span className="font-medium">
+                      {(
+                        (item as any).operational_metrics
+                          ?.capacity_utilization * 100 || 0
+                      ).toFixed(1)}
+                      %
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Cost Percentages */}
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-800 mb-3">Cost Percentages</h4>
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
+                  Cost Percentages
+                </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
                     <span className="text-gray-600">COGS %</span>
-                    <span className="font-medium">{(item as any).cost_percentages?.cogs_percent || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).cost_percentages?.cogs_percent || "N/A"}%
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Employee %</span>
-                    <span className="font-medium">{(item as any).cost_percentages?.employee_percent || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).cost_percentages?.employee_percent ||
+                        "N/A"}
+                      %
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Marketing %</span>
-                    <span className="font-medium">{(item as any).cost_percentages?.marketing_percent || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).cost_percentages?.marketing_percent ||
+                        "N/A"}
+                      %
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Rent %</span>
-                    <span className="font-medium">{(item as any).cost_percentages?.rent_percent || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).cost_percentages?.rent_percent || "N/A"}%
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Admin %</span>
-                    <span className="font-medium">{(item as any).cost_percentages?.admin_percent || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).cost_percentages?.admin_percent || "N/A"}%
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Other %</span>
-                    <span className="font-medium">{(item as any).cost_percentages?.other_percent || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).cost_percentages?.other_percent || "N/A"}%
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Variance Analysis */}
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-800 mb-3">Variance Analysis</h4>
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
+                  Variance Analysis
+                </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Budget vs Actual</span>
-                    <span className="font-medium">{(item as any).variance_analysis?.budget_vs_actual_variance || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).variance_analysis
+                        ?.budget_vs_actual_variance || "N/A"}
+                      %
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">YoY Cost Growth</span>
-                    <span className="font-medium">{((item as any).variance_analysis?.yoy_cost_growth_rate * 100 || 0).toFixed(1)}%</span>
+                    <span className="font-medium">
+                      {(
+                        (item as any).variance_analysis?.yoy_cost_growth_rate *
+                          100 || 0
+                      ).toFixed(1)}
+                      %
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Cost Inflation Impact</span>
-                    <span className="font-medium">{(item as any).variance_analysis?.cost_inflation_impact || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).variance_analysis?.cost_inflation_impact ||
+                        "N/A"}
+                      %
+                    </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Efficiency Improvement</span>
-                    <span className="font-medium">{(item as any).variance_analysis?.efficiency_improvement || 'N/A'}%</span>
+                    <span className="text-gray-600">
+                      Efficiency Improvement
+                    </span>
+                    <span className="font-medium">
+                      {(item as any).variance_analysis
+                        ?.efficiency_improvement || "N/A"}
+                      %
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Cost/Revenue Ratio</span>
-                    <span className="font-medium">{(item as any).variance_analysis?.cost_per_revenue_ratio || 'N/A'}</span>
+                    <span className="font-medium">
+                      {(item as any).variance_analysis
+                        ?.cost_per_revenue_ratio || "N/A"}
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Benchmarking Ratios */}
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-800 mb-3">Benchmarking Ratios</h4>
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
+                  Benchmarking Ratios
+                </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Industry Avg COGS</span>
-                    <span className="font-medium">{(item as any).benchmarking_ratios?.industry_avg_cogs || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).benchmarking_ratios?.industry_avg_cogs ||
+                        "N/A"}
+                      %
+                    </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Employee Cost Benchmark</span>
-                    <span className="font-medium">{(item as any).benchmarking_ratios?.employee_cost_benchmark || 'N/A'}%</span>
+                    <span className="text-gray-600">
+                      Employee Cost Benchmark
+                    </span>
+                    <span className="font-medium">
+                      {(item as any).benchmarking_ratios
+                        ?.employee_cost_benchmark || "N/A"}
+                      %
+                    </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Marketing Spend Benchmark</span>
-                    <span className="font-medium">{(item as any).benchmarking_ratios?.marketing_spend_benchmark || 'N/A'}%</span>
+                    <span className="text-gray-600">
+                      Marketing Spend Benchmark
+                    </span>
+                    <span className="font-medium">
+                      {(item as any).benchmarking_ratios
+                        ?.marketing_spend_benchmark || "N/A"}
+                      %
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Admin Cost Benchmark</span>
-                    <span className="font-medium">{(item as any).benchmarking_ratios?.admin_cost_benchmark || 'N/A'}%</span>
+                    <span className="font-medium">
+                      {(item as any).benchmarking_ratios
+                        ?.admin_cost_benchmark || "N/A"}
+                      %
+                    </span>
                   </div>
                 </div>
               </div>
@@ -648,7 +901,7 @@ export default function OperationsDashboard({
               </div>
             </div>
           </div>
-          
+
           {/* Legend */}
           <div className="flex flex-col gap-3 mt-8">
             {pieChartData.map((item, index) => (

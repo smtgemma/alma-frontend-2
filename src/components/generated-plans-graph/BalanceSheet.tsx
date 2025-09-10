@@ -37,9 +37,9 @@ const formatCurrency = (value: number) => {
 // Custom label component for pie chart - values inside segments
 const CustomLabel = (props: any) => {
   const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props;
-  
+
   if (!percent || percent < 0.05) return null; // Don't show labels for very small segments
-  
+
   const RADIAN = Math.PI / 180;
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -47,17 +47,17 @@ const CustomLabel = (props: any) => {
 
   return (
     <g>
-      <text 
-        x={x} 
-        y={y} 
-        fill="white" 
-        textAnchor="middle" 
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor="middle"
         dominantBaseline="central"
         fontSize="18"
         fontWeight="bold"
-        style={{ 
-          textShadow: '2px 2px 4px rgba(0,0,0,0.9)',
-          pointerEvents: 'none'
+        style={{
+          textShadow: "2px 2px 4px rgba(0,0,0,0.9)",
+          pointerEvents: "none",
         }}
       >
         {`${(percent * 100).toFixed(0)}%`}
@@ -212,7 +212,7 @@ export default function BalanceSheet({
               </div>
             </div>
           </div>
-          
+
           {/* Legend */}
           <div className="flex flex-col gap-3 mt-8">
             {pieChartData.map((item, index) => (
