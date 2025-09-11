@@ -39,7 +39,6 @@ const imageUploadBaseQuery = fetchBaseQuery({
   },
 });
 
-
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     signIn: builder.mutation<LoginResponse, LoginRequest>({
@@ -49,7 +48,7 @@ export const authApi = baseApi.injectEndpoints({
         body,
       }),
       invalidatesTags: ["User"],
-    }),   
+    }),
     adminSignIn: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({
         url: "/auth/admin/login",
@@ -113,7 +112,10 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     refreshToken: builder.mutation<
-      { success: boolean; data: { accessToken: string; refreshToken?: string } },
+      {
+        success: boolean;
+        data: { accessToken: string; refreshToken?: string };
+      },
       { refreshToken: string }
     >({
       query: (body) => ({
@@ -213,5 +215,5 @@ export const {
   useUpdateProfileMutation,
   useUploadProfileImageMutation,
   useChangePasswordMutation,
-  useAdminSignInMutation
+  useAdminSignInMutation,
 } = authApi;

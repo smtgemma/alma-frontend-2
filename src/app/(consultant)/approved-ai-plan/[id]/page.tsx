@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import GeneratedBusinessPlanforUser from "@/components/consultant/GeneratedBusinessPlanforUser";
 import { useParams } from "next/navigation";
 import { useGetSingleBusinessPlanQuery } from "@/redux/api/businessPlan/businessPlanApi";
+import { useSubmitExpertReviewMutation } from "@/redux/api/expertReview/expertReviewApi";
 import Navbar from "@/components/shared/Navbar/Navbar";
 import FinancialDashboard from "@/components/generated-plans-graph/FinancialHighlights";
 import MarketingDashboard from "@/components/generated-plans-graph/Marketing";
@@ -11,10 +12,25 @@ import DebtDashboard from "@/components/generated-plans-graph/DebtStructure";
 import BalanceSheet from "@/components/generated-plans-graph/BalanceSheet";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const ApprovedAiPlanPage = () => {
   const { id } = useParams();
   const { data: planInfo } = useGetSingleBusinessPlanQuery(id);
+  const [submitExpertReview, { isLoading: isSubmitting }] =
+    useSubmitExpertReviewMutation();
+  const [isRequestSubmitted, setIsRequestSubmitted] = useState(false);
+
+  // Check if request was already submitted (from localStorage)
+  useEffect(() => {
+    if (id) {
+      const requestKey = `expert_review_request_${id}`;
+      const wasSubmitted = localStorage.getItem(requestKey);
+      if (wasSubmitted === "true") {
+        setIsRequestSubmitted(true);
+      }
+    }
+  }, [id]);
 
   // State for countdown timer
   const [timeLeft, setTimeLeft] = useState({
@@ -89,6 +105,35 @@ const ApprovedAiPlanPage = () => {
     return () => clearInterval(timer);
   }, [planInfo?.data?.createdAt, id]); // Re-run if plan creation time or id changes
 
+  // Handle expert review request
+  const handleExpertReviewRequest = async () => {
+    if (!id) {
+      toast.error("Plan ID is missing. Please try again.");
+      return;
+    }
+
+    if (isRequestSubmitted) {
+      toast.info("Expert review request has already been submitted!");
+      return;
+    }
+
+    try {
+      const result = await submitExpertReview(id as string).unwrap();
+      toast.success("Expert review request submitted successfully!");
+      console.log("Expert review submitted:", result);
+      setIsRequestSubmitted(true);
+
+      // Store in localStorage to persist across page refreshes
+      const requestKey = `expert_review_request_${id}`;
+      localStorage.setItem(requestKey, "true");
+    } catch (error: any) {
+      console.error("Error submitting expert review:", error);
+      toast.error(
+        error?.data?.message || "Failed to submit expert review request"
+      );
+    }
+  };
+
   const {
     balanceSheet = [],
     businessModel = "",
@@ -142,11 +187,21 @@ const ApprovedAiPlanPage = () => {
                     strategy, and <br /> investor readiness. Actionable insights
                     included.
                   </p>
-                  <Link href={`/request-consultation?planId=${planId}`}>
-                    <button className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors font-medium">
-                      View Expert Review
-                    </button>
-                  </Link>
+                  <button
+                    onClick={handleExpertReviewRequest}
+                    disabled={isSubmitting || isRequestSubmitted}
+                    className={`px-6 py-3 rounded-lg transition-colors font-medium  ${
+                      isSubmitting || isRequestSubmitted
+                        ? "bg-primary/70 cursor-not-allowed text-white"
+                        : "bg-purple-600 text-white hover:bg-purple-700 cursor-pointer"
+                    }`}
+                  >
+                    {isSubmitting
+                      ? "Submitting..."
+                      : isRequestSubmitted
+                      ? "Request Submitted ✓"
+                      : "View Expert Review"}
+                  </button>
                 </div>
 
                 {/* Right Icon */}

@@ -61,7 +61,6 @@ export const generatePlanApi = createApi({
   endpoints: (builder) => ({
     generatePlan: builder.mutation<GeneratePlanResponse, GeneratePlanRequest>({
       query: (data) => {
-    
         return {
           url: "/businessPlan", // Direct backend endpoint
           method: "POST",

@@ -10,7 +10,7 @@ import { refreshAccessToken, isTokenExpired } from "@/utils/tokenRefresh";
 
 // Create base query with token refresh logic
 const baseQuery = fetchBaseQuery({
-  // http://172.252.13.71:1002
+  // http://206.162.244.131:1002 //
   baseUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1`,
   credentials: "omit",
   prepareHeaders: (headers) => {

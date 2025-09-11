@@ -158,7 +158,7 @@ const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
       }
     }
   }, [isInitialized, token, dispatch]);
-//http://10.0.30.45:2002 http://172.252.13.71:1002/api/v1
+  //http://10.0.30.45:2002 http://172.252.13.71:1002/api/v1
   // Don't render children until auth is initialized
   if (!isInitialized) {
     console.log("⏳ Auth not initialized, showing loading...");
