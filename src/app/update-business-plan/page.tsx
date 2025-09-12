@@ -185,6 +185,11 @@ const UpdateBusinessPlanPage = () => {
     }
   };
 
+  // Handle cancel
+  const handleCancel = () => {
+    router.back();
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -211,7 +216,7 @@ const UpdateBusinessPlanPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">
@@ -222,6 +227,80 @@ const UpdateBusinessPlanPage = () => {
               Plan ID: <span className="font-bold text-blue-600">{planId}</span>
             </p>
           )} */}
+        </div>
+
+        {/* Floating Action Buttons */}
+        <div className="fixed top-8 right-8 z-50 flex flex-col sm:flex-row gap-2">
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="px-4 py-2 0 text-black border border-primary rounded-lg  transition-colors font-medium shadow-lg flex items-center gap-2 text-sm sm:text-base"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            <span className="hidden sm:inline">Cancel</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleUpdate}
+            disabled={isUpdating}
+            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center gap-2 text-sm sm:text-base"
+          >
+            {isUpdating ? (
+              <>
+                <svg
+                  className="animate-spin w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <span className="hidden sm:inline">Updating...</span>
+              </>
+            ) : (
+              <>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span className="hidden sm:inline">Update</span>
+              </>
+            )}
+          </button>
         </div>
 
         {/* Business Plan Information */}
@@ -889,17 +968,6 @@ const UpdateBusinessPlanPage = () => {
                   </div>
                 )}
 
-              {/* Update Button */}
-              <div className="flex justify-center pt-6">
-                <button
-                  type="button"
-                  onClick={handleUpdate}
-                  disabled={isUpdating}
-                  className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isUpdating ? "Updating..." : "Update"}
-                </button>
-              </div>
             </form>
           )}
         </div>

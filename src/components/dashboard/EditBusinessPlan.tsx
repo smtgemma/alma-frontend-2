@@ -229,11 +229,10 @@ export default function EditBusinessPlan({
           <div>
             <span className="font-medium text-gray-700">Status:</span>
             <span
-              className={`ml-2 px-3 py-1 rounded-full text-xs font-medium ${
-                planData.status === "COMPLETED"
-                  ? "bg-green-100 text-green-800"
-                  : "bg-yellow-100 text-yellow-800"
-              }`}
+              className={`ml-2 px-3 py-1 rounded-full text-xs font-medium ${planData.status === "COMPLETED"
+                ? "bg-green-100 text-green-800"
+                : "bg-yellow-100 text-yellow-800"
+                }`}
             >
               {planData.status}
             </span>

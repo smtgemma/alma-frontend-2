@@ -172,7 +172,7 @@ export default function OperationsDashboard({
 
       {/* Key Ratios Table */}
       <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
-        Key Ratios
+        Operating Cost Breakdown
       </h2>
       {/* <div className="">
         <div className="overflow-x-auto">
