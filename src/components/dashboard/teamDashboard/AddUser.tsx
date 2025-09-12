@@ -65,10 +65,14 @@ export default function AddUser() {
             Add New User to Your Team
           </h2>
 
-          <p className="text-gray-600 mb-6 leading-relaxed">
+          {/* <p className="text-gray-600 mb-6 leading-relaxed">
             Invite up to 5 team members to join your plan. Once they accept your
             invitation, they'll get full access to generate and manage business
             plans under your subscription.
+          </p> */}
+
+          <p className="text-gray-600 mb-6 leading-relaxed">
+            Write the Email to add member
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">

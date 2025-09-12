@@ -18,6 +18,7 @@ import { LogoutPopup } from "./LogoutPopup";
 import { useSelector, useDispatch } from "react-redux";
 import { store } from "@/redux/store";
 import { logout } from "@/redux/features/user/userSlice";
+import { useGetUserProfileQuery } from "@/redux/api/auth/authApi";
 import { toast } from "sonner";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { HiMenu, HiX } from "react-icons/hi";
@@ -29,6 +30,9 @@ export default function AdminSideNavbarDashboard() {
   const dispatch = useDispatch();
   const { user } = useSelector((state: any) => state.user);
   console.log(user);
+
+  // Get fresh profile data
+  const { data: profileData } = useGetUserProfileQuery({});
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isLogoutSelected, setIsLogoutSelected] = useState(false);
   const [currentSelectedPath, setCurrentSelectedPath] = useState(pathname);
@@ -63,6 +67,9 @@ export default function AdminSideNavbarDashboard() {
   };
 
   const getProfileImage = () => {
+    if (profileData?.data?.image) {
+      return profileData.data.image;
+    }
     if (user?.image) {
       return user.image;
     }
@@ -70,6 +77,9 @@ export default function AdminSideNavbarDashboard() {
   };
 
   const getDisplayName = () => {
+    if (profileData?.data) {
+      return `${profileData.data.firstName} ${profileData.data.lastName}`;
+    }
     if (user) {
       return `${user.firstName} ${user.lastName}`;
     }
@@ -77,6 +87,9 @@ export default function AdminSideNavbarDashboard() {
   };
 
   const getDisplayEmail = () => {
+    if (profileData?.data?.email) {
+      return profileData.data.email;
+    }
     if (user?.email) {
       return user.email;
     }
@@ -121,8 +134,7 @@ export default function AdminSideNavbarDashboard() {
         <div className="flex flex-col justify-center items-center px-8 pt-14 pb-4">
           <div className="w-[110px] h-[110px] rounded-full overflow-hidden">
             <Image
-              // src={getProfileImage()}
-              src="/images/dp.webp"
+              src={getProfileImage()}
               alt="Admin"
               width={100}
               height={100}

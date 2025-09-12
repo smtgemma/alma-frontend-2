@@ -186,11 +186,12 @@ const TeamUsers = () => {
                     {format(new Date(user.updatedAt), "hh:mm a - MMM dd, yyyy")}{" "}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-base text-accent font-normal">
-                    {user.planName}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-base text-accent font-normal">
                     {user.name?.slice(0, 40) + "..."}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-base text-accent font-normal">
+                    {user.user.firstName} {user.user.lastName}
+                  </td>
+
                   <td className="px-6 py-4 whitespace-nowrap text-sm cursor-pointer">
                     <Link href={`/admin/user-profile/${user.user.id}`}>
                       <button className="px-3 cursor-pointer py-1 text-sm border border-gray-300 rounded-[41px] bg-gray-100 hover:bg-gray-200 text-gray-700">
@@ -201,10 +202,10 @@ const TeamUsers = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <span
                       className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${user.status === "INCOMPLETED"
-                          ? "bg-red-100 text-red-800 border-red-200"
-                          : user.status === "Pending"
-                            ? "bg-orange-100 text-orange-800 border-orange-200"
-                            : "bg-green-100 text-green-800 border-green-200"
+                        ? "bg-red-100 text-red-800 border-red-200"
+                        : user.status === "Pending"
+                          ? "bg-orange-100 text-orange-800 border-orange-200"
+                          : "bg-green-100 text-green-800 border-green-200"
                         }`}
                     >
                       {user.status}
@@ -266,8 +267,8 @@ const TeamUsers = () => {
                   key={pageNum}
                   onClick={() => setCurrentPage(pageNum)}
                   className={`px-3 py-1 text-sm rounded ${currentPage === pageNum
-                      ? "bg-primary text-white"
-                      : "border border-gray-300 hover:bg-gray-50"
+                    ? "bg-primary text-white"
+                    : "border border-gray-300 hover:bg-gray-50"
                     }`}
                 >
                   {pageNum}

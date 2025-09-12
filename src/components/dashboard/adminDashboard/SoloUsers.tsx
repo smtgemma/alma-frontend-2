@@ -202,10 +202,10 @@ const SoloUsers = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <span
                       className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${user.status == "INCOMPLETED"
-                          ? "bg-red-100 text-red-800 border-red-200"
-                          : user.status === "COMPLETED"
-                            ? "bg-green-100 text-green-800 border-green-200"
-                            : "bg-green-100 text-green-800 border-green-200"
+                        ? "bg-red-100 text-red-800 border-red-200"
+                        : user.status === "COMPLETED"
+                          ? "bg-green-100 text-green-800 border-green-200"
+                          : "bg-green-100 text-green-800 border-green-200"
                         }`}
                     >
                       {user.status}
@@ -276,8 +276,8 @@ const SoloUsers = () => {
                   key={pageNum}
                   onClick={() => setCurrentPage(pageNum)}
                   className={`px-3 py-1 text-sm rounded ${currentPage === pageNum
-                      ? "bg-primary text-white"
-                      : "border border-gray-300 hover:bg-gray-50"
+                    ? "bg-primary text-white"
+                    : "border border-gray-300 hover:bg-gray-50"
                     }`}
                 >
                   {pageNum}
