@@ -11,7 +11,7 @@ const faqs = [
     },
     {
         question: "Do I need any business experience to use this tool?",
-        answer: "Less than 10 minutes. Simply answer a few guided prompts, and our AI instantly generates a structured, investor-ready business plan — complete with executive summary, market analysis, strategy, and projections.",
+        answer: "No experience is required. Our AI guides you step by step, making it easy for anyone—whether you’re a first-time entrepreneur or an experienced business owner.",
     },
     {
         question: "Can I export or share my business plan?",

@@ -32,6 +32,7 @@ export default function S8OperatingCost() {
 
   const persistedData = getFormData("step8");
   const step7Data = getFormData("step7");
+  const step6Data = getFormData("step6");
 
   // Refs for dropdown containers
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -46,6 +47,24 @@ export default function S8OperatingCost() {
       return { ...persistedData, operatingCostItems: updatedItems };
     }
 
+    // Calculate initial total investment for default values
+    const initialInvestment = step6Data?.investmentItems 
+      ? step6Data.investmentItems.reduce((total: number, item: any) => {
+          const amount = parseFloat(item.amount) || 0;
+          return total + amount;
+        }, 0)
+      : 100000; // Default fallback
+
+    // Helper function to calculate default total cost based on percentage
+    const calculateDefaultTotalCost = (percentage: string): string => {
+      const percentageValue = parseFloat(percentage.replace('%', '')) || 0;
+      const totalCost = (percentageValue / 100) * initialInvestment;
+      return `€${totalCost.toLocaleString("en-US", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })}`;
+    };
+
     return {
       operatingCosts: "",
       operatingCostItems: [
@@ -53,69 +72,69 @@ export default function S8OperatingCost() {
           id: "1",
           name: "Marketing and advertising expenses",
           percentage: "50%",
-          totalCost: "€50,000",
+          totalCost: calculateDefaultTotalCost("50%"),
           showOptions: false,
         },
         {
           id: "2",
           name: "Employee salaries and wages",
           percentage: "30%",
-          totalCost: "€30,000",
+          totalCost: calculateDefaultTotalCost("30%"),
           showOptions: false,
         },
         {
           id: "3",
           name: "Rent",
           percentage: "50%",
-          totalCost: "€50,000",
+          totalCost: calculateDefaultTotalCost("50%"),
           showOptions: false,
         },
         {
           id: "4",
           name: "General administrations",
           percentage: "30%",
-          totalCost: "€30,000",
+          totalCost: calculateDefaultTotalCost("30%"),
           showOptions: false,
         },
         {
           id: "5",
           name: "Accounting",
           percentage: "50%",
-          totalCost: "€50,000",
+          totalCost: calculateDefaultTotalCost("50%"),
           showOptions: false,
         },
         {
           id: "6",
           name: "Other expenses",
           percentage: "30%",
-          totalCost: "€30,000",
+          totalCost: calculateDefaultTotalCost("30%"),
           showOptions: false,
         },
         {
           id: "7",
           name: "Income tax",
           percentage: "50%",
-          totalCost: "€50,000",
+          totalCost: calculateDefaultTotalCost("50%"),
           showOptions: false,
         },
         {
           id: "8",
           name: "Interest expenses",
           percentage: "30%",
-          totalCost: "€30,000",
+          totalCost: calculateDefaultTotalCost("30%"),
           showOptions: false,
         },
         {
           id: "9",
           name: "Other expenses",
           percentage: "50%",
-          totalCost: "€50,000",
+          totalCost: calculateDefaultTotalCost("50%"),
           showOptions: false,
         },
       ],
-      firstYearTotalCost: "€90,000",
-      firstYearNetProfit: "€90,000",
-      netProfitMargin: "38%",
+      firstYearTotalCost: "€0",
+      firstYearNetProfit: "€0",
+      netProfitMargin: "0%",
     };
   });
 
@@ -146,25 +165,41 @@ export default function S8OperatingCost() {
     return parseFloat(numericValue) || 0;
   };
 
-  // Calculate total cost for an item based on percentage and expected revenue
+  // Calculate total initial investment from step6 data
+  // This is used as the base for calculating operating cost percentages
+  const calculateTotalInitialInvestment = (): number => {
+    if (!step6Data?.investmentItems) return 0;
+    return step6Data.investmentItems.reduce((total: number, item: any) => {
+      const amount = parseFloat(item.amount) || 0;
+      return total + amount;
+    }, 0);
+  };
+
+  // Calculate total cost for an item based on percentage and Total Initial Investment
+  // Formula: (percentage / 100) * Total Initial Investment from S6InvestmentPlan
   const calculateItemTotalCost = (
     percentage: string,
-    expectedRevenue: number
+    totalInitialInvestment: number
   ): number => {
     const percentageValue = extractPercentageValue(percentage);
-    return (percentageValue / 100) * expectedRevenue;
+    return (percentageValue / 100) * totalInitialInvestment;
   };
 
   // Calculate all summary values
   const calculateSummaryValues = (
     operatingCostItems: OperatingCostItem[],
-    expectedRevenue: number
+    totalInitialInvestment: number
   ) => {
     // Calculate total operating costs
     const totalOperatingCosts = operatingCostItems.reduce((total, item) => {
-      const itemCost = calculateItemTotalCost(item.percentage, expectedRevenue);
+      const itemCost = calculateItemTotalCost(item.percentage, totalInitialInvestment);
       return total + itemCost;
     }, 0);
+
+    // Get expected revenue from step7 for net profit calculation
+    const expectedRevenue = extractNumericValue(
+      step7Data?.expectedRevenue || "€100,000"
+    );
 
     // Calculate net profit
     const netProfit = expectedRevenue - totalOperatingCosts;
@@ -182,10 +217,8 @@ export default function S8OperatingCost() {
 
   // Update item total cost when percentage changes
   const updateItemTotalCost = (id: string, percentage: string) => {
-    const expectedRevenue = extractNumericValue(
-      step7Data?.expectedRevenue || "€100,000"
-    );
-    const totalCost = calculateItemTotalCost(percentage, expectedRevenue);
+    const totalInitialInvestment = calculateTotalInitialInvestment();
+    const totalCost = calculateItemTotalCost(percentage, totalInitialInvestment);
 
     setForm((prev) => ({
       ...prev,
@@ -199,12 +232,10 @@ export default function S8OperatingCost() {
 
   // Update all summary calculations
   const updateSummaryCalculations = () => {
-    const expectedRevenue = extractNumericValue(
-      step7Data?.expectedRevenue || "€100,000"
-    );
+    const totalInitialInvestment = calculateTotalInitialInvestment();
     const summary = calculateSummaryValues(
       form.operatingCostItems,
-      expectedRevenue
+      totalInitialInvestment
     );
 
     setForm((prev) => ({
@@ -242,10 +273,10 @@ export default function S8OperatingCost() {
     updateFormData("step8", form);
   }, [form, updateFormData]);
 
-  // Update calculations when step7 data changes or form items change
+  // Update calculations when step6 or step7 data changes or form items change
   useEffect(() => {
     updateSummaryCalculations();
-  }, [form.operatingCostItems, step7Data?.expectedRevenue]);
+  }, [form.operatingCostItems, step6Data?.investmentItems, step7Data?.expectedRevenue]);
 
   const handleInputChange = (field: keyof OperatingCostForm, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
