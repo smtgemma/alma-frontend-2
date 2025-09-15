@@ -36,7 +36,7 @@ export default function LoginSuccessful() {
 
 
           
-      <Link href="/ai-form">
+      <Link href="/ai-smart-form">
         <PrimaryButton type="submit" loading={isLoading} text="Generate a Plan" />
       </Link>
 

@@ -76,8 +76,8 @@ export default function S1BasicInfo() {
   const [getAISuggestions] = useGetAISuggestionsMutation();
   const [extractPdf] = useExtractPdfMutation();
 
-  const languages = ["Italy", "UK", "Spane", "French", "German"];
-  const currency = ["Italian", "Spanish"];
+  const languages = ["Italian", "English"];
+  const currency = ["Italy", "UK","Germany", "France","Spain","USA" ];
 
   const handleInputChange = (
     e: React.ChangeEvent<

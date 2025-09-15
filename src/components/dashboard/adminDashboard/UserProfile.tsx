@@ -284,11 +284,10 @@ const UserProfile = ({ id }: { id: string }) => {
                     </td>
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <span
-                        className={`inline-flex px-2 py-1 text-[10px] sm:text-xs font-semibold rounded-full ${
-                          plan.status === "COMPLETED"
+                        className={`inline-flex px-2 py-1 text-[10px] sm:text-xs font-semibold rounded-full ${plan.status === "COMPLETED"
                             ? "bg-green-100 text-green-800/40 border border-green-800/40"
                             : "bg-red-100 text-red-800/40 border border-red-800/40"
-                        }`}
+                          }`}
                       >
                         {plan.status}
                       </span>
@@ -353,11 +352,10 @@ const UserProfile = ({ id }: { id: string }) => {
                 <button
                   key={pageNum}
                   onClick={() => setCurrentPage(pageNum)}
-                  className={`px-3 py-1 text-sm rounded ${
-                    currentPage === pageNum
+                  className={`px-3 py-1 text-sm rounded ${currentPage === pageNum
                       ? "bg-primary text-white"
                       : "border border-gray-300 hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   {pageNum}
                 </button>
