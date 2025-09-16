@@ -39,7 +39,7 @@ const AdminGrowthChart = ({ growth }: { growth?: GrowthData }) => {
   const progress = Math.min(Math.abs(overallValue), 22); // cap at 100
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
+    <div className="bg-white p-6 rounded-lg h-full flex flex-col">
       <div className="flex justify-center">
         {/* Donut Chart */}
         <div className="relative w-40 h-40">
@@ -78,7 +78,7 @@ const AdminGrowthChart = ({ growth }: { growth?: GrowthData }) => {
         </div>
       </div>
 
-      <div>
+      <div className="flex-1 flex flex-col justify-between">
         <h3 className="text-lg font-semibold text-gray-900 mb-6 mt-4 text-center">
           Average <br /> Customer Growth
         </h3>

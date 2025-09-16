@@ -1,7 +1,14 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 const AdminRevenueChart = ({ chartData }: any) => {
+  const [hoveredPoint, setHoveredPoint] = useState<{
+    index: number;
+    type: 'solo' | 'team';
+    x: number;
+    y: number;
+    value: number;
+  } | null>(null);
   const months = [
     "Jan",
     "Feb",
@@ -33,7 +40,7 @@ const AdminRevenueChart = ({ chartData }: any) => {
   }
 
   return (
-    <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg border border-gray-200 w-full">
+    <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg w-full h-full flex flex-col">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4 md:mb-6">
         <h3 className="text-sm sm:text-md md:text-lg font-semibold text-gray-900">
@@ -52,7 +59,7 @@ const AdminRevenueChart = ({ chartData }: any) => {
       </div>
 
       {/* Chart Container */}
-      <div className="relative h-48 sm:h-56 md:h-64 w-full">
+      <div className="relative flex-1 min-h-48 w-full">
         {/* Y-axis labels */}
         <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[10px] sm:text-xs md:text-sm text-gray-500 pr-1 sm:pr-2">
           {yAxisLabels.reverse().map((label, i) => (
@@ -75,6 +82,7 @@ const AdminRevenueChart = ({ chartData }: any) => {
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
           >
+            {/* Solo line */}
             <polyline
               fill="none"
               stroke="#31FF50"
@@ -88,6 +96,7 @@ const AdminRevenueChart = ({ chartData }: any) => {
                 )
                 .join(" ")}
             />
+            {/* Team line */}
             <polyline
               fill="none"
               stroke="#FF5B5B"
@@ -101,6 +110,62 @@ const AdminRevenueChart = ({ chartData }: any) => {
                 )
                 .join(" ")}
             />
+            
+            {/* Solo hover points */}
+            {soloRevenue.map((value: number, index: number) => {
+              const x = (index / (months.length - 1)) * 100;
+              const y = 100 - (value / maxRevenue) * 100;
+              return (
+                <circle
+                  key={`solo-${index}`}
+                  cx={x}
+                  cy={y}
+                  r="4"
+                  fill="transparent"
+                  stroke="transparent"
+                  className="cursor-pointer"
+                  onMouseEnter={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setHoveredPoint({
+                      index,
+                      type: 'solo',
+                      x: rect.left + rect.width / 2,
+                      y: rect.top,
+                      value
+                    });
+                  }}
+                  onMouseLeave={() => setHoveredPoint(null)}
+                />
+              );
+            })}
+            
+            {/* Team hover points */}
+            {teamRevenue.map((value: number, index: number) => {
+              const x = (index / (months.length - 1)) * 100;
+              const y = 100 - (value / maxRevenue) * 100;
+              return (
+                <circle
+                  key={`team-${index}`}
+                  cx={x}
+                  cy={y}
+                  r="4"
+                  fill="transparent"
+                  stroke="transparent"
+                  className="cursor-pointer"
+                  onMouseEnter={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setHoveredPoint({
+                      index,
+                      type: 'team',
+                      x: rect.left + rect.width / 2,
+                      y: rect.top,
+                      value
+                    });
+                  }}
+                  onMouseLeave={() => setHoveredPoint(null)}
+                />
+              );
+            })}
           </svg>
 
           {/* X-axis labels */}
@@ -111,6 +176,40 @@ const AdminRevenueChart = ({ chartData }: any) => {
           </div>
         </div>
       </div>
+
+      {/* Tooltip */}
+      {hoveredPoint && (
+        <div
+          className="fixed z-50 pointer-events-none"
+          style={{
+            left: hoveredPoint.x,
+            top: hoveredPoint.y - 60,
+            transform: 'translateX(-50%)'
+          }}
+        >
+          <div className={`px-3 py-2 rounded-lg shadow-lg text-white text-sm font-medium ${
+            hoveredPoint.type === 'solo' ? 'bg-[#31FF50]' : 'bg-[#FF5B5B]'
+          }`}>
+            <div className="text-center">
+              <div className="font-bold">
+                €{hoveredPoint.value.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}
+              </div>
+              <div className="text-xs opacity-90">
+                {months[hoveredPoint.index]} - {hoveredPoint.type === 'solo' ? 'Solo' : 'Team'}
+              </div>
+            </div>
+            {/* Tooltip arrow */}
+            <div 
+              className={`absolute left-1/2 transform -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent ${
+                hoveredPoint.type === 'solo' ? 'border-t-[#31FF50]' : 'border-t-[#FF5B5B]'
+              }`}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

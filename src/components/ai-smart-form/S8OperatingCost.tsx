@@ -55,6 +55,8 @@ export default function S8OperatingCost() {
         }, 0)
       : 100000; // Default fallback
 
+      console.log(initialInvestment);
+
     // Helper function to calculate default total cost based on percentage
     const calculateDefaultTotalCost = (percentage: string): string => {
       const percentageValue = parseFloat(percentage.replace('%', '')) || 0;
@@ -64,6 +66,7 @@ export default function S8OperatingCost() {
         maximumFractionDigits: 0,
       })}`;
     };
+    console.log(calculateDefaultTotalCost);
 
     return {
       operatingCosts: "",
@@ -141,8 +144,58 @@ export default function S8OperatingCost() {
   // Helper function to extract numeric value from currency string
   const extractNumericValue = (currencyString: string): number => {
     if (!currencyString) return 0;
-    const numericValue = currencyString.replace(/[€,\s]/g, "");
+    const numericValue = currencyString.replace(/[€$£¥,\s]/g, "");
     return parseFloat(numericValue) || 0;
+  };
+
+  // Helper function to extract revenue from range strings (e.g., "€50,000 - €150,000")
+  const extractRevenueValue = (revenueString: string): number => {
+    if (!revenueString) return 0;
+    
+    // Handle text descriptions like "Expected first-year revenue: approximately $750,000"
+    // Extract all numbers with currency symbols from the text
+    const currencyMatches = revenueString.match(/[€$£¥]\s*[\d,]+/g);
+    if (currencyMatches && currencyMatches.length > 0) {
+      // Take the last/largest currency value found
+      const lastMatch = currencyMatches[currencyMatches.length - 1];
+      return extractNumericValue(lastMatch);
+    }
+    
+    // Handle standalone numbers like "750,000" or "750000"
+    const numberMatches = revenueString.match(/[\d,]+/g);
+    if (numberMatches && numberMatches.length > 0) {
+      // Take the largest number found
+      const numbers = numberMatches.map(match => parseFloat(match.replace(/,/g, '')));
+      const largestNumber = Math.max(...numbers);
+      if (largestNumber > 1000) { // Assume it's a revenue amount if > 1000
+        return largestNumber;
+      }
+    }
+    
+    // Handle range formats like "€50,000 - €150,000"
+    if (revenueString.includes('-')) {
+      // Extract the higher value from the range for conservative estimation
+      const parts = revenueString.split('-');
+      if (parts.length === 2) {
+        const higherValue = parts[1].trim();
+        return extractNumericValue(higherValue);
+      }
+    }
+    
+    // Handle "Under €50,000" format
+    if (revenueString.toLowerCase().includes('under')) {
+      const value = revenueString.replace(/under/gi, '').trim();
+      return extractNumericValue(value);
+    }
+    
+    // Handle "Over €500,000" format
+    if (revenueString.toLowerCase().includes('over')) {
+      const value = revenueString.replace(/over/gi, '').trim();
+      return extractNumericValue(value);
+    }
+    
+    // Handle direct currency values like "€100,000"
+    return extractNumericValue(revenueString);
   };
 
   // Helper function to format currency
@@ -168,7 +221,7 @@ export default function S8OperatingCost() {
   // Calculate total initial investment from step6 data
   // This is used as the base for calculating operating cost percentages
   const calculateTotalInitialInvestment = (): number => {
-    if (!step6Data?.investmentItems) return 0;
+    if (!step6Data?.investmentItems) return 100000; // Default fallback
     return step6Data.investmentItems.reduce((total: number, item: any) => {
       const amount = parseFloat(item.amount) || 0;
       return total + amount;
@@ -197,9 +250,18 @@ export default function S8OperatingCost() {
     }, 0);
 
     // Get expected revenue from step7 for net profit calculation
-    const expectedRevenue = extractNumericValue(
-      step7Data?.expectedRevenue || "€100,000"
+    // If no revenue is set in S7, use a higher default to avoid negative profits
+    const expectedRevenue = extractRevenueValue(
+      step7Data?.expectedRevenue || "€500,000"
     );
+
+    // Debug logging
+    console.log("=== REVENUE DEBUG ===");
+    console.log("Step7 Data:", step7Data);
+    console.log("Expected Revenue from S7:", step7Data?.expectedRevenue);
+    console.log("Extracted Revenue Value:", expectedRevenue);
+    console.log("Total Operating Costs:", totalOperatingCosts);
+    console.log("===================");
 
     // Calculate net profit
     const netProfit = expectedRevenue - totalOperatingCosts;
@@ -207,6 +269,9 @@ export default function S8OperatingCost() {
     // Calculate profit margin
     const profitMargin =
       expectedRevenue > 0 ? (netProfit / expectedRevenue) * 100 : 0;
+
+    console.log("Net Profit:", netProfit);
+    console.log("Profit Margin:", profitMargin);
 
     return {
       totalCost: formatCurrency(totalOperatingCosts),
@@ -227,6 +292,19 @@ export default function S8OperatingCost() {
           ? { ...item, percentage, totalCost: formatCurrency(totalCost) }
           : item
       ),
+    }));
+  };
+
+  // Recalculate all item costs when total initial investment changes
+  const recalculateAllItemCosts = () => {
+    const totalInitialInvestment = calculateTotalInitialInvestment();
+    
+    setForm((prev) => ({
+      ...prev,
+      operatingCostItems: prev.operatingCostItems.map((item) => {
+        const totalCost = calculateItemTotalCost(item.percentage, totalInitialInvestment);
+        return { ...item, totalCost: formatCurrency(totalCost) };
+      }),
     }));
   };
 
@@ -275,8 +353,14 @@ export default function S8OperatingCost() {
 
   // Update calculations when step6 or step7 data changes or form items change
   useEffect(() => {
+    // Recalculate all item costs when investment data changes
+    recalculateAllItemCosts();
+  }, [step6Data?.investmentItems]);
+
+  // Update summary calculations when operating cost items or revenue changes
+  useEffect(() => {
     updateSummaryCalculations();
-  }, [form.operatingCostItems, step6Data?.investmentItems, step7Data?.expectedRevenue]);
+  }, [form.operatingCostItems, step7Data?.expectedRevenue]);
 
   const handleInputChange = (field: keyof OperatingCostForm, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -288,8 +372,10 @@ export default function S8OperatingCost() {
     value: string
   ) => {
     if (field === "percentage") {
+      // Ensure percentage has % symbol if not present
+      const formattedPercentage = value.includes('%') ? value : `${value}%`;
       // Update the percentage and recalculate total cost
-      updateItemTotalCost(id, value);
+      updateItemTotalCost(id, formattedPercentage);
     } else {
       setForm((prev) => ({
         ...prev,

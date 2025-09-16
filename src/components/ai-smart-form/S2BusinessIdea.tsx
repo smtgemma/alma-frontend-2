@@ -12,7 +12,7 @@ interface BusinessIdeaForm {
   selectedServiceCategory: string;
   deliveryMethod: string;
   companyOwnership: string;
-  businessGoals: string[];
+  businessGoals: string;
   customProductCategories: string[];
   customServiceCategories: string[];
 }
@@ -110,12 +110,10 @@ export default function S2BusinessIdea() {
     }
   };
 
-  const handleCheckboxChange = (goal: string) => {
+  const handleBusinessGoalChange = (goal: string) => {
     setForm((prev) => ({
       ...prev,
-      businessGoals: prev.businessGoals.includes(goal)
-        ? prev.businessGoals.filter((g) => g !== goal)
-        : [...prev.businessGoals, goal],
+      businessGoals: goal,
     }));
   };
 
@@ -296,21 +294,19 @@ export default function S2BusinessIdea() {
                     ].map((option) => (
                       <div
                         key={option}
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
-                          form.businessStage === option
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${form.businessStage === option
                             ? "border-primary"
                             : "border-[#888888]/50"
-                        }`}
+                          }`}
                         onClick={() =>
                           handleRadioChange("businessStage", option)
                         }
                       >
                         <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${
-                            form.businessStage === option
+                          className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${form.businessStage === option
                               ? "border-[#A9A4FE] bg-primary"
                               : "border-primary bg-white"
-                          }`}
+                            }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent leading-relaxed">
                           {option}
@@ -334,21 +330,19 @@ export default function S2BusinessIdea() {
                     {/* Product Option */}
                     <div>
                       <div
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
-                          form.productService === "Product"
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${form.productService === "Product"
                             ? "border-primary"
                             : "border-gray-200"
-                        }`}
+                          }`}
                         onClick={() =>
                           handleRadioChange("productService", "Product")
                         }
                       >
                         <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                            form.productService === "Product"
+                          className={`w-4 h-4 rounded-full border-2 mr-3 ${form.productService === "Product"
                               ? "border-[#A9A4FE] bg-primary"
                               : "border-primary bg-white"
-                          }`}
+                            }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent">
                           Product
@@ -376,11 +370,10 @@ export default function S2BusinessIdea() {
                                     e.preventDefault();
                                   }
                                 }}
-                                className={`w-full px-4 py-3 bg-[#FCFCFC] border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent ${
-                                  errors.selectedProductCategory
+                                className={`w-full px-4 py-3 bg-[#FCFCFC] border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent ${errors.selectedProductCategory
                                     ? "border-red-500"
                                     : "border-gray-200"
-                                }`}
+                                  }`}
                               />
                               {errors.selectedProductCategory && (
                                 <p className="text-red-500 text-sm mt-1">
@@ -442,21 +435,19 @@ export default function S2BusinessIdea() {
                     {/* Service Option */}
                     <div>
                       <div
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
-                          form.productService === "Service"
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${form.productService === "Service"
                             ? "border-primary"
                             : "border-gray-200"
-                        }`}
+                          }`}
                         onClick={() =>
                           handleRadioChange("productService", "Service")
                         }
                       >
                         <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                            form.productService === "Service"
+                          className={`w-4 h-4 rounded-full border-2 mr-3 ${form.productService === "Service"
                               ? "border-[#A9A4FE] bg-primary"
                               : "border-primary bg-white"
-                          }`}
+                            }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent">
                           Service
@@ -484,11 +475,10 @@ export default function S2BusinessIdea() {
                                     e.preventDefault();
                                   }
                                 }}
-                                className={`w-full px-4 py-3 bg-[#FCFCFC] border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent ${
-                                  errors.selectedServiceCategory
+                                className={`w-full px-4 py-3 bg-[#FCFCFC] border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent ${errors.selectedServiceCategory
                                     ? "border-red-500"
                                     : "border-gray-200"
-                                }`}
+                                  }`}
                               />
                               {errors.selectedServiceCategory && (
                                 <p className="text-red-500 text-sm mt-1">
@@ -586,21 +576,19 @@ export default function S2BusinessIdea() {
                     ].map((option) => (
                       <div
                         key={option}
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
-                          form.deliveryMethod === option
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${form.deliveryMethod === option
                             ? "border-primary"
                             : "border-[#888888]/50"
-                        }`}
+                          }`}
                         onClick={() =>
                           handleRadioChange("deliveryMethod", option)
                         }
                       >
                         <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                            form.deliveryMethod === option
+                          className={`w-4 h-4 rounded-full border-2 mr-3 ${form.deliveryMethod === option
                               ? "border-[#A9A4FE] bg-primary"
                               : "border-primary bg-white"
-                          }`}
+                            }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent">
                           {option}
@@ -620,21 +608,19 @@ export default function S2BusinessIdea() {
                     {["Yes", "No"].map((option) => (
                       <div
                         key={option}
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
-                          form.companyOwnership === option
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${form.companyOwnership === option
                             ? "border-primary"
                             : "border-[#888888]/50"
-                        }`}
+                          }`}
                         onClick={() =>
                           handleRadioChange("companyOwnership", option)
                         }
                       >
                         <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                            form.companyOwnership === option
+                          className={`w-4 h-4 rounded-full border-2 mr-3 ${form.companyOwnership === option
                               ? "border-[#A9A4FE] bg-primary"
                               : "border-primary bg-white"
-                          }`}
+                            }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent">
                           {option}
@@ -650,36 +636,29 @@ export default function S2BusinessIdea() {
                     What goals do you pursue with this business plan?
                   </label>
                   <div className="mt-4 space-y-4">
-                    {/* {[
-                                            'Launch a new Product or Service',
-                                             'Secure Investor Funding or Grant',
-                                             'Boost Sales & Revenue'
-                                         ].map((option) => (
-                                             <div key={option} className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
-                                                 form.businessGoals.includes(option) ? 'border-primary' : 'border-gray-200'
-                                             }`} onClick={() => handleCheckboxChange(option)}>
-                                                 <div className={`w-4 h-4 border-2 mr-3 flex items-center justify-center ${
-                                                     form.businessGoals.includes(option) ? 'border-primary bg-primary' : 'border-primary bg-white'
-                                                 }`}>
-                                                     {form.businessGoals.includes(option) && (
-                                                         <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                         </svg>
-                                                     )}
-                                                 </div>
-                                                 <span className="text-[1rem] font-normal text-accent">{option}</span>
-                                             </div>
-                                         ))} */}
-
                     {[
-                      "Launch a New Product or Service",
-                      "Secure Investor Funding or Grants",
-                      "Boost Sales & Revenue",
-                    ].map((category) => (
-                      <div key={category} className="flex items-center">
-                        <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7 "></div>
-                        <span className="text-[1rem] font-normal text-accent">
-                          {category}
+                      'Launch a new Product or Service',
+                      'Secure Investor Funding or Grant',
+                      'Boost Sales & Revenue'
+                    ].map((option) => (
+                      <div
+                        key={option}
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
+                          form.businessGoals === option
+                            ? "border-primary"
+                            : "border-[#888888]/50"
+                        }`}
+                        onClick={() => handleBusinessGoalChange(option)}
+                      >
+                        <div
+                          className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${
+                            form.businessGoals === option
+                              ? "border-[#A9A4FE] bg-primary"
+                              : "border-primary bg-white"
+                          }`}
+                        ></div>
+                        <span className="text-[1rem] font-normal text-accent leading-relaxed">
+                          {option}
                         </span>
                       </div>
                     ))}

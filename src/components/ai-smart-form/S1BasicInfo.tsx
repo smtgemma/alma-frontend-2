@@ -702,7 +702,7 @@ export default function S1BasicInfo() {
                     Do you have a website or online presence? (Required)
                   </label>
                   <input
-                    type="url"
+                    type="text"
                     name="website"
                     value={form.website}
                     onChange={handleInputChange}

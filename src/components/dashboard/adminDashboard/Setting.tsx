@@ -475,7 +475,7 @@ const Setting = () => {
                   </td> */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Link
-                      href={`/users/${user.id}`}
+                      href={`/admin/user-profile/${user.id}`}
                       className="px-3 py-1 text-sm border border-gray-300 rounded-[41px] bg-gray-100 hover:bg-gray-200 text-gray-700"
                     >
                       View

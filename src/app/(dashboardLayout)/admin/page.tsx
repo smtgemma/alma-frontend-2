@@ -206,11 +206,15 @@ export default function AdminDashboardPage() {
         <div className="space-y-6">
           <AdminSummaryCards cardInfo={safeDashboardData.data?.cards} />
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-y-6 md:gap-x-5 px-4 lg:px-6">
-            <div className="col-span-3">
-              <AdminRevenueChart chartData={safeDashboardData.data?.revenue} />
+            <div className="col-span-3 h-full">
+              <div className="h-full">
+                <AdminRevenueChart chartData={safeDashboardData.data?.revenue} />
+              </div>
             </div>
-            <div className="col-span-1">
-              <AdminGrowthChart growth={safeDashboardData.data?.growth} />
+            <div className="col-span-1 h-full">
+              <div className="h-full">
+                <AdminGrowthChart growth={safeDashboardData.data?.growth} />
+              </div>
             </div>
           </div>
           <AdminPlanDetails planData={safeDashboardData.data?.currentPlans} />

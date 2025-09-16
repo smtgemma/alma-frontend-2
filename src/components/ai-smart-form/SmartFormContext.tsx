@@ -43,7 +43,7 @@ interface BusinessIdeaForm {
   selectedServiceCategory: string;
   deliveryMethod: string;
   companyOwnership: string;
-  businessGoals: string[];
+  businessGoals: string;
   customProductCategories: string[];
   customServiceCategories: string[];
 }
@@ -330,7 +330,7 @@ const getDefaultFormData = (): SmartFormData => ({
     selectedServiceCategory: "",
     deliveryMethod: "",
     companyOwnership: "",
-    businessGoals: [],
+    businessGoals: "",
     customProductCategories: [],
     customServiceCategories: [],
   },
