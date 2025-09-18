@@ -27,6 +27,7 @@ const defaultPieChartData = [
 const COLORS = ["#8B5CF6", "#312E81", "#EF4444"];
 
 const formatCurrency = (value: number) => {
+  if (!value || isNaN(value)) return "0";
   if (value >= 1000000) {
     return `${(value / 1000000).toFixed(0)}M`;
   } else if (value >= 1000) {
@@ -35,9 +36,10 @@ const formatCurrency = (value: number) => {
   return value.toString();
 };
 
-// Custom label component for pie chart - values inside segments
+// Custom label component for pie chart - values inside segments with actual amounts
 const CustomLabel = (props: any) => {
-  const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props;
+  const { cx, cy, midAngle, innerRadius, outerRadius, percent, value, name } =
+    props;
 
   if (!percent || percent < 0.05) return null; // Don't show labels for very small segments
 
@@ -50,11 +52,11 @@ const CustomLabel = (props: any) => {
     <g>
       <text
         x={x}
-        y={y}
+        y={y - 8}
         fill="white"
         textAnchor="middle"
         dominantBaseline="central"
-        fontSize="18"
+        fontSize="14"
         fontWeight="bold"
         style={{
           textShadow: "2px 2px 4px rgba(0,0,0,0.9)",
@@ -62,6 +64,21 @@ const CustomLabel = (props: any) => {
         }}
       >
         {`${(percent * 100).toFixed(0)}%`}
+      </text>
+      <text
+        x={x}
+        y={y + 8}
+        fill="white"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize="12"
+        fontWeight="normal"
+        style={{
+          textShadow: "2px 2px 4px rgba(0,0,0,0.9)",
+          pointerEvents: "none",
+        }}
+      >
+        {name}
       </text>
     </g>
   );
@@ -93,7 +110,11 @@ export default function OperationsDashboard({
   // Generate dynamic pie chart data from operatingCostBreakdown
   const generatePieChartData = () => {
     if (!operatingCostBreakdown || operatingCostBreakdown.length === 0) {
-      return defaultPieChartData;
+      return defaultPieChartData.map((item, index) => ({
+        ...item,
+        actualValue: 0,
+        formattedValue: formatCurrency(0),
+      }));
     }
 
     // Use the first item from operatingCostBreakdown for pie chart data
@@ -119,22 +140,35 @@ export default function OperationsDashboard({
     );
 
     if (totalCost === 0) {
-      return defaultPieChartData;
+      return defaultPieChartData.map((item, index) => ({
+        ...item,
+        actualValue: 0,
+        formattedValue: formatCurrency(0),
+      }));
     }
 
     // Generate pie chart data with percentages (take top 3 components)
-    return costComponents
+    const topComponents = costComponents
       .filter((component) => component.value > 0)
       .sort((a, b) => b.value - a.value)
-      .slice(0, 3)
-      .map((component, index) => {
-        const percentage = (component.value / totalCost) * 100;
-        return {
-          name: component.name,
-          value: Math.round(percentage),
-          color: COLORS[index % COLORS.length],
-        };
-      });
+      .slice(0, 3);
+
+    // Calculate total of only the top 3 components for accurate pie chart percentages
+    const topComponentsTotal = topComponents.reduce(
+      (sum, component) => sum + component.value,
+      0
+    );
+
+    return topComponents.map((component, index) => {
+      const percentage = (component.value / topComponentsTotal) * 100;
+      return {
+        name: component.name,
+        value: Math.round(percentage),
+        actualValue: component.value,
+        formattedValue: formatCurrency(component.value),
+        color: COLORS[index % COLORS.length],
+      };
+    });
   };
 
   const pieChartData = generatePieChartData();
@@ -878,6 +912,7 @@ export default function OperationsDashboard({
                   outerRadius={175}
                   paddingAngle={2}
                   dataKey="value"
+                  label={CustomLabel}
                   labelLine={false}
                 >
                   {pieChartData.map((entry, index) => (
@@ -887,6 +922,21 @@ export default function OperationsDashboard({
                     />
                   ))}
                 </Pie>
+                <Tooltip
+                  formatter={(value: number, name: string, props: any) => [
+                    `${value}% (${
+                      props.payload.formattedValue ||
+                      formatCurrency(props.payload.actualValue || 0)
+                    })`,
+                    name,
+                  ]}
+                  contentStyle={{
+                    backgroundColor: "#333",
+                    border: "none",
+                    borderRadius: "8px",
+                    color: "white",
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 flex items-center justify-center">
@@ -902,20 +952,34 @@ export default function OperationsDashboard({
             </div>
           </div>
 
-          {/* Legend */}
-          <div className="flex flex-col gap-3 mt-8">
+          {/* Enhanced Legend with actual values */}
+          <div className="flex flex-col gap-4 mt-8">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Cost Breakdown
+            </h3>
             {pieChartData.map((item, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <div
-                  className="w-4 h-4 rounded-full"
-                  style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                ></div>
-                <span className="text-sm font-medium text-gray-700">
-                  {item.name}
-                </span>
-                <span className="text-sm font-bold text-gray-900">
-                  {item.value}%
-                </span>
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg min-w-[250px]"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                  ></div>
+                  <span className="text-sm font-medium text-gray-700">
+                    {item.name}
+                  </span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span className="text-sm font-bold text-gray-900">
+                    {item.value}%
+                  </span>
+                  <span className="text-xs text-gray-600">
+                    {item.formattedValue ||
+                      formatCurrency(item.actualValue || 0)}
+                  </span>
+                </div>
               </div>
             ))}
           </div>

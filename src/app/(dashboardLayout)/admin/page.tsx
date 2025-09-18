@@ -6,6 +6,7 @@ import AdminRevenueChart from "@/components/dashboard/adminDashboard/AdminRevenu
 import AdminGrowthChart from "@/components/dashboard/adminDashboard/AdminGrowthChart";
 import AdminPlanDetails from "@/components/dashboard/adminDashboard/AdminPlanDetails";
 import { useAdminSummaryQuery } from "@/redux/api/admin/adminAPI";
+import { useGetPlansQuery } from "@/redux/api/plans/plansApi";
 import AdminDashboardLoading from "@/components/dashboard/adminDashboard/AdminDashboardLoading";
 
 export default function AdminDashboardPage() {
@@ -17,7 +18,10 @@ export default function AdminDashboardPage() {
     refetch,
   } = useAdminSummaryQuery({});
 
-  if (isLoading || isFetching) {
+  // Fetch actual plans data
+  const { data: plansData, isLoading: plansLoading } = useGetPlansQuery({});
+
+  if (isLoading || isFetching || plansLoading) {
     return (
       <div className="space-y-6">
         <AdminDashboardHeader />
@@ -208,7 +212,9 @@ export default function AdminDashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-y-6 md:gap-x-5 px-4 lg:px-6">
             <div className="col-span-3 h-full">
               <div className="h-full">
-                <AdminRevenueChart chartData={safeDashboardData.data?.revenue} />
+                <AdminRevenueChart
+                  chartData={safeDashboardData.data?.revenue}
+                />
               </div>
             </div>
             <div className="col-span-1 h-full">
@@ -217,7 +223,18 @@ export default function AdminDashboardPage() {
               </div>
             </div>
           </div>
-          <AdminPlanDetails planData={safeDashboardData.data?.currentPlans} />
+          <AdminPlanDetails
+            planData={{
+              count: plansData?.data?.length || 0,
+              plans:
+                plansData?.data?.map((plan: any) => ({
+                  id: plan.id,
+                  publicName: plan.publicName,
+                  currency: "€",
+                  price: plan.price,
+                })) || [],
+            }}
+          />
         </div>
       </div>
     </div>

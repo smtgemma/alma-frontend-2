@@ -9,13 +9,13 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setSubscriptionData } from "@/redux/features/subscription/subscriptionSlice";
- 
+
 interface PlanFeature {
   id: string;
   name: string;
   included: boolean;
 }
- 
+
 interface Plan {
   id: string;
   name: string;
@@ -26,12 +26,12 @@ interface Plan {
   current?: boolean;
   popular?: boolean;
 }
- 
+
 export default function SubscriptionPlan() {
   const { data: plansData, isLoading } = useGetCurrentPlansQuery({});
   const router = useRouter();
   const dispatch = useDispatch();
- 
+
   const handlePlanSelect = async (id: any) => {
     // Check if user is authenticated
     const token = localStorage.getItem("token") || Cookies.get("token");
@@ -42,7 +42,7 @@ export default function SubscriptionPlan() {
       router.push("/signIn");
       return;
     }
- 
+
     try {
       // Create subscription with backend to get clientSecret
       const response = await fetch(
@@ -58,9 +58,9 @@ export default function SubscriptionPlan() {
           }),
         }
       );
- 
+
       const data = await response.json();
- 
+
       if (!response.ok) {
         if (response.status === 401) {
           // Clear invalid token
@@ -83,7 +83,7 @@ export default function SubscriptionPlan() {
           return;
         }
       }
- 
+
       if (data.success) {
         router.push("/billing/" + id);
         // Store subscription data in Redux
@@ -113,14 +113,14 @@ export default function SubscriptionPlan() {
           Manage Subscription
         </h1>
       </div>
- 
+
       {/* Current Plan Section */}
       {plansData?.data?.currentPlan && (
         <div className="  py-6 mb-8">
           <h2 className="text-base font-medium text-gray-800 mb-2">
             Current Plan
           </h2>
- 
+
           <div className="flex flex-col lg:flex-row gap-6 items-start">
             <div className="flex-1">
               <div className="mb-4">
@@ -138,13 +138,17 @@ export default function SubscriptionPlan() {
                   to <br />
                   <span className="text-red-600 font-medium">
                     {format(
-                      new Date(plansData?.data?.startDate),
+                      new Date(
+                        plansData?.data?.endDate ||
+                          plansData?.data?.membershipEnds ||
+                          plansData?.data?.startDate
+                      ),
                       "MMM dd, yyyy"
                     )}
                   </span>
                 </p>
               </div>
- 
+
               <button className="bg-primary text-white px-6 py-3 rounded-[52px] flex items-center gap-2  transition-colors">
                 <span>
                   Switch to {""}
@@ -155,7 +159,7 @@ export default function SubscriptionPlan() {
                 <BsArrowRight className="text-lg" />
               </button>
             </div>
- 
+
             <div className="w-64 h-40 bg-gradient-to-br from-green-100 to-yellow-100 rounded-lg flex items-center justify-center">
               <Image
                 src="/images/plan-img.png"
@@ -168,13 +172,13 @@ export default function SubscriptionPlan() {
           </div>
         </div>
       )}
- 
+
       {/* Compare Plans Section */}
       <div className="">
         <h2 className="text-[24px] font-medium text-gray-800 mb-6">
           Compare Plans
         </h2>
- 
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {plansData?.data?.plans?.map((plan: any) => (
             <div
@@ -191,7 +195,7 @@ export default function SubscriptionPlan() {
                   </span>
                 </div>
               )}
- 
+
               {/* Plan Header */}
               <div className="text-start mb-6">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
@@ -205,7 +209,7 @@ export default function SubscriptionPlan() {
                 </div>
                 {/* <p className="text-gray-600 text-sm">{plan.description}</p> */}
               </div>
- 
+
               {/* Features List */}
               <div className="space-y-3 mb-6">
                 {plan.features.map((feature: any, index: number) => (
@@ -215,7 +219,7 @@ export default function SubscriptionPlan() {
                   </div>
                 ))}
               </div>
- 
+
               {/* Action Button */}
               <button
                 onClick={() => handlePlanSelect(plan.id)}
@@ -232,7 +236,7 @@ export default function SubscriptionPlan() {
           ))}
         </div>
       </div>
- 
+
       {/* Additional Info */}
       {/* <div className="bg-gray-50 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Plan Benefits</h3>

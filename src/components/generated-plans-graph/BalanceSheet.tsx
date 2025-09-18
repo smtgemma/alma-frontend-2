@@ -26,6 +26,7 @@ const defaultPieChartData = [
 
 // Format currency for display
 const formatCurrency = (value: number) => {
+  if (!value || isNaN(value)) return "$0";
   if (value >= 1000000) {
     return `$${(value / 1000000).toFixed(1)}M`;
   } else if (value >= 1000) {
@@ -34,9 +35,9 @@ const formatCurrency = (value: number) => {
   return `$${value.toLocaleString()}`;
 };
 
-// Custom label component for pie chart - values inside segments
+// Custom label component for pie chart - values inside segments with names
 const CustomLabel = (props: any) => {
-  const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props;
+  const { cx, cy, midAngle, innerRadius, outerRadius, percent, name } = props;
 
   if (!percent || percent < 0.05) return null; // Don't show labels for very small segments
 
@@ -49,11 +50,11 @@ const CustomLabel = (props: any) => {
     <g>
       <text
         x={x}
-        y={y}
+        y={y - 8}
         fill="white"
         textAnchor="middle"
         dominantBaseline="central"
-        fontSize="18"
+        fontSize="14"
         fontWeight="bold"
         style={{
           textShadow: "2px 2px 4px rgba(0,0,0,0.9)",
@@ -61,6 +62,21 @@ const CustomLabel = (props: any) => {
         }}
       >
         {`${(percent * 100).toFixed(0)}%`}
+      </text>
+      <text
+        x={x}
+        y={y + 8}
+        fill="white"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize="12"
+        fontWeight="normal"
+        style={{
+          textShadow: "2px 2px 4px rgba(0,0,0,0.9)",
+          pointerEvents: "none",
+        }}
+      >
+        {name}
       </text>
     </g>
   );
@@ -73,31 +89,61 @@ export default function BalanceSheet({
   // Generate dynamic pie chart data from balanceSheet
   const generatePieChartData = () => {
     if (!balanceSheet || balanceSheet.length === 0) {
-      return defaultPieChartData;
+      return defaultPieChartData.map((item) => ({
+        ...item,
+        actualValue: 0,
+        formattedValue: formatCurrency(0),
+      }));
     }
 
     // Use the first item from balanceSheet for pie chart data
     const item = balanceSheet[0];
-    const total = item.assets || 0;
+    const assets = item.assets || 0;
+    const liabilities = item.liabilities || 0;
+    const equity = item.equity || 0;
 
-    if (total === 0) {
-      return defaultPieChartData;
+    // For balance sheet pie chart, we should show the breakdown of total assets
+    // The pie chart represents how assets are financed (by liabilities and equity)
+    // So the total should be assets, and we show what portion is financed by liabilities vs equity
+    if (assets === 0) {
+      return defaultPieChartData.map((item) => ({
+        ...item,
+        actualValue: 0,
+        formattedValue: formatCurrency(0),
+      }));
     }
 
-    // Calculate the percentages for Assets, Liabilities, and Equity
-    const assetsPercentage = ((item.assets || 0) / total) * 100;
-    const liabilitiesPercentage = ((item.liabilities || 0) / total) * 100;
-    const equityPercentage = ((item.equity || 0) / total) * 100;
+    // In a balance sheet: Assets = Liabilities + Equity
+    // For the pie chart, we want to show how the total assets are financed
+    const total = assets;
+    const liabilitiesPercentage = (liabilities / total) * 100;
+    const equityPercentage = (equity / total) * 100;
 
-    return [
-      { name: "Assets", value: Math.round(assetsPercentage), fill: "#8B5CF6" },
+    // Filter out zero values and return only meaningful segments
+    const segments = [
       {
         name: "Liabilities",
         value: Math.round(liabilitiesPercentage),
         fill: "#1E1B4B",
+        actualValue: liabilities,
+        formattedValue: formatCurrency(liabilities),
       },
-      { name: "Equity", value: Math.round(equityPercentage), fill: "#EF4444" },
-    ];
+      {
+        name: "Equity",
+        value: Math.round(equityPercentage),
+        fill: "#EF4444",
+        actualValue: equity,
+        formattedValue: formatCurrency(equity),
+      },
+    ].filter((segment) => segment.actualValue > 0);
+
+    return segments.length > 0
+      ? segments
+      : defaultPieChartData.map((item) => ({
+          ...item,
+          actualValue: 0,
+          formattedValue: formatCurrency(0),
+        }));
   };
 
   const pieChartData = generatePieChartData();
@@ -200,33 +246,61 @@ export default function BalanceSheet({
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => [`${value}%`, ""]} />
+                <Tooltip
+                  formatter={(value: number, name: string, props: any) => [
+                    `${value}% (${
+                      props.payload.formattedValue ||
+                      formatCurrency(props.payload.actualValue || 0)
+                    })`,
+                    name,
+                  ]}
+                  contentStyle={{
+                    backgroundColor: "#333",
+                    border: "none",
+                    borderRadius: "8px",
+                    color: "white",
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
+                <div className="text-lg font-semibold text-gray-800">Asset</div>
                 <div className="text-lg font-semibold text-gray-800">
-                  Balance
+                  Financing
                 </div>
-                <div className="text-lg font-semibold text-gray-800">Sheet</div>
               </div>
             </div>
           </div>
 
-          {/* Legend */}
-          <div className="flex flex-col gap-3 mt-8">
+          {/* Enhanced Legend with actual values */}
+          <div className="flex flex-col gap-4 mt-8">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Asset Financing Breakdown
+            </h3>
             {pieChartData.map((item, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <div
-                  className="w-4 h-4 rounded-full"
-                  style={{ backgroundColor: item.fill }}
-                ></div>
-                <span className="text-sm font-medium text-gray-700">
-                  {item.name}
-                </span>
-                <span className="text-sm font-bold text-gray-900">
-                  {item.value}%
-                </span>
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg min-w-[250px]"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: item.fill }}
+                  ></div>
+                  <span className="text-sm font-medium text-gray-700">
+                    {item.name}
+                  </span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span className="text-sm font-bold text-gray-900">
+                    {item.value}%
+                  </span>
+                  <span className="text-xs text-gray-600">
+                    {item.formattedValue ||
+                      formatCurrency(item.actualValue || 0)}
+                  </span>
+                </div>
               </div>
             ))}
           </div>

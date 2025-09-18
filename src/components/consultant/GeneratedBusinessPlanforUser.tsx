@@ -53,9 +53,9 @@ const GeneratedBusinessPlanforUser = ({
     generateEmpathyPDF("businessplan");
   };
 
-  const handleDownloadDOC = () => {
+  const handleDownloadDOC = async () => {
     // Use the comprehensive Word document download functionality
-    generateWordDocument({
+    await generateWordDocument({
       executiveSummary,
       businessOverview,
       marketAnalysis,
