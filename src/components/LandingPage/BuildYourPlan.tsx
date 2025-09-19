@@ -10,7 +10,7 @@ const BuildYourPlan = () => {
 
             <div className="  rounded-[40px] shadow-md px-6 py-20 text-center  bg-gradient-to-tr from-[#6B4AFF] to-[#9222B7] ">
 
-                <h3 className="text:text-[2rem] md:text-[3rem] font-normal text-[#FAFAFA] mb-4">
+                <h3 className="text-[2rem] md:text-[3rem] font-normal text-[#FAFAFA] mb-4">
                     A business plan you can trust powered by <br />
                     AI, built for results.
                 </h3>

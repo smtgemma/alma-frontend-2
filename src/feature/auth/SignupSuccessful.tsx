@@ -34,11 +34,7 @@ export default function SignupSuccessful() {
         </Link>
 
 
-        <Link href="/">
-          <button className="px-3 py-2 w-full text-center rounded-lg bg-white border border-accent transition-all duration-300 text-accent shadow cursor-pointer mt-4">
-            Skip
-          </button>
-        </Link>
+        
       </div>
     </div>
   );

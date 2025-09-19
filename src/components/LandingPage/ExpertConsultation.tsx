@@ -3,14 +3,14 @@ import React from 'react';
 
 export default function ExpertConsultation() {
     return (
-        <section className="max-w-[1440px] mx-auto bg-white py-20 px-6 md:px-8 ">
-            <h2 className=" text-[2rem] md:text-[2.3rem] font-semibold text-accent mb-12">
+        <section className="max-w-[1440px] mx-auto bg-white py-10 md:py-20 px-6 md:px-8 ">
+            <h2 className=" text-[1.7rem] md:text-[2.3rem] font-semibold text-accent mb-12">
                 Expert’s Consultation
             </h2>
 
-            <div className=" bg-white rounded-[40px] p-6 md:p-10 grid md:grid-cols-2 gap-6">
-                <div className='p-6 md:p-12'>
-                    <h3 className="text-[1.7rem] md:text-[2rem] font-medium text-primary mb-4">
+            <div className=" bg-white rounded-[40px] p-0 md:p-10 grid md:grid-cols-2 gap-6">
+                <div className='p-0 md:p-12'>
+                    <h3 className="text-[1.5rem] md:text-[2rem] font-medium text-primary mb-4">
 
                         Take One to One Experts consultations
                     </h3>

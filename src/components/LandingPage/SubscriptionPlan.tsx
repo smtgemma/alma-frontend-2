@@ -117,7 +117,7 @@ export default function SubscriptionPlan() {
         <div className="max-w-[1440px] mx-auto w-full">
           {/* Header */}
           <div className="text-start mb-12">
-            <h1 className="text-[2rem] md:text-[2.3rem] font-semibold text-accent mb-2 ml-0 md:ml-0 lg:ml-6">
+            <h1 className="text-[1.7rem] md:text-[2.3rem] font-semibold text-accent mb-2 ml-0 md:ml-0 lg:ml-6">
               Claim Your Complete Plan <br /> One Simple Purchase
             </h1>
           </div>
@@ -128,7 +128,7 @@ export default function SubscriptionPlan() {
               plans.map((plan: any) => (
                 <div
                   key={plan.id}
-                  className="bg-white rounded-[40px] p-8 md:p-16  relative flex flex-col border-3 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
+                  className="bg-white rounded-[40px] p-3 md:p-16  relative flex flex-col border-3 border-transparent hover:border-primary transition-all duration-300 ease-in-out"
                   
                 >
                   <div className="text-start mb-6">
@@ -151,7 +151,7 @@ export default function SubscriptionPlan() {
                       </span>
                     </div>
                     <p
-                      className={`text-[0.81rem] font-normal leading-relaxed ${
+                      className={`text-[1rem] font-normal leading-relaxed ${
                         plan.id === "team" ? "text-info" : ""
                       }`}
                     >
@@ -163,9 +163,9 @@ export default function SubscriptionPlan() {
                   <div className="space-y-4 mb-8 flex-grow">
                     {plan.features.map((feature: string, index: number) => (
                       <div key={index} className="flex items-center gap-3">
-                        <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
+                        <div className="w-4 h-4 md:w-6 md:h-6 bg-secondary rounded-full flex items-center justify-center">
                           <svg
-                            className="w-4 h-4 text-primary"
+                            className="w-3 h-3 md:w-4 md:h-4 text-primary"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >

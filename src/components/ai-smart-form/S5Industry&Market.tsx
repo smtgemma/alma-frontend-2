@@ -20,6 +20,13 @@ interface IndustryMarketForm {
   customClientType03: string[];
   customClientType04: string[];
   customMarketingPlan: string[];
+  selectedIndustryOptions: string[];
+  selectedIdealClientOptions: string[];
+  selectedClientType01Options: string[];
+  selectedClientType02Options: string[];
+  selectedClientType03Options: string[];
+  selectedClientType04Options: string[];
+  selectedMarketingPlanOptions: string[];
   showIndustryOptions: boolean;
   showIdealClientOptions: boolean;
   showClientType01Options: boolean;
@@ -90,6 +97,13 @@ export default function S5IndustryMarket() {
       customClientType03: [],
       customClientType04: [],
       customMarketingPlan: [],
+      selectedIndustryOptions: [],
+      selectedIdealClientOptions: [],
+      selectedClientType01Options: [],
+      selectedClientType02Options: [],
+      selectedClientType03Options: [],
+      selectedClientType04Options: [],
+      selectedMarketingPlanOptions: [],
       showIndustryOptions: false,
       showIdealClientOptions: false,
       showClientType01Options: false,
@@ -420,61 +434,159 @@ export default function S5IndustryMarket() {
     }
   };
 
-  // Option selection handlers
+  // Option selection handlers for multiple selection
   const handleIndustryOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      industry: option,
-      showIndustryOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedIndustryOptions;
+      const isSelected = currentOptions.includes(option);
+
+      let newOptions;
+      if (isSelected) {
+        // Remove if already selected
+        newOptions = currentOptions.filter((opt) => opt !== option);
+      } else {
+        // Add if not selected
+        newOptions = [...currentOptions, option];
+      }
+
+      return {
+        ...prev,
+        selectedIndustryOptions: newOptions,
+        industry: newOptions.join(", "), // Set input field value
+      };
+    });
   };
 
   const handleIdealClientOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      idealClient: option,
-      showIdealClientOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedIdealClientOptions;
+      const isSelected = currentOptions.includes(option);
+
+      let newOptions;
+      if (isSelected) {
+        // Remove if already selected
+        newOptions = currentOptions.filter((opt) => opt !== option);
+      } else {
+        // Add if not selected
+        newOptions = [...currentOptions, option];
+      }
+
+      return {
+        ...prev,
+        selectedIdealClientOptions: newOptions,
+        idealClient: newOptions.join(", "), // Set input field value
+      };
+    });
   };
 
   const handleClientType01OptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      clientType01: option,
-      showClientType01Options: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedClientType01Options;
+      const isSelected = currentOptions.includes(option);
+
+      let newOptions;
+      if (isSelected) {
+        // Remove if already selected
+        newOptions = currentOptions.filter((opt) => opt !== option);
+      } else {
+        // Add if not selected
+        newOptions = [...currentOptions, option];
+      }
+
+      return {
+        ...prev,
+        selectedClientType01Options: newOptions,
+        clientType01: newOptions.join(", "), // Set input field value
+      };
+    });
   };
 
   const handleClientType02OptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      clientType02: option,
-      showClientType02Options: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedClientType02Options;
+      const isSelected = currentOptions.includes(option);
+
+      let newOptions;
+      if (isSelected) {
+        // Remove if already selected
+        newOptions = currentOptions.filter((opt) => opt !== option);
+      } else {
+        // Add if not selected
+        newOptions = [...currentOptions, option];
+      }
+
+      return {
+        ...prev,
+        selectedClientType02Options: newOptions,
+        clientType02: newOptions.join(", "), // Set input field value
+      };
+    });
   };
 
   const handleClientType03OptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      clientType03: option,
-      showClientType03Options: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedClientType03Options;
+      const isSelected = currentOptions.includes(option);
+
+      let newOptions;
+      if (isSelected) {
+        // Remove if already selected
+        newOptions = currentOptions.filter((opt) => opt !== option);
+      } else {
+        // Add if not selected
+        newOptions = [...currentOptions, option];
+      }
+
+      return {
+        ...prev,
+        selectedClientType03Options: newOptions,
+        clientType03: newOptions.join(", "), // Set input field value
+      };
+    });
   };
 
   const handleClientType04OptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      clientType04: option,
-      showClientType04Options: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedClientType04Options;
+      const isSelected = currentOptions.includes(option);
+
+      let newOptions;
+      if (isSelected) {
+        // Remove if already selected
+        newOptions = currentOptions.filter((opt) => opt !== option);
+      } else {
+        // Add if not selected
+        newOptions = [...currentOptions, option];
+      }
+
+      return {
+        ...prev,
+        selectedClientType04Options: newOptions,
+        clientType04: newOptions.join(", "), // Set input field value
+      };
+    });
   };
 
   const handleMarketingPlanOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      marketingPlan: option,
-      showMarketingPlanOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedMarketingPlanOptions;
+      const isSelected = currentOptions.includes(option);
+
+      let newOptions;
+      if (isSelected) {
+        // Remove if already selected
+        newOptions = currentOptions.filter((opt) => opt !== option);
+      } else {
+        // Add if not selected
+        newOptions = [...currentOptions, option];
+      }
+
+      return {
+        ...prev,
+        selectedMarketingPlanOptions: newOptions,
+        marketingPlan: newOptions.join(", "), // Set input field value
+      };
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -565,6 +677,34 @@ export default function S5IndustryMarket() {
                           : "border-[#888888]/30"
                       }`}
                     />
+
+                    {/* Selected Options Display */}
+                    {form.selectedIndustryOptions.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedIndustryOptions.map((option, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                            >
+                              <span className="mr-2">{option}</span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleIndustryOptionSelect(option)
+                                }
+                                className="text-primary hover:text-primary/70"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Sub-options */}
@@ -579,35 +719,91 @@ export default function S5IndustryMarket() {
                           </span>
                         </div>
                       ) : (
-                        industryAiSuggestions.map((option) => (
+                        industryAiSuggestions.map((option) => {
+                          const isSelected =
+                            form.selectedIndustryOptions.includes(option);
+                          return (
+                            <button
+                              key={option}
+                              type="button"
+                              onClick={() => handleIndustryOptionSelect(option)}
+                              className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                                isSelected
+                                  ? "bg-primary/10 border border-primary"
+                                  : "hover:bg-gray-50"
+                              }`}
+                            >
+                              <div
+                                className={`w-4 h-4 border-2 rounded mr-3 ml-7 flex items-center justify-center ${
+                                  isSelected
+                                    ? "bg-primary border-primary"
+                                    : "border-gray-300"
+                                }`}
+                              >
+                                {isSelected && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                              <span className="text-[1rem] font-normal text-accent">
+                                {option}
+                              </span>
+                            </button>
+                          );
+                        })
+                      )}
+
+                      {/* Custom options */}
+                      {form.customIndustry.map((option, index) => {
+                        const isSelected =
+                          form.selectedIndustryOptions.includes(option);
+                        return (
                           <button
-                            key={option}
+                            key={`custom-industry-${index}`}
                             type="button"
                             onClick={() => handleIndustryOptionSelect(option)}
-                            className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
+                            className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                              isSelected
+                                ? "bg-primary/10 border border-primary"
+                                : "hover:bg-gray-50"
+                            }`}
                           >
-                            <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
+                            <div
+                              className={`w-4 h-4 border-2 rounded mr-3 ml-7 flex items-center justify-center ${
+                                isSelected
+                                  ? "bg-primary border-primary"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {isSelected && (
+                                <svg
+                                  className="w-3 h-3 text-white"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </div>
                             <span className="text-[1rem] font-normal text-accent">
                               {option}
                             </span>
                           </button>
-                        ))
-                      )}
-
-                      {/* Custom options */}
-                      {form.customIndustry.map((option, index) => (
-                        <button
-                          key={`custom-industry-${index}`}
-                          type="button"
-                          onClick={() => handleIndustryOptionSelect(option)}
-                          className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                        >
-                          <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
-                          <span className="text-[1rem] font-normal text-accent">
-                            {option}
-                          </span>
-                        </button>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -633,6 +829,36 @@ export default function S5IndustryMarket() {
                       placeholder="E.g. Professionals, Tech Startups, Retail Brands, Health..."
                       className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent "
                     />
+
+                    {/* Selected Options Display */}
+                    {form.selectedIdealClientOptions.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedIdealClientOptions.map(
+                            (option, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              >
+                                <span className="mr-2">{option}</span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleIdealClientOptionSelect(option)
+                                  }
+                                  className="text-primary hover:text-primary/70"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Sub-options */}
@@ -650,37 +876,95 @@ export default function S5IndustryMarket() {
                           </span>
                         </div>
                       ) : (
-                        idealClientAiSuggestions.map((option) => (
+                        idealClientAiSuggestions.map((option) => {
+                          const isSelected =
+                            form.selectedIdealClientOptions.includes(option);
+                          return (
+                            <button
+                              key={option}
+                              type="button"
+                              onClick={() =>
+                                handleIdealClientOptionSelect(option)
+                              }
+                              className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                                isSelected
+                                  ? "bg-primary/10 border border-primary"
+                                  : "hover:bg-gray-50"
+                              }`}
+                            >
+                              <div
+                                className={`w-4 h-4 border-2 rounded mr-3 ml-7 flex items-center justify-center ${
+                                  isSelected
+                                    ? "bg-primary border-primary"
+                                    : "border-gray-300"
+                                }`}
+                              >
+                                {isSelected && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                              <span className="text-[1rem] font-normal text-accent">
+                                {option}
+                              </span>
+                            </button>
+                          );
+                        })
+                      )}
+
+                      {/* Custom options */}
+                      {form.customIdealClient.map((option, index) => {
+                        const isSelected =
+                          form.selectedIdealClientOptions.includes(option);
+                        return (
                           <button
-                            key={option}
+                            key={`custom-client-${index}`}
                             type="button"
                             onClick={() =>
                               handleIdealClientOptionSelect(option)
                             }
-                            className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
+                            className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                              isSelected
+                                ? "bg-primary/10 border border-primary"
+                                : "hover:bg-gray-50"
+                            }`}
                           >
-                            <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
+                            <div
+                              className={`w-4 h-4 border-2 rounded mr-3 ml-7 flex items-center justify-center ${
+                                isSelected
+                                  ? "bg-primary border-primary"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {isSelected && (
+                                <svg
+                                  className="w-3 h-3 text-white"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </div>
                             <span className="text-[1rem] font-normal text-accent">
                               {option}
                             </span>
                           </button>
-                        ))
-                      )}
-
-                      {/* Custom options */}
-                      {form.customIdealClient.map((option, index) => (
-                        <button
-                          key={`custom-client-${index}`}
-                          type="button"
-                          onClick={() => handleIdealClientOptionSelect(option)}
-                          className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                        >
-                          <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
-                          <span className="text-[1rem] font-normal text-accent">
-                            {option}
-                          </span>
-                        </button>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -707,6 +991,36 @@ export default function S5IndustryMarket() {
                       className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
 
+                    {/* Selected Options Display */}
+                    {form.selectedClientType01Options.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedClientType01Options.map(
+                            (option, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              >
+                                <span className="mr-2">{option}</span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleClientType01OptionSelect(option)
+                                  }
+                                  className="text-primary hover:text-primary/70"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Sub-options */}
                     {form.showClientType01Options && (
                       <div
@@ -722,39 +1036,95 @@ export default function S5IndustryMarket() {
                             </span>
                           </div>
                         ) : (
-                          clientTypeAiSuggestions.map((option) => (
+                          clientTypeAiSuggestions.map((option) => {
+                            const isSelected =
+                              form.selectedClientType01Options.includes(option);
+                            return (
+                              <button
+                                key={option}
+                                type="button"
+                                onClick={() =>
+                                  handleClientType01OptionSelect(option)
+                                }
+                                className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                                  isSelected
+                                    ? "bg-primary/10 border border-primary"
+                                    : "hover:bg-gray-50"
+                                }`}
+                              >
+                                <div
+                                  className={`w-4 h-4 border-2 rounded mr-2 ml-4 flex items-center justify-center ${
+                                    isSelected
+                                      ? "bg-primary border-primary"
+                                      : "border-gray-300"
+                                  }`}
+                                >
+                                  {isSelected && (
+                                    <svg
+                                      className="w-3 h-3 text-white"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                                <span className="text-[0.875rem] font-normal text-accent">
+                                  {option}
+                                </span>
+                              </button>
+                            );
+                          })
+                        )}
+
+                        {/* Custom options */}
+                        {form.customClientType01.map((option, index) => {
+                          const isSelected =
+                            form.selectedClientType01Options.includes(option);
+                          return (
                             <button
-                              key={option}
+                              key={`custom-type01-${index}`}
                               type="button"
                               onClick={() =>
                                 handleClientType01OptionSelect(option)
                               }
-                              className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
+                              className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                                isSelected
+                                  ? "bg-primary/10 border border-primary"
+                                  : "hover:bg-gray-50"
+                              }`}
                             >
-                              <div className="w-1 h-1 bg-[#6B4AFF] rounded-full mr-2 ml-4"></div>
+                              <div
+                                className={`w-4 h-4 border-2 rounded mr-2 ml-4 flex items-center justify-center ${
+                                  isSelected
+                                    ? "bg-primary border-primary"
+                                    : "border-gray-300"
+                                }`}
+                              >
+                                {isSelected && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
                               <span className="text-[0.875rem] font-normal text-accent">
                                 {option}
                               </span>
                             </button>
-                          ))
-                        )}
-
-                        {/* Custom options */}
-                        {form.customClientType01.map((option, index) => (
-                          <button
-                            key={`custom-type01-${index}`}
-                            type="button"
-                            onClick={() =>
-                              handleClientType01OptionSelect(option)
-                            }
-                            className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                          >
-                            <div className="w-1 h-1 bg-[#6B4AFF] rounded-full mr-2 ml-4"></div>
-                            <span className="text-[0.875rem] font-normal text-accent">
-                              {option}
-                            </span>
-                          </button>
-                        ))}
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -782,6 +1152,36 @@ export default function S5IndustryMarket() {
                       className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
 
+                    {/* Selected Options Display */}
+                    {form.selectedClientType02Options.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedClientType02Options.map(
+                            (option, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              >
+                                <span className="mr-2">{option}</span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleClientType02OptionSelect(option)
+                                  }
+                                  className="text-primary hover:text-primary/70"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Sub-options */}
                     {form.showClientType02Options && (
                       <div
@@ -797,39 +1197,95 @@ export default function S5IndustryMarket() {
                             </span>
                           </div>
                         ) : (
-                          clientTypeAiSuggestions.map((option) => (
+                          clientTypeAiSuggestions.map((option) => {
+                            const isSelected =
+                              form.selectedClientType02Options.includes(option);
+                            return (
+                              <button
+                                key={option}
+                                type="button"
+                                onClick={() =>
+                                  handleClientType02OptionSelect(option)
+                                }
+                                className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                                  isSelected
+                                    ? "bg-primary/10 border border-primary"
+                                    : "hover:bg-gray-50"
+                                }`}
+                              >
+                                <div
+                                  className={`w-4 h-4 border-2 rounded mr-2 ml-4 flex items-center justify-center ${
+                                    isSelected
+                                      ? "bg-primary border-primary"
+                                      : "border-gray-300"
+                                  }`}
+                                >
+                                  {isSelected && (
+                                    <svg
+                                      className="w-3 h-3 text-white"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                                <span className="text-[0.875rem] font-normal text-accent">
+                                  {option}
+                                </span>
+                              </button>
+                            );
+                          })
+                        )}
+
+                        {/* Custom options */}
+                        {form.customClientType02.map((option, index) => {
+                          const isSelected =
+                            form.selectedClientType02Options.includes(option);
+                          return (
                             <button
-                              key={option}
+                              key={`custom-type02-${index}`}
                               type="button"
                               onClick={() =>
                                 handleClientType02OptionSelect(option)
                               }
-                              className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
+                              className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                                isSelected
+                                  ? "bg-primary/10 border border-primary"
+                                  : "hover:bg-gray-50"
+                              }`}
                             >
-                              <div className="w-1 h-1 bg-[#6B4AFF] rounded-full mr-2 ml-4"></div>
+                              <div
+                                className={`w-4 h-4 border-2 rounded mr-2 ml-4 flex items-center justify-center ${
+                                  isSelected
+                                    ? "bg-primary border-primary"
+                                    : "border-gray-300"
+                                }`}
+                              >
+                                {isSelected && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
                               <span className="text-[0.875rem] font-normal text-accent">
                                 {option}
                               </span>
                             </button>
-                          ))
-                        )}
-
-                        {/* Custom options */}
-                        {form.customClientType02.map((option, index) => (
-                          <button
-                            key={`custom-type02-${index}`}
-                            type="button"
-                            onClick={() =>
-                              handleClientType02OptionSelect(option)
-                            }
-                            className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                          >
-                            <div className="w-1 h-1 bg-[#6B4AFF] rounded-full mr-2 ml-4"></div>
-                            <span className="text-[0.875rem] font-normal text-accent">
-                              {option}
-                            </span>
-                          </button>
-                        ))}
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -853,6 +1309,36 @@ export default function S5IndustryMarket() {
                       }
                       className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
+
+                    {/* Selected Options Display */}
+                    {form.selectedClientType03Options.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedClientType03Options.map(
+                            (option, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              >
+                                <span className="mr-2">{option}</span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleClientType03OptionSelect(option)
+                                  }
+                                  className="text-primary hover:text-primary/70"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Sub-options */}
                     {form.showClientType03Options && (
@@ -924,6 +1410,36 @@ export default function S5IndustryMarket() {
                       }
                       className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
+
+                    {/* Selected Options Display */}
+                    {form.selectedClientType04Options.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedClientType04Options.map(
+                            (option, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              >
+                                <span className="mr-2">{option}</span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleClientType04OptionSelect(option)
+                                  }
+                                  className="text-primary hover:text-primary/70"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Sub-options */}
                     {form.showClientType04Options && (
@@ -1003,6 +1519,36 @@ export default function S5IndustryMarket() {
                       placeholder="E.g. Digital & Online marketing, Influencer & Blogging, SEO & Blogging..."
                       className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
+
+                    {/* Selected Options Display */}
+                    {form.selectedMarketingPlanOptions.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedMarketingPlanOptions.map(
+                            (option, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              >
+                                <span className="mr-2">{option}</span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleMarketingPlanOptionSelect(option)
+                                  }
+                                  className="text-primary hover:text-primary/70"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Sub-options */}
@@ -1020,39 +1566,95 @@ export default function S5IndustryMarket() {
                           </span>
                         </div>
                       ) : (
-                        marketingPlanAiSuggestions.map((option) => (
+                        marketingPlanAiSuggestions.map((option) => {
+                          const isSelected =
+                            form.selectedMarketingPlanOptions.includes(option);
+                          return (
+                            <button
+                              key={option}
+                              type="button"
+                              onClick={() =>
+                                handleMarketingPlanOptionSelect(option)
+                              }
+                              className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                                isSelected
+                                  ? "bg-primary/10 border border-primary"
+                                  : "hover:bg-gray-50"
+                              }`}
+                            >
+                              <div
+                                className={`w-4 h-4 border-2 rounded mr-3 ml-7 flex items-center justify-center ${
+                                  isSelected
+                                    ? "bg-primary border-primary"
+                                    : "border-gray-300"
+                                }`}
+                              >
+                                {isSelected && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                              <span className="text-[1rem] font-normal text-accent">
+                                {option}
+                              </span>
+                            </button>
+                          );
+                        })
+                      )}
+
+                      {/* Custom options */}
+                      {form.customMarketingPlan.map((option, index) => {
+                        const isSelected =
+                          form.selectedMarketingPlanOptions.includes(option);
+                        return (
                           <button
-                            key={option}
+                            key={`custom-marketing-${index}`}
                             type="button"
                             onClick={() =>
                               handleMarketingPlanOptionSelect(option)
                             }
-                            className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
+                            className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                              isSelected
+                                ? "bg-primary/10 border border-primary"
+                                : "hover:bg-gray-50"
+                            }`}
                           >
-                            <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
+                            <div
+                              className={`w-4 h-4 border-2 rounded mr-3 ml-7 flex items-center justify-center ${
+                                isSelected
+                                  ? "bg-primary border-primary"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {isSelected && (
+                                <svg
+                                  className="w-3 h-3 text-white"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </div>
                             <span className="text-[1rem] font-normal text-accent">
                               {option}
                             </span>
                           </button>
-                        ))
-                      )}
-
-                      {/* Custom options */}
-                      {form.customMarketingPlan.map((option, index) => (
-                        <button
-                          key={`custom-marketing-${index}`}
-                          type="button"
-                          onClick={() =>
-                            handleMarketingPlanOptionSelect(option)
-                          }
-                          className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                        >
-                          <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
-                          <span className="text-[1rem] font-normal text-accent">
-                            {option}
-                          </span>
-                        </button>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>

@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import ReduxProvider from "@/redux/Provider";
 import Loading from "@/components/Others/Loading";
 import StripeProvider from "@/components/StripeProvider";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,13 +37,41 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning={true}  className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} antialiased`}>
+      <body
+        suppressHydrationWarning={true}
+        className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} antialiased`}
+      >
         <ReduxProvider>
           <StripeProvider>
             <Toaster position="top-center" expand={true} richColors />
             <Suspense fallback={<Loading />}>{children}</Suspense>
           </StripeProvider>
         </ReduxProvider>
+
+        {/* Google Translate script */}
+        <div id="google_translate_element" className="hidden" />
+        <Script
+          id="google-translate"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              function googleTranslateElementInit() {
+                new google.translate.TranslateElement(
+                  {
+                    pageLanguage: 'en',
+                    includedLanguages: 'en,it,de,fr,es',
+                    autoDisplay: false
+                  },
+                  'google_translate_element'
+                );
+              }
+            `,
+          }}
+        />
+        <Script
+          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

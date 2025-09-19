@@ -258,7 +258,7 @@ export default function OtpVerification() {
 
   return (
     <div className="">
-      <div className="w-full max-w-md space-y-8 text-center">
+      <div className="w-full mx-auto  max-w-md space-y-8 text-center ">
         <div className="space-y-4 flex flex-col items-center">
           {/* <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-blue-500">
             <LuCheck className="h-20 w-20 text-white" />
@@ -297,7 +297,7 @@ export default function OtpVerification() {
                 type="text"
                 inputMode="numeric"
                 maxLength={1}
-                className={`h-14 w-14 rounded-md border border-gray-300 text-center text-xl focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary ${activeInput === index
+                className={`w-10 h-10 md:h-14 md:w-14 rounded-md border border-gray-300 text-center text-xl focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary ${activeInput === index
                   ? "border-primary ring-1 ring-primary"
                   : ""
                   }`}

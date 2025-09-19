@@ -17,22 +17,22 @@ const benefits = [
 export default function SolutionSection() {
   return (
     <section className="max-w-[1440px] mx-auto bg-white px-6 md:px-8  pb-10">
-      
 
-      <div className=" bg-white rounded-[40px]  p-6 md:p-10 grid md:grid-cols-2 gap-6" > {/* style={{ boxShadow: '0 4px 6px 1px #4F46E540' }} */}
-       
+
+      <div className=" bg-white rounded-[40px]  p-0 md:p-10 grid md:grid-cols-2 gap-6" > {/* style={{ boxShadow: '0 4px 6px 1px #4F46E540' }} */}
+
 
         <ul className="bg-card p-6 md:p-12 rounded-[20px] text-sm space-y-2 text-indigo-900 font-medium">
           {benefits.map((problem, index) => (
             <li key={index} className="flex items-center gap-4 mb-4">
-              <span className="bg-secondary rounded-full p-1"><FaCheck className='text-primary text-lg font-normal' /></span>
+              <span className="bg-secondary rounded-full p-1"><FaCheck className='text-primary text-md md:text-lg font-normal' /></span>
               <span className='text-[1rem] md:text-[1.3rem] font-medium text-accent'>{problem}</span>
             </li>
           ))}
         </ul>
 
-        <div className='p-6 md:p-12'>
-        <h3 className="text-[1.7rem] md:text-[2rem] font-medium text-accent mb-4">
+        <div className='p-0 md:p-12'>
+          <h3 className="text-[1.5rem] md:text-[2rem] font-medium text-accent mb-4">
             Game-Changing Benefits of Having a Clear Plan
           </h3>
           <p className="text-[1rem] md:text-[1.3rem] text-[#475466] font-normal mb-6">

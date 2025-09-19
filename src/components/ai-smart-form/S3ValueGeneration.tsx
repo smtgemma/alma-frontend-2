@@ -14,6 +14,9 @@ interface ValueGenerationForm {
   customUniqueOptions: string[];
   customProblemOptions: string[];
   customValueAddOptions: string[];
+  selectedUniqueOptions: string[];
+  selectedProblemOptions: string[];
+  selectedValueAddOptions: string[];
   showUniqueOptions: boolean;
   showProblemOptions: boolean;
   showValueAddOptions: boolean;
@@ -42,6 +45,9 @@ export default function S3ValueGeneration() {
       customUniqueOptions: [],
       customProblemOptions: [],
       customValueAddOptions: [],
+      selectedUniqueOptions: [],
+      selectedProblemOptions: [],
+      selectedValueAddOptions: [],
       showUniqueOptions: false,
       showProblemOptions: false,
       showValueAddOptions: false,
@@ -258,27 +264,70 @@ export default function S3ValueGeneration() {
   }, []);
 
   const handleUniqueOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      uniqueValue: option,
-      showUniqueOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedUniqueOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedUniqueOptions: currentOptions.filter((opt) => opt !== option),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedUniqueOptions: [...currentOptions, option],
+        };
+      }
+    });
   };
 
   const handleProblemOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      problemDescription: option,
-      showProblemOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedProblemOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedProblemOptions: currentOptions.filter(
+            (opt) => opt !== option
+          ),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedProblemOptions: [...currentOptions, option],
+        };
+      }
+    });
   };
 
   const handleValueAddOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      valueAddDescription: option,
-      showValueAddOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedValueAddOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedValueAddOptions: currentOptions.filter(
+            (opt) => opt !== option
+          ),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedValueAddOptions: [...currentOptions, option],
+        };
+      }
+    });
   };
 
   const handleTextareaClick = (
@@ -390,7 +439,11 @@ export default function S3ValueGeneration() {
                   <div className="mt-4 relative">
                     <input
                       type="text"
-                      value={form.uniqueValue}
+                      value={
+                        form.selectedUniqueOptions.length > 0
+                          ? form.selectedUniqueOptions.join(", ")
+                          : form.uniqueValue
+                      }
                       onChange={(e) =>
                         handleTextareaChange("uniqueValue", e.target.value)
                       }
@@ -408,6 +461,32 @@ export default function S3ValueGeneration() {
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
+                    {/* Selected Options Display */}
+                    {form.selectedUniqueOptions.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedUniqueOptions.map((option, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                            >
+                              <span className="mr-2">{option}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleUniqueOptionSelect(option)}
+                                className="text-primary hover:text-primary/70"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Dropdown with AI suggestions */}
                     {form.showUniqueOptions && (
                       <div className="mb-4 mt-2 " ref={uniqueDropdownRef}>
@@ -422,21 +501,51 @@ export default function S3ValueGeneration() {
                         ) : (
                           uniqueAiSuggestions.length > 0 && (
                             <>
-                              {uniqueAiSuggestions.map((suggestion, index) => (
-                                <button
-                                  key={`ai-unique-${index}`}
-                                  type="button"
-                                  className="flex items-center p-1 ml-7 rounded-lg cursor-pointer text-left transition-colors"
-                                  onClick={() =>
-                                    handleUniqueOptionSelect(suggestion)
-                                  }
-                                >
-                                  <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                                  <span className="text-[1rem] font-normal text-accent">
-                                    {suggestion}
-                                  </span>
-                                </button>
-                              ))}
+                              {uniqueAiSuggestions.map((suggestion, index) => {
+                                const isSelected =
+                                  form.selectedUniqueOptions.includes(
+                                    suggestion
+                                  );
+                                return (
+                                  <button
+                                    key={`ai-unique-${index}`}
+                                    type="button"
+                                    className={`flex items-center p-2 ml-7 rounded-lg cursor-pointer text-left transition-colors ${
+                                      isSelected
+                                        ? "bg-primary/10 border border-primary"
+                                        : "hover:bg-gray-50"
+                                    }`}
+                                    onClick={() =>
+                                      handleUniqueOptionSelect(suggestion)
+                                    }
+                                  >
+                                    <div
+                                      className={`w-4 h-4 border-2 rounded mr-3 flex items-center justify-center ${
+                                        isSelected
+                                          ? "bg-primary border-primary"
+                                          : "border-gray-300"
+                                      }`}
+                                    >
+                                      {isSelected && (
+                                        <svg
+                                          className="w-3 h-3 text-white"
+                                          fill="currentColor"
+                                          viewBox="0 0 20 20"
+                                        >
+                                          <path
+                                            fillRule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clipRule="evenodd"
+                                          />
+                                        </svg>
+                                      )}
+                                    </div>
+                                    <span className="text-[1rem] font-normal text-accent">
+                                      {suggestion}
+                                    </span>
+                                  </button>
+                                );
+                              })}
                               {/* <div className="border-b border-gray-200"></div> */}
                             </>
                           )
@@ -454,7 +563,11 @@ export default function S3ValueGeneration() {
                   <div className="mt-4 relative">
                     <input
                       type="text"
-                      value={form.problemDescription}
+                      value={
+                        form.selectedProblemOptions.length > 0
+                          ? form.selectedProblemOptions.join(", ")
+                          : form.problemDescription
+                      }
                       onChange={(e) =>
                         handleTextareaChange(
                           "problemDescription",
@@ -475,6 +588,34 @@ export default function S3ValueGeneration() {
                       className="w-full px-4 py-4 bg-[#FCFCFC] border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
+                    {/* Selected Options Display */}
+                    {form.selectedProblemOptions.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedProblemOptions.map((option, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                            >
+                              <span className="mr-2">{option}</span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleProblemOptionSelect(option)
+                                }
+                                className="text-primary hover:text-primary/70"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Dropdown with AI suggestions */}
                     {form.showProblemOptions && (
                       <div className="mb-4 mt-2" ref={problemDropdownRef}>
@@ -489,21 +630,51 @@ export default function S3ValueGeneration() {
                         ) : (
                           problemAiSuggestions.length > 0 && (
                             <>
-                              {problemAiSuggestions.map((suggestion, index) => (
-                                <button
-                                  key={`ai-problem-${index}`}
-                                  type="button"
-                                  className="flex items-center p-1 ml-7 rounded-lg cursor-pointer text-left transition-colors"
-                                  onClick={() =>
-                                    handleProblemOptionSelect(suggestion)
-                                  }
-                                >
-                                  <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                                  <span className="text-[1rem] font-normal text-accent">
-                                    {suggestion}
-                                  </span>
-                                </button>
-                              ))}
+                              {problemAiSuggestions.map((suggestion, index) => {
+                                const isSelected =
+                                  form.selectedProblemOptions.includes(
+                                    suggestion
+                                  );
+                                return (
+                                  <button
+                                    key={`ai-problem-${index}`}
+                                    type="button"
+                                    className={`flex items-center p-2 ml-7 rounded-lg cursor-pointer text-left transition-colors ${
+                                      isSelected
+                                        ? "bg-primary/10 border border-primary"
+                                        : "hover:bg-gray-50"
+                                    }`}
+                                    onClick={() =>
+                                      handleProblemOptionSelect(suggestion)
+                                    }
+                                  >
+                                    <div
+                                      className={`w-4 h-4 border-2 rounded mr-3 flex items-center justify-center ${
+                                        isSelected
+                                          ? "bg-primary border-primary"
+                                          : "border-gray-300"
+                                      }`}
+                                    >
+                                      {isSelected && (
+                                        <svg
+                                          className="w-3 h-3 text-white"
+                                          fill="currentColor"
+                                          viewBox="0 0 20 20"
+                                        >
+                                          <path
+                                            fillRule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clipRule="evenodd"
+                                          />
+                                        </svg>
+                                      )}
+                                    </div>
+                                    <span className="text-[1rem] font-normal text-accent">
+                                      {suggestion}
+                                    </span>
+                                  </button>
+                                );
+                              })}
                               {/* <div className="border-b border-gray-200"></div> */}
                             </>
                           )
@@ -522,7 +693,11 @@ export default function S3ValueGeneration() {
                     <input
                       type="text"
                       placeholder="E.g. We provide a dedicated account manager and 24/7 technical support"
-                      value={form.valueAddDescription}
+                      value={
+                        form.selectedValueAddOptions.length > 0
+                          ? form.selectedValueAddOptions.join(", ")
+                          : form.valueAddDescription
+                      }
                       onChange={(e) =>
                         handleTextareaChange(
                           "valueAddDescription",
@@ -555,6 +730,34 @@ export default function S3ValueGeneration() {
                       className="w-full px-4 py-3 bg-[#FCFCFC] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
+                    {/* Selected Options Display */}
+                    {form.selectedValueAddOptions.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedValueAddOptions.map((option, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                            >
+                              <span className="mr-2">{option}</span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleValueAddOptionSelect(option)
+                                }
+                                className="text-primary hover:text-primary/70"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Sub-options below input */}
 
                     {form.showValueAddOptions && (
@@ -575,25 +778,53 @@ export default function S3ValueGeneration() {
                             valueAddAiSuggestions.length > 0 && (
                               <>
                                 {valueAddAiSuggestions.map(
-                                  (suggestion, index) => (
-                                    <button
-                                      key={`ai-valueadd-suggestion-${index}`}
-                                      type="button"
-                                      className="flex items-center p-1 ml-7 rounded-lg cursor-pointer text-left transition-colors"
-                                      onClick={() => {
-                                        handleValueAddOptionSelect(suggestion);
-                                        setForm((prev) => ({
-                                          ...prev,
-                                          showValueAddOptions: false,
-                                        }));
-                                      }}
-                                    >
-                                      <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                                      <span className="text-[1rem] font-normal text-accent">
-                                        {suggestion}
-                                      </span>
-                                    </button>
-                                  )
+                                  (suggestion, index) => {
+                                    const isSelected =
+                                      form.selectedValueAddOptions.includes(
+                                        suggestion
+                                      );
+                                    return (
+                                      <button
+                                        key={`ai-valueadd-suggestion-${index}`}
+                                        type="button"
+                                        className={`flex items-center p-2 ml-7 rounded-lg cursor-pointer text-left transition-colors ${
+                                          isSelected
+                                            ? "bg-primary/10 border border-primary"
+                                            : "hover:bg-gray-50"
+                                        }`}
+                                        onClick={() => {
+                                          handleValueAddOptionSelect(
+                                            suggestion
+                                          );
+                                        }}
+                                      >
+                                        <div
+                                          className={`w-4 h-4 border-2 rounded mr-3 flex items-center justify-center ${
+                                            isSelected
+                                              ? "bg-primary border-primary"
+                                              : "border-gray-300"
+                                          }`}
+                                        >
+                                          {isSelected && (
+                                            <svg
+                                              className="w-3 h-3 text-white"
+                                              fill="currentColor"
+                                              viewBox="0 0 20 20"
+                                            >
+                                              <path
+                                                fillRule="evenodd"
+                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                clipRule="evenodd"
+                                              />
+                                            </svg>
+                                          )}
+                                        </div>
+                                        <span className="text-[1rem] font-normal text-accent">
+                                          {suggestion}
+                                        </span>
+                                      </button>
+                                    );
+                                  }
                                 )}
                               </>
                             )}

@@ -56,3 +56,54 @@ body {
 }
 
 /* #80E5FF */
+
+/* Hide the Google Translate toolbar and default UI */
+
+
+.goog-te-gadget {
+  display: none !important;
+}
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+
+
+
+/* Hide Google Translate UI completely */
+#google_translate_element,
+.goog-te-gadget,
+.goog-te-combo,
+.goog-te-banner-frame,
+.goog-te-banner,
+.goog-te-balloon-frame,
+.goog-logo-link,
+.goog-te-gadget-icon,
+.goog-te-spinner-pos,
+.goog-te-menu-frame,
+.goog-te-menu2,
+.goog-te-menu-value,
+.goog-te-ftab,
+.goog-te-ftab-frame,
+.goog-te-menu-frame iframe,
+.skiptranslate,
+iframe[src*="translate.googleapis.com"],
+iframe[src*="translate.google.com"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  opacity: 0 !important;
+  z-index: -9999 !important;
+}
+
+/* Prevent page from shifting down */
+body {
+  top: 0px !important;
+}
+

@@ -16,6 +16,9 @@ interface BusinessGoalVisionForm {
   customBusinessGoals: string[];
   customLongTermVision: string[];
   customMission: string[];
+  selectedBusinessGoalsOptions: string[];
+  selectedLongTermVisionOptions: string[];
+  selectedMissionOptions: string[];
   showBusinessGoalsOptions: boolean;
   showLongTermVisionOptions: boolean;
   showMissionOptions: boolean;
@@ -63,6 +66,9 @@ export default function S4BusinessGoalVision() {
       customBusinessGoals: [],
       customLongTermVision: [],
       customMission: [],
+      selectedBusinessGoalsOptions: [],
+      selectedLongTermVisionOptions: [],
+      selectedMissionOptions: [],
       showBusinessGoalsOptions: false,
       showLongTermVisionOptions: false,
       showMissionOptions: false,
@@ -218,6 +224,75 @@ export default function S4BusinessGoalVision() {
     }
   };
 
+  const handleBusinessGoalOptionSelect = (option: string) => {
+    setForm((prev) => {
+      const currentOptions = prev.selectedBusinessGoalsOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedBusinessGoalsOptions: currentOptions.filter(
+            (opt) => opt !== option
+          ),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedBusinessGoalsOptions: [...currentOptions, option],
+        };
+      }
+    });
+  };
+
+  const handleVisionOptionSelect = (option: string) => {
+    setForm((prev) => {
+      const currentOptions = prev.selectedLongTermVisionOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedLongTermVisionOptions: currentOptions.filter(
+            (opt) => opt !== option
+          ),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedLongTermVisionOptions: [...currentOptions, option],
+        };
+      }
+    });
+  };
+
+  const handleMissionOptionSelect = (option: string) => {
+    setForm((prev) => {
+      const currentOptions = prev.selectedMissionOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedMissionOptions: currentOptions.filter(
+            (opt) => opt !== option
+          ),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedMissionOptions: [...currentOptions, option],
+        };
+      }
+    });
+  };
+
   const handleKeyPress = (
     e: React.KeyboardEvent<HTMLInputElement>,
     field: "customBusinessGoals" | "customLongTermVision" | "customMission",
@@ -305,30 +380,6 @@ export default function S4BusinessGoalVision() {
     };
   }, []);
 
-  const handleBusinessGoalOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      businessGoalsDescription: option,
-      showBusinessGoalsOptions: false,
-    }));
-  };
-
-  const handleLongTermVisionOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      longTermVisionDescription: option,
-      showLongTermVisionOptions: false,
-    }));
-  };
-
-  const handleMissionOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      missionDescription: option,
-      showMissionOptions: false,
-    }));
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -390,7 +441,11 @@ export default function S4BusinessGoalVision() {
                   <div className="mt-4">
                     <input
                       type="text"
-                      value={form.businessGoalsDescription}
+                      value={
+                        form.selectedBusinessGoalsOptions.length > 0
+                          ? form.selectedBusinessGoalsOptions.join(", ")
+                          : form.businessGoalsDescription
+                      }
                       onChange={(e) =>
                         handleTextareaChange(
                           "businessGoalsDescription",
@@ -410,6 +465,36 @@ export default function S4BusinessGoalVision() {
                       placeholder="E.g. We aim to become a leader in sustainable technology..."
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
+
+                    {/* Selected Options Display */}
+                    {form.selectedBusinessGoalsOptions.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedBusinessGoalsOptions.map(
+                            (option, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              >
+                                <span className="mr-2">{option}</span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleBusinessGoalOptionSelect(option)
+                                  }
+                                  className="text-primary hover:text-primary/70"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Sub-options */}
@@ -424,37 +509,95 @@ export default function S4BusinessGoalVision() {
                           </span>
                         </div>
                       ) : (
-                        businessGoalsAiSuggestions.map((option) => (
+                        businessGoalsAiSuggestions.map((option) => {
+                          const isSelected =
+                            form.selectedBusinessGoalsOptions.includes(option);
+                          return (
+                            <button
+                              key={option}
+                              type="button"
+                              className={`flex items-center p-2 bg-white rounded-lg cursor-pointer text-left transition-colors w-full ${
+                                isSelected
+                                  ? "bg-primary/10 border border-primary"
+                                  : "hover:bg-gray-50"
+                              }`}
+                              onClick={() =>
+                                handleBusinessGoalOptionSelect(option)
+                              }
+                            >
+                              <div
+                                className={`w-4 h-4 border-2 rounded mr-3 ml-5 flex items-center justify-center ${
+                                  isSelected
+                                    ? "bg-primary border-primary"
+                                    : "border-gray-300"
+                                }`}
+                              >
+                                {isSelected && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                              <span className="text-[1rem] font-normal text-accent">
+                                {option}
+                              </span>
+                            </button>
+                          );
+                        })
+                      )}
+
+                      {/* Custom options */}
+                      {form.customBusinessGoals.map((option, index) => {
+                        const isSelected =
+                          form.selectedBusinessGoalsOptions.includes(option);
+                        return (
                           <button
-                            key={option}
+                            key={`custom-goal-${index}`}
                             type="button"
-                            className="flex items-center p-2 bg-white rounded-lg hover:bg-gray-50 cursor-pointer text-left transition-colors w-full"
+                            className={`flex items-center p-2 bg-white rounded-lg cursor-pointer text-left transition-colors w-full ${
+                              isSelected
+                                ? "bg-primary/10 border border-primary"
+                                : "hover:bg-gray-50"
+                            }`}
                             onClick={() =>
                               handleBusinessGoalOptionSelect(option)
                             }
                           >
-                            <div className="w-2 h-2 bg-primary rounded-full mr-3 ml-5"></div>
+                            <div
+                              className={`w-4 h-4 border-2 rounded mr-3 ml-5 flex items-center justify-center ${
+                                isSelected
+                                  ? "bg-primary border-primary"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {isSelected && (
+                                <svg
+                                  className="w-3 h-3 text-white"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </div>
                             <span className="text-[1rem] font-normal text-accent">
                               {option}
                             </span>
                           </button>
-                        ))
-                      )}
-
-                      {/* Custom options */}
-                      {form.customBusinessGoals.map((option, index) => (
-                        <button
-                          key={`custom-goal-${index}`}
-                          type="button"
-                          className="flex items-center p-2 bg-white rounded-lg hover:bg-gray-50 cursor-pointer text-left transition-colors w-full"
-                          onClick={() => handleBusinessGoalOptionSelect(option)}
-                        >
-                          <div className="w-2 h-2 bg-primary rounded-full mr-3 ml-5"></div>
-                          <span className="text-[1rem] font-normal text-accent">
-                            {option}
-                          </span>
-                        </button>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -467,7 +610,11 @@ export default function S4BusinessGoalVision() {
                   <div className="mt-4">
                     <input
                       type="text"
-                      value={form.longTermVisionDescription}
+                      value={
+                        form.selectedLongTermVisionOptions.length > 0
+                          ? form.selectedLongTermVisionOptions.join(", ")
+                          : form.longTermVisionDescription
+                      }
                       onChange={(e) =>
                         handleTextareaChange(
                           "longTermVisionDescription",
@@ -487,6 +634,36 @@ export default function S4BusinessGoalVision() {
                       placeholder="E.g. To revolutionize the industry through innovation..."
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
+
+                    {/* Selected Options Display */}
+                    {form.selectedLongTermVisionOptions.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedLongTermVisionOptions.map(
+                            (option, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              >
+                                <span className="mr-2">{option}</span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleVisionOptionSelect(option)
+                                  }
+                                  className="text-primary hover:text-primary/70"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Sub-options */}
@@ -501,39 +678,91 @@ export default function S4BusinessGoalVision() {
                           </span>
                         </div>
                       ) : (
-                        visionAiSuggestions.map((option) => (
+                        visionAiSuggestions.map((option) => {
+                          const isSelected =
+                            form.selectedLongTermVisionOptions.includes(option);
+                          return (
+                            <button
+                              key={option}
+                              type="button"
+                              className={`flex items-center p-2 bg-white rounded-lg cursor-pointer text-left transition-colors w-full ${
+                                isSelected
+                                  ? "bg-primary/10 border border-primary"
+                                  : "hover:bg-gray-50"
+                              }`}
+                              onClick={() => handleVisionOptionSelect(option)}
+                            >
+                              <div
+                                className={`w-4 h-4 border-2 rounded mr-3 ml-5 flex items-center justify-center ${
+                                  isSelected
+                                    ? "bg-primary border-primary"
+                                    : "border-gray-300"
+                                }`}
+                              >
+                                {isSelected && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                              <span className="text-[1rem] font-normal text-accent">
+                                {option}
+                              </span>
+                            </button>
+                          );
+                        })
+                      )}
+
+                      {/* Custom options */}
+                      {form.customLongTermVision.map((option, index) => {
+                        const isSelected =
+                          form.selectedLongTermVisionOptions.includes(option);
+                        return (
                           <button
-                            key={option}
+                            key={`custom-vision-${index}`}
                             type="button"
-                            className="flex items-center p-2 bg-white rounded-lg hover:bg-gray-50 cursor-pointer text-left transition-colors w-full"
-                            onClick={() =>
-                              handleLongTermVisionOptionSelect(option)
-                            }
+                            className={`flex items-center p-2 bg-white rounded-lg cursor-pointer text-left transition-colors w-full ${
+                              isSelected
+                                ? "bg-primary/10 border border-primary"
+                                : "hover:bg-gray-50"
+                            }`}
+                            onClick={() => handleVisionOptionSelect(option)}
                           >
-                            <div className="w-2 h-2 bg-primary rounded-full mr-3 ml-5"></div>
+                            <div
+                              className={`w-4 h-4 border-2 rounded mr-3 ml-5 flex items-center justify-center ${
+                                isSelected
+                                  ? "bg-primary border-primary"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {isSelected && (
+                                <svg
+                                  className="w-3 h-3 text-white"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </div>
                             <span className="text-[1rem] font-normal text-accent">
                               {option}
                             </span>
                           </button>
-                        ))
-                      )}
-
-                      {/* Custom options */}
-                      {form.customLongTermVision.map((option, index) => (
-                        <button
-                          key={`custom-vision-${index}`}
-                          type="button"
-                          className="flex items-center p-2 bg-white rounded-lg hover:bg-gray-50 cursor-pointer text-left transition-colors w-full"
-                          onClick={() =>
-                            handleLongTermVisionOptionSelect(option)
-                          }
-                        >
-                          <div className="w-2 h-2 bg-primary rounded-full mr-3 ml-5"></div>
-                          <span className="text-[1rem] font-normal text-accent">
-                            {option}
-                          </span>
-                        </button>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -546,7 +775,11 @@ export default function S4BusinessGoalVision() {
                   <div className="mt-4">
                     <input
                       type="text"
-                      value={form.missionDescription}
+                      value={
+                        form.selectedMissionOptions.length > 0
+                          ? form.selectedMissionOptions.join(", ")
+                          : form.missionDescription
+                      }
                       onChange={(e) =>
                         handleTextareaChange(
                           "missionDescription",
@@ -560,6 +793,34 @@ export default function S4BusinessGoalVision() {
                       placeholder="E.g. Empowering businesses through cutting-edge solutions..."
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
+
+                    {/* Selected Options Display */}
+                    {form.selectedMissionOptions.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedMissionOptions.map((option, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                            >
+                              <span className="mr-2">{option}</span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleMissionOptionSelect(option)
+                                }
+                                className="text-primary hover:text-primary/70"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Sub-options */}
@@ -574,35 +835,91 @@ export default function S4BusinessGoalVision() {
                           </span>
                         </div>
                       ) : (
-                        missionAiSuggestions.map((option) => (
+                        missionAiSuggestions.map((option) => {
+                          const isSelected =
+                            form.selectedMissionOptions.includes(option);
+                          return (
+                            <button
+                              key={option}
+                              type="button"
+                              className={`flex items-center p-2 bg-white rounded-lg cursor-pointer text-left transition-colors w-full ${
+                                isSelected
+                                  ? "bg-primary/10 border border-primary"
+                                  : "hover:bg-gray-50"
+                              }`}
+                              onClick={() => handleMissionOptionSelect(option)}
+                            >
+                              <div
+                                className={`w-4 h-4 border-2 rounded mr-3 ml-5 flex items-center justify-center ${
+                                  isSelected
+                                    ? "bg-primary border-primary"
+                                    : "border-gray-300"
+                                }`}
+                              >
+                                {isSelected && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                              <span className="text-[1rem] font-normal text-accent">
+                                {option}
+                              </span>
+                            </button>
+                          );
+                        })
+                      )}
+
+                      {/* Custom options */}
+                      {form.customMission.map((option, index) => {
+                        const isSelected =
+                          form.selectedMissionOptions.includes(option);
+                        return (
                           <button
-                            key={option}
+                            key={`custom-mission-${index}`}
                             type="button"
-                            className="flex items-center p-2 bg-white rounded-lg hover:bg-gray-50 cursor-pointer text-left transition-colors w-full"
+                            className={`flex items-center p-2 bg-white rounded-lg cursor-pointer text-left transition-colors w-full ${
+                              isSelected
+                                ? "bg-primary/10 border border-primary"
+                                : "hover:bg-gray-50"
+                            }`}
                             onClick={() => handleMissionOptionSelect(option)}
                           >
-                            <div className="w-2 h-2 bg-primary rounded-full mr-3 ml-5"></div>
+                            <div
+                              className={`w-4 h-4 border-2 rounded mr-3 ml-5 flex items-center justify-center ${
+                                isSelected
+                                  ? "bg-primary border-primary"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {isSelected && (
+                                <svg
+                                  className="w-3 h-3 text-white"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </div>
                             <span className="text-[1rem] font-normal text-accent">
                               {option}
                             </span>
                           </button>
-                        ))
-                      )}
-
-                      {/* Custom options */}
-                      {form.customMission.map((option, index) => (
-                        <button
-                          key={`custom-mission-${index}`}
-                          type="button"
-                          className="flex items-center p-2 bg-white rounded-lg hover:bg-gray-50 cursor-pointer text-left transition-colors w-full"
-                          onClick={() => handleMissionOptionSelect(option)}
-                        >
-                          <div className="w-2 h-2 bg-primary rounded-full mr-3 ml-5"></div>
-                          <span className="text-[1rem] font-normal text-accent">
-                            {option}
-                          </span>
-                        </button>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>

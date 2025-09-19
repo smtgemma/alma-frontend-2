@@ -11,11 +11,13 @@ interface InvestmentItem {
   description: string;
   amount: string;
   showOptions?: boolean;
+  selectedOptions?: string[];
 }
 
 interface InvestmentPlanForm {
   initialInvestment: string;
   customInitialInvestment: string[];
+  selectedInitialInvestmentOptions: string[];
   showInitialInvestmentOptions: boolean;
   investmentItems: InvestmentItem[];
 }
@@ -53,11 +55,30 @@ export default function S6InvestmentPlan() {
     persistedData || {
       initialInvestment: "",
       customInitialInvestment: [],
+      selectedInitialInvestmentOptions: [],
       showInitialInvestmentOptions: false,
       investmentItems: [
-        { id: "1", description: "", amount: "", showOptions: false },
-        { id: "2", description: "", amount: "", showOptions: false },
-        { id: "3", description: "", amount: "", showOptions: false },
+        {
+          id: "1",
+          description: "",
+          amount: "",
+          showOptions: false,
+          selectedOptions: [],
+        },
+        {
+          id: "2",
+          description: "",
+          amount: "",
+          showOptions: false,
+          selectedOptions: [],
+        },
+        {
+          id: "3",
+          description: "",
+          amount: "",
+          showOptions: false,
+          selectedOptions: [],
+        },
       ],
     }
   );
@@ -209,21 +230,54 @@ export default function S6InvestmentPlan() {
 
   // Option selection handlers
   const handleInitialInvestmentOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      initialInvestment: option,
-      showInitialInvestmentOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedInitialInvestmentOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedInitialInvestmentOptions: currentOptions.filter(
+            (opt) => opt !== option
+          ),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedInitialInvestmentOptions: [...currentOptions, option],
+        };
+      }
+    });
   };
 
   const handleInvestmentItemOptionSelect = (itemId: string, option: string) => {
     setForm((prev) => ({
       ...prev,
-      investmentItems: prev.investmentItems.map((item) =>
-        item.id === itemId
-          ? { ...item, description: option, showOptions: false }
-          : item
-      ),
+      investmentItems: prev.investmentItems.map((item) => {
+        if (item.id === itemId) {
+          const currentOptions = item.selectedOptions || [];
+          const isSelected = currentOptions.includes(option);
+
+          let newOptions;
+          if (isSelected) {
+            // Remove if already selected
+            newOptions = currentOptions.filter((opt) => opt !== option);
+          } else {
+            // Add if not selected
+            newOptions = [...currentOptions, option];
+          }
+
+          return {
+            ...item,
+            selectedOptions: newOptions,
+            description: newOptions.join(", "), // Set input field value
+            showOptions: false,
+          };
+        }
+        return item;
+      }),
     }));
   };
 
@@ -365,7 +419,11 @@ export default function S6InvestmentPlan() {
                   <div className="mt-4">
                     <input
                       type="text"
-                      value={form.initialInvestment}
+                      value={
+                        form.selectedInitialInvestmentOptions.length > 0
+                          ? form.selectedInitialInvestmentOptions.join(", ")
+                          : form.initialInvestment
+                      }
                       onChange={(e) =>
                         handleTextareaChange(
                           "initialInvestment",
@@ -385,6 +443,36 @@ export default function S6InvestmentPlan() {
                       placeholder="Equipment"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
+
+                    {/* Selected Options Display */}
+                    {form.selectedInitialInvestmentOptions.length > 0 && (
+                      <div className="mt-3">
+                        <div className="text-sm text-gray-600 mb-2">
+                          Selected options:
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {form.selectedInitialInvestmentOptions.map(
+                            (option, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                              >
+                                <span className="mr-2">{option}</span>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleInitialInvestmentOptionSelect(option)
+                                  }
+                                  className="text-primary hover:text-primary/70"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Sub-options */}
@@ -402,39 +490,99 @@ export default function S6InvestmentPlan() {
                           </span>
                         </div>
                       ) : (
-                        initialInvestmentAiSuggestions.map((option, index) => (
+                        initialInvestmentAiSuggestions.map((option, index) => {
+                          const isSelected =
+                            form.selectedInitialInvestmentOptions.includes(
+                              option
+                            );
+                          return (
+                            <button
+                              key={`${option}-${index}`}
+                              type="button"
+                              onClick={() =>
+                                handleInitialInvestmentOptionSelect(option)
+                              }
+                              className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                                isSelected
+                                  ? "bg-primary/10 border border-primary"
+                                  : "hover:bg-gray-50"
+                              }`}
+                            >
+                              <div
+                                className={`w-4 h-4 border-2 rounded mr-3 ml-7 flex items-center justify-center ${
+                                  isSelected
+                                    ? "bg-primary border-primary"
+                                    : "border-gray-300"
+                                }`}
+                              >
+                                {isSelected && (
+                                  <svg
+                                    className="w-3 h-3 text-white"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                              <span className="text-[1rem] font-normal text-accent">
+                                {option}
+                              </span>
+                            </button>
+                          );
+                        })
+                      )}
+
+                      {/* Custom options */}
+                      {form.customInitialInvestment.map((option, index) => {
+                        const isSelected =
+                          form.selectedInitialInvestmentOptions.includes(
+                            option
+                          );
+                        return (
                           <button
-                            key={`${option}-${index}`}
+                            key={`custom-investment-${index}`}
                             type="button"
                             onClick={() =>
                               handleInitialInvestmentOptionSelect(option)
                             }
-                            className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
+                            className={`flex items-center w-full text-left p-2 rounded transition-colors ${
+                              isSelected
+                                ? "bg-primary/10 border border-primary"
+                                : "hover:bg-gray-50"
+                            }`}
                           >
-                            <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
+                            <div
+                              className={`w-4 h-4 border-2 rounded mr-3 ml-7 flex items-center justify-center ${
+                                isSelected
+                                  ? "bg-primary border-primary"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {isSelected && (
+                                <svg
+                                  className="w-3 h-3 text-white"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </div>
                             <span className="text-[1rem] font-normal text-accent">
                               {option}
                             </span>
                           </button>
-                        ))
-                      )}
-
-                      {/* Custom options */}
-                      {form.customInitialInvestment.map((option, index) => (
-                        <button
-                          key={`custom-investment-${index}`}
-                          type="button"
-                          onClick={() =>
-                            handleInitialInvestmentOptionSelect(option)
-                          }
-                          className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                        >
-                          <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
-                          <span className="text-[1rem] font-normal text-accent">
-                            {option}
-                          </span>
-                        </button>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>

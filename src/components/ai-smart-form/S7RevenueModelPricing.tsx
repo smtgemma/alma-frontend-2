@@ -9,6 +9,8 @@ interface ProductService {
   id: string;
   name: string;
   price: string;
+  showOptions?: boolean;
+  selectedOptions?: string[];
 }
 
 interface RevenueModelForm {
@@ -20,6 +22,10 @@ interface RevenueModelForm {
   customGrowthProjection: string[];
   customBusinessShare: string[];
   customPricingLevel: string[];
+  selectedExpectedRevenueOptions: string[];
+  selectedGrowthProjectionOptions: string[];
+  selectedBusinessShareOptions: string[];
+  selectedPricingLevelOptions: string[];
   showExpectedRevenueOptions: boolean;
   showGrowthProjectionOptions: boolean;
   showBusinessShareOptions: boolean;
@@ -86,15 +92,43 @@ export default function S7RevenueModelPricing() {
       customGrowthProjection: [],
       customBusinessShare: [],
       customPricingLevel: [],
+      selectedExpectedRevenueOptions: [],
+      selectedGrowthProjectionOptions: [],
+      selectedBusinessShareOptions: [],
+      selectedPricingLevelOptions: [],
       showExpectedRevenueOptions: false,
       showGrowthProjectionOptions: false,
       showBusinessShareOptions: false,
       showPricingLevelOptions: false,
       productServices: [
-        { id: "1", name: "", price: "" },
-        { id: "2", name: "", price: "" },
-        { id: "3", name: "", price: "" },
-        { id: "4", name: "", price: "" },
+        {
+          id: "1",
+          name: "",
+          price: "",
+          showOptions: false,
+          selectedOptions: [],
+        },
+        {
+          id: "2",
+          name: "",
+          price: "",
+          showOptions: false,
+          selectedOptions: [],
+        },
+        {
+          id: "3",
+          name: "",
+          price: "",
+          showOptions: false,
+          selectedOptions: [],
+        },
+        {
+          id: "4",
+          name: "",
+          price: "",
+          showOptions: false,
+          selectedOptions: [],
+        },
       ],
     }
   );
@@ -275,37 +309,97 @@ export default function S7RevenueModelPricing() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Option selection handlers
+  // Option selection handlers for multiple selection
   const handleExpectedRevenueOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      expectedRevenue: option,
-      showExpectedRevenueOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedExpectedRevenueOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedExpectedRevenueOptions: currentOptions.filter(
+            (opt) => opt !== option
+          ),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedExpectedRevenueOptions: [...currentOptions, option],
+        };
+      }
+    });
   };
 
   const handleGrowthProjectionOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      growthProjection: option,
-      showGrowthProjectionOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedGrowthProjectionOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedGrowthProjectionOptions: currentOptions.filter(
+            (opt) => opt !== option
+          ),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedGrowthProjectionOptions: [...currentOptions, option],
+        };
+      }
+    });
   };
 
   const handleBusinessShareOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      businessShare: option,
-      showBusinessShareOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedBusinessShareOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedBusinessShareOptions: currentOptions.filter(
+            (opt) => opt !== option
+          ),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedBusinessShareOptions: [...currentOptions, option],
+        };
+      }
+    });
   };
 
   const handlePricingLevelOptionSelect = (option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      pricingLevel: option,
-      showPricingLevelOptions: false,
-    }));
+    setForm((prev) => {
+      const currentOptions = prev.selectedPricingLevelOptions;
+      const isSelected = currentOptions.includes(option);
+
+      if (isSelected) {
+        // Remove if already selected
+        return {
+          ...prev,
+          selectedPricingLevelOptions: currentOptions.filter(
+            (opt) => opt !== option
+          ),
+        };
+      } else {
+        // Add if not selected
+        return {
+          ...prev,
+          selectedPricingLevelOptions: [...currentOptions, option],
+        };
+      }
+    });
   };
 
   const handleAddCustomOption = (
@@ -525,12 +619,16 @@ export default function S7RevenueModelPricing() {
                           <button
                             key={option}
                             type="button"
-                            onClick={() =>
-                              handleExpectedRevenueOptionSelect(option)
-                            }
-                            className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
+                            onClick={() => {
+                              setForm((prev) => ({
+                                ...prev,
+                                expectedRevenue: option,
+                                showExpectedRevenueOptions: false,
+                              }));
+                            }}
+                            className="flex items-center w-full text-left p-2 rounded transition-colors hover:bg-gray-50"
                           >
-                            <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
+                            <div className="w-2 h-2 bg-primary rounded-full mr-3 ml-7"></div>
                             <span className="text-[1rem] font-normal text-accent">
                               {option}
                             </span>
@@ -543,10 +641,14 @@ export default function S7RevenueModelPricing() {
                         <button
                           key={`custom-revenue-${index}`}
                           type="button"
-                          onClick={() =>
-                            handleExpectedRevenueOptionSelect(option)
-                          }
-                          className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
+                          onClick={() => {
+                            setForm((prev) => ({
+                              ...prev,
+                              expectedRevenue: option,
+                              showExpectedRevenueOptions: false,
+                            }));
+                          }}
+                          className="flex items-center w-full text-left p-2 rounded transition-colors hover:bg-gray-50"
                         >
                           <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
                           <span className="text-[1rem] font-normal text-accent">
@@ -631,12 +733,16 @@ export default function S7RevenueModelPricing() {
                           <button
                             key={option}
                             type="button"
-                            onClick={() =>
-                              handleGrowthProjectionOptionSelect(option)
-                            }
-                            className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
+                            onClick={() => {
+                              setForm((prev) => ({
+                                ...prev,
+                                growthProjection: option,
+                                showGrowthProjectionOptions: false,
+                              }));
+                            }}
+                            className="flex items-center w-full text-left p-2 rounded transition-colors hover:bg-gray-50"
                           >
-                            <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
+                            <div className="w-2 h-2 bg-primary rounded-full mr-3 ml-7"></div>
                             <span className="text-[1rem] font-normal text-accent">
                               {option}
                             </span>
@@ -649,10 +755,14 @@ export default function S7RevenueModelPricing() {
                         <button
                           key={`custom-growth-${index}`}
                           type="button"
-                          onClick={() =>
-                            handleGrowthProjectionOptionSelect(option)
-                          }
-                          className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
+                          onClick={() => {
+                            setForm((prev) => ({
+                              ...prev,
+                              growthProjection: option,
+                              showGrowthProjectionOptions: false,
+                            }));
+                          }}
+                          className="flex items-center w-full text-left p-2 rounded transition-colors hover:bg-gray-50"
                         >
                           <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3 ml-7"></div>
                           <span className="text-[1rem] font-normal text-accent">

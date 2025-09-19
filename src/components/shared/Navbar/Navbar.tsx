@@ -12,6 +12,7 @@ import { CgProfile } from "react-icons/cg";
 import { MdLogout } from "react-icons/md";
 import { LogoutPopup } from "@/components/dashboard/LogoutPopup";
 import Cookies from "js-cookie";
+import { LanguageSwitcher } from "@/components/language/Multilingual";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -213,7 +214,7 @@ const Navbar = () => {
               />
             </div>
             <div>
-              <h3 className="text-black font-medium text-2xl ">
+              <h3 className="text-black font-medium text-xl md:text-2xl ">
                 Business AI Plan
               </h3>
             </div>
@@ -228,6 +229,11 @@ const Navbar = () => {
                 {token ? "Yes" : "No"} | Role: {user?.role || "None"}
               </div>
             )} */}
+
+            {/* Language Switcher */}
+            <div className="flex items-center">
+              <LanguageSwitcher />
+            </div>
 
             {user && token ? (
               // User is logged in - show profile dropdown
@@ -301,12 +307,12 @@ const Navbar = () => {
 
               <>
                 <Link href="/signIn">
-                  <button className="text-accent text-[1rem] font-medium px-4 py-2 rounded-[33px] transition bg-white cursor-pointer">
+                  <button className="text-accent text-[0.8rem]  md:text-[1rem] font-medium px-3 md:px-4 py-2 rounded-[33px] transition bg-white cursor-pointer">
                     Login
                   </button>
                 </Link>
                 <Link href="/signUp">
-                  <button className="bg-primary text-[1rem] font-medium hover:bg-primary/80 text-white px-5 py-2 rounded-[33px] transition cursor-pointer">
+                  <button className="bg-primary text-[0.7rem] md:text-[1rem] font-medium hover:bg-primary/80 text-white px-2 md:px-5 py-2 rounded-[33px] transition cursor-pointer">
                     Sign Up
                   </button>
                 </Link>

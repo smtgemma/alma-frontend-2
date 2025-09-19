@@ -19,6 +19,7 @@ interface BusinessInfoForm {
   businessStage: string;
   businessType: string;
   businessDocument: File | null;
+  businessDocuments?: File[]; // Multiple PDF files
   extractedContent?: string;
   location: string;
   activity: string;
@@ -27,12 +28,14 @@ interface BusinessInfoForm {
   sourceLanguage: string;
   targetLanguage: string;
   customBusinessStages?: string[];
+  selectedBusinessStagesOptions?: string[];
   uploaded_file?: Array<{
     text_content: string;
     page_count: number;
     metadata: Record<string, any>;
     financial_data: any;
     document_type: string;
+    file_name?: string; // Add file name for reference
   }>;
 }
 
@@ -46,6 +49,8 @@ interface BusinessIdeaForm {
   businessGoals: string;
   customProductCategories: string[];
   customServiceCategories: string[];
+  selectedProductCategoriesOptions: string[];
+  selectedServiceCategoriesOptions: string[];
 }
 
 interface ValueGenerationForm {
@@ -57,6 +62,9 @@ interface ValueGenerationForm {
   customUniqueOptions: string[];
   customProblemOptions: string[];
   customValueAddOptions: string[];
+  selectedUniqueOptions: string[];
+  selectedProblemOptions: string[];
+  selectedValueAddOptions: string[];
   showUniqueOptions: boolean;
   showProblemOptions: boolean;
   showValueAddOptions: boolean;
@@ -73,6 +81,9 @@ interface BusinessGoalVisionForm {
   customBusinessGoals: string[];
   customLongTermVision: string[];
   customMission: string[];
+  selectedBusinessGoalsOptions: string[];
+  selectedLongTermVisionOptions: string[];
+  selectedMissionOptions: string[];
   showBusinessGoalsOptions: boolean;
   showLongTermVisionOptions: boolean;
   showMissionOptions: boolean;
@@ -93,6 +104,13 @@ interface IndustryMarketForm {
   customClientType03: string[];
   customClientType04: string[];
   customMarketingPlan: string[];
+  selectedIndustryOptions: string[];
+  selectedIdealClientOptions: string[];
+  selectedClientType01Options: string[];
+  selectedClientType02Options: string[];
+  selectedClientType03Options: string[];
+  selectedClientType04Options: string[];
+  selectedMarketingPlanOptions: string[];
   showIndustryOptions: boolean;
   showIdealClientOptions: boolean;
   showClientType01Options: boolean;
@@ -107,11 +125,13 @@ interface InvestmentItem {
   description: string;
   amount: string;
   showOptions?: boolean;
+  selectedOptions?: string[];
 }
 
 interface InvestmentPlanForm {
   initialInvestment: string;
   customInitialInvestment: string[];
+  selectedInitialInvestmentOptions: string[];
   showInitialInvestmentOptions: boolean;
   investmentItems: InvestmentItem[];
 }
@@ -120,6 +140,8 @@ interface ProductService {
   id: string;
   name: string;
   price: string;
+  showOptions?: boolean;
+  selectedOptions?: string[];
 }
 
 interface RevenueModelForm {
@@ -131,6 +153,10 @@ interface RevenueModelForm {
   customGrowthProjection: string[];
   customBusinessShare: string[];
   customPricingLevel: string[];
+  selectedExpectedRevenueOptions: string[];
+  selectedGrowthProjectionOptions: string[];
+  selectedBusinessShareOptions: string[];
+  selectedPricingLevelOptions: string[];
   showExpectedRevenueOptions: boolean;
   showGrowthProjectionOptions: boolean;
   showBusinessShareOptions: boolean;
@@ -322,6 +348,7 @@ const getDefaultFormData = (): SmartFormData => ({
     sourceLanguage: "English",
     targetLanguage: "English",
     customBusinessStages: [],
+    selectedBusinessStagesOptions: [],
   },
   step2: {
     businessStage: "",
@@ -333,6 +360,8 @@ const getDefaultFormData = (): SmartFormData => ({
     businessGoals: "",
     customProductCategories: [],
     customServiceCategories: [],
+    selectedProductCategoriesOptions: [],
+    selectedServiceCategoriesOptions: [],
   },
   step3: {
     uniqueValue: "",
@@ -343,6 +372,9 @@ const getDefaultFormData = (): SmartFormData => ({
     customUniqueOptions: [],
     customProblemOptions: [],
     customValueAddOptions: [],
+    selectedUniqueOptions: [],
+    selectedProblemOptions: [],
+    selectedValueAddOptions: [],
     showUniqueOptions: false,
     showProblemOptions: false,
     showValueAddOptions: false,
@@ -358,6 +390,9 @@ const getDefaultFormData = (): SmartFormData => ({
     customBusinessGoals: [],
     customLongTermVision: [],
     customMission: [],
+    selectedBusinessGoalsOptions: [],
+    selectedLongTermVisionOptions: [],
+    selectedMissionOptions: [],
     showBusinessGoalsOptions: false,
     showLongTermVisionOptions: false,
     showMissionOptions: false,
@@ -377,6 +412,13 @@ const getDefaultFormData = (): SmartFormData => ({
     customClientType03: [],
     customClientType04: [],
     customMarketingPlan: [],
+    selectedIndustryOptions: [],
+    selectedIdealClientOptions: [],
+    selectedClientType01Options: [],
+    selectedClientType02Options: [],
+    selectedClientType03Options: [],
+    selectedClientType04Options: [],
+    selectedMarketingPlanOptions: [],
     showIndustryOptions: false,
     showIdealClientOptions: false,
     showClientType01Options: false,
@@ -388,11 +430,30 @@ const getDefaultFormData = (): SmartFormData => ({
   step6: {
     initialInvestment: "",
     customInitialInvestment: [],
+    selectedInitialInvestmentOptions: [],
     showInitialInvestmentOptions: false,
     investmentItems: [
-      { id: "1", description: "", amount: "", showOptions: false },
-      { id: "2", description: "", amount: "", showOptions: false },
-      { id: "3", description: "", amount: "", showOptions: false },
+      {
+        id: "1",
+        description: "",
+        amount: "",
+        showOptions: false,
+        selectedOptions: [],
+      },
+      {
+        id: "2",
+        description: "",
+        amount: "",
+        showOptions: false,
+        selectedOptions: [],
+      },
+      {
+        id: "3",
+        description: "",
+        amount: "",
+        showOptions: false,
+        selectedOptions: [],
+      },
     ],
   },
   step7: {
@@ -404,15 +465,19 @@ const getDefaultFormData = (): SmartFormData => ({
     customGrowthProjection: [],
     customBusinessShare: [],
     customPricingLevel: [],
+    selectedExpectedRevenueOptions: [],
+    selectedGrowthProjectionOptions: [],
+    selectedBusinessShareOptions: [],
+    selectedPricingLevelOptions: [],
     showExpectedRevenueOptions: false,
     showGrowthProjectionOptions: false,
     showBusinessShareOptions: false,
     showPricingLevelOptions: false,
     productServices: [
-      { id: "1", name: "", price: "" },
-      { id: "2", name: "", price: "" },
-      { id: "3", name: "", price: "" },
-      { id: "4", name: "", price: "" },
+      { id: "1", name: "", price: "", showOptions: false, selectedOptions: [] },
+      { id: "2", name: "", price: "", showOptions: false, selectedOptions: [] },
+      { id: "3", name: "", price: "", showOptions: false, selectedOptions: [] },
+      { id: "4", name: "", price: "", showOptions: false, selectedOptions: [] },
     ],
   },
   step8: {
@@ -520,13 +585,18 @@ export const SmartFormProvider = ({ children }: { children: ReactNode }) => {
       step: T,
       data: Partial<SmartFormData[T]>
     ) => {
-      setFormData((prev) => ({
-        ...prev,
-        [step]: {
-          ...prev[step],
-          ...data,
-        },
-      }));
+      console.log(`🔄 Updating form data for ${step}:`, data);
+      setFormData((prev) => {
+        const newData = {
+          ...prev,
+          [step]: {
+            ...prev[step],
+            ...data,
+          },
+        };
+        console.log(`📝 Updated form data:`, newData);
+        return newData;
+      });
     },
     []
   );

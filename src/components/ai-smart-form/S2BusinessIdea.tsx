@@ -15,6 +15,8 @@ interface BusinessIdeaForm {
   businessGoals: string;
   customProductCategories: string[];
   customServiceCategories: string[];
+  selectedProductCategoriesOptions: string[];
+  selectedServiceCategoriesOptions: string[];
 }
 
 export default function S2BusinessIdea() {
@@ -30,7 +32,21 @@ export default function S2BusinessIdea() {
   // Get persisted data from context
   const persistedData = getFormData("step2");
 
-  const [form, setForm] = useState<BusinessIdeaForm>(persistedData);
+  const [form, setForm] = useState<BusinessIdeaForm>(
+    persistedData || {
+      businessStage: "",
+      productService: "",
+      selectedProductCategory: "",
+      selectedServiceCategory: "",
+      deliveryMethod: "",
+      companyOwnership: "",
+      businessGoals: "",
+      customProductCategories: [],
+      customServiceCategories: [],
+      selectedProductCategoriesOptions: [],
+      selectedServiceCategoriesOptions: [],
+    }
+  );
 
   // Sync form changes with context
   useEffect(() => {
@@ -137,6 +153,8 @@ export default function S2BusinessIdea() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("🚀 S2BusinessIdea - Form submit started");
+    console.log("📝 S2BusinessIdea - Current form data:", form);
 
     // Save current form data to context before validation
     updateFormData("step2", form);
@@ -145,10 +163,14 @@ export default function S2BusinessIdea() {
     const isValid = validateStep(1); // 0-based index for step 2
 
     if (isValid) {
-      console.log("Business Idea Form Submitted:", form);
+      console.log("✅ S2BusinessIdea - Validation passed, moving to next step");
+      console.log("💾 S2BusinessIdea - Business Idea Form Submitted:", form);
       nextStep();
     } else {
-      console.log("Validation failed, showing errors:", errors);
+      console.log(
+        "❌ S2BusinessIdea - Validation failed, showing errors:",
+        errors
+      );
       // Errors are already set by validateStep, they will be displayed automatically
     }
   };
@@ -294,19 +316,21 @@ export default function S2BusinessIdea() {
                     ].map((option) => (
                       <div
                         key={option}
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${form.businessStage === option
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
+                          form.businessStage === option
                             ? "border-primary"
                             : "border-[#888888]/50"
-                          }`}
+                        }`}
                         onClick={() =>
                           handleRadioChange("businessStage", option)
                         }
                       >
                         <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${form.businessStage === option
+                          className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${
+                            form.businessStage === option
                               ? "border-[#A9A4FE] bg-primary"
                               : "border-primary bg-white"
-                            }`}
+                          }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent leading-relaxed">
                           {option}
@@ -330,19 +354,21 @@ export default function S2BusinessIdea() {
                     {/* Product Option */}
                     <div>
                       <div
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${form.productService === "Product"
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
+                          form.productService === "Product"
                             ? "border-primary"
                             : "border-gray-200"
-                          }`}
+                        }`}
                         onClick={() =>
                           handleRadioChange("productService", "Product")
                         }
                       >
                         <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 ${form.productService === "Product"
+                          className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                            form.productService === "Product"
                               ? "border-[#A9A4FE] bg-primary"
                               : "border-primary bg-white"
-                            }`}
+                          }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent">
                           Product
@@ -370,15 +396,57 @@ export default function S2BusinessIdea() {
                                     e.preventDefault();
                                   }
                                 }}
-                                className={`w-full px-4 py-3 bg-[#FCFCFC] border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent ${errors.selectedProductCategory
+                                className={`w-full px-4 py-3 bg-[#FCFCFC] border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent ${
+                                  errors.selectedProductCategory
                                     ? "border-red-500"
                                     : "border-gray-200"
-                                  }`}
+                                }`}
                               />
                               {errors.selectedProductCategory && (
                                 <p className="text-red-500 text-sm mt-1">
                                   {errors.selectedProductCategory}
                                 </p>
+                              )}
+
+                              {/* Selected Options Display */}
+                              {form.selectedProductCategoriesOptions.length >
+                                0 && (
+                                <div className="mt-3">
+                                  <div className="text-sm text-gray-600 mb-2">
+                                    Selected options:
+                                  </div>
+                                  <div className="flex flex-wrap gap-2">
+                                    {form.selectedProductCategoriesOptions.map(
+                                      (option, index) => (
+                                        <div
+                                          key={index}
+                                          className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                                        >
+                                          <span className="mr-2">{option}</span>
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const newOptions =
+                                                form.selectedProductCategoriesOptions.filter(
+                                                  (opt) => opt !== option
+                                                );
+                                              setForm({
+                                                ...form,
+                                                selectedProductCategoriesOptions:
+                                                  newOptions,
+                                                selectedProductCategory:
+                                                  newOptions.join(", "),
+                                              });
+                                            }}
+                                            className="text-primary hover:text-primary/70"
+                                          >
+                                            ×
+                                          </button>
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                </div>
                               )}
                             </div>
 
@@ -402,24 +470,80 @@ export default function S2BusinessIdea() {
                                       <>
                                         {/* <div className="text-xs text-gray-500 font-medium mb-1 px-2">AI Suggestions:</div> */}
                                         {productAiSuggestions.map(
-                                          (suggestion, index) => (
-                                            <button
-                                              key={`ai-product-suggestion-${index}`}
-                                              type="button"
-                                              className="flex items-center p-1 ml-7 rounded-lg  cursor-pointer text-left transition-colors"
-                                              onClick={() => {
-                                                handleProductCategorySelect(
-                                                  suggestion
-                                                );
-                                                setShowProductDropdown(false);
-                                              }}
-                                            >
-                                              <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                                              <span className="text-[1rem] font-normal text-accent">
-                                                {suggestion}
-                                              </span>
-                                            </button>
-                                          )
+                                          (suggestion, index) => {
+                                            const isSelected =
+                                              form.selectedProductCategoriesOptions.includes(
+                                                suggestion
+                                              );
+                                            return (
+                                              <button
+                                                key={`ai-product-suggestion-${index}`}
+                                                type="button"
+                                                className={`flex items-center p-1 ml-7 rounded-lg cursor-pointer text-left transition-colors ${
+                                                  isSelected
+                                                    ? "bg-primary/10 border border-primary"
+                                                    : "hover:bg-gray-50"
+                                                }`}
+                                                onClick={() => {
+                                                  const currentOptions =
+                                                    form.selectedProductCategoriesOptions;
+                                                  const isAlreadySelected =
+                                                    currentOptions.includes(
+                                                      suggestion
+                                                    );
+
+                                                  let newOptions;
+                                                  if (isAlreadySelected) {
+                                                    // Remove if already selected
+                                                    newOptions =
+                                                      currentOptions.filter(
+                                                        (opt) =>
+                                                          opt !== suggestion
+                                                      );
+                                                  } else {
+                                                    // Add if not selected
+                                                    newOptions = [
+                                                      ...currentOptions,
+                                                      suggestion,
+                                                    ];
+                                                  }
+
+                                                  setForm({
+                                                    ...form,
+                                                    selectedProductCategoriesOptions:
+                                                      newOptions,
+                                                    selectedProductCategory:
+                                                      newOptions.join(", "),
+                                                  });
+                                                }}
+                                              >
+                                                <div
+                                                  className={`w-4 h-4 border-2 rounded mr-3 flex items-center justify-center ${
+                                                    isSelected
+                                                      ? "bg-primary border-primary"
+                                                      : "border-gray-300"
+                                                  }`}
+                                                >
+                                                  {isSelected && (
+                                                    <svg
+                                                      className="w-3 h-3 text-white"
+                                                      fill="currentColor"
+                                                      viewBox="0 0 20 20"
+                                                    >
+                                                      <path
+                                                        fillRule="evenodd"
+                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                        clipRule="evenodd"
+                                                      />
+                                                    </svg>
+                                                  )}
+                                                </div>
+                                                <span className="text-[1rem] font-normal text-accent">
+                                                  {suggestion}
+                                                </span>
+                                              </button>
+                                            );
+                                          }
                                         )}
                                         {/* <div className="border-t border-gray-200 my-2"></div> */}
                                         {/* <div className="text-xs text-gray-500 font-medium mb-1 px-2">Other Options:</div> */}
@@ -435,19 +559,21 @@ export default function S2BusinessIdea() {
                     {/* Service Option */}
                     <div>
                       <div
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${form.productService === "Service"
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
+                          form.productService === "Service"
                             ? "border-primary"
                             : "border-gray-200"
-                          }`}
+                        }`}
                         onClick={() =>
                           handleRadioChange("productService", "Service")
                         }
                       >
                         <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 ${form.productService === "Service"
+                          className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                            form.productService === "Service"
                               ? "border-[#A9A4FE] bg-primary"
                               : "border-primary bg-white"
-                            }`}
+                          }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent">
                           Service
@@ -475,15 +601,57 @@ export default function S2BusinessIdea() {
                                     e.preventDefault();
                                   }
                                 }}
-                                className={`w-full px-4 py-3 bg-[#FCFCFC] border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent ${errors.selectedServiceCategory
+                                className={`w-full px-4 py-3 bg-[#FCFCFC] border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent ${
+                                  errors.selectedServiceCategory
                                     ? "border-red-500"
                                     : "border-gray-200"
-                                  }`}
+                                }`}
                               />
                               {errors.selectedServiceCategory && (
                                 <p className="text-red-500 text-sm mt-1">
                                   {errors.selectedServiceCategory}
                                 </p>
+                              )}
+
+                              {/* Selected Options Display */}
+                              {form.selectedServiceCategoriesOptions.length >
+                                0 && (
+                                <div className="mt-3">
+                                  <div className="text-sm text-gray-600 mb-2">
+                                    Selected options:
+                                  </div>
+                                  <div className="flex flex-wrap gap-2">
+                                    {form.selectedServiceCategoriesOptions.map(
+                                      (option, index) => (
+                                        <div
+                                          key={index}
+                                          className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                                        >
+                                          <span className="mr-2">{option}</span>
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const newOptions =
+                                                form.selectedServiceCategoriesOptions.filter(
+                                                  (opt) => opt !== option
+                                                );
+                                              setForm({
+                                                ...form,
+                                                selectedServiceCategoriesOptions:
+                                                  newOptions,
+                                                selectedServiceCategory:
+                                                  newOptions.join(", "),
+                                              });
+                                            }}
+                                            className="text-primary hover:text-primary/70"
+                                          >
+                                            ×
+                                          </button>
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                </div>
                               )}
                             </div>
 
@@ -507,24 +675,80 @@ export default function S2BusinessIdea() {
                                       <>
                                         {/* <div className="text-xs text-gray-500 font-medium mb-1 px-2">AI Suggestions:</div> */}
                                         {serviceAiSuggestions.map(
-                                          (suggestion, index) => (
-                                            <button
-                                              key={`ai-service-suggestion-${index}`}
-                                              type="button"
-                                              className="flex items-center p-1 ml-7 rounded-lg cursor-pointer text-left transition-colors"
-                                              onClick={() => {
-                                                handleServiceCategorySelect(
-                                                  suggestion
-                                                );
-                                                setShowServiceDropdown(false);
-                                              }}
-                                            >
-                                              <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                                              <span className="text-[1rem] font-normal text-accent">
-                                                {suggestion}
-                                              </span>
-                                            </button>
-                                          )
+                                          (suggestion, index) => {
+                                            const isSelected =
+                                              form.selectedServiceCategoriesOptions.includes(
+                                                suggestion
+                                              );
+                                            return (
+                                              <button
+                                                key={`ai-service-suggestion-${index}`}
+                                                type="button"
+                                                className={`flex items-center p-1 ml-7 rounded-lg cursor-pointer text-left transition-colors ${
+                                                  isSelected
+                                                    ? "bg-primary/10 border border-primary"
+                                                    : "hover:bg-gray-50"
+                                                }`}
+                                                onClick={() => {
+                                                  const currentOptions =
+                                                    form.selectedServiceCategoriesOptions;
+                                                  const isAlreadySelected =
+                                                    currentOptions.includes(
+                                                      suggestion
+                                                    );
+
+                                                  let newOptions;
+                                                  if (isAlreadySelected) {
+                                                    // Remove if already selected
+                                                    newOptions =
+                                                      currentOptions.filter(
+                                                        (opt) =>
+                                                          opt !== suggestion
+                                                      );
+                                                  } else {
+                                                    // Add if not selected
+                                                    newOptions = [
+                                                      ...currentOptions,
+                                                      suggestion,
+                                                    ];
+                                                  }
+
+                                                  setForm({
+                                                    ...form,
+                                                    selectedServiceCategoriesOptions:
+                                                      newOptions,
+                                                    selectedServiceCategory:
+                                                      newOptions.join(", "),
+                                                  });
+                                                }}
+                                              >
+                                                <div
+                                                  className={`w-4 h-4 border-2 rounded mr-3 flex items-center justify-center ${
+                                                    isSelected
+                                                      ? "bg-primary border-primary"
+                                                      : "border-gray-300"
+                                                  }`}
+                                                >
+                                                  {isSelected && (
+                                                    <svg
+                                                      className="w-3 h-3 text-white"
+                                                      fill="currentColor"
+                                                      viewBox="0 0 20 20"
+                                                    >
+                                                      <path
+                                                        fillRule="evenodd"
+                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                        clipRule="evenodd"
+                                                      />
+                                                    </svg>
+                                                  )}
+                                                </div>
+                                                <span className="text-[1rem] font-normal text-accent">
+                                                  {suggestion}
+                                                </span>
+                                              </button>
+                                            );
+                                          }
                                         )}
                                         {/* <div className="border-t border-gray-200 my-2"></div> */}
                                         {/* <div className="text-xs text-gray-500 font-medium mb-1 px-2">Other Options:</div> */}
@@ -533,21 +757,77 @@ export default function S2BusinessIdea() {
 
                                   {/* Custom service categories */}
                                   {form.customServiceCategories.map(
-                                    (category, index) => (
-                                      <button
-                                        key={`custom-service-${index}`}
-                                        type="button"
-                                        className="flex items-center p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer text-left transition-colors"
-                                        onClick={() =>
-                                          handleServiceCategorySelect(category)
-                                        }
-                                      >
-                                        <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-3"></div>
-                                        <span className="text-[1rem] font-normal text-accent">
-                                          {category}
-                                        </span>
-                                      </button>
-                                    )
+                                    (category, index) => {
+                                      const isSelected =
+                                        form.selectedServiceCategoriesOptions.includes(
+                                          category
+                                        );
+                                      return (
+                                        <button
+                                          key={`custom-service-${index}`}
+                                          type="button"
+                                          className={`flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer text-left transition-colors ${
+                                            isSelected
+                                              ? "bg-primary/10 border-primary"
+                                              : "bg-white hover:bg-gray-50"
+                                          }`}
+                                          onClick={() => {
+                                            const currentOptions =
+                                              form.selectedServiceCategoriesOptions;
+                                            const isAlreadySelected =
+                                              currentOptions.includes(category);
+
+                                            let newOptions;
+                                            if (isAlreadySelected) {
+                                              // Remove if already selected
+                                              newOptions =
+                                                currentOptions.filter(
+                                                  (opt) => opt !== category
+                                                );
+                                            } else {
+                                              // Add if not selected
+                                              newOptions = [
+                                                ...currentOptions,
+                                                category,
+                                              ];
+                                            }
+
+                                            setForm({
+                                              ...form,
+                                              selectedServiceCategoriesOptions:
+                                                newOptions,
+                                              selectedServiceCategory:
+                                                newOptions.join(", "),
+                                            });
+                                          }}
+                                        >
+                                          <div
+                                            className={`w-4 h-4 border-2 rounded mr-3 flex items-center justify-center ${
+                                              isSelected
+                                                ? "bg-primary border-primary"
+                                                : "border-gray-300"
+                                            }`}
+                                          >
+                                            {isSelected && (
+                                              <svg
+                                                className="w-3 h-3 text-white"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                              >
+                                                <path
+                                                  fillRule="evenodd"
+                                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                  clipRule="evenodd"
+                                                />
+                                              </svg>
+                                            )}
+                                          </div>
+                                          <span className="text-[1rem] font-normal text-accent">
+                                            {category}
+                                          </span>
+                                        </button>
+                                      );
+                                    }
                                   )}
                                 </div>
                               </div>
@@ -576,19 +856,21 @@ export default function S2BusinessIdea() {
                     ].map((option) => (
                       <div
                         key={option}
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${form.deliveryMethod === option
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
+                          form.deliveryMethod === option
                             ? "border-primary"
                             : "border-[#888888]/50"
-                          }`}
+                        }`}
                         onClick={() =>
                           handleRadioChange("deliveryMethod", option)
                         }
                       >
                         <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 ${form.deliveryMethod === option
+                          className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                            form.deliveryMethod === option
                               ? "border-[#A9A4FE] bg-primary"
                               : "border-primary bg-white"
-                            }`}
+                          }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent">
                           {option}
@@ -608,19 +890,21 @@ export default function S2BusinessIdea() {
                     {["Yes", "No"].map((option) => (
                       <div
                         key={option}
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${form.companyOwnership === option
+                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
+                          form.companyOwnership === option
                             ? "border-primary"
                             : "border-[#888888]/50"
-                          }`}
+                        }`}
                         onClick={() =>
                           handleRadioChange("companyOwnership", option)
                         }
                       >
                         <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 ${form.companyOwnership === option
+                          className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                            form.companyOwnership === option
                               ? "border-[#A9A4FE] bg-primary"
                               : "border-primary bg-white"
-                            }`}
+                          }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent">
                           {option}
@@ -637,9 +921,9 @@ export default function S2BusinessIdea() {
                   </label>
                   <div className="mt-4 space-y-4">
                     {[
-                      'Launch a new Product or Service',
-                      'Secure Investor Funding or Grant',
-                      'Boost Sales & Revenue'
+                      "Launch a new Product or Service",
+                      "Secure Investor Funding or Grant",
+                      "Boost Sales & Revenue",
                     ].map((option) => (
                       <div
                         key={option}

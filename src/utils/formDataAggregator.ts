@@ -27,6 +27,7 @@ const stepQuestions: Record<string, Record<string, string>> = {
     website: "Do you have a website or online presence?",
     sourceLanguage: "Source plan language",
     targetLanguage: "Target plan Currency",
+    selectedBusinessStagesOptions: "Selected business stages options",
   },
   step2: {
     businessStage: "What stage is your business currently in?",
@@ -37,6 +38,8 @@ const stepQuestions: Record<string, Record<string, string>> = {
     companyOwnership:
       "Will the company own any inventions, digital assets, discoveries, trade secrets or similar?",
     businessGoals: "What goals do you pursue with this business plan",
+    selectedProductCategoriesOptions: "Selected product categories options",
+    selectedServiceCategoriesOptions: "Selected service categories options",
   },
   step3: {
     uniqueValue: "What makes your product/service unique?",
@@ -44,6 +47,9 @@ const stepQuestions: Record<string, Record<string, string>> = {
     problemDescription: "Problem description",
     valueAddSupport: "Do you offer any other value support or guarantees?",
     valueAddDescription: "Value add description",
+    selectedUniqueOptions: "Selected unique value options",
+    selectedProblemOptions: "Selected problem solving options",
+    selectedValueAddOptions: "Selected value-add support options",
   },
   step4: {
     businessGoals: "What is your business aiming to achieve?",
@@ -54,6 +60,9 @@ const stepQuestions: Record<string, Record<string, string>> = {
     missionDescription: "Mission description",
     operationalArea:
       "What will be the primary operational area for the business?",
+    selectedBusinessGoalsOptions: "Selected business goals options",
+    selectedLongTermVisionOptions: "Selected long-term vision options",
+    selectedMissionOptions: "Selected mission options",
   },
   step5: {
     industry: "Which industry does your business belong to?",
@@ -63,10 +72,18 @@ const stepQuestions: Record<string, Record<string, string>> = {
     clientType03: "Client type 03",
     clientType04: "Client type 04",
     marketingPlan: "How do you plan to reach them (marketing plan advice)?",
+    selectedIndustryOptions: "Selected industry options",
+    selectedIdealClientOptions: "Selected ideal client options",
+    selectedClientType01Options: "Selected client type 01 options",
+    selectedClientType02Options: "Selected client type 02 options",
+    selectedClientType03Options: "Selected client type 03 options",
+    selectedClientType04Options: "Selected client type 04 options",
+    selectedMarketingPlanOptions: "Selected marketing plan options",
   },
   step6: {
     initialInvestment: "Initial Investment",
     investmentItems: "Investment breakdown items",
+    selectedInitialInvestmentOptions: "Selected initial investment options",
   },
   step7: {
     expectedRevenue: "Expected Revenue",
@@ -74,6 +91,10 @@ const stepQuestions: Record<string, Record<string, string>> = {
     businessShare: "Business Share",
     pricingLevel: "Pricing Level",
     productServices: "Products/Services pricing",
+    selectedExpectedRevenueOptions: "Selected expected revenue options",
+    selectedGrowthProjectionOptions: "Selected growth projection options",
+    selectedBusinessShareOptions: "Selected business share options",
+    selectedPricingLevelOptions: "Selected pricing level options",
   },
   step8: {
     operatingCosts: "Operating Costs",
@@ -95,6 +116,9 @@ const stepQuestions: Record<string, Record<string, string>> = {
  * @returns AggregatedFormData in the required format
  */
 export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
+  console.log("🚀 Starting form data aggregation...");
+  console.log("📋 Raw form data:", formData);
+
   const aggregated: AggregatedFormData = {
     uploaded_file: [],
     user_input: [],
@@ -115,11 +139,17 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
   }
 
   // Process all form inputs across steps
+  console.log("📝 Processing form steps...");
   Object.entries(formData).forEach(([stepKey, stepData]) => {
+    console.log(`\n🔍 Processing ${stepKey}:`, stepData);
     const questions = stepQuestions[stepKey];
-    if (!questions || !stepData) return;
+    if (!questions || !stepData) {
+      console.log(`⚠️ Skipping ${stepKey} - no questions or data`);
+      return;
+    }
 
     Object.entries(stepData).forEach(([fieldKey, fieldValue]) => {
+      console.log(`  📌 Field: ${fieldKey} =`, fieldValue);
       // Skip certain fields that shouldn't be in user_input
       if (
         fieldKey === "uploaded_file" ||
@@ -129,6 +159,30 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
         fieldKey.startsWith("show") ||
         (Array.isArray(fieldValue) && fieldValue.length === 0)
       ) {
+        return;
+      }
+
+      // Handle selected options arrays specially
+      if (fieldKey.startsWith("selected") && fieldKey.endsWith("Options")) {
+        console.log(`    ✅ Processing selected options: ${fieldKey}`);
+        if (Array.isArray(fieldValue) && fieldValue.length > 0) {
+          const baseQuestionKey = fieldKey
+            .replace("selected", "")
+            .replace("Options", "");
+          const question =
+            questions[baseQuestionKey] || `${baseQuestionKey} selected options`;
+          console.log(
+            `    📝 Adding to user_input: ${question} = ${fieldValue.join(
+              ", "
+            )}`
+          );
+          aggregated.user_input.push({
+            question,
+            answer: fieldValue.join(", "),
+          });
+        } else {
+          console.log(`    ⚠️ Skipping ${fieldKey} - empty array`);
+        }
         return;
       }
 
@@ -176,13 +230,23 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
 
       // Only add if answer has content
       if (answer && answer.trim()) {
+        console.log(
+          `    📝 Adding to user_input: ${question} = ${answer.trim()}`
+        );
         aggregated.user_input.push({
           question,
           answer: answer.trim(),
         });
+      } else {
+        console.log(`    ⚠️ Skipping ${fieldKey} - empty answer`);
       }
     });
   });
+
+  console.log("\n🎉 Aggregation complete!");
+  console.log("📊 Final aggregated data:", aggregated);
+  console.log("📈 Total user inputs:", aggregated.user_input.length);
+  console.log("📁 Total uploaded files:", aggregated.uploaded_file.length);
 
   return aggregated;
 }

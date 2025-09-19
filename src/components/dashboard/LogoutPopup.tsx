@@ -29,7 +29,7 @@ export const LogoutPopup = ({
           />
         )}
 
-        <div className="flex flex-col items-center justify-center gap-3 bg-white rounded-xl p-10 min-w-sm md:min-w-xl mx-auto z-50 relative shadow-xl">
+        <div className="flex flex-col items-center justify-center gap-3 bg-white rounded-xl p-10 min-w-xs md:min-w-xl mx-auto z-50 relative shadow-xl">
           <div className="bg-[#FDE1E1] p-1 rounded-full  text-center">
             <MdOutlineErrorOutline className="text-[#FF7878] text-2xl" />
           </div>
