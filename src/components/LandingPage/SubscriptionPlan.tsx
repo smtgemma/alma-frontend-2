@@ -163,9 +163,9 @@ export default function SubscriptionPlan() {
                   <div className="space-y-4 mb-8 flex-grow">
                     {plan.features.map((feature: string, index: number) => (
                       <div key={index} className="flex items-center gap-3">
-                        <div className="w-4 h-4 md:w-6 md:h-6 bg-secondary rounded-full flex items-center justify-center">
+                        <div className=" bg-secondary rounded-full flex items-baseline justify-center">
                           <svg
-                            className="w-3 h-3 md:w-4 md:h-4 text-primary"
+                            className="  w-4 h-4 text-primary"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -177,7 +177,7 @@ export default function SubscriptionPlan() {
                           </svg>
                         </div>
                         <span
-                          className="text-[0.81rem] font-normal text-accent"
+                          className="text-[0.81rem] md:text-base font-normal text-accent"
                           dangerouslySetInnerHTML={{
                             __html: feature.replace(/\n/g, "<br />"),
                           }}
