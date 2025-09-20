@@ -45,6 +45,43 @@ body {
   }
 }
 
+/* PDF-specific styles for better organization */
+@media print {
+  .pdf-page-break {
+    page-break-before: always;
+  }
+  
+  .pdf-page-break-after {
+    page-break-after: always;
+  }
+  
+  .pdf-no-break {
+    page-break-inside: avoid;
+  }
+  
+  .pdf-section {
+    margin-bottom: 2rem;
+    page-break-inside: avoid;
+  }
+  
+  .pdf-chart-container {
+    page-break-inside: avoid;
+    margin: 1rem 0;
+  }
+  
+  .pdf-table {
+    page-break-inside: avoid;
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .pdf-header {
+    page-break-after: avoid;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
 @layer components {
   .input {
     @apply border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm;

@@ -154,9 +154,9 @@ export default function BalanceSheet({
         Balance Sheet
       </h2>
       {/* Balance Sheet Table */}
-      <div className="">
+      <div className="pdf-no-break">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full pdf-table">
             <thead>
               <tr className="bg-purple-100">
                 <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
@@ -308,7 +308,7 @@ export default function BalanceSheet({
       </div>
 
       {/* Net Financial Position Chart */}
-      <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6 pdf-no-break pdf-chart-container">
         <div className="bg-purple-500 text-white px-4 py-2 rounded-t-lg mb-4">
           <h2 className="text-lg font-semibold">Net Financial Position</h2>
         </div>
@@ -318,7 +318,7 @@ export default function BalanceSheet({
             <span className="text-gray-600">Net Position</span>
           </div>
         </div>
-        <div className="h-80">
+        <div className="h-80 pdf-no-break">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={netFinancialPosition}
