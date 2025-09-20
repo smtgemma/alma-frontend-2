@@ -593,28 +593,35 @@ const UpdateBusinessPlanPage = () => {
                 )}
 
               {/* Cash Flow Analysis */}
-              {businessPlan?.data?.cashFlowAnalysis &&
-                businessPlan.data.cashFlowAnalysis.length > 0 && (
+              {formData.cashFlowAnalysis &&
+                formData.cashFlowAnalysis.length > 0 && (
                   <div>
                     <label className="block text-xl font-semibold text-gray-800 mb-3">
                       Cash Flow Analysis
                     </label>
                     <div className="space-y-4">
-                      {businessPlan.data.cashFlowAnalysis.map(
+                      {formData.cashFlowAnalysis.map(
                         (item: any, index: number) => (
                           <div
                             key={index}
-                            className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border border-gray-200 rounded-lg bg-gray-50"
+                            className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border border-gray-200 rounded-lg bg-white"
                           >
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Year
                               </label>
                               <input
-                                type="text"
+                                type="number"
                                 value={item.year || ""}
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700"
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "cashFlowAnalysis",
+                                    index,
+                                    "year",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               />
                             </div>
                             <div>
@@ -622,14 +629,17 @@ const UpdateBusinessPlanPage = () => {
                                 Operating
                               </label>
                               <input
-                                type="text"
-                                value={
-                                  item.operating
-                                    ? `€${item.operating.toLocaleString()}`
-                                    : ""
+                                type="number"
+                                value={item.operating || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "cashFlowAnalysis",
+                                    index,
+                                    "operating",
+                                    parseFloat(e.target.value) || 0
+                                  )
                                 }
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               />
                             </div>
                             <div>
@@ -637,14 +647,17 @@ const UpdateBusinessPlanPage = () => {
                                 Investing
                               </label>
                               <input
-                                type="text"
-                                value={
-                                  item.investing
-                                    ? `€${item.investing.toLocaleString()}`
-                                    : ""
+                                type="number"
+                                value={item.investing || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "cashFlowAnalysis",
+                                    index,
+                                    "investing",
+                                    parseFloat(e.target.value) || 0
+                                  )
                                 }
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               />
                             </div>
                             <div>
@@ -652,14 +665,17 @@ const UpdateBusinessPlanPage = () => {
                                 Financing
                               </label>
                               <input
-                                type="text"
-                                value={
-                                  item.financing
-                                    ? `€${item.financing.toLocaleString()}`
-                                    : ""
+                                type="number"
+                                value={item.financing || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "cashFlowAnalysis",
+                                    index,
+                                    "financing",
+                                    parseFloat(e.target.value) || 0
+                                  )
                                 }
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               />
                             </div>
                             <div>
@@ -667,14 +683,17 @@ const UpdateBusinessPlanPage = () => {
                                 Net Cash
                               </label>
                               <input
-                                type="text"
-                                value={
-                                  item.net_cash
-                                    ? `€${item.net_cash.toLocaleString()}`
-                                    : ""
+                                type="number"
+                                value={item.net_cash || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "cashFlowAnalysis",
+                                    index,
+                                    "net_cash",
+                                    parseFloat(e.target.value) || 0
+                                  )
                                 }
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               />
                             </div>
                           </div>
@@ -876,29 +895,36 @@ const UpdateBusinessPlanPage = () => {
                 </div>
               )}
 
-              {/* Additional Financial Data */}
-              {businessPlan?.data?.profitLossProjection &&
-                businessPlan.data.profitLossProjection.length > 0 && (
+              {/* Profit Loss Projection */}
+              {formData.profitLossProjection &&
+                formData.profitLossProjection.length > 0 && (
                   <div>
                     <label className="block text-xl font-semibold text-gray-800 mb-3">
                       Profit & Loss Projection
                     </label>
                     <div className="space-y-4">
-                      {businessPlan.data.profitLossProjection.map(
+                      {formData.profitLossProjection.map(
                         (item: any, index: number) => (
                           <div
                             key={index}
-                            className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border border-gray-200 rounded-lg bg-gray-50"
+                            className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border border-gray-200 rounded-lg bg-white"
                           >
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Year
                               </label>
                               <input
-                                type="text"
+                                type="number"
                                 value={item.year || ""}
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700"
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "year",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               />
                             </div>
                             <div>
@@ -906,14 +932,17 @@ const UpdateBusinessPlanPage = () => {
                                 Revenue
                               </label>
                               <input
-                                type="text"
-                                value={
-                                  item.revenue
-                                    ? `€${item.revenue.toLocaleString()}`
-                                    : ""
+                                type="number"
+                                value={item.revenue || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "revenue",
+                                    parseFloat(e.target.value) || 0
+                                  )
                                 }
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               />
                             </div>
                             <div>
@@ -921,14 +950,17 @@ const UpdateBusinessPlanPage = () => {
                                 COGS
                               </label>
                               <input
-                                type="text"
-                                value={
-                                  item.cogs
-                                    ? `€${item.cogs.toLocaleString()}`
-                                    : ""
+                                type="number"
+                                value={item.cogs || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "cogs",
+                                    parseFloat(e.target.value) || 0
+                                  )
                                 }
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               />
                             </div>
                             <div>
@@ -936,14 +968,125 @@ const UpdateBusinessPlanPage = () => {
                                 Gross Profit
                               </label>
                               <input
-                                type="text"
-                                value={
-                                  item.gross_profit
-                                    ? `€${item.gross_profit.toLocaleString()}`
-                                    : ""
+                                type="number"
+                                value={item.gross_profit || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "gross_profit",
+                                    parseFloat(e.target.value) || 0
+                                  )
                                 }
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Operating Expenses
+                              </label>
+                              <input
+                                type="number"
+                                value={item.operating_expenses || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "operating_expenses",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                EBITDA
+                              </label>
+                              <input
+                                type="number"
+                                value={item.ebitda || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "ebitda",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Depreciation & Amortization
+                              </label>
+                              <input
+                                type="number"
+                                value={item.depreciation_amortization || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "depreciation_amortization",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                EBIT
+                              </label>
+                              <input
+                                type="number"
+                                value={item.ebit || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "ebit",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Interest
+                              </label>
+                              <input
+                                type="number"
+                                value={item.interest || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "interest",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Taxes
+                              </label>
+                              <input
+                                type="number"
+                                value={item.taxes || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "taxes",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               />
                             </div>
                             <div>
@@ -951,14 +1094,17 @@ const UpdateBusinessPlanPage = () => {
                                 Net Income
                               </label>
                               <input
-                                type="text"
-                                value={
-                                  item.net_income
-                                    ? `€${item.net_income.toLocaleString()}`
-                                    : ""
+                                type="number"
+                                value={item.net_income || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "net_income",
+                                    parseFloat(e.target.value) || 0
+                                  )
                                 }
-                                readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               />
                             </div>
                           </div>
@@ -967,7 +1113,6 @@ const UpdateBusinessPlanPage = () => {
                     </div>
                   </div>
                 )}
-
             </form>
           )}
         </div>
