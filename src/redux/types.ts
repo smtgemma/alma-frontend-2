@@ -81,6 +81,66 @@ interface OperatingCostBreakdown {
     tax: number;
 }
 
+interface FinancialAnalysis {
+    year: number;
+    gross_operating_cash_flow: number;
+    working_capital_change: number;
+    current_management_cash_flow: number;
+    operating_cash_flow: number;
+    debt_service_cash_flow: number;
+    shareholders_cash_flow: number;
+    net_cash_flow: number;
+    sales_revenue: number;
+    production_value: number;
+    gross_operating_margin: number;
+    ebit: number;
+    ebt: number;
+    net_income: number;
+    dividends: number;
+    net_tangible_assets: number;
+    net_intangible_assets: number;
+    financial_assets: number;
+    trade_assets: number;
+    inventory: number;
+    deferred_liquidity: number;
+    immediate_liquidity: number;
+    equity: number;
+    long_term_debt: number;
+    short_term_debt: number;
+    net_financial_position: number;
+    mortgage_loans: number;
+    other_financial_debts: number;
+    cash_and_banks: number;
+}
+
+interface RatiosAnalysis {
+    year: number;
+    roi: number;
+    roe: number;
+    ros: number;
+    ebit_margin: number;
+    net_debt_to_ebitda: number;
+    net_debt_to_equity: number;
+    net_debt_to_revenue: number;
+    current_ratio: number;
+    quick_ratio: number;
+    debt_to_equity: number;
+    treasury_margin: number;
+    structural_margin: number;
+    net_working_capital: number;
+    altman_z_score: number;
+}
+
+interface ProductionSalesForecast {
+    year: number;
+    sales_revenue: number;
+    revenue_growth: number;
+    units_sold: number;
+    average_price: number;
+    unit_production_cost: number;
+    unit_margin: number;
+}
+
 interface PlanData {
     financialHighlights: FinancialHighlights[];
     cashFlowAnalysis: CashFlowAnalysis[];
@@ -90,6 +150,10 @@ interface PlanData {
     debtStructure: DebtStructure[];
     keyRatios: KeyRatios[];
     operatingCostBreakdown: OperatingCostBreakdown[];
+    financialAnalysis: FinancialAnalysis[];
+    ratiosAnalysis: RatiosAnalysis[];
+    productionSalesForecast: ProductionSalesForecast[];
+    managementTeam: string;
 }
 
 interface PlanInfo {
@@ -123,4 +187,17 @@ export interface IOperationsPlan {
     operationsPlan: string;
     operatingCostBreakdown: OperatingCostBreakdown[];
     keyRatios: KeyRatios[];
+}
+
+export interface IFinancialAnalysis {
+    financialAnalysis: FinancialAnalysis[];
+}
+
+export interface IRatiosAnalysis {
+    ratiosAnalysis: RatiosAnalysis[];
+}
+
+export interface IProductionSalesForecast {
+    productionSalesForecast: ProductionSalesForecast[];
+    managementTeam: string;
 }

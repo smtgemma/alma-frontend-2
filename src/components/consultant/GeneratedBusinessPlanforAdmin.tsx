@@ -21,6 +21,7 @@ interface GeneratedBusinessPlanforAdminProps {
   sectorStrategy?: string;
   fundingSources?: string;
   operationsPlan?: string;
+  managementTeam?: string;
   planId?: string; // Add plan ID for edit functionality
   onPlanUpdate?: (updatedData: any) => void; // Callback for plan updates
   financialHighlights?: any[];
@@ -31,6 +32,9 @@ interface GeneratedBusinessPlanforAdminProps {
   debtStructure?: any[];
   keyRatios?: any[];
   operatingCostBreakdown?: any[];
+  financialAnalysis?: any[];
+  ratiosAnalysis?: any[];
+  productionSalesForecast?: any[];
 }
 
 const GeneratedBusinessPlanforAdmin = ({
@@ -42,6 +46,7 @@ const GeneratedBusinessPlanforAdmin = ({
   sectorStrategy = "",
   fundingSources = "",
   operationsPlan = "",
+  managementTeam = "",
   planId,
   onPlanUpdate,
   financialHighlights = [],
@@ -52,6 +57,9 @@ const GeneratedBusinessPlanforAdmin = ({
   debtStructure = [],
   keyRatios = [],
   operatingCostBreakdown = [],
+  financialAnalysis = [],
+  ratiosAnalysis = [],
+  productionSalesForecast = [],
 }: GeneratedBusinessPlanforAdminProps) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -76,6 +84,7 @@ const GeneratedBusinessPlanforAdmin = ({
     sectorStrategy,
     fundingSources,
     operationsPlan,
+    managementTeam,
   });
 
   const handleEdit = () => {
@@ -127,6 +136,7 @@ const GeneratedBusinessPlanforAdmin = ({
       sectorStrategy: currentPlanData.sectorStrategy,
       fundingSources: currentPlanData.fundingSources,
       operationsPlan: currentPlanData.operationsPlan,
+      managementTeam: currentPlanData.managementTeam || managementTeam,
       financialHighlights,
       cashFlowAnalysis,
       profitLossProjection,
@@ -135,6 +145,9 @@ const GeneratedBusinessPlanforAdmin = ({
       debtStructure,
       keyRatios,
       operatingCostBreakdown,
+      financialAnalysis,
+      ratiosAnalysis,
+      productionSalesForecast,
     });
   };
 

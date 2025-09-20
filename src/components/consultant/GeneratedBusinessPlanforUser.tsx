@@ -14,6 +14,7 @@ interface GeneratedBusinessPlanforUserProps {
   sectorStrategy?: string;
   fundingSources?: string;
   operationsPlan?: string;
+  managementTeam?: string;
   financialHighlights?: any[];
   cashFlowAnalysis?: any[];
   profitLossProjection?: any[];
@@ -22,6 +23,9 @@ interface GeneratedBusinessPlanforUserProps {
   debtStructure?: any[];
   keyRatios?: any[];
   operatingCostBreakdown?: any[];
+  financialAnalysis?: any[];
+  ratiosAnalysis?: any[];
+  productionSalesForecast?: any[];
 }
 
 const GeneratedBusinessPlanforUser = ({
@@ -33,6 +37,7 @@ const GeneratedBusinessPlanforUser = ({
   sectorStrategy = "",
   fundingSources = "",
   operationsPlan = "",
+  managementTeam = "",
   financialHighlights = [],
   cashFlowAnalysis = [],
   profitLossProjection = [],
@@ -41,6 +46,9 @@ const GeneratedBusinessPlanforUser = ({
   debtStructure = [],
   keyRatios = [],
   operatingCostBreakdown = [],
+  financialAnalysis = [],
+  ratiosAnalysis = [],
+  productionSalesForecast = [],
 }: GeneratedBusinessPlanforUserProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -64,6 +72,7 @@ const GeneratedBusinessPlanforUser = ({
       sectorStrategy,
       fundingSources,
       operationsPlan,
+      managementTeam,
       financialHighlights,
       cashFlowAnalysis,
       profitLossProjection,
@@ -72,6 +81,9 @@ const GeneratedBusinessPlanforUser = ({
       debtStructure,
       keyRatios,
       operatingCostBreakdown,
+      financialAnalysis,
+      ratiosAnalysis,
+      productionSalesForecast,
     });
   };
 

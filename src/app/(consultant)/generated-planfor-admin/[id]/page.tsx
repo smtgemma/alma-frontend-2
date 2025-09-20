@@ -12,6 +12,9 @@ import MarketingDashboard from "@/components/generated-plans-graph/Marketing";
 import OperationsDashboard from "@/components/generated-plans-graph/OperationPlan";
 import DebtDashboard from "@/components/generated-plans-graph/DebtStructure";
 import BalanceSheet from "@/components/generated-plans-graph/BalanceSheet";
+import FinancialAnalysis from "@/components/generated-plans-graph/FinancalAnalysis";
+import RatiosAnalysis from "@/components/generated-plans-graph/RatiosAnalysis";
+import ProductionSalesForecast from "@/components/generated-plans-graph/ProductionSalesForecast";
 
 const GeneratedPlanForAdminPage = () => {
   const { id } = useParams();
@@ -103,16 +106,20 @@ const GeneratedPlanForAdminPage = () => {
     createdAt = "",
     debtStructure = [],
     executiveSummary = "",
+    financialAnalysis = [],
     financialHighlights = [],
     fundingSources = "",
     id: planId = "",
     keyRatios = [],
+    managementTeam = "",
     marketAnalysis = "",
     marketingSalesStrategy = "",
     netFinancialPosition = [],
     operatingCostBreakdown = [],
     operationsPlan = "",
+    productionSalesForecast = [],
     profitLossProjection = [],
+    ratiosAnalysis = [],
     sectorStrategy = "",
     status = "",
     subscriptionType = "",
@@ -284,6 +291,16 @@ const GeneratedPlanForAdminPage = () => {
           operationsPlan={operationsPlan}
           keyRatios={keyRatios}
           operatingCostBreakdown={operatingCostBreakdown}
+        />
+        <FinancialAnalysis
+          financialAnalysis={financialAnalysis}
+        />
+        <RatiosAnalysis
+          ratiosAnalysis={ratiosAnalysis}
+        />
+        <ProductionSalesForecast
+          productionSalesForecast={productionSalesForecast}
+          managementTeam={managementTeam}
         />
         <p className="text-base font-normal text-[#B6BEC8] text-center py-10">
           This plan document is generated and secured by [BusinessplanAI].{" "}

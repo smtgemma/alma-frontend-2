@@ -252,136 +252,14 @@ export default function OperationsDashboard({
       <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
         Operating Cost Breakdown
       </h2>
-      {/* <div className="">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border border-gray-200">
-            <thead>
-              <tr className="bg-purple-100">
-                <th className="px-4 py-3 text-sm font-medium text-[#121417]">
-                  Year
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-[#121417]">
-                  ROI
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-[#121417]">
-                  ROE
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-[#121417]">
-                  Debt to Equity
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-[#121417]">
-                  Gross Margins
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-[#121417]">
-                  EBITDA Margin
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-[#121417]">
-                  Net Margin
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-[#121417]">
-                  Current Ratio
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-[#121417]">
-                  Quick Ratio
-                </th>
-                <th className="px-4 py-3 text-sm font-medium text-[#121417]">
-                  Asset Turnover
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {keyRatios.map((row, index) => (
-                <tr key={index} className="border-b border-gray-100">
-                  <td className="px-4 py-3 text-gray-900">{row.year}</td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {row.roi}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {row.roe}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {row.debt_to_equity}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {row.gross_margin}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {row.ebitda_margin}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {row.net_margin}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {row.current_ratio}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {row.quick_ratio}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {row.asset_turnover}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div> */}
-
-      {/* Operating Cost Breakdown Bar Chart */}
-      {/* <div className="bg-gray-50 rounded-lg p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Operating Cost Breakdown
-          </h2>
-          <div className="flex items-center gap-4">
-            <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
-              Yearly
-            </span>
-            <div className="flex items-center gap-4 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                <span className="text-gray-700">Revenue</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
-                <span className="text-gray-700">Costs</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="h-80">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={operatingCostData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis
-                dataKey="year"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 12, fill: "#666" }}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 12, fill: "#666" }}
-                tickFormatter={formatCurrency}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="costs" fill="#D1D5DB" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="revenue" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div> */}
+      
 
       {/* Year-wise Cost Analysis Cards */}
       <div className="">
         {/* <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
           Year-wise Cost Analysis
         </h2> */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {validOperatingCostBreakdown.map((item, index) => (
             <div
               key={index}

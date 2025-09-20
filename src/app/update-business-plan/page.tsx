@@ -33,6 +33,7 @@ const UpdateBusinessPlanPage = () => {
     sectorStrategy: "",
     fundingSources: "",
     operationsPlan: "",
+    managementTeam: "",
     financialHighlights: [] as any[],
     cashFlowAnalysis: [] as any[],
     profitLossProjection: [] as any[],
@@ -41,6 +42,9 @@ const UpdateBusinessPlanPage = () => {
     debtStructure: [] as any[],
     keyRatios: [] as any[],
     operatingCostBreakdown: [] as any[],
+    financialAnalysis: [] as any[],
+    ratiosAnalysis: [] as any[],
+    productionSalesForecast: [] as any[],
     user_input: {
       uploaded_file: [] as any[],
       user_input: [] as any[],
@@ -59,6 +63,7 @@ const UpdateBusinessPlanPage = () => {
         sectorStrategy: businessPlan.data.sectorStrategy || "",
         fundingSources: businessPlan.data.fundingSources || "",
         operationsPlan: businessPlan.data.operationsPlan || "",
+        managementTeam: businessPlan.data.managementTeam || "",
         financialHighlights: businessPlan.data.financialHighlights || [],
         cashFlowAnalysis: businessPlan.data.cashFlowAnalysis || [],
         profitLossProjection: businessPlan.data.profitLossProjection || [],
@@ -67,6 +72,9 @@ const UpdateBusinessPlanPage = () => {
         debtStructure: businessPlan.data.debtStructure || [],
         keyRatios: businessPlan.data.keyRatios || [],
         operatingCostBreakdown: businessPlan.data.operatingCostBreakdown || [],
+        financialAnalysis: businessPlan.data.financialAnalysis || [],
+        ratiosAnalysis: businessPlan.data.ratiosAnalysis || [],
+        productionSalesForecast: businessPlan.data.productionSalesForecast || [],
         user_input: {
           uploaded_file: businessPlan.data.user_input?.uploaded_file || [],
           user_input: businessPlan.data.user_input?.user_input || [],
@@ -151,6 +159,7 @@ const UpdateBusinessPlanPage = () => {
         sectorStrategy: formData.sectorStrategy,
         fundingSources: formData.fundingSources,
         operationsPlan: formData.operationsPlan,
+        managementTeam: formData.managementTeam,
 
         // Financial arrays (JSON fields)
         financialHighlights: formData.financialHighlights,
@@ -161,6 +170,9 @@ const UpdateBusinessPlanPage = () => {
         debtStructure: formData.debtStructure,
         keyRatios: formData.keyRatios,
         operatingCostBreakdown: formData.operatingCostBreakdown,
+        financialAnalysis: formData.financialAnalysis,
+        ratiosAnalysis: formData.ratiosAnalysis,
+        productionSalesForecast: formData.productionSalesForecast,
 
         // Other fields
         user_input: formData.user_input,
@@ -478,6 +490,22 @@ const UpdateBusinessPlanPage = () => {
                   rows={6}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter operations plan"
+                />
+              </div>
+
+              {/* Management Team */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Management Team
+                </label>
+                <textarea
+                  value={formData.managementTeam}
+                  onChange={(e) =>
+                    handleInputChange("managementTeam", e.target.value)
+                  }
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter management team information"
                 />
               </div>
 
@@ -1101,6 +1129,289 @@ const UpdateBusinessPlanPage = () => {
                                     "profitLossProjection",
                                     index,
                                     "net_income",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+              {/* Financial Analysis */}
+              {formData.financialAnalysis &&
+                formData.financialAnalysis.length > 0 && (
+                  <div>
+                    <label className="block text-xl font-semibold text-gray-800 mb-3">
+                      Financial Analysis
+                    </label>
+                    <div className="space-y-4">
+                      {formData.financialAnalysis.map(
+                        (item: any, index: number) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border border-gray-200 rounded-lg bg-white"
+                          >
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Year
+                              </label>
+                              <input
+                                type="number"
+                                value={item.year || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "financialAnalysis",
+                                    index,
+                                    "year",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Sales Revenue
+                              </label>
+                              <input
+                                type="number"
+                                value={item.sales_revenue || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "financialAnalysis",
+                                    index,
+                                    "sales_revenue",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                EBIT
+                              </label>
+                              <input
+                                type="number"
+                                value={item.ebit || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "financialAnalysis",
+                                    index,
+                                    "ebit",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Net Income
+                              </label>
+                              <input
+                                type="number"
+                                value={item.net_income || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "financialAnalysis",
+                                    index,
+                                    "net_income",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+              {/* Ratios Analysis */}
+              {formData.ratiosAnalysis &&
+                formData.ratiosAnalysis.length > 0 && (
+                  <div>
+                    <label className="block text-xl font-semibold text-gray-800 mb-3">
+                      Ratios Analysis
+                    </label>
+                    <div className="space-y-4">
+                      {formData.ratiosAnalysis.map(
+                        (item: any, index: number) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border border-gray-200 rounded-lg bg-white"
+                          >
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Year
+                              </label>
+                              <input
+                                type="number"
+                                value={item.year || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "ratiosAnalysis",
+                                    index,
+                                    "year",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                ROI (%)
+                              </label>
+                              <input
+                                type="number"
+                                step="0.01"
+                                value={item.roi || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "ratiosAnalysis",
+                                    index,
+                                    "roi",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                ROE (%)
+                              </label>
+                              <input
+                                type="number"
+                                step="0.01"
+                                value={item.roe || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "ratiosAnalysis",
+                                    index,
+                                    "roe",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Current Ratio
+                              </label>
+                              <input
+                                type="number"
+                                step="0.01"
+                                value={item.current_ratio || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "ratiosAnalysis",
+                                    index,
+                                    "current_ratio",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+              {/* Production Sales Forecast */}
+              {formData.productionSalesForecast &&
+                formData.productionSalesForecast.length > 0 && (
+                  <div>
+                    <label className="block text-xl font-semibold text-gray-800 mb-3">
+                      Production Sales Forecast
+                    </label>
+                    <div className="space-y-4">
+                      {formData.productionSalesForecast.map(
+                        (item: any, index: number) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border border-gray-200 rounded-lg bg-white"
+                          >
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Year
+                              </label>
+                              <input
+                                type="number"
+                                value={item.year || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "productionSalesForecast",
+                                    index,
+                                    "year",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Sales Revenue
+                              </label>
+                              <input
+                                type="number"
+                                value={item.sales_revenue || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "productionSalesForecast",
+                                    index,
+                                    "sales_revenue",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Revenue Growth (%)
+                              </label>
+                              <input
+                                type="number"
+                                step="0.01"
+                                value={item.revenue_growth || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "productionSalesForecast",
+                                    index,
+                                    "revenue_growth",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Units Sold
+                              </label>
+                              <input
+                                type="number"
+                                value={item.units_sold || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "productionSalesForecast",
+                                    index,
+                                    "units_sold",
                                     parseFloat(e.target.value) || 0
                                   )
                                 }

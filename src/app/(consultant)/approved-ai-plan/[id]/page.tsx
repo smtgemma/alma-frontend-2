@@ -10,6 +10,9 @@ import MarketingDashboard from "@/components/generated-plans-graph/Marketing";
 import OperationsDashboard from "@/components/generated-plans-graph/OperationPlan";
 import DebtDashboard from "@/components/generated-plans-graph/DebtStructure";
 import BalanceSheet from "@/components/generated-plans-graph/BalanceSheet";
+import FinancialAnalysis from "@/components/generated-plans-graph/FinancalAnalysis";
+import ProductionSalesForecast from "@/components/generated-plans-graph/ProductionSalesForecast";
+import RatiosAnalysis from "@/components/generated-plans-graph/RatiosAnalysis";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -157,6 +160,10 @@ const ApprovedAiPlanPage = () => {
     subscriptionType = "",
     updatedAt = "",
     userId = "",
+    managementTeam = "",
+    financialAnalysis = [],
+    ratiosAnalysis = [],
+    productionSalesForecast = [],
   } = planInfo?.data || {}; // default to empty object if `data` is undefined
 
   return (
@@ -230,6 +237,7 @@ const ApprovedAiPlanPage = () => {
           sectorStrategy={sectorStrategy}
           fundingSources={fundingSources}
           operationsPlan={operationsPlan}
+          managementTeam={managementTeam}
           financialHighlights={financialHighlights}
           cashFlowAnalysis={cashFlowAnalysis}
           profitLossProjection={profitLossProjection}
@@ -238,6 +246,9 @@ const ApprovedAiPlanPage = () => {
           debtStructure={debtStructure}
           keyRatios={keyRatios}
           operatingCostBreakdown={operatingCostBreakdown}
+          financialAnalysis={financialAnalysis}
+          ratiosAnalysis={ratiosAnalysis}
+          productionSalesForecast={productionSalesForecast}
         />
         <FinancialDashboard
           financialHighlights={financialHighlights}
@@ -262,6 +273,25 @@ const ApprovedAiPlanPage = () => {
           keyRatios={keyRatios}
           operatingCostBreakdown={operatingCostBreakdown}
         />
+        
+        {/* Financial Analysis Section */}
+        {financialAnalysis && financialAnalysis.length > 0 && (
+          <FinancialAnalysis financialAnalysis={financialAnalysis} />
+        )}
+
+        {/* Ratios Analysis Section */}
+        {ratiosAnalysis && ratiosAnalysis.length > 0 && (
+          <RatiosAnalysis ratiosAnalysis={ratiosAnalysis} />
+        )}
+
+        {/* Production Sales Forecast Section */}
+        {productionSalesForecast && productionSalesForecast.length > 0 && (
+          <ProductionSalesForecast 
+            productionSalesForecast={productionSalesForecast}
+            managementTeam={managementTeam}
+          />
+        )}
+        
         <p className="text-base font-normal text-[#B6BEC8] text-center py-10">
           This plan document is generated and secured by [BusinessplanAI].{" "}
           <br />

@@ -14,6 +14,7 @@ interface DocDownloadProps {
   sectorStrategy?: string;
   fundingSources?: string;
   operationsPlan?: string;
+  managementTeam?: string;
   financialHighlights?: any[];
   cashFlowAnalysis?: any[];
   profitLossProjection?: any[];
@@ -22,6 +23,9 @@ interface DocDownloadProps {
   debtStructure?: any[];
   keyRatios?: any[];
   operatingCostBreakdown?: any[];
+  financialAnalysis?: any[];
+  ratiosAnalysis?: any[];
+  productionSalesForecast?: any[];
 }
 
 // Helper function to create and capture charts as images
@@ -291,6 +295,7 @@ export const generateWordDocument = async ({
   sectorStrategy = "",
   fundingSources = "",
   operationsPlan = "",
+  managementTeam = "",
   financialHighlights = [],
   cashFlowAnalysis = [],
   profitLossProjection = [],
@@ -299,6 +304,9 @@ export const generateWordDocument = async ({
   debtStructure = [],
   keyRatios = [],
   operatingCostBreakdown = [],
+  financialAnalysis = [],
+  ratiosAnalysis = [],
+  productionSalesForecast = [],
 }: DocDownloadProps) => {
   // Helper function to convert data for charts
   const convertDataForChart = (data: any[], chartType: string = "bar") => {
@@ -628,6 +636,17 @@ export const generateWordDocument = async ({
       }
 
       ${
+        managementTeam
+          ? `
+      <div class="section">
+        <h2>Management Team</h2>
+        <p>${managementTeam}</p>
+      </div>
+      `
+          : ""
+      }
+
+      ${
         financialHighlights.length > 0
           ? `
       <div class="section">
@@ -778,6 +797,48 @@ export const generateWordDocument = async ({
         }
         <div class="chart-note">
           <strong>Note:</strong> This section includes donut charts showing cost distribution across different categories.
+        </div>
+      </div>
+      `
+          : ""
+      }
+
+      ${
+        financialAnalysis.length > 0
+          ? `
+      <div class="section">
+        <h2>Financial Analysis</h2>
+        ${generateTableHTML(financialAnalysis, "Financial Analysis Table")}
+        <div class="chart-note">
+          <strong>Note:</strong> This section includes comprehensive financial metrics and analysis data.
+        </div>
+      </div>
+      `
+          : ""
+      }
+
+      ${
+        ratiosAnalysis.length > 0
+          ? `
+      <div class="section">
+        <h2>Ratios Analysis</h2>
+        ${generateTableHTML(ratiosAnalysis, "Ratios Analysis Table")}
+        <div class="chart-note">
+          <strong>Note:</strong> This section includes financial ratios and performance indicators.
+        </div>
+      </div>
+      `
+          : ""
+      }
+
+      ${
+        productionSalesForecast.length > 0
+          ? `
+      <div class="section">
+        <h2>Production Sales Forecast</h2>
+        ${generateTableHTML(productionSalesForecast, "Production Sales Forecast Table")}
+        <div class="chart-note">
+          <strong>Note:</strong> This section includes production metrics, sales forecasts, and growth projections.
         </div>
       </div>
       `
