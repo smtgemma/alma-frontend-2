@@ -13,6 +13,8 @@ export interface AggregatedFormData {
     question: string;
     answer: string;
   }>;
+  language?: string;
+  currency?: string;
 }
 
 // Question mappings for each step - based on the form labels in your components
@@ -122,6 +124,8 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
   const aggregated: AggregatedFormData = {
     uploaded_file: [],
     user_input: [],
+    language: formData.step1?.sourceLanguage || undefined,
+    currency: formData.step1?.targetLanguage || undefined,
   };
 
   // Process uploaded files from step1
@@ -155,6 +159,8 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
         fieldKey === "uploaded_file" ||
         fieldKey === "businessDocument" ||
         fieldKey === "extractedContent" ||
+        fieldKey === "sourceLanguage" ||
+        fieldKey === "targetLanguage" ||
         fieldKey.startsWith("custom") ||
         fieldKey.startsWith("show") ||
         (Array.isArray(fieldValue) && fieldValue.length === 0)

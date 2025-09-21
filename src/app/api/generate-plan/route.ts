@@ -44,6 +44,18 @@ export async function POST(request: NextRequest) {
       console.log("Added user_input to request:", requestBody.user_input);
     }
 
+     // Add language if present
+     if (body.language) {
+      requestBody.language = body.language;
+      console.log("Added language to request:", requestBody.language);
+    }
+
+    // Add currency if present
+    if (body.currency) {
+      requestBody.currency = body.currency;
+      console.log("Added currency to request:", requestBody.currency);
+    }
+
     // Remove user_id from request body as it's not needed for the backend API
     if (body.user_id) {
       delete body.user_id;
@@ -63,6 +75,8 @@ export async function POST(request: NextRequest) {
           answer: "new",
         },
       ];
+      requestBody.language = "English";
+      requestBody.currency = "USD";
       console.log("Created test request body:", requestBody);
     }
 
