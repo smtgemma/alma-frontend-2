@@ -368,6 +368,64 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
         // This is likely the main Expert's Review section container
         element.remove();
       }
+      
+      // Add classes to keep Profit Loss Projection content together
+      if (textContent.includes("Profit Loss Projection") && element.tagName === 'H2') {
+        // Add class to prevent page break after the heading
+        element.classList.add('profit-loss-projection-break');
+        
+        // Find the container that includes both graph and table
+        let container = element.parentElement;
+        while (container && container !== clonedElement) {
+          // Look for a container that likely contains both chart and table
+          const containerContent = container.textContent || '';
+          if (containerContent.includes("Profit Loss Projection") && 
+              (containerContent.includes("Revenue") || containerContent.includes("Net Income"))) {
+            container.classList.add('profit-loss-projection-section');
+            break;
+          }
+          container = container.parentElement;
+        }
+        
+        // Also add class to immediate parent
+        if (element.parentElement) {
+          element.parentElement.classList.add('profit-loss-section');
+        }
+      }
+      
+      // Handle Financial Highlights chart specifically for PDF
+      if (textContent.includes("FinancialHighlights") && textContent.includes("Yearly")) {
+        // Find recharts wrapper and ensure it has proper width for PDF
+        const rechartsWrapper = element.querySelector('.recharts-wrapper');
+        if (rechartsWrapper) {
+          (rechartsWrapper as HTMLElement).style.minWidth = '800px';
+          (rechartsWrapper as HTMLElement).style.width = '800px';
+        }
+        
+        // Also ensure the parent container allows overflow
+        if (element.parentElement) {
+          element.parentElement.style.overflowX = 'visible';
+          element.parentElement.style.minWidth = '850px';
+        }
+      }
+      
+      // Handle Financial Analysis table specifically for PDF
+      if (textContent.includes("Financial Analysis") && element.tagName === 'H2') {
+        // Find the next sibling div that contains the table
+        let nextSibling = element.nextElementSibling;
+        if (nextSibling && nextSibling.tagName === 'DIV') {
+          nextSibling.classList.add('financial-analysis-pdf-table');
+        }
+      }
+      
+      // Handle Ratios Analysis table specifically for PDF
+      if (textContent.includes("Ratios Analysis") && element.tagName === 'H2') {
+        // Find the next sibling div that contains the table
+        let nextSibling = element.nextElementSibling;
+        if (nextSibling && nextSibling.tagName === 'DIV') {
+          nextSibling.classList.add('ratios-analysis-pdf-table');
+        }
+      }
     });
     
     // Also remove any elements that are positioned fixed or have high z-index
@@ -464,6 +522,38 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
           page-break-inside: avoid;
         }
         
+        /* Keep Profit Loss Projection graph and table together */
+        .profit-loss-projection-section {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
+        
+        /* Optional page break before Profit Loss Projection only if needed */
+        .profit-loss-projection-break {
+          page-break-before: auto !important;
+          break-before: auto !important;
+        }
+        
+        /* Target elements with purple background (profit loss projection heading) */
+        *[style*="background-color: rgb(167, 139, 250)"],
+        *[style*="background-color: #A78BFA"],
+        .bg-\\[\\#A78BFA\\],
+        .bg-purple-400,
+        h2.bg-\\[\\#A78BFA\\] {
+          page-break-before: auto !important;
+          break-before: auto !important;
+          page-break-after: avoid !important;
+          break-after: avoid !important;
+        }
+        
+        /* Keep profit loss projection content together */
+        .profit-loss-section {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+          page-break-before: auto !important;
+          break-before: auto !important;
+        }
+        
         /* Style tables for PDF */
         table {
           page-break-inside: avoid;
@@ -472,11 +562,187 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
           margin-bottom: 1em;
         }
         
+        /* Keep profit loss projection tables with their content */
+        .profit-loss-section table,
+        .profit-loss-projection-section table {
+          page-break-before: avoid !important;
+          break-before: avoid !important;
+          margin-top: 0 !important;
+        }
+        
         /* Style images and charts */
         img, canvas, svg {
           max-width: 100%;
           height: auto;
           page-break-inside: avoid;
+        }
+        
+        /* Keep chart containers together with their content */
+        .recharts-wrapper,
+        .recharts-surface,
+        [class*="recharts"] {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+          page-break-before: avoid !important;
+          break-before: avoid !important;
+        }
+        
+        /* Fix pie chart text positioning issues in PDF */
+        .recharts-wrapper {
+          padding: 40px 20px !important;
+          margin: 20px 0 !important;
+        }
+        
+        .recharts-wrapper svg {
+          overflow: visible !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+        
+        /* Force pie chart labels to stay within chart boundaries */
+        .recharts-pie-label-text {
+          font-size: 11px !important;
+          transform: translateY(0px) !important;
+        }
+        
+        /* Ensure pie chart containers have enough space */
+        .relative.w-96.h-96 {
+          width: 450px !important;
+          height: 450px !important;
+          padding: 30px !important;
+          margin: 20px auto !important;
+        }
+        
+        /* Fix Balance Sheet and Operating Cost Breakdown charts specifically */
+        .flex.justify-center.items-start.gap-8 {
+          padding: 30px 20px !important;
+          margin: 40px 0 !important;
+        }
+        
+        /* Prevent text overflow on pie charts */
+        .recharts-pie .recharts-text {
+          font-size: 11px !important;
+          font-weight: bold !important;
+        }
+        
+        /* Specific fixes for pie chart label positioning */
+        .recharts-pie-label-text,
+        .recharts-text.recharts-pie-label-text {
+          font-size: 10px !important;
+          font-weight: 600 !important;
+          fill: white !important;
+          text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+        }
+        
+        /* Force all pie chart elements to stay within container */
+        .recharts-pie-sector {
+          transform-origin: center !important;
+        }
+        
+        /* Override any absolute positioning that causes text to float */
+        .recharts-layer.recharts-pie-labels text {
+          position: relative !important;
+          transform: none !important;
+        }
+        
+        /* Force pie chart SVG to have proper viewBox and prevent text overflow */
+        .recharts-surface {
+          overflow: hidden !important;
+        }
+        
+        /* Balance Sheet and Operating Cost Breakdown specific fixes */
+        h2:contains("Balance Sheet") + div .recharts-wrapper,
+        h2:contains("Operating Cost Breakdown") + div .recharts-wrapper {
+          padding: 50px !important;
+          margin: 30px auto !important;
+        }
+        
+        /* Hide any text elements that are positioned outside the chart area */
+        .recharts-wrapper text[x][y] {
+          visibility: visible !important;
+        }
+        
+        /* Ensure all chart text stays within the SVG bounds */
+        .recharts-wrapper svg text {
+          max-width: 100% !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+        }
+        
+        /* Ensure Financial Highlights chart shows all years in PDF */
+        .bg-gray-50.rounded-lg.p-6 .recharts-wrapper {
+          min-width: 800px !important;
+          width: 800px !important;
+        }
+        
+        /* Financial Highlights chart container specific styles for PDF */
+        .bg-gray-50.rounded-lg.p-6:has(.recharts-wrapper) {
+          overflow-x: visible !important;
+          min-width: 850px !important;
+        }
+        
+        /* Fix Financial Analysis and Ratio Analysis table overflow issues */
+        .financial-analysis-pdf-table,
+        .ratios-analysis-pdf-table {
+          overflow-x: visible !important;
+          width: 100% !important;
+        }
+        
+        /* Financial Analysis and Ratio Analysis table specific styles */
+        .financial-analysis-pdf-table .overflow-x-auto,
+        .ratios-analysis-pdf-table .overflow-x-auto {
+          overflow-x: visible !important;
+          width: 100% !important;
+        }
+        
+        /* Make Financial Analysis and Ratio Analysis tables responsive in PDF */
+        .financial-analysis-pdf-table table,
+        .ratios-analysis-pdf-table table {
+          width: 100% !important;
+          table-layout: fixed !important;
+          font-size: 8px !important;
+          border-collapse: collapse !important;
+        }
+        
+        /* Adjust cell padding and text size for better fit */
+        .financial-analysis-pdf-table table th,
+        .financial-analysis-pdf-table table td,
+        .ratios-analysis-pdf-table table th,
+        .ratios-analysis-pdf-table table td {
+          padding: 2px 4px !important;
+          font-size: 7px !important;
+          white-space: nowrap !important;
+          text-overflow: ellipsis !important;
+          width: auto !important;
+          overflow: hidden !important;
+          vertical-align: middle !important;
+        }
+        
+        /* Make first column (metrics) wider for readability */
+        .financial-analysis-pdf-table table td:first-child,
+        .financial-analysis-pdf-table table th:first-child,
+        .ratios-analysis-pdf-table table td:first-child,
+        .ratios-analysis-pdf-table table th:first-child {
+          width: 25% !important;
+          min-width: 100px !important;
+          font-size: 7px !important;
+          font-weight: 500 !important;
+        }
+        
+        /* Data columns should be equal width */
+        .financial-analysis-pdf-table table td:not(:first-child),
+        .financial-analysis-pdf-table table th:not(:first-child),
+        .ratios-analysis-pdf-table table td:not(:first-child),
+        .ratios-analysis-pdf-table table th:not(:first-child) {
+          width: auto !important;
+          text-align: center !important;
+        }
+        
+        /* Ensure the table containers don't break page layout */
+        .financial-analysis-pdf-table,
+        .ratios-analysis-pdf-table {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
         }
         
         /* Ensure grid layouts are properly displayed */

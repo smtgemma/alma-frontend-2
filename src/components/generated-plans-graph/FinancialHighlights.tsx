@@ -36,6 +36,7 @@ export default function FinancialDashboard({
     Revenue: item.revenue,
   }));
 
+
   return (
     <div className="mx-auto space-y-10 mt-10">
       {/* Financial Highlights Table */}
