@@ -176,10 +176,10 @@ const generateChartImage = async (
                         !value || isNaN(value)
                           ? "$0"
                           : value >= 1000000
-                            ? `$${(value / 1000000).toFixed(1)}M`
-                            : value >= 1000
-                              ? `$${(value / 1000).toFixed(0)}K`
-                              : `$${value.toLocaleString()}`;
+                          ? `$${(value / 1000000).toFixed(1)}M`
+                          : value >= 1000
+                          ? `$${(value / 1000).toFixed(0)}K`
+                          : `$${value.toLocaleString()}`;
 
                       return {
                         text: `${label}: ${percentage}% (${formattedValue})`,
@@ -208,10 +208,10 @@ const generateChartImage = async (
                     !value || isNaN(value)
                       ? "$0"
                       : value >= 1000000
-                        ? `$${(value / 1000000).toFixed(1)}M`
-                        : value >= 1000
-                          ? `$${(value / 1000).toFixed(0)}K`
-                          : `$${value.toLocaleString()}`;
+                      ? `$${(value / 1000000).toFixed(1)}M`
+                      : value >= 1000
+                      ? `$${(value / 1000).toFixed(0)}K`
+                      : `$${value.toLocaleString()}`;
 
                   return `${context.label}: ${percentage}% (${formattedValue})`;
                 },
@@ -386,50 +386,49 @@ export const generateWordDocument = async ({
 
   // Generate chart images with proper data conversion
 
-
   const financialChart =
     financialHighlights.length > 0
       ? await generateChartImage(
-        "bar",
-        convertDataForChart(financialHighlights, "financial"),
-        "Financial Highlights Bar Chart"
-      )
+          "bar",
+          convertDataForChart(financialHighlights, "financial"),
+          "Financial Highlights Bar Chart"
+        )
       : "";
 
   const profitLossChart =
     profitLossProjection.length > 0
       ? await generateChartImage(
-        "line",
-        convertDataForChart(profitLossProjection, "financial"),
-        "Profit Loss Trend Chart"
-      )
+          "line",
+          convertDataForChart(profitLossProjection, "financial"),
+          "Profit Loss Trend Chart"
+        )
       : "";
 
   const balanceSheetChart =
     balanceSheet.length > 0
       ? await generateChartImage(
-        "pie",
-        convertDataForChart(balanceSheet, "balance_sheet"),
-        "Balance Sheet Distribution Chart"
-      )
+          "pie",
+          convertDataForChart(balanceSheet, "balance_sheet"),
+          "Balance Sheet Distribution Chart"
+        )
       : "";
 
   const keyRatiosChart =
     keyRatios.length > 0
       ? await generateChartImage(
-        "bar",
-        convertDataForChart(keyRatios),
-        "Key Ratios Bar Chart"
-      )
+          "bar",
+          convertDataForChart(keyRatios),
+          "Key Ratios Bar Chart"
+        )
       : "";
 
   const operatingCostChart =
     operatingCostBreakdown.length > 0
       ? await generateChartImage(
-        "pie",
-        convertDataForChart(operatingCostBreakdown, "operating_cost"),
-        "Operating Cost Distribution Chart"
-      )
+          "pie",
+          convertDataForChart(operatingCostBreakdown, "operating_cost"),
+          "Operating Cost Distribution Chart"
+        )
       : "";
 
   // Helper function to format numbers for display
@@ -444,21 +443,102 @@ export const generateWordDocument = async ({
     return `$${num.toLocaleString()}`;
   };
 
+  // FIXED: Financial Analysis table that fits perfectly in Word document
+  const generateFinancialAnalysisSideBySideHTML = (
+    data: any[],
+    title: string
+  ) => {
+    if (!data || data.length === 0) return "";
+
+    const headers = Object.keys(data[0] || {});
+    const years = [...new Set(data.map((item) => item.year))].sort();
+    const numYears = years.length;
+
+    // Calculate optimal column widths for A4 page (fits ~6-8 columns comfortably)
+    const metricWidth = "22%";
+    const yearWidth = numYears <= 3 ? "19%" : numYears <= 4 ? "14.5%" : "11%";
+
+    // Create table rows
+    const tableRows = headers
+      .map((header) => {
+        const displayHeader = header
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase())
+          .replace(/\(.*?\)/g, "") // Remove parentheses for cleaner look
+          .trim();
+
+        const yearCells = years.map((year) => {
+          const item = data.find((item) => item.year == year);
+          const cellValue = item ? item[header] : "";
+          const formattedValue =
+            typeof cellValue === "number" ||
+            (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
+              ? formatNumber(cellValue)
+              : String(cellValue || "");
+
+          // Abbreviate long numbers for better fit
+          let displayValue = formattedValue;
+          if (displayValue.length > 8) {
+            displayValue = displayValue.replace(/,/g, "").slice(0, 8) + "...";
+          }
+
+          return `<td style="font-size: 9px; padding: 2px 1px; text-align: center; white-space: nowrap; border: 1px solid #333; width: ${yearWidth};">${displayValue}</td>`;
+        });
+
+        return `<tr>
+          <th style="background-color: #f5f5f5; font-weight: bold; font-size: 9px; padding: 3px 2px; text-align: center; white-space: normal; word-wrap: break-word; border: 1px solid #333; width: ${metricWidth}; vertical-align: top;">${displayHeader}</th>
+          ${yearCells.join("")}
+        </tr>`;
+      })
+      .join("");
+
+    // Year header row
+    const yearHeaderRow = `<tr>
+      <th style="background-color: #f5f5f5; font-weight: bold; font-size: 10px; padding: 4px 2px; text-align: center; border: 1px solid #333; width: ${metricWidth};">Metric</th>
+      ${years
+        .map(
+          (year) =>
+            `<th style="background-color: #f5f5f5; font-weight: bold; font-size: 10px; padding: 4px 2px; text-align: center; white-space: nowrap; border: 1px solid #333; width: ${yearWidth};">${year}</th>`
+        )
+        .join("")}
+    </tr>`;
+
+    return `
+      <div style="margin: 15px 0; page-break-inside: avoid; width: 100%;">
+        <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #34495e; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 3px;">${title}</h3>
+        <div style="width: 100%; overflow: hidden; page-break-inside: avoid;">
+          <table style="width: 100%; border-collapse: collapse; font-family: 'Times New Roman', serif; font-size: 9px; table-layout: fixed; border: 2px solid #333;">
+            <thead>
+              ${yearHeaderRow}
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top: 6px; padding: 4px; background-color: #f0f8ff; border-left: 3px solid #3498db; font-size: 9px; font-style: italic; text-align: center;">
+          <strong>Comparative Financial Analysis - ${years.join(" | ")}</strong>
+        </div>
+      </div>
+    `;
+  };
+
   // Helper function to generate transposed table HTML (columns become rows, rows become columns)
   const generateTransposedTableHTML = (data: any[], title: string) => {
     if (!data || data.length === 0) return "";
 
     const headers = Object.keys(data[0] || {});
-    
+
     // Create transposed structure: each original column becomes a row
-    const transposedRows = headers.map(header => {
-      const row = [header.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())];
-      data.forEach(item => {
+    const transposedRows = headers.map((header) => {
+      const row = [
+        header.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+      ];
+      data.forEach((item) => {
         const cellValue = item[header];
         const formattedValue =
           typeof cellValue === "number" ||
-            (!isNaN(parseFloat(cellValue)) &&
-              isFinite(parseFloat(cellValue)))
+          (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
             ? formatNumber(cellValue)
             : String(cellValue || "");
         row.push(formattedValue);
@@ -474,11 +554,11 @@ export const generateWordDocument = async ({
             ${row
               .map((cell, cellIndex) => {
                 const isHeader = cellIndex === 0;
-                const cellStyle = isHeader 
-                  ? "background-color: #f5f5f5; font-weight: bold; font-size: 12px; padding: 8px 6px; text-align: left; white-space: nowrap;"
-                  : "font-size: 11px; padding: 6px 4px; text-align: center; white-space: nowrap;";
-                
-                return isHeader 
+                const cellStyle = isHeader
+                  ? "background-color: #f5f5f5; font-weight: bold; font-size: 11px; padding: 6px 4px; text-align: left; white-space: nowrap; border: 1px solid #333;"
+                  : "font-size: 10px; padding: 4px 2px; text-align: center; white-space: nowrap; border: 1px solid #333;";
+
+                return isHeader
                   ? `<th style="${cellStyle}">${cell}</th>`
                   : `<td style="${cellStyle}">${cell}</td>`;
               })
@@ -489,10 +569,10 @@ export const generateWordDocument = async ({
 
     // Create table with proper styling
     return `
-      <div style="margin: 20px 0; page-break-inside: avoid;">
-        <h3 style="margin: 0 0 15px 0; font-size: 14px; color: #34495e;">${title}</h3>
-        <div style="overflow-x: auto; max-width: 100%; page-break-inside: avoid;">
-          <table border="1" cellpadding="4" cellspacing="0" style="width: 100%; border-collapse: collapse; font-family: 'Times New Roman', serif; font-size: 11px; table-layout: auto;">
+      <div style="margin: 10px 0; page-break-inside: avoid; width: 100%;">
+        <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #34495e;">${title}</h3>
+        <div style="width: 100%; overflow: hidden; page-break-inside: avoid;">
+          <table style="width: 100%; border-collapse: collapse; font-family: 'Times New Roman', serif; font-size: 10px; table-layout: auto; border: 2px solid #333;">
             <tbody>
               ${tableRows}
             </tbody>
@@ -500,6 +580,12 @@ export const generateWordDocument = async ({
         </div>
       </div>
     `;
+  };
+
+  // OLD function - keeping for backward compatibility but not using for Financial Analysis
+  const generateFinancialAnalysisTableHTML = (data: any[], title: string) => {
+    // This will now redirect to the new side-by-side function
+    return generateFinancialAnalysisSideBySideHTML(data, title);
   };
 
   // Helper function to generate table HTML with better column management
@@ -513,22 +599,22 @@ export const generateWordDocument = async ({
     let columnWidths: string[] = [];
     if (numColumns <= 4) {
       // For 4 or fewer columns - equal distribution
-      columnWidths = headers.map(() => "20%");
+      columnWidths = headers.map(() => "25%");
     } else if (numColumns <= 6) {
       // For 5-6 columns - slightly smaller
       columnWidths = headers.map(() => "16.66%");
     } else {
       // For 7+ columns - even smaller, with first column wider for labels
-      columnWidths = ["25%", ...Array(numColumns - 1).fill("12%")];
+      columnWidths = ["18%", ...Array(numColumns - 1).fill("9%")];
     }
 
     // Generate header row with proper widths
     const headerRow = headers
       .map(
         (header, index) =>
-          `<th style="width: ${columnWidths[index]
-          }; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${columnWidths[index]
-          };">${header
+          `<th style="width: ${
+            columnWidths[index]
+          }; font-size: 11px; padding: 4px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border: 1px solid #333; background-color: #f5f5f5;">${header
             .replace(/_/g, " ")
             .replace(/\b\w/g, (l) => l.toUpperCase())}</th>`
       )
@@ -544,12 +630,12 @@ export const generateWordDocument = async ({
               const cellValue = row[header];
               const formattedValue =
                 typeof cellValue === "number" ||
-                  (!isNaN(parseFloat(cellValue)) &&
-                    isFinite(parseFloat(cellValue)))
+                (!isNaN(parseFloat(cellValue)) &&
+                  isFinite(parseFloat(cellValue)))
                   ? formatNumber(cellValue)
                   : String(cellValue || "");
 
-              return `<td style="width: ${columnWidths[index]}; font-size: 11px; padding: 6px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${columnWidths[index]};">${formattedValue}</td>`;
+              return `<td style="width: ${columnWidths[index]}; font-size: 10px; padding: 3px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border: 1px solid #333; text-align: center;">${formattedValue}</td>`;
             })
             .join("")}
         </tr>`
@@ -558,12 +644,12 @@ export const generateWordDocument = async ({
 
     // Create table with proper styling
     return `
-      <div style="margin: 20px 0; page-break-inside: avoid;">
-        <h3 style="margin: 0 0 15px 0; font-size: 14px; color: #34495e;">${title}</h3>
-        <div style="overflow-x: auto; max-width: 100%; page-break-inside: avoid;">
-          <table border="1" cellpadding="4" cellspacing="0" style="width: 100%; border-collapse: collapse; font-family: 'Times New Roman', serif; font-size: 11px; min-width: 600px; table-layout: fixed;">
+      <div style="margin: 10px 0; page-break-inside: avoid; width: 100%;">
+        <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #34495e;">${title}</h3>
+        <div style="width: 100%; overflow: hidden; page-break-inside: avoid;">
+          <table style="width: 100%; border-collapse: collapse; font-family: 'Times New Roman', serif; font-size: 10px; table-layout: fixed; border: 2px solid #333;">
             <thead>
-              <tr style="background-color: #f5f5f5;">
+              <tr>
                 ${headerRow}
               </tr>
             </thead>
@@ -587,83 +673,78 @@ export const generateWordDocument = async ({
         body {
           font-family: 'Times New Roman', serif;
           line-height: 1.6;
-          margin: 40px;
+          margin: 15px;
           color: #333;
-          /* Ensure normal page flow */
+          width: 100%;
         }
         h1 {
           color: #2c3e50;
           text-align: center;
-          margin-bottom: 30px;
+          margin-bottom: 15px;
           font-size: 24px;
           page-break-after: avoid;
         }
         h2 {
           color: #34495e;
-          margin-top: 40px;
-          margin-bottom: 15px;
+          margin-top: 20px;
+          margin-bottom: 10px;
           font-size: 18px;
           border-bottom: 2px solid #3498db;
           padding-bottom: 5px;
           page-break-after: avoid;
           page-break-inside: avoid;
-          /* Force new page only when needed */
           break-before: page;
         }
         h3 {
           color: #34495e;
-          margin-top: 25px;
-          margin-bottom: 10px;
+          margin-top: 15px;
+          margin-bottom: 8px;
           font-size: 16px;
           page-break-after: avoid;
         }
         p {
-          margin-bottom: 15px;
+          margin-bottom: 10px;
           text-align: justify;
-          /* Allow paragraphs to flow naturally */
           page-break-inside: auto;
           orphans: 3;
           widows: 3;
+          font-size: 12px;
         }
         .section {
-          margin-bottom: 40px;
-          /* Remove forced page breaks - let content flow naturally */
+          margin-bottom: 25px;
           page-break-inside: auto;
-          /* Allow section content to stay together as much as possible */
         }
         .executive-summary {
-          /* First section - no page break before */
           page-break-before: avoid;
         }
         .header {
           text-align: center;
-          margin-bottom: 40px;
+          margin-bottom: 20px;
           page-break-after: avoid;
         }
         .footer {
-          margin-top: 40px;
+          margin-top: 20px;
           text-align: center;
           font-size: 12px;
           color: #666;
           page-break-before: always;
         }
-        /* Improved table styling */
+        /* Table styling optimized for Word */
         table {
-          width: 100%;
+          width: 100% !important;
           border-collapse: collapse;
-          margin: 20px 0;
+          margin: 8px 0;
           page-break-inside: auto;
-          page-break-before: auto;
           table-layout: fixed;
           font-family: 'Times New Roman', serif;
-          font-size: 11px;
-          min-width: 600px;
+          font-size: 10px;
+          border: 2px solid #333;
         }
         th, td {
-          border: 1px solid #ddd;
-          padding: 6px 4px;
-          text-align: left;
-          vertical-align: top;
+          border: 1px solid #333;
+          padding: 3px 2px;
+          text-align: center;
+          vertical-align: middle;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -672,32 +753,26 @@ export const generateWordDocument = async ({
         th {
           background-color: #f5f5f5;
           font-weight: bold;
-          font-size: 12px;
-        }
-        /* Responsive table wrapper */
-        .table-container {
-          overflow-x: auto;
-          max-width: 100%;
-          margin: 20px 0;
-          page-break-inside: avoid;
-          -webkit-overflow-scrolling: touch;
+          font-size: 10px;
         }
         ul {
-          margin: 10px 0;
+          margin: 8px 0;
           padding-left: 20px;
           page-break-inside: auto;
         }
         li {
           margin-bottom: 5px;
           page-break-inside: avoid;
+          font-size: 12px;
         }
         .chart-note {
           background-color: #f9f9f9;
           border-left: 4px solid #3498db;
-          padding: 10px;
-          margin: 15px 0;
+          padding: 8px;
+          margin: 10px 0;
           font-style: italic;
           page-break-inside: avoid;
+          font-size: 11px;
         }
         img {
           max-width: 100%;
@@ -706,36 +781,37 @@ export const generateWordDocument = async ({
           border-radius: 8px;
           box-shadow: 0 4px 8px rgba(0,0,0,0.1);
           page-break-inside: avoid;
-          margin: 20px 0;
+          margin: 15px 0;
           display: block;
           margin-left: auto;
           margin-right: auto;
         }
-        /* Better page break control */
         .section-content {
           page-break-inside: auto;
-          margin-bottom: 30px;
+          margin-bottom: 15px;
+          width: 100%;
         }
         .section-title {
           page-break-after: avoid;
-          margin-bottom: 15px;
+          margin-bottom: 10px;
+          width: 100%;
         }
         @page {
           size: A4;
-          margin: 1in;
-          /* Better control over page breaks */
+          margin: 0.5in;
         }
         @media print {
           body {
             margin: 0;
-            padding: 1in;
+            padding: 0.5in;
+            font-size: 10px;
           }
-          /* More precise page break control */
           h2 {
             page-break-before: always;
             page-break-after: avoid;
             margin-top: 0;
             break-before: page;
+            font-size: 16px;
           }
           .section {
             page-break-before: auto;
@@ -751,24 +827,24 @@ export const generateWordDocument = async ({
             page-break-inside: auto;
             orphans: 3;
             widows: 3;
+            font-size: 10px;
           }
           table {
             page-break-inside: auto;
             page-break-before: auto;
             width: 100% !important;
             table-layout: fixed !important;
-            font-size: 10px !important;
+            font-size: 9px !important;
+            border: 1px solid #000 !important;
           }
           th, td {
-            font-size: 10px !important;
-            padding: 4px 2px !important;
+            font-size: 8px !important;
+            padding: 2px 1px !important;
             white-space: normal !important;
             word-wrap: break-word !important;
             overflow: visible !important;
-          }
-          .table-container {
-            overflow: visible !important;
-            width: 100% !important;
+            border: 1px solid #000 !important;
+            text-align: center !important;
           }
           tr {
             page-break-inside: avoid;
@@ -777,10 +853,10 @@ export const generateWordDocument = async ({
             page-break-inside: avoid;
             page-break-before: avoid;
             page-break-after: avoid;
+            max-width: 100% !important;
           }
-          /* Ensure content doesn't break awkwardly */
           .section-content p:last-child {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
           }
         }
       </style>
@@ -821,36 +897,39 @@ export const generateWordDocument = async ({
         </div>
       </div>
 
-        ${financialHighlights.length > 0
-      ? `
+        ${
+          financialHighlights.length > 0
+            ? `
       <div class="section">
         <div class="section-title">
           <h2>Financial Highlights</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
-        financialHighlights,
-        "Financial Highlights Table"
-      )}
-          ${financialChart
-        ? `
+            financialHighlights,
+            "Financial Highlights Table"
+          )}
+          ${
+            financialChart
+              ? `
             <div style="text-align: center;">
               <img src="${financialChart}" alt="Financial Highlights Chart" />
             </div>
           `
-        : ""
-      }
+              : ""
+          }
           <div class="chart-note">
             <strong>Note:</strong> This section includes bar charts showing Revenue and Net Income trends over multiple years.
           </div>
         </div>
       </div>
       `
-      : ""
-    }
+            : ""
+        }
 
-      ${businessModel
-      ? `
+      ${
+        businessModel
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>Business Model</h2>
@@ -860,11 +939,12 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
 
-       ${cashFlowAnalysis.length > 0
-      ? `
+       ${
+         cashFlowAnalysis.length > 0
+           ? `
       <div class="section">
         <div class="section-title">
           <h2>Cash Flow Analysis</h2>
@@ -874,11 +954,12 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
-    }
+           : ""
+       }
 
-      ${marketingSalesStrategy
-      ? `
+      ${
+        marketingSalesStrategy
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>Marketing & Sales Strategy</h2>
@@ -888,39 +969,42 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
 
-      ${profitLossProjection.length > 0
-      ? `
+      ${
+        profitLossProjection.length > 0
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>Profit Loss Projection</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-        profitLossProjection,
-        "Profit Loss Projection Table"
-      )}
-          ${profitLossChart
-        ? `
+            profitLossProjection,
+            "Profit Loss Projection Table"
+          )}
+          ${
+            profitLossChart
+              ? `
             <div style="text-align: center;">
               <img src="${profitLossChart}" alt="Profit Loss Trend Chart" />
             </div>
           `
-        : ""
-      }
+              : ""
+          }
           <div class="chart-note">
             <strong>Note:</strong> This section includes line charts showing profit and loss trends over time.
           </div>
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
 
-      ${sectorStrategy
-      ? `
+      ${
+        sectorStrategy
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>Sector Strategy</h2>
@@ -930,36 +1014,39 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
 
-    ${balanceSheet.length > 0
-      ? `
+    ${
+      balanceSheet.length > 0
+        ? `
       <div class="section">
         <div class="section-title">
           <h2>Balance Sheet</h2>
         </div>
         <div class="section-content">
-          ${generateTableHTML(balanceSheet, "Balance Sheet Table")}
-          ${balanceSheetChart
-        ? `
+          ${generateTransposedTableHTML(balanceSheet, "Balance Sheet Table")}
+          ${
+            balanceSheetChart
+              ? `
             <div style="text-align: center;">
               <img src="${balanceSheetChart}" alt="Balance Sheet Distribution Chart" />
             </div>
           `
-        : ""
-      }
+              : ""
+          }
           <div class="chart-note">
             <strong>Note:</strong> This section includes donut charts showing Assets, Liabilities, and Equity distribution.
           </div>
         </div>
       </div>
       `
-      : ""
+        : ""
     }
 
-    ${debtStructure.length > 0
-      ? `
+    ${
+      debtStructure.length > 0
+        ? `
       <div class="section">
         <div class="section-title">
           <h2>Debt Structure</h2>
@@ -969,11 +1056,12 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
+        : ""
     }
 
-      ${fundingSources
-      ? `
+      ${
+        fundingSources
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>Funding Sources</h2>
@@ -983,12 +1071,13 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
   
 
-      ${operationsPlan
-      ? `
+      ${
+        operationsPlan
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>Operations Plan</h2>
@@ -998,69 +1087,78 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
 
-    ${operatingCostBreakdown.length > 0
-      ? `
+    ${
+      operatingCostBreakdown.length > 0
+        ? `
       <div class="section">
         <div class="section-title">
           <h2>Operating Cost Breakdown</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-        operatingCostBreakdown,
-        "Operating Cost Breakdown Table"
-      )}
-          ${operatingCostChart
-        ? `
+            operatingCostBreakdown,
+            "Operating Cost Breakdown Table"
+          )}
+          ${
+            operatingCostChart
+              ? `
             <div style="text-align: center;">
               <img src="${operatingCostChart}" alt="Operating Cost Distribution Chart" />
             </div>
           `
-        : ""
-      }
+              : ""
+          }
           <div class="chart-note">
             <strong>Note:</strong> This section includes donut charts showing cost distribution across different categories.
           </div>
         </div>
       </div>
       `
-      : ""
+        : ""
     }
 
-      
-
-      ${financialAnalysis.length > 0
-      ? `
+      ${
+        financialAnalysis.length > 0
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>Financial Analysis</h2>
         </div>
         <div class="section-content">
-          ${generateTransposedTableHTML(financialAnalysis, "Financial Analysis Table")}
+          ${generateFinancialAnalysisSideBySideHTML(
+            financialAnalysis,
+            "Financial Analysis Table"
+          )}
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
 
-      ${ratiosAnalysis.length > 0
-      ? `
+      ${
+        ratiosAnalysis.length > 0
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>Ratios Analysis</h2>
         </div>
         <div class="section-content">
-          ${generateTransposedTableHTML(ratiosAnalysis, "Ratios Analysis Table")}
+          ${generateTransposedTableHTML(
+            ratiosAnalysis,
+            "Ratios Analysis Table"
+          )}
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
 
-    ${managementTeam
-      ? `
+    ${
+      managementTeam
+        ? `
       <div class="section">
         <div class="section-title">
           <h2>Management Team</h2>
@@ -1070,25 +1168,26 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
+        : ""
     }
       
-      ${productionSalesForecast.length > 0
-      ? `
+      ${
+        productionSalesForecast.length > 0
+          ? `
       <div class="section">
         <div class="section-title">
-          <h2>Production Sales Forecast </h2>
+          <h2>Production Sales Forecast</h2>
         </div>
         <div class="section-content">
-          ${generateTableHTML(productionSalesForecast, "Production Sales Forecast  Table")}
+          ${generateTableHTML(
+            productionSalesForecast,
+            "Production Sales Forecast Table"
+          )}
         </div>
       </div>
       `
-      : ""
-    }
-
-
-      
+          : ""
+      }
 
       <div class="footer">
         <p>This document was generated by BusinessPlanAI</p>
