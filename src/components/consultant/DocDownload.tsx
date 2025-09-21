@@ -15,6 +15,10 @@ interface DocDownloadProps {
   fundingSources?: string;
   operationsPlan?: string;
   managementTeam?: string;
+  implementationTimeline?: any[];
+  financialAnalysis?: any[];
+  ratiosAnalysis?: any[];
+  productionSalesForecast?: any[];
   financialHighlights?: any[];
   cashFlowAnalysis?: any[];
   profitLossProjection?: any[];
@@ -23,9 +27,6 @@ interface DocDownloadProps {
   debtStructure?: any[];
   keyRatios?: any[];
   operatingCostBreakdown?: any[];
-  financialAnalysis?: any[];
-  ratiosAnalysis?: any[];
-  productionSalesForecast?: any[];
 }
 
 // Helper function to create and capture charts as images
@@ -175,10 +176,10 @@ const generateChartImage = async (
                         !value || isNaN(value)
                           ? "$0"
                           : value >= 1000000
-                          ? `$${(value / 1000000).toFixed(1)}M`
-                          : value >= 1000
-                          ? `$${(value / 1000).toFixed(0)}K`
-                          : `$${value.toLocaleString()}`;
+                            ? `$${(value / 1000000).toFixed(1)}M`
+                            : value >= 1000
+                              ? `$${(value / 1000).toFixed(0)}K`
+                              : `$${value.toLocaleString()}`;
 
                       return {
                         text: `${label}: ${percentage}% (${formattedValue})`,
@@ -207,10 +208,10 @@ const generateChartImage = async (
                     !value || isNaN(value)
                       ? "$0"
                       : value >= 1000000
-                      ? `$${(value / 1000000).toFixed(1)}M`
-                      : value >= 1000
-                      ? `$${(value / 1000).toFixed(0)}K`
-                      : `$${value.toLocaleString()}`;
+                        ? `$${(value / 1000000).toFixed(1)}M`
+                        : value >= 1000
+                          ? `$${(value / 1000).toFixed(0)}K`
+                          : `$${value.toLocaleString()}`;
 
                   return `${context.label}: ${percentage}% (${formattedValue})`;
                 },
@@ -296,6 +297,9 @@ export const generateWordDocument = async ({
   fundingSources = "",
   operationsPlan = "",
   managementTeam = "",
+  financialAnalysis = [],
+  ratiosAnalysis = [],
+  productionSalesForecast = [],
   financialHighlights = [],
   cashFlowAnalysis = [],
   profitLossProjection = [],
@@ -304,9 +308,6 @@ export const generateWordDocument = async ({
   debtStructure = [],
   keyRatios = [],
   operatingCostBreakdown = [],
-  financialAnalysis = [],
-  ratiosAnalysis = [],
-  productionSalesForecast = [],
 }: DocDownloadProps) => {
   // Helper function to convert data for charts
   const convertDataForChart = (data: any[], chartType: string = "bar") => {
@@ -384,97 +385,194 @@ export const generateWordDocument = async ({
   };
 
   // Generate chart images with proper data conversion
+
+
   const financialChart =
     financialHighlights.length > 0
       ? await generateChartImage(
-          "bar",
-          convertDataForChart(financialHighlights, "financial"),
-          "Financial Highlights Bar Chart"
-        )
+        "bar",
+        convertDataForChart(financialHighlights, "financial"),
+        "Financial Highlights Bar Chart"
+      )
       : "";
 
   const profitLossChart =
     profitLossProjection.length > 0
       ? await generateChartImage(
-          "line",
-          convertDataForChart(profitLossProjection, "financial"),
-          "Profit Loss Trend Chart"
-        )
+        "line",
+        convertDataForChart(profitLossProjection, "financial"),
+        "Profit Loss Trend Chart"
+      )
       : "";
 
   const balanceSheetChart =
     balanceSheet.length > 0
       ? await generateChartImage(
-          "pie",
-          convertDataForChart(balanceSheet, "balance_sheet"),
-          "Balance Sheet Distribution Chart"
-        )
+        "pie",
+        convertDataForChart(balanceSheet, "balance_sheet"),
+        "Balance Sheet Distribution Chart"
+      )
       : "";
 
   const keyRatiosChart =
     keyRatios.length > 0
       ? await generateChartImage(
-          "bar",
-          convertDataForChart(keyRatios),
-          "Key Ratios Bar Chart"
-        )
+        "bar",
+        convertDataForChart(keyRatios),
+        "Key Ratios Bar Chart"
+      )
       : "";
 
   const operatingCostChart =
     operatingCostBreakdown.length > 0
       ? await generateChartImage(
-          "pie",
-          convertDataForChart(operatingCostBreakdown, "operating_cost"),
-          "Operating Cost Distribution Chart"
-        )
+        "pie",
+        convertDataForChart(operatingCostBreakdown, "operating_cost"),
+        "Operating Cost Distribution Chart"
+      )
       : "";
 
-  // Helper function to generate table HTML
+  // Helper function to format numbers for display
+  const formatNumber = (value: any): string => {
+    if (!value || isNaN(parseFloat(value))) return "0";
+    const num = parseFloat(value);
+    if (num >= 1000000) {
+      return `$${(num / 1000000).toFixed(1)}M`;
+    } else if (num >= 1000) {
+      return `$${(num / 1000).toFixed(0)}K`;
+    }
+    return `$${num.toLocaleString()}`;
+  };
+
+  // Helper function to generate transposed table HTML (columns become rows, rows become columns)
+  const generateTransposedTableHTML = (data: any[], title: string) => {
+    if (!data || data.length === 0) return "";
+
+    const headers = Object.keys(data[0] || {});
+    
+    // Create transposed structure: each original column becomes a row
+    const transposedRows = headers.map(header => {
+      const row = [header.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())];
+      data.forEach(item => {
+        const cellValue = item[header];
+        const formattedValue =
+          typeof cellValue === "number" ||
+            (!isNaN(parseFloat(cellValue)) &&
+              isFinite(parseFloat(cellValue)))
+            ? formatNumber(cellValue)
+            : String(cellValue || "");
+        row.push(formattedValue);
+      });
+      return row;
+    });
+
+    // Generate table rows
+    const tableRows = transposedRows
+      .map(
+        (row, rowIndex) =>
+          `<tr>
+            ${row
+              .map((cell, cellIndex) => {
+                const isHeader = cellIndex === 0;
+                const cellStyle = isHeader 
+                  ? "background-color: #f5f5f5; font-weight: bold; font-size: 12px; padding: 8px 6px; text-align: left; white-space: nowrap;"
+                  : "font-size: 11px; padding: 6px 4px; text-align: center; white-space: nowrap;";
+                
+                return isHeader 
+                  ? `<th style="${cellStyle}">${cell}</th>`
+                  : `<td style="${cellStyle}">${cell}</td>`;
+              })
+              .join("")}
+          </tr>`
+      )
+      .join("");
+
+    // Create table with proper styling
+    return `
+      <div style="margin: 20px 0; page-break-inside: avoid;">
+        <h3 style="margin: 0 0 15px 0; font-size: 14px; color: #34495e;">${title}</h3>
+        <div style="overflow-x: auto; max-width: 100%; page-break-inside: avoid;">
+          <table border="1" cellpadding="4" cellspacing="0" style="width: 100%; border-collapse: collapse; font-family: 'Times New Roman', serif; font-size: 11px; table-layout: auto;">
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  };
+
+  // Helper function to generate table HTML with better column management
   const generateTableHTML = (data: any[], title: string) => {
     if (!data || data.length === 0) return "";
 
     const headers = Object.keys(data[0] || {});
-    const tableRows = data
+    const numColumns = headers.length;
+
+    // Determine column widths based on number of columns
+    let columnWidths: string[] = [];
+    if (numColumns <= 4) {
+      // For 4 or fewer columns - equal distribution
+      columnWidths = headers.map(() => "20%");
+    } else if (numColumns <= 6) {
+      // For 5-6 columns - slightly smaller
+      columnWidths = headers.map(() => "16.66%");
+    } else {
+      // For 7+ columns - even smaller, with first column wider for labels
+      columnWidths = ["25%", ...Array(numColumns - 1).fill("12%")];
+    }
+
+    // Generate header row with proper widths
+    const headerRow = headers
       .map(
-        (row) =>
-          `<tr>${headers
-            .map((header) => `<td>${row[header] || ""}</td>`)
-            .join("")}</tr>`
+        (header, index) =>
+          `<th style="width: ${columnWidths[index]
+          }; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${columnWidths[index]
+          };">${header
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, (l) => l.toUpperCase())}</th>`
       )
       .join("");
 
-    return `
-      <h3>${title}</h3>
-      <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-        <thead>
-          <tr style="background-color: #f5f5f5;">
-            ${headers.map((header) => `<th>${header}</th>`).join("")}
-          </tr>
-        </thead>
-        <tbody>
-          ${tableRows}
-        </tbody>
-      </table>
-    `;
-  };
+    // Generate data rows with proper formatting and widths
+    const tableRows = data
+      .map(
+        (row) =>
+          `<tr>
+          ${headers
+            .map((header, index) => {
+              const cellValue = row[header];
+              const formattedValue =
+                typeof cellValue === "number" ||
+                  (!isNaN(parseFloat(cellValue)) &&
+                    isFinite(parseFloat(cellValue)))
+                  ? formatNumber(cellValue)
+                  : String(cellValue || "");
 
-  // Helper function to generate chart description
-  const generateChartDescription = (data: any[], title: string) => {
-    if (!data || data.length === 0) return "";
+              return `<td style="width: ${columnWidths[index]}; font-size: 11px; padding: 6px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${columnWidths[index]};">${formattedValue}</td>`;
+            })
+            .join("")}
+        </tr>`
+      )
+      .join("");
 
+    // Create table with proper styling
     return `
-      <h3>${title}</h3>
-      <p><strong>Chart Data:</strong></p>
-      <ul>
-        ${data
-          .map((item, index) => {
-            const details = Object.entries(item)
-              .map(([key, value]) => `${key}: ${value}`)
-              .join(", ");
-            return `<li>${details}</li>`;
-          })
-          .join("")}
-      </ul>
+      <div style="margin: 20px 0; page-break-inside: avoid;">
+        <h3 style="margin: 0 0 15px 0; font-size: 14px; color: #34495e;">${title}</h3>
+        <div style="overflow-x: auto; max-width: 100%; page-break-inside: avoid;">
+          <table border="1" cellpadding="4" cellspacing="0" style="width: 100%; border-collapse: collapse; font-family: 'Times New Roman', serif; font-size: 11px; min-width: 600px; table-layout: fixed;">
+            <thead>
+              <tr style="background-color: #f5f5f5;">
+                ${headerRow}
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+        </div>
+      </div>
     `;
   };
 
@@ -491,64 +589,107 @@ export const generateWordDocument = async ({
           line-height: 1.6;
           margin: 40px;
           color: #333;
+          /* Ensure normal page flow */
         }
         h1 {
           color: #2c3e50;
           text-align: center;
           margin-bottom: 30px;
           font-size: 24px;
+          page-break-after: avoid;
         }
         h2 {
           color: #34495e;
-          margin-top: 30px;
+          margin-top: 40px;
           margin-bottom: 15px;
           font-size: 18px;
           border-bottom: 2px solid #3498db;
           padding-bottom: 5px;
+          page-break-after: avoid;
+          page-break-inside: avoid;
+          /* Force new page only when needed */
+          break-before: page;
         }
         h3 {
           color: #34495e;
           margin-top: 25px;
           margin-bottom: 10px;
           font-size: 16px;
+          page-break-after: avoid;
         }
         p {
           margin-bottom: 15px;
           text-align: justify;
+          /* Allow paragraphs to flow naturally */
+          page-break-inside: auto;
+          orphans: 3;
+          widows: 3;
         }
         .section {
-          margin-bottom: 25px;
+          margin-bottom: 40px;
+          /* Remove forced page breaks - let content flow naturally */
+          page-break-inside: auto;
+          /* Allow section content to stay together as much as possible */
+        }
+        .executive-summary {
+          /* First section - no page break before */
+          page-break-before: avoid;
         }
         .header {
           text-align: center;
           margin-bottom: 40px;
+          page-break-after: avoid;
         }
         .footer {
           margin-top: 40px;
           text-align: center;
           font-size: 12px;
           color: #666;
+          page-break-before: always;
         }
+        /* Improved table styling */
         table {
           width: 100%;
           border-collapse: collapse;
           margin: 20px 0;
+          page-break-inside: auto;
+          page-break-before: auto;
+          table-layout: fixed;
+          font-family: 'Times New Roman', serif;
+          font-size: 11px;
+          min-width: 600px;
         }
         th, td {
           border: 1px solid #ddd;
-          padding: 8px;
+          padding: 6px 4px;
           text-align: left;
+          vertical-align: top;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-wrap: break-word;
         }
         th {
           background-color: #f5f5f5;
           font-weight: bold;
+          font-size: 12px;
+        }
+        /* Responsive table wrapper */
+        .table-container {
+          overflow-x: auto;
+          max-width: 100%;
+          margin: 20px 0;
+          page-break-inside: avoid;
+          -webkit-overflow-scrolling: touch;
         }
         ul {
           margin: 10px 0;
           padding-left: 20px;
+          page-break-inside: auto;
         }
         li {
           margin-bottom: 5px;
+          page-break-inside: avoid;
         }
         .chart-note {
           background-color: #f9f9f9;
@@ -556,6 +697,91 @@ export const generateWordDocument = async ({
           padding: 10px;
           margin: 15px 0;
           font-style: italic;
+          page-break-inside: avoid;
+        }
+        img {
+          max-width: 100%;
+          height: auto;
+          border: 2px solid #2c3e50;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+          page-break-inside: avoid;
+          margin: 20px 0;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        /* Better page break control */
+        .section-content {
+          page-break-inside: auto;
+          margin-bottom: 30px;
+        }
+        .section-title {
+          page-break-after: avoid;
+          margin-bottom: 15px;
+        }
+        @page {
+          size: A4;
+          margin: 1in;
+          /* Better control over page breaks */
+        }
+        @media print {
+          body {
+            margin: 0;
+            padding: 1in;
+          }
+          /* More precise page break control */
+          h2 {
+            page-break-before: always;
+            page-break-after: avoid;
+            margin-top: 0;
+            break-before: page;
+          }
+          .section {
+            page-break-before: auto;
+            page-break-inside: auto;
+          }
+          .executive-summary {
+            page-break-before: avoid;
+          }
+          h1, h3 {
+            page-break-after: avoid;
+          }
+          p, ul, ol, li, .chart-note {
+            page-break-inside: auto;
+            orphans: 3;
+            widows: 3;
+          }
+          table {
+            page-break-inside: auto;
+            page-break-before: auto;
+            width: 100% !important;
+            table-layout: fixed !important;
+            font-size: 10px !important;
+          }
+          th, td {
+            font-size: 10px !important;
+            padding: 4px 2px !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+            overflow: visible !important;
+          }
+          .table-container {
+            overflow: visible !important;
+            width: 100% !important;
+          }
+          tr {
+            page-break-inside: avoid;
+          }
+          img {
+            page-break-inside: avoid;
+            page-break-before: avoid;
+            page-break-after: avoid;
+          }
+          /* Ensure content doesn't break awkwardly */
+          .section-content p:last-child {
+            margin-bottom: 20px;
+          }
         }
       </style>
     </head>
@@ -565,285 +791,304 @@ export const generateWordDocument = async ({
         <p>Generated on: ${new Date().toLocaleDateString()}</p>
       </div>
 
+      <!-- Executive Summary - First page, no page break before -->
+      <div class="section executive-summary">
+        <div class="section-title">
+          <h2>Executive Summary</h2>
+        </div>
+        <div class="section-content">
+          <p>${executiveSummary.replace(/\n/g, "</p><p>")}</p>
+        </div>
+      </div>
+      
+      <!-- Business Overview - New page -->
       <div class="section">
-        <h2>Executive Summary</h2>
-        <p>${executiveSummary}</p>
+        <div class="section-title">
+          <h2>Business Overview</h2>
+        </div>
+        <div class="section-content">
+          <p>${businessOverview.replace(/\n/g, "</p><p>")}</p>
+        </div>
       </div>
 
+      <!-- Market Analysis - New page -->
       <div class="section">
-        <h2>Business Overview</h2>
-        <p>${businessOverview}</p>
+        <div class="section-title">
+          <h2>Market Analysis</h2>
+        </div>
+        <div class="section-content">
+          <p>${marketAnalysis.replace(/\n/g, "</p><p>")}</p>
+        </div>
       </div>
 
+        ${financialHighlights.length > 0
+      ? `
       <div class="section">
-        <h2>Market Analysis</h2>
-        <p>${marketAnalysis}</p>
-      </div>
-
-      ${
-        businessModel
-          ? `
-      <div class="section">
-        <h2>Business Model</h2>
-        <p>${businessModel}</p>
-      </div>
-      `
-          : ""
+        <div class="section-title">
+          <h2>Financial Highlights</h2>
+        </div>
+        <div class="section-content">
+          ${generateTableHTML(
+        financialHighlights,
+        "Financial Highlights Table"
+      )}
+          ${financialChart
+        ? `
+            <div style="text-align: center;">
+              <img src="${financialChart}" alt="Financial Highlights Chart" />
+            </div>
+          `
+        : ""
       }
-
-      ${
-        marketingSalesStrategy
-          ? `
-      <div class="section">
-        <h2>Marketing & Sales Strategy</h2>
-        <p>${marketingSalesStrategy}</p>
-      </div>
-      `
-          : ""
-      }
-
-      ${
-        sectorStrategy
-          ? `
-      <div class="section">
-        <h2>Sector Strategy</h2>
-        <p>${sectorStrategy}</p>
-      </div>
-      `
-          : ""
-      }
-
-      ${
-        fundingSources
-          ? `
-      <div class="section">
-        <h2>Funding Sources</h2>
-        <p>${fundingSources}</p>
-      </div>
-      `
-          : ""
-      }
-
-      ${
-        operationsPlan
-          ? `
-      <div class="section">
-        <h2>Operations Plan</h2>
-        <p>${operationsPlan}</p>
-      </div>
-      `
-          : ""
-      }
-
-      ${
-        managementTeam
-          ? `
-      <div class="section">
-        <h2>Management Team</h2>
-        <p>${managementTeam}</p>
-      </div>
-      `
-          : ""
-      }
-
-      ${
-        financialHighlights.length > 0
-          ? `
-      <div class="section">
-        <h2>Financial Highlights</h2>
-        ${generateTableHTML(financialHighlights, "Financial Highlights Table")}
-        ${
-          financialChart
-            ? `
-          <div style="margin: 20px 0; text-align: center;">
-            <img src="${financialChart}" alt="Financial Highlights Chart" style="max-width: 100%; height: auto; border: 2px solid #2c3e50; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
+          <div class="chart-note">
+            <strong>Note:</strong> This section includes bar charts showing Revenue and Net Income trends over multiple years.
           </div>
-        `
-            : ""
-        }
-        <div class="chart-note">
-          <strong>Note:</strong> This section includes bar charts showing Revenue and Net Income trends over multiple years.
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-      ${
-        cashFlowAnalysis.length > 0
-          ? `
+      ${businessModel
+      ? `
       <div class="section">
-        <h2>Cash Flow Analysis</h2>
-        ${generateTableHTML(cashFlowAnalysis, "Cash Flow Analysis Table")}
+        <div class="section-title">
+          <h2>Business Model</h2>
+        </div>
+        <div class="section-content">
+          <p>${businessModel.replace(/\n/g, "</p><p>")}</p>
+        </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-      ${
-        profitLossProjection.length > 0
-          ? `
+       ${cashFlowAnalysis.length > 0
+      ? `
       <div class="section">
-        <h2>Profit Loss Projection</h2>
-        ${generateTableHTML(
-          profitLossProjection,
-          "Profit Loss Projection Table"
-        )}
-        ${
-          profitLossChart
-            ? `
-          <div style="margin: 20px 0; text-align: center;">
-            <img src="${profitLossChart}" alt="Profit Loss Trend Chart" style="max-width: 100%; height: auto; border: 2px solid #2c3e50; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
+        <div class="section-title">
+          <h2>Cash Flow Analysis</h2>
+        </div>
+        <div class="section-content">
+          ${generateTableHTML(cashFlowAnalysis, "Cash Flow Analysis Table")}
+        </div>
+      </div>
+      `
+      : ""
+    }
+
+      ${marketingSalesStrategy
+      ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>Marketing & Sales Strategy</h2>
+        </div>
+        <div class="section-content">
+          <p>${marketingSalesStrategy.replace(/\n/g, "</p><p>")}</p>
+        </div>
+      </div>
+      `
+      : ""
+    }
+
+      ${profitLossProjection.length > 0
+      ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>Profit Loss Projection</h2>
+        </div>
+        <div class="section-content">
+          ${generateTransposedTableHTML(
+        profitLossProjection,
+        "Profit Loss Projection Table"
+      )}
+          ${profitLossChart
+        ? `
+            <div style="text-align: center;">
+              <img src="${profitLossChart}" alt="Profit Loss Trend Chart" />
+            </div>
+          `
+        : ""
+      }
+          <div class="chart-note">
+            <strong>Note:</strong> This section includes line charts showing profit and loss trends over time.
           </div>
-        `
-            : ""
-        }
-        <div class="chart-note">
-          <strong>Note:</strong> This section includes line charts showing profit and loss trends over time.
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-      ${
-        balanceSheet.length > 0
-          ? `
+      ${sectorStrategy
+      ? `
       <div class="section">
-        <h2>Balance Sheet</h2>
-        ${generateTableHTML(balanceSheet, "Balance Sheet Table")}
-        ${
-          balanceSheetChart
-            ? `
-          <div style="margin: 20px 0; text-align: center;">
-            <img src="${balanceSheetChart}" alt="Balance Sheet Distribution Chart" style="max-width: 100%; height: auto; border: 2px solid #2c3e50; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
+        <div class="section-title">
+          <h2>Sector Strategy</h2>
+        </div>
+        <div class="section-content">
+          <p>${sectorStrategy.replace(/\n/g, "</p><p>")}</p>
+        </div>
+      </div>
+      `
+      : ""
+    }
+
+    ${balanceSheet.length > 0
+      ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>Balance Sheet</h2>
+        </div>
+        <div class="section-content">
+          ${generateTableHTML(balanceSheet, "Balance Sheet Table")}
+          ${balanceSheetChart
+        ? `
+            <div style="text-align: center;">
+              <img src="${balanceSheetChart}" alt="Balance Sheet Distribution Chart" />
+            </div>
+          `
+        : ""
+      }
+          <div class="chart-note">
+            <strong>Note:</strong> This section includes donut charts showing Assets, Liabilities, and Equity distribution.
           </div>
-        `
-            : ""
-        }
-        <div class="chart-note">
-          <strong>Note:</strong> This section includes donut charts showing Assets, Liabilities, and Equity distribution.
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-      ${
-        netFinancialPosition.length > 0
-          ? `
+    ${debtStructure.length > 0
+      ? `
       <div class="section">
-        <h2>Net Financial Position</h2>
-        ${generateTableHTML(
-          netFinancialPosition,
-          "Net Financial Position Table"
-        )}
+        <div class="section-title">
+          <h2>Debt Structure</h2>
+        </div>
+        <div class="section-content">
+          ${generateTableHTML(debtStructure, "Debt Structure Table")}
+        </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-      ${
-        debtStructure.length > 0
-          ? `
+      ${fundingSources
+      ? `
       <div class="section">
-        <h2>Debt Structure</h2>
-        ${generateTableHTML(debtStructure, "Debt Structure Table")}
+        <div class="section-title">
+          <h2>Funding Sources</h2>
+        </div>
+        <div class="section-content">
+          <p>${fundingSources.replace(/\n/g, "</p><p>")}</p>
+        </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
+  
 
-      ${
-        keyRatios.length > 0
-          ? `
+      ${operationsPlan
+      ? `
       <div class="section">
-        <h2>Key Ratios</h2>
-        ${generateTableHTML(keyRatios, "Key Ratios Table")}
-        ${
-          keyRatiosChart
-            ? `
-          <div style="margin: 20px 0; text-align: center;">
-            <img src="${keyRatiosChart}" alt="Key Ratios Bar Chart" style="max-width: 100%; height: auto; border: 2px solid #2c3e50; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
+        <div class="section-title">
+          <h2>Operations Plan</h2>
+        </div>
+        <div class="section-content">
+          <p>${operationsPlan.replace(/\n/g, "</p><p>")}</p>
+        </div>
+      </div>
+      `
+      : ""
+    }
+
+    ${operatingCostBreakdown.length > 0
+      ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>Operating Cost Breakdown</h2>
+        </div>
+        <div class="section-content">
+          ${generateTransposedTableHTML(
+        operatingCostBreakdown,
+        "Operating Cost Breakdown Table"
+      )}
+          ${operatingCostChart
+        ? `
+            <div style="text-align: center;">
+              <img src="${operatingCostChart}" alt="Operating Cost Distribution Chart" />
+            </div>
+          `
+        : ""
+      }
+          <div class="chart-note">
+            <strong>Note:</strong> This section includes donut charts showing cost distribution across different categories.
           </div>
-        `
-            : ""
-        }
-        <div class="chart-note">
-          <strong>Note:</strong> This section includes bar charts showing Users and Customers growth over time.
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-      ${
-        operatingCostBreakdown.length > 0
-          ? `
-      <div class="section">
-        <h2>Operating Cost Breakdown</h2>
-        ${generateTableHTML(
-          operatingCostBreakdown,
-          "Operating Cost Breakdown Table"
-        )}
-        ${
-          operatingCostChart
-            ? `
-          <div style="margin: 20px 0; text-align: center;">
-            <img src="${operatingCostChart}" alt="Operating Cost Distribution Chart" style="max-width: 100%; height: auto; border: 2px solid #2c3e50; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
-          </div>
-        `
-            : ""
-        }
-        <div class="chart-note">
-          <strong>Note:</strong> This section includes donut charts showing cost distribution across different categories.
-        </div>
-      </div>
-      `
-          : ""
-      }
+      
 
-      ${
-        financialAnalysis.length > 0
-          ? `
+      ${financialAnalysis.length > 0
+      ? `
       <div class="section">
-        <h2>Financial Analysis</h2>
-        ${generateTableHTML(financialAnalysis, "Financial Analysis Table")}
-        <div class="chart-note">
-          <strong>Note:</strong> This section includes comprehensive financial metrics and analysis data.
+        <div class="section-title">
+          <h2>Financial Analysis</h2>
+        </div>
+        <div class="section-content">
+          ${generateTransposedTableHTML(financialAnalysis, "Financial Analysis Table")}
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-      ${
-        ratiosAnalysis.length > 0
-          ? `
+      ${ratiosAnalysis.length > 0
+      ? `
       <div class="section">
-        <h2>Ratios Analysis</h2>
-        ${generateTableHTML(ratiosAnalysis, "Ratios Analysis Table")}
-        <div class="chart-note">
-          <strong>Note:</strong> This section includes financial ratios and performance indicators.
+        <div class="section-title">
+          <h2>Ratios Analysis</h2>
+        </div>
+        <div class="section-content">
+          ${generateTransposedTableHTML(ratiosAnalysis, "Ratios Analysis Table")}
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-      ${
-        productionSalesForecast.length > 0
-          ? `
+    ${managementTeam
+      ? `
       <div class="section">
-        <h2>Production Sales Forecast</h2>
-        ${generateTableHTML(productionSalesForecast, "Production Sales Forecast Table")}
-        <div class="chart-note">
-          <strong>Note:</strong> This section includes production metrics, sales forecasts, and growth projections.
+        <div class="section-title">
+          <h2>Management Team</h2>
+        </div>
+        <div class="section-content">
+          <p>${managementTeam.replace(/\n/g, "</p><p>")}</p>
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
+      
+      ${productionSalesForecast.length > 0
+      ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>Production Sales Forecast </h2>
+        </div>
+        <div class="section-content">
+          ${generateTableHTML(productionSalesForecast, "Production Sales Forecast  Table")}
+        </div>
+      </div>
+      `
+      : ""
+    }
+
+
+      
 
       <div class="footer">
         <p>This document was generated by BusinessPlanAI</p>
