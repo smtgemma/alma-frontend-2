@@ -48,6 +48,7 @@ const SubscriptionPlan = () => {
       }
     }
   }, [plansData]);
+console.log("soloPlanData, teamPlanData", soloPlanData, teamPlanData);
 
   // get active plan
   const currentPlanData = activeTab === "solo" ? soloPlanData : teamPlanData;
@@ -77,9 +78,10 @@ const SubscriptionPlan = () => {
     return <Loading />;
   }
 
-  if (!soloPlanData || !teamPlanData) {
+  if (!soloPlanData && !teamPlanData) {
     return <div>No plans found</div>;
   }
+console.log("currentPlanData", currentPlanData);
 
   return (
     <div className="space-y-6 px-4 lg:px-6 py-6">
