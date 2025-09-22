@@ -6,7 +6,6 @@ import { Suspense } from "react";
 import { Toaster } from "sonner";
 import ReduxProvider from "@/redux/Provider";
 import Loading from "@/components/Others/Loading";
-import StripeProvider from "@/components/StripeProvider";
 import Script from "next/script";
 
 const geistSans = Geist({
@@ -42,10 +41,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} antialiased`}
       >
         <ReduxProvider>
-          <StripeProvider>
-            <Toaster position="top-center" expand={true} richColors />
-            <Suspense fallback={<Loading />}>{children}</Suspense>
-          </StripeProvider>
+          <Toaster position="top-center" expand={true} richColors />
+          <Suspense fallback={<Loading />}>{children}</Suspense>
         </ReduxProvider>
 
         {/* Google Translate script */}

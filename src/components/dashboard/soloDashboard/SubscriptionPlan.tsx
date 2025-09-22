@@ -7,8 +7,6 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { setSubscriptionData } from "@/redux/features/subscription/subscriptionSlice";
 
 interface PlanFeature {
   id: string;
@@ -30,7 +28,6 @@ interface Plan {
 export default function SubscriptionPlan() {
   const { data: plansData, isLoading } = useGetCurrentPlansQuery({});
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const handlePlanSelect = async (id: any) => {
     // Check if user is authenticated
@@ -44,7 +41,7 @@ export default function SubscriptionPlan() {
     }
 
     try {
-      // Create subscription with backend to get clientSecret
+      // Create subscription with backend (PayPal)
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/billing/subscribe`,
         {
@@ -59,7 +56,7 @@ export default function SubscriptionPlan() {
         }
       );
 
-      const data = await response.json();
+      const respData = await response.json();
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -77,25 +74,27 @@ export default function SubscriptionPlan() {
         } else {
           // Show the specific error message from API response
           const errorMessage =
-            data?.message ||
+            respData?.message ||
             `Server error: ${response.status}. Please try again.`;
           toast.error(errorMessage);
           return;
         }
       }
 
-      if (data.success) {
-        router.push("/billing/" + id);
-        // Store subscription data in Redux
-        dispatch(
-          setSubscriptionData({
-            clientSecret: data.data.clientSecret,
-            paymentIntentId: data.data.paymentIntentId,
-          })
-        );
+      if (respData.success && respData?.data?.approvalUrl && respData?.data?.paypalSubscriptionId) {
+        try {
+          if (typeof window !== "undefined") {
+            sessionStorage.setItem(
+              "paypalSubscriptionId",
+              respData.data.paypalSubscriptionId
+            );
+          }
+        } catch {}
+        // Redirect user to PayPal approval URL
+        window.location.href = respData.data.approvalUrl;
       } else {
         // Show the specific error message from API response
-        const errorMessage = data?.message || "Failed to create subscription";
+        const errorMessage = respData?.message || "Failed to create subscription";
         toast.error(errorMessage);
       }
     } catch (error: any) {
