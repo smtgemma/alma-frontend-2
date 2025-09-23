@@ -64,17 +64,23 @@ export default function PayPalReturnPage() {
         }
 
         // Clear stored ID after successful confirmation
+        let redirectPath = "/dashboard";
         try {
           if (typeof window !== "undefined") {
             sessionStorage.removeItem("paypalSubscriptionId");
+            const storedPath = sessionStorage.getItem("postPaymentRedirectPath");
+            if (storedPath) {
+              redirectPath = storedPath;
+              sessionStorage.removeItem("postPaymentRedirectPath");
+            }
           }
         } catch {}
 
         toast.success("Subscription activated successfully!");
         setStatus("success");
 
-        // Redirect to dashboard
-        setTimeout(() => router.push("/dashboard"), 1000);
+        // Redirect based on origin (default to dashboard)
+        setTimeout(() => router.push(redirectPath), 1000);
       } catch (e: any) {
         toast.error(e?.message || "Failed to confirm payment");
         setStatus("error");

@@ -76,6 +76,11 @@ export default function S11SubscriptionPlan() {
               "paypalSubscriptionId",
               respData.data.paypalSubscriptionId
             );
+            // After confirming payment, return user to AI Smart Form review step
+            sessionStorage.setItem(
+              "postPaymentRedirectPath",
+              "/ai-smart-form?step=10"
+            );
           }
         } catch {}
         // Redirect user to PayPal approval URL
