@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { BsCalendar2Check, BsCreditCard } from "react-icons/bs";
+import { BsCalendar2Check, BsCreditCard, BsEnvelope } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { GrPower } from "react-icons/gr";
 import Link from "next/link";
@@ -267,6 +267,27 @@ export default function MobileMenu() {
                   }
                 />{" "}
                 Subscription plan
+              </button>
+            </Link>
+
+            <Link href="/contact">
+              <button
+                onClick={() => handleMenuClick("/contact")}
+                className={clsx(
+                  "w-full flex items-center gap-3 text-left px-4 py-2 rounded-md text-[1rem] font-medium text-accent cursor-pointer mb-2",
+                  currentSelectedPath === "/contact"
+                    ? "bg-primary text-white"
+                    : "bg-white hover:bg-primary hover:text-white"
+                )}
+              >
+                <BsEnvelope
+                  className={
+                    currentSelectedPath === "/contact"
+                      ? "text-white text-2xl"
+                      : "text-[#99A6B8] text-2xl"
+                  }
+                />{" "}
+                Contact
               </button>
             </Link>
           </div>
