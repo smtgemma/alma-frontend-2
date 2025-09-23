@@ -88,6 +88,11 @@ export default function SubscriptionPlan() {
               "paypalSubscriptionId",
               respData.data.paypalSubscriptionId
             );
+            // Indicate that after payment we should go to dashboard
+            sessionStorage.setItem(
+              "postPaymentRedirectPath",
+              "/dashboard"
+            );
           }
         } catch {}
         // Redirect user to PayPal approval URL
