@@ -332,7 +332,7 @@ const UpdateBusinessPlanPage = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600 italic">Caricamento in corso...</p>
+          <p className="mt-4 text-gray-600 ">Caricamento in corso...</p>
         </div>
       </div>
     );
@@ -342,10 +342,10 @@ const UpdateBusinessPlanPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4 italic">
+          <h1 className="text-2xl font-bold text-red-600 mb-4 ">
             Errore
           </h1>
-          <p className="text-gray-600 italic">Impossibile caricare i dati</p>
+          <p className="text-gray-600 ">Impossibile caricare i dati</p>
         </div>
       </div>
     );
@@ -356,7 +356,7 @@ const UpdateBusinessPlanPage = () => {
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2 italic">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2 ">
             Aggiorna Piano Aziendale
           </h1>
           {/* {planId && (
@@ -387,7 +387,7 @@ const UpdateBusinessPlanPage = () => {
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-            <span className="hidden sm:inline italic">Annulla</span>
+            <span className="hidden sm:inline ">Annulla</span>
           </button>
           <button
             type="button"
@@ -416,7 +416,7 @@ const UpdateBusinessPlanPage = () => {
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                <span className="hidden sm:inline italic">
+                <span className="hidden sm:inline ">
                   Aggiornamento...
                 </span>
               </>
@@ -436,7 +436,7 @@ const UpdateBusinessPlanPage = () => {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                <span className="hidden sm:inline italic">Aggiorna</span>
+                <span className="hidden sm:inline ">Aggiorna</span>
               </>
             )}
           </button>
@@ -494,7 +494,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Executive Summary */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                   Sintesi
                 </label>
                 <textarea
@@ -510,7 +510,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Business Overview */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                  Panoramica aziendal
                 </label>
                 <textarea
@@ -526,7 +526,7 @@ const UpdateBusinessPlanPage = () => {
 
                {/* Management Team */}
                <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                  Management Team
                 </label>
                 <textarea
@@ -542,7 +542,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Business Model */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                    Modello di Business
                 </label>
                 <textarea
@@ -558,7 +558,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Market Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                    Analisi di Mercato
                 </label>
                 <textarea
@@ -574,12 +574,12 @@ const UpdateBusinessPlanPage = () => {
 
                {/* Funding Sources */}
                <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                    Fonti di Finanziamento
                 </label>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 ">
                       Da Casa (Importo)
                     </label>
                     <input
@@ -600,7 +600,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Profit Loss Projection Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                    Proiezione di Profitti e Perdite
                 </label>
                 <textarea
@@ -622,7 +622,7 @@ const UpdateBusinessPlanPage = () => {
                 Array.isArray(formData.profitLossProjection) &&
                 formData.profitLossProjection.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                      8.1 Proiezione di Profitti e Perdite
                     </label>
                     <div className="space-y-4">
@@ -841,7 +841,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Marketing & Sales Strategy */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                   Strategia di Marketing e Vendite
                 </label>
                 <textarea
@@ -893,7 +893,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Financial Highlights Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                   Analisi degli Evidenziatori Finanziari
                 </label>
                 <textarea
@@ -915,7 +915,7 @@ const UpdateBusinessPlanPage = () => {
                 Array.isArray(formData.cashFlowAnalysis) &&
                 formData.cashFlowAnalysis.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                       Analisi del Flusso di Cassa
                     </label>
                     <div className="space-y-4">
@@ -1026,7 +1026,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Balance Sheet Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                Stato Patrimoniale
                 </label>
                 <textarea
@@ -1042,7 +1042,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Net Financial Position Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                    Posizione Finanziaria Netta
                 </label>
                 <textarea
@@ -1061,7 +1061,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Debt Structure Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                   Struttura del Debito
                 </label>
                 <textarea
@@ -1077,7 +1077,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Financial Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                    Analisi Finanziaria
                 </label>
                 <textarea
@@ -1096,7 +1096,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Key Ratios Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                   Analisi dei Rapporti Chiave
                 </label>
                 <textarea
@@ -1112,7 +1112,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Ratios Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                   Analisi dei Rapporti
                 </label>
                 <textarea
@@ -1130,7 +1130,7 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Production Sales Forecast Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                   Analisi della Previsione di Produzione e Vendite
                 </label>
                 <textarea
@@ -1151,7 +1151,7 @@ const UpdateBusinessPlanPage = () => {
               {formData.kpiAnalysis &&
                 Object.keys(formData.kpiAnalysis).length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                       Analisi KPI
                     </label>
                     <div className="space-y-4">
@@ -1161,12 +1161,12 @@ const UpdateBusinessPlanPage = () => {
                             key={year}
                             className="border border-gray-200 rounded-lg p-4 bg-white"
                           >
-                            <h4 className="font-semibold text-gray-700 mb-3 italic">
+                            <h4 className="font-semibold text-gray-700 mb-3 ">
                               Anno {year}
                             </h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                <label className="block text-sm font-medium text-gray-700 mb-1 ">
                                   Punteggio Complessivo
                                 </label>
                                 <input
@@ -1186,7 +1186,7 @@ const UpdateBusinessPlanPage = () => {
                                 />
                               </div>
                               <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                <label className="block text-sm font-medium text-gray-700 mb-1 ">
                                   Avvisi (separati da virgola)
                                 </label>
                                 <input
@@ -1209,7 +1209,7 @@ const UpdateBusinessPlanPage = () => {
                                 />
                               </div>
                               <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                <label className="block text-sm font-medium text-gray-700 mb-1 ">
                                   Raccomandazioni (separate da virgola)
                                 </label>
                                 <input
@@ -1244,7 +1244,7 @@ const UpdateBusinessPlanPage = () => {
                 Array.isArray(formData.financialHighlights) &&
                 formData.financialHighlights.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                       Evidenziatori Finanziari
                     </label>
                     <div className="space-y-4">
@@ -1356,7 +1356,7 @@ const UpdateBusinessPlanPage = () => {
                 Array.isArray(formData.cashFlowAnalysisAnalysis) &&
                 formData.cashFlowAnalysisAnalysis.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                       Dati dell'Analisi del Flusso di Cassa
                     </label>
                     <div className="space-y-4">
@@ -1466,14 +1466,14 @@ const UpdateBusinessPlanPage = () => {
               {/* User Input */}
               {formData.user_input && (
                 <div>
-                  <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                  <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                     Input dell'Utente
                   </label>
                   <div className="space-y-4">
                     {formData.user_input.user_input &&
                       formData.user_input.user_input.length > 0 && (
                         <div>
-                          <label className="block text-lg font-medium text-gray-700 mb-2 italic">
+                          <label className="block text-lg font-medium text-gray-700 mb-2 ">
                             Domande e Risposte
                           </label>
                           {formData.user_input.user_input.map(
@@ -1483,7 +1483,7 @@ const UpdateBusinessPlanPage = () => {
                                 className="bg-white p-4 rounded-lg mb-2 space-y-2 border border-gray-200"
                               >
                                 <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                  <label className="block text-sm font-medium text-gray-700 mb-1 ">
                                     Domanda {index + 1}
                                   </label>
                                   <input
@@ -1508,7 +1508,7 @@ const UpdateBusinessPlanPage = () => {
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                  <label className="block text-sm font-medium text-gray-700 mb-1 ">
                                     Risposta {index + 1}
                                   </label>
                                   <textarea
@@ -1538,7 +1538,7 @@ const UpdateBusinessPlanPage = () => {
                     {formData.user_input.uploaded_file &&
                       formData.user_input.uploaded_file.length > 0 && (
                         <div>
-                          <label className="block text-lg font-medium text-gray-700 mb-2 italic">
+                          <label className="block text-lg font-medium text-gray-700 mb-2 ">
                             File Caricati
                           </label>
                           {formData.user_input.uploaded_file.map(
@@ -1548,7 +1548,7 @@ const UpdateBusinessPlanPage = () => {
                                 className="bg-white p-4 rounded-lg mb-2 space-y-2 border border-gray-200"
                               >
                                 <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                  <label className="block text-sm font-medium text-gray-700 mb-1 ">
                                     Tipo di Documento
                                   </label>
                                   <input
@@ -1573,7 +1573,7 @@ const UpdateBusinessPlanPage = () => {
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                  <label className="block text-sm font-medium text-gray-700 mb-1 ">
                                     Numero di Pagine
                                   </label>
                                   <input
@@ -1600,7 +1600,7 @@ const UpdateBusinessPlanPage = () => {
                                 {file.financial_data && (
                                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                                     <div>
-                                      <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                      <label className="block text-sm font-medium text-gray-700 mb-1 ">
                                         Totale Attività
                                       </label>
                                       <input
@@ -1615,7 +1615,7 @@ const UpdateBusinessPlanPage = () => {
                                       />
                                     </div>
                                     <div>
-                                      <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                      <label className="block text-sm font-medium text-gray-700 mb-1 ">
                                         Ricavi Totali
                                       </label>
                                       <input
@@ -1662,7 +1662,7 @@ const UpdateBusinessPlanPage = () => {
                 Array.isArray(formData.financialAnalysis) &&
                 formData.financialAnalysis.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                       Analisi Finanziaria
                     </label>
                     <div className="space-y-4">
@@ -1774,7 +1774,7 @@ const UpdateBusinessPlanPage = () => {
                 Array.isArray(formData.ratiosAnalysis) &&
                 formData.ratiosAnalysis.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                       Analisi dei Rapporti
                     </label>
                     <div className="space-y-4">
@@ -1871,7 +1871,7 @@ const UpdateBusinessPlanPage = () => {
                 Array.isArray(formData.productionSalesForecast) &&
                 formData.productionSalesForecast.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 ">
                       Previsione di Produzione e Vendite
                     </label>
                     <div className="space-y-4">

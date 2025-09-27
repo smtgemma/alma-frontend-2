@@ -294,7 +294,7 @@ export default function S6InvestmentPlan() {
                       </label>
                     </div>
                   </div>
-                  //
+                  
                   {/* Investment Items */}
                   {form.investmentItems.map((item, index) => (
                     <div key={item.id} className="space-y-4">

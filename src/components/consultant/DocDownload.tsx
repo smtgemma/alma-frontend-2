@@ -195,10 +195,10 @@ const generateChartImage = async (
                         !originalValue || isNaN(originalValue)
                           ? "$0"
                           : originalValue >= 1000000
-                          ? `$${(originalValue / 1000000).toFixed(1)}M`
-                          : originalValue >= 1000
-                          ? `$${(originalValue / 1000).toFixed(0)}K`
-                          : `$${originalValue.toLocaleString()}`;
+                            ? `$${(originalValue / 1000000).toFixed(1)}M`
+                            : originalValue >= 1000
+                              ? `$${(originalValue / 1000).toFixed(0)}K`
+                              : `$${originalValue.toLocaleString()}`;
 
                       return {
                         text: `${label}: ${percentage}% (${formattedValue})`,
@@ -246,10 +246,10 @@ const generateChartImage = async (
                     !value || isNaN(value)
                       ? "$0"
                       : value >= 1000000
-                      ? `$${(value / 1000000).toFixed(1)}M`
-                      : value >= 1000
-                      ? `$${(value / 1000).toFixed(0)}K`
-                      : `$${value.toLocaleString()}`;
+                        ? `$${(value / 1000000).toFixed(1)}M`
+                        : value >= 1000
+                          ? `$${(value / 1000).toFixed(0)}K`
+                          : `$${value.toLocaleString()}`;
 
                   return `${context.label}: ${percentage}% (${formattedValue})`;
                 },
@@ -309,10 +309,10 @@ const generateChartImage = async (
                     !value || isNaN(value)
                       ? "$0"
                       : value >= 1000000
-                      ? `$${(value / 1000000).toFixed(1)}M`
-                      : value >= 1000
-                      ? `$${(value / 1000).toFixed(0)}K`
-                      : `$${value.toLocaleString()}`;
+                        ? `$${(value / 1000000).toFixed(1)}M`
+                        : value >= 1000
+                          ? `$${(value / 1000).toFixed(0)}K`
+                          : `$${value.toLocaleString()}`;
                   return `${context.dataset.label}: ${formattedValue}`;
                 },
               },
@@ -517,54 +517,54 @@ export const generateWordDocument = async ({
   const financialChart =
     financialHighlights.length > 0
       ? await generateChartImage(
-          "bar",
-          convertDataForChart(financialHighlights, "financial"),
-          "Grafico a barre punti salienti finanziari"
-        )
+        "bar",
+        convertDataForChart(financialHighlights, "financial"),
+        "Grafico a barre punti salienti finanziari"
+      )
       : "";
 
   const profitLossChart =
     profitLossProjection.length > 0
       ? await generateChartImage(
-          "line",
-          convertDataForChart(profitLossProjection, "financial"),
-          "Grafico tendenza profitti e perdite"
-        )
+        "line",
+        convertDataForChart(profitLossProjection, "financial"),
+        "Grafico tendenza profitti e perdite"
+      )
       : "";
   const netFinancialPositionChart =
     netFinancialPosition.length > 0
       ? await generateChartImage(
-          "line",
-          convertDataForChart(netFinancialPosition, "net_financial"),
-          "Grafico posizione finanziaria netta"
-        )
+        "line",
+        convertDataForChart(netFinancialPosition, "net_financial"),
+        "Grafico posizione finanziaria netta"
+      )
       : "";
 
   const balanceSheetChart =
     balanceSheet.length > 0
       ? await generateChartImage(
-          "pie",
-          convertDataForChart(balanceSheet, "balance_sheet"),
-          "Grafico distribuzione stato patrimoniale"
-        )
+        "pie",
+        convertDataForChart(balanceSheet, "balance_sheet"),
+        "Grafico distribuzione stato patrimoniale"
+      )
       : "";
 
   const keyRatiosChart =
     keyRatios.length > 0
       ? await generateChartImage(
-          "bar",
-          convertDataForChart(keyRatios),
-          "Grafico a barre rapporti chiave"
-        )
+        "bar",
+        convertDataForChart(keyRatios),
+        "Grafico a barre rapporti chiave"
+      )
       : "";
 
   const operatingCostChart =
     operatingCostBreakdown.length > 0
       ? await generateChartImage(
-          "pie",
-          convertDataForChart(operatingCostBreakdown, "operating_cost"),
-          "Grafico distribuzione costi operativi"
-        )
+        "pie",
+        convertDataForChart(operatingCostBreakdown, "operating_cost"),
+        "Grafico distribuzione costi operativi"
+      )
       : "";
 
   // Helper function to check if a value is likely a year
@@ -598,7 +598,15 @@ export const generateWordDocument = async ({
   const generateTransposedTableHTML = (data: any[], title: string) => {
     if (!data || data.length === 0) return "";
 
-    const headers = Object.keys(data[0] || {});
+    // const headers = Object.keys(data[0] || {});
+    if (!data || data.length === 0) return "";
+
+    // Find the first valid object in the array
+    const firstValidItem = data.find(item => item && typeof item === 'object' && item !== null);
+
+    if (!firstValidItem) return ""; // No valid objects found
+
+    const headers = Object.keys(firstValidItem);
 
     // Create transposed structure: each original column becomes a row
     const transposedRows = headers.map((header) => {
@@ -609,7 +617,7 @@ export const generateWordDocument = async ({
         const cellValue = item[header];
         const formattedValue =
           typeof cellValue === "number" ||
-          (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
+            (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
             ? formatNumber(cellValue, header)
             : String(cellValue || "");
         row.push(formattedValue);
@@ -623,17 +631,17 @@ export const generateWordDocument = async ({
         (row, rowIndex) =>
           `<tr>
             ${row
-              .map((cell, cellIndex) => {
-                const isHeader = cellIndex === 0;
-                const cellStyle = isHeader
-                  ? "background-color: #f5f5f5; font-weight: bold; font-size: 12px; padding: 8px 6px; text-align: left; white-space: nowrap;"
-                  : "font-size: 11px; padding: 6px 4px; text-align: center; white-space: nowrap;";
+            .map((cell, cellIndex) => {
+              const isHeader = cellIndex === 0;
+              const cellStyle = isHeader
+                ? "background-color: #f5f5f5; font-weight: bold; font-size: 12px; padding: 8px 6px; text-align: left; white-space: nowrap;"
+                : "font-size: 11px; padding: 6px 4px; text-align: center; white-space: nowrap;";
 
-                return isHeader
-                  ? `<th style="${cellStyle}">${cell}</th>`
-                  : `<td style="${cellStyle}">${cell}</td>`;
-              })
-              .join("")}
+              return isHeader
+                ? `<th style="${cellStyle}">${cell}</th>`
+                : `<td style="${cellStyle}">${cell}</td>`;
+            })
+            .join("")}
           </tr>`
       )
       .join("");
@@ -682,7 +690,7 @@ export const generateWordDocument = async ({
           const cellValue = item ? item[header] : "";
           const formattedValue =
             typeof cellValue === "number" ||
-            (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
+              (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
               ? formatNumber(cellValue, header)
               : String(cellValue || "");
 
@@ -763,10 +771,8 @@ export const generateWordDocument = async ({
     const headerRow = headers
       .map(
         (header, index) =>
-          `<th style="width: ${
-            columnWidths[index]
-          }; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${
-            columnWidths[index]
+          `<th style="width: ${columnWidths[index]
+          }; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${columnWidths[index]
           };">${header
             .replace(/_/g, " ")
             .replace(/\b\w/g, (l) => l.toUpperCase())}</th>`
@@ -783,8 +789,8 @@ export const generateWordDocument = async ({
               const cellValue = row[header];
               const formattedValue =
                 typeof cellValue === "number" ||
-                (!isNaN(parseFloat(cellValue)) &&
-                  isFinite(parseFloat(cellValue)))
+                  (!isNaN(parseFloat(cellValue)) &&
+                    isFinite(parseFloat(cellValue)))
                   ? formatNumber(cellValue, header)
                   : String(cellValue || "");
 
@@ -949,6 +955,7 @@ export const generateWordDocument = async ({
         .section-content {
           page-break-inside: auto;
           margin-bottom: 15px;
+           text-align: justify;
         }
         .section-title {
           page-break-after: avoid;
@@ -1082,9 +1089,8 @@ export const generateWordDocument = async ({
         </div>
       </div>
 
-       ${
-         managementTeam
-           ? `
+       ${managementTeam
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>3. Team di gestione</h2>
@@ -1094,12 +1100,11 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-           : ""
-       }
+      : ""
+    }
 
-        ${
-          businessModel
-            ? `
+        ${businessModel
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>4. Modello di business</h2>
@@ -1109,8 +1114,8 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-            : ""
-        }
+      : ""
+    }
 
 
       <!-- Market Analysis - New page -->
@@ -1123,89 +1128,82 @@ export const generateWordDocument = async ({
         </div>
       </div>
 
-      ${
-        fundingSources
-          ? `
+      ${fundingSources
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>6. Fonti di finanziamento</h2>
         </div>
         <div class="section-content">
-          <p>${
-            typeof fundingSources === "string"
-              ? fundingSources.replace(/\n/g, "</p><p>")
-              : typeof fundingSources === "object" && fundingSources !== null
-              ? Object.entries(fundingSources)
-                  .map(
-                    ([key, value]) =>
-                      `${key
-                        .replace(/([A-Z])/g, " $1")
-                        .replace(/^./, (str) => str.toUpperCase())}: ${
-                        typeof value === "number"
-                          ? `$${value.toLocaleString()}`
-                          : value
-                      }`
-                  )
-                  .join(", ")
-              : "No funding information available"
-          }</p>
+          <p>${typeof fundingSources === "string"
+        ? fundingSources.replace(/\n/g, "</p><p>")
+        : typeof fundingSources === "object" && fundingSources !== null
+          ? Object.entries(fundingSources)
+            .map(
+              ([key, value]) =>
+                `${key
+                  .replace(/([A-Z])/g, " $1")
+                  .replace(/^./, (str) => str.toUpperCase())}: ${typeof value === "number"
+                    ? `$${value.toLocaleString()}`
+                    : value
+                }`
+            )
+            .join(", ")
+          : "No funding information available"
+      }</p>
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-      ${
-        productionSalesForecast.length > 0
-          ? `
+      ${productionSalesForecast.length > 0
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>7. Previsione vendite produzione</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
-            productionSalesForecast,
-            "Tabella previsione vendite produzione"
-          )}
+        productionSalesForecast,
+        "Tabella previsione vendite produzione"
+      )}
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-       ${
-         operatingCostBreakdown.length > 0
-           ? `
+       ${operatingCostBreakdown.length > 0
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>7.1 Ripartizione costi operativi</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-            operatingCostBreakdown,
-            "Tabella ripartizione costi operativi 7.2"
-          )}
-          ${
-            operatingCostChart
-              ? `
+        operatingCostBreakdown,
+        "Tabella ripartizione costi operativi 7.2"
+      )}
+          ${operatingCostChart
+        ? `
             <div style="text-align: center;">
               <img src="${operatingCostChart}" alt="Grafico distribuzione costi operativi" />
             </div>
           `
-              : ""
-          }
+        : ""
+      }
           <div class="chart-note">
             <strong>Nota:</strong> Questa sezione include grafici a ciambella che mostrano la distribuzione dei costi tra diverse categorie.
           </div>
         </div>
       </div>
       `
-           : ""
-       }
+      : ""
+    }
 
-        ${
-          marketingSalesStrategy
-            ? `
+        ${marketingSalesStrategy
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>8. Strategia marketing e vendite</h2>
@@ -1215,54 +1213,50 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-            : ""
-        }
+      : ""
+    }
 
-        ${
-          profitLossProjection.length > 0
-            ? `
+        ${profitLossProjection.length > 0
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>8.1 Proiezione profitti e perdite</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-            profitLossProjection,
-            "Tabella proiezione profitti e perdite"
-          )}
-          ${
-            profitLossChart
-              ? `
+        profitLossProjection,
+        "Tabella proiezione profitti e perdite"
+      )}
+          ${profitLossChart
+        ? `
             <div style="text-align: center;">
               <img src="${profitLossChart}" alt="Grafico tendenza profitti e perdite" />
             </div>
           `
-              : ""
-          }
+        : ""
+      }
           <div class="chart-note">
             <strong>Nota:</strong> Questa sezione include grafici a linee che mostrano le tendenze di profitti e perdite nel tempo.
           </div>
         </div>
       </div>
       `
-            : ""
-        }
+      : ""
+    }
 
-        ${
-          balanceSheet.length > 0
-            ? `
+        ${balanceSheet.length > 0
+      ? `
           <div class="section">
             <div class="section-title">
               <h2>9. Stato patrimoniale</h2>
             </div>
             <div class="section-content">
               ${generateTransposedTableHTML(
-                balanceSheet,
-                "Tabella stato patrimoniale"
-              )}
-              ${
-                balanceSheetChart
-                  ? `
+        balanceSheet,
+        "Tabella stato patrimoniale"
+      )}
+              ${balanceSheetChart
+        ? `
                 <div style="display: flex; align-items: center; gap: 20px; margin: 20px 0;">
                   <div style="flex: 1; max-width: 400px; display: flex; justify-content: center;">
                     <img src="${balanceSheetChart}" alt="Grafico distribuzione stato patrimoniale" style="width: 100%; height: auto;" />
@@ -1270,124 +1264,120 @@ export const generateWordDocument = async ({
                   <div style="flex: 1; padding-left: 20px;">
                     <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: bold; color: #2c3e50;">Componenti stato patrimoniale</h3>
                     <div style="display: flex; flex-direction: column; gap: 10px;">
-                      ${
-                        balanceSheet.length > 0
-                          ? (() => {
-                              const item = balanceSheet[0];
-                              const assets = item.assets || 0;
-                              const liabilities = item.liabilities || 0;
-                              const equity = item.equity || 0;
+                      ${balanceSheet.length > 0
+          ? (() => {
+            const item = balanceSheet[0];
+            const assets = item.assets || 0;
+            const liabilities = item.liabilities || 0;
+            const equity = item.equity || 0;
 
-                              // Calculate percentages using absolute values
-                              const absAssets = Math.abs(assets);
-                              const absLiabilities = Math.abs(liabilities);
-                              const absEquity = Math.abs(equity);
-                              const total =
-                                absAssets + absLiabilities + absEquity;
+            // Calculate percentages using absolute values
+            const absAssets = Math.abs(assets);
+            const absLiabilities = Math.abs(liabilities);
+            const absEquity = Math.abs(equity);
+            const total =
+              absAssets + absLiabilities + absEquity;
 
-                              const assetsPercentage =
-                                total > 0
-                                  ? Math.round((absAssets / total) * 100)
-                                  : 0;
-                              const liabilitiesPercentage =
-                                total > 0
-                                  ? Math.round((absLiabilities / total) * 100)
-                                  : 0;
-                              const equityPercentage =
-                                total > 0
-                                  ? Math.round((absEquity / total) * 100)
-                                  : 0;
+            const assetsPercentage =
+              total > 0
+                ? Math.round((absAssets / total) * 100)
+                : 0;
+            const liabilitiesPercentage =
+              total > 0
+                ? Math.round((absLiabilities / total) * 100)
+                : 0;
+            const equityPercentage =
+              total > 0
+                ? Math.round((absEquity / total) * 100)
+                : 0;
 
-                              // Format currency
-                              const formatCurrency = (value: any) => {
-                                if (!value || isNaN(value)) return "$0";
-                                if (value >= 1000000)
-                                  return `$${(value / 1000000).toFixed(1)}M`;
-                                if (value >= 1000)
-                                  return `$${(value / 1000).toFixed(0)}K`;
-                                return `$${value.toLocaleString()}`;
-                              };
+            // Format currency
+            const formatCurrency = (value: any) => {
+              if (!value || isNaN(value)) return "$0";
+              if (value >= 1000000)
+                return `$${(value / 1000000).toFixed(1)}M`;
+              if (value >= 1000)
+                return `$${(value / 1000).toFixed(0)}K`;
+              return `$${value.toLocaleString()}`;
+            };
 
-                              return `
+            return `
                           <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: #f8f9fa; border-radius: 6px;">
                             <div style="width: 12px; height: 12px; background: #8B5CF6; border-radius: 50%;"></div>
                             <span style="font-weight: 500; color: #2c3e50;">Attività</span>
                             <span style="margin-left: auto; font-weight: bold; color: #2c3e50;">${assetsPercentage}%</span>
                             <span style="font-size: 12px; color: #666;">${formatCurrency(
-                              assets
-                            )}</span>
+              assets
+            )}</span>
                           </div>
                           <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: #f8f9fa; border-radius: 6px;">
                             <div style="width: 12px; height: 12px; background: #1E1B4B; border-radius: 50%;"></div>
                             <span style="font-weight: 500; color: #2c3e50;">Passività</span>
                             <span style="margin-left: auto; font-weight: bold; color: #2c3e50;">${liabilitiesPercentage}%</span>
                             <span style="font-size: 12px; color: #666;">${formatCurrency(
-                              liabilities
-                            )}</span>
+              liabilities
+            )}</span>
                           </div>
                           <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: #f8f9fa; border-radius: 6px;">
                             <div style="width: 12px; height: 12px; background: #EF4444; border-radius: 50%;"></div>
                             <span style="font-weight: 500; color: #2c3e50;">Patrimonio netto</span>
                             <span style="margin-left: auto; font-weight: bold; color: #2c3e50;">${equityPercentage}%</span>
                             <span style="font-size: 12px; color: #666;">${formatCurrency(
-                              equity
-                            )}</span>
+              equity
+            )}</span>
                           </div>
                         `;
-                            })()
-                          : ""
-                      }
+          })()
+          : ""
+        }
                     </div>
                   </div>
                 </div>
               `
-                  : ""
-              }
+        : ""
+      }
               <div class="chart-note">
                 <strong>Nota:</strong> Questa sezione include grafici a ciambella che mostrano la distribuzione di Attività, Passività e Patrimonio netto.
               </div>
             </div>
           </div>
           `
-            : ""
-        }
+      : ""
+    }
   
 
 
     
 
-    ${
-      netFinancialPosition.length > 0
-        ? `
+    ${netFinancialPosition.length > 0
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>10. Posizione finanziaria netta</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-            netFinancialPosition,
-            "Tabella posizione finanziaria netta"
-          )}
-          ${
-            netFinancialPositionChart
-              ? `
+        netFinancialPosition,
+        "Tabella posizione finanziaria netta"
+      )}
+          ${netFinancialPositionChart
+        ? `
             <div style="text-align: center;">
               <img src="${netFinancialPositionChart}" alt="Grafico posizione finanziaria netta" />
             </div>
           `
-              : ""
-          }
+        : ""
+      }
           <div class="chart-note">
             <strong>Nota:</strong> Questa sezione include grafici a linee che mostrano le tendenze della posizione finanziaria netta nel tempo.
           </div>
         </div>
       </div>
       `
-        : ""
+      : ""
     }  
-    ${
-      debtStructure.length > 0
-        ? `
+    ${debtStructure.length > 0
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>11. Struttura del debito</h2>
@@ -1397,93 +1387,88 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-        : ""
+      : ""
     }  
 
-      ${
-        financialAnalysis.length > 0
-          ? `
+      ${financialAnalysis.length > 0
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>12. Analisi finanziaria</h2>
         </div>
         <div class="section-content">
           ${generateFinancialAnalysisTableHTML(
-            financialAnalysis,
-            "Tabella analisi finanziaria"
-          )}
+        financialAnalysis,
+        "Tabella analisi finanziaria"
+      )}
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
-        ${
-          financialHighlights.length > 0
-            ? `
+        ${financialHighlights.length > 0
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>12.1 Punti salienti finanziari</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
-            financialHighlights,
-            "Tabella punti salienti finanziari"
-          )}
-          ${
-            financialChart
-              ? `
+        financialHighlights,
+        "Tabella punti salienti finanziari"
+      )}
+          ${financialChart
+        ? `
             <div style="text-align: center;">
               <img src="${financialChart}" alt="Grafico punti salienti finanziari" />
             </div>
           `
-              : ""
-          }
+        : ""
+      }
           <div class="chart-note">
             <strong>Nota:</strong> Questa sezione include grafici a barre che mostrano le tendenze di Ricavi e Reddito netto su più anni.
           </div>
         </div>
       </div>
       `
-            : ""
-        }
+      : ""
+    }
 
         
-       ${
-         cashFlowAnalysis.length > 0
-           ? `
+       ${cashFlowAnalysis.length > 0
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>12.2 Analisi flusso di cassa</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
-            cashFlowAnalysis,
-            "Tabella analisi flusso di cassa"
-          )}
+        cashFlowAnalysis,
+        "Tabella analisi flusso di cassa"
+      )}
         </div>
       </div>
       `
-           : ""
-       }
+      : ""
+    }
 
-      ${
-        ratiosAnalysis.length > 0
-          ? `
+      ${ratiosAnalysis.length > 0
+      ? `
       <div class="section">
         <div class="section-title">
           <h2>13. Analisi rapporti</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-            ratiosAnalysis,
-            "Tabella analisi rapporti"
-          )}
+        ratiosAnalysis,
+        "Tabella analisi rapporti"
+      )}
         </div>
       </div>
       `
-          : ""
-      }
+      : ""
+    }
 
    
       

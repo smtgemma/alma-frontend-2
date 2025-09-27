@@ -1,5 +1,5 @@
 "use client";
-
+// src/components/common/PlanSlideModal.tsx
 import React, { useEffect, useState } from "react";
 import {
   X,
@@ -109,7 +109,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
               onClick={onClose}
               className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              Back
+              Indietro
             </button>
           </div>
 
@@ -119,10 +119,10 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
               <Building className="w-8 h-8 text-blue-600 animate-pulse" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Loading Plan Details...
+              Caricamento Dettagli Piano...
             </h3>
             <p className="text-gray-600">
-              Please wait while we fetch the business plan information.
+              Attendere mentre recuperiamo le informazioni del piano aziendale.
             </p>
           </div>
         </div>
@@ -131,7 +131,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString("it-IT", {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -145,7 +145,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 1: Executive Summary
     if (plan.executiveSummary) {
       slides.push({
-        title: "Executive Summary",
+        title: "Riassunto Esecutivo",
         content: plan.executiveSummary,
         icon: Building,
       });
@@ -154,7 +154,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 2: Business Overview
     if (plan.businessOverview) {
       slides.push({
-        title: "Business Overview",
+        title: "Panoramica Aziendale",
         content: plan.businessOverview,
         icon: Building,
       });
@@ -163,7 +163,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 3: Market Analysis
     if (plan.marketAnalysis) {
       slides.push({
-        title: "Market Analysis",
+        title: "Analisi di Mercato",
         content: plan.marketAnalysis,
         icon: TrendingUp,
       });
@@ -172,7 +172,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 4: Financial Highlights
     if (plan.financialHighlights && plan.financialHighlights.length > 0) {
       slides.push({
-        title: "Financial Highlights",
+        title: "Punti Salienti Finanziari",
         content: plan.financialHighlights,
         icon: BarChart3,
         isFinancial: true,
@@ -182,7 +182,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 5: Business Model
     if (plan.businessModel) {
       slides.push({
-        title: "Business Model",
+        title: "Modello di Business",
         content: plan.businessModel,
         icon: Target,
       });
@@ -190,7 +190,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 6: Cash Flow Analysis
     if (plan.cashFlowAnalysis && plan.cashFlowAnalysis.length > 0) {
       slides.push({
-        title: "Cash Flow Analysis",
+        title: "Analisi del Flusso di Cassa",
         content: plan.cashFlowAnalysis,
         icon: TrendingUp,
         isFinancial: true,
@@ -200,7 +200,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 7: Marketing Sales Strategy
     if (plan.marketingSalesStrategy) {
       slides.push({
-        title: "Marketing Sales Strategy",
+        title: "Strategia di Marketing e Vendite",
         content: plan.marketingSalesStrategy,
         icon: Lightbulb,
       });
@@ -208,7 +208,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 8: Profit & Loss Projection
     if (plan.profitLossProjection && plan.profitLossProjection.length > 0) {
       slides.push({
-        title: "Profit & Loss Projection",
+        title: "Proiezione Profitti e Perdite",
         content: plan.profitLossProjection,
         icon: DollarSign,
         isFinancial: true,
@@ -227,7 +227,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 10: Balance Sheet
     if (plan.balanceSheet && plan.balanceSheet.length > 0) {
       slides.push({
-        title: "Balance Sheet",
+        title: "Bilancio",
         content: plan.balanceSheet,
         icon: Building,
         isFinancial: true,
@@ -237,7 +237,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 11: Net Financial Position
     if (plan.netFinancialPosition && plan.netFinancialPosition.length > 0) {
       slides.push({
-        title: "Net Financial Position",
+        title: "Posizione Finanziaria Netta",
         content: plan.netFinancialPosition,
         icon: DollarSign,
         isFinancial: true,
@@ -247,7 +247,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 12: Debt Structure
     if (plan.debtStructure && plan.debtStructure.length > 0) {
       slides.push({
-        title: "Debt Structure",
+        title: "Struttura del Debito",
         content: plan.debtStructure,
         icon: BarChart3,
         isFinancial: true,
@@ -256,7 +256,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 13: Funding Sources
     if (plan.fundingSources) {
       slides.push({
-        title: "Funding Sources",
+        title: "Fonti di Finanziamento",
         content: plan.fundingSources,
         icon: DollarSign,
       });
@@ -274,7 +274,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 15: Key Ratios
     if (plan.keyRatios && plan.keyRatios.length > 0) {
       slides.push({
-        title: "Key Ratios",
+        title: "Indicatori Chiave",
         content: plan.keyRatios,
         icon: BarChart3,
         isFinancial: true,
@@ -284,7 +284,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
     // Slide 16: Operating Cost Breakdown
     if (plan.operatingCostBreakdown && plan.operatingCostBreakdown.length > 0) {
       slides.push({
-        title: "Operating Cost Breakdown",
+        title: "Ripartizione Costi Operativi",
         content: plan.operatingCostBreakdown,
         icon: Users,
         isFinancial: true,
@@ -348,7 +348,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
             onClick={onClose}
             className="px-3 py-1.5 sm:px-4 sm:py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer text-sm sm:text-base"
           >
-            Back
+            Indietro
           </button>
         </div>
 
@@ -385,15 +385,15 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
           <div className="flex flex-col sm:flex-row justify-between items-start mb-6 sm:mb-8 gap-4">
             <div className="flex-1">
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
-                {plan.planName || "InnovateX/"}
+                {plan.planName || ""}
               </h1>
               <p className="text-gray-500 text-sm sm:text-base lg:text-lg">
-                {plan.businessType || "Early stage paper company"}
+                {plan.businessType || ""}
               </p>
             </div>
             <div className="text-left sm:text-right">
               <p className="text-gray-400 text-xs sm:text-sm">
-                Slide {currentSlide + 1} out of {totalSlides}
+                Slide {currentSlide + 1} di {totalSlides}
               </p>
             </div>
           </div>
@@ -414,48 +414,53 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                       <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 border border-green-200">
                         <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                           <TrendingUp className="w-5 h-5 text-green-600" />
-                          Revenue Growth Trend
+                          Tendenza di Crescita dei Ricavi
                         </h4>
                         <div className="flex items-end justify-between h-40 gap-3">
-                          {currentSlideData.content.map(
-                            (item: any, index: number) => {
-                              const maxRevenue = Math.max(
-                                ...currentSlideData.content.map(
-                                  (i: any) => i.revenue || 0
-                                )
-                              );
-                              const height =
-                                ((item.revenue || 0) / maxRevenue) * 100;
-                              return (
-                                <div
-                                  key={index}
-                                  className="flex flex-col items-center flex-1 group"
-                                >
-                                  <div className="relative">
-                                    <div
-                                      className="bg-gradient-to-t from-green-500 to-green-400 rounded-t-lg w-full min-h-[20px] transition-all duration-500 hover:from-green-600 hover:to-green-500 shadow-lg"
-                                      style={{
-                                        height: `${Math.max(height, 10)}%`,
-                                      }}
-                                    ></div>
-                                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                      <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded">
-                                        €{item.revenue?.toLocaleString() || "0"}
+                          {Array.isArray(currentSlideData.content) &&
+                            currentSlideData.content.map(
+                              (item: any, index: number) => {
+                                const maxRevenue = Math.max(
+                                  ...(Array.isArray(currentSlideData.content)
+                                    ? currentSlideData.content.map(
+                                        (i: any) => i.revenue || 0
+                                      )
+                                    : [0])
+                                );
+                                const height =
+                                  ((item.revenue || 0) / maxRevenue) * 100;
+                                return (
+                                  <div
+                                    key={index}
+                                    className="flex flex-col items-center flex-1 group"
+                                  >
+                                    <div className="relative">
+                                      <div
+                                        className="bg-gradient-to-t from-green-500 to-green-400 rounded-t-lg w-full min-h-[20px] transition-all duration-500 hover:from-green-600 hover:to-green-500 shadow-lg"
+                                        style={{
+                                          height: `${Math.max(height, 10)}%`,
+                                        }}
+                                      ></div>
+                                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded">
+                                          €
+                                          {item.revenue?.toLocaleString() ||
+                                            "0"}
+                                        </div>
                                       </div>
                                     </div>
+                                    <div className="mt-3 text-center">
+                                      <p className="text-sm font-medium text-gray-600">
+                                        Anno {item.year}
+                                      </p>
+                                      <p className="text-sm font-bold text-green-600">
+                                        €{(item.revenue / 1000)?.toFixed(0)}K
+                                      </p>
+                                    </div>
                                   </div>
-                                  <div className="mt-3 text-center">
-                                    <p className="text-sm font-medium text-gray-600">
-                                      Year {item.year}
-                                    </p>
-                                    <p className="text-sm font-bold text-green-600">
-                                      €{(item.revenue / 1000)?.toFixed(0)}K
-                                    </p>
-                                  </div>
-                                </div>
-                              );
-                            }
-                          )}
+                                );
+                              }
+                            )}
                         </div>
                       </div>
 
@@ -468,15 +473,15 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                           <table className="w-full">
                             <thead className="bg-gray-50">
                               <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anno</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ricavi</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Net Income</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Capex</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Debt Repayment</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                              {currentSlideData.content.map((item: any, index: number) => (
+                              {Array.isArray(currentSlideData.content) && currentSlideData.content.map((item: any, index: number) => (
                                 <tr key={index} className="hover:bg-gray-50">
                                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {item.year}
@@ -510,9 +515,9 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                         Net Income vs Capex Comparison
                       </h4>
                       <div className="flex items-end justify-between h-32 gap-2">
-                        {currentSlideData.content.map((item: any, index: number) => {
+                        {Array.isArray(currentSlideData.content) && currentSlideData.content.map((item: any, index: number) => {
                           const maxValue = Math.max(
-                            ...currentSlideData.content.map((i: any) =>
+                                  ...(Array.isArray(currentSlideData.content) ? currentSlideData.content.map((i: any) =>
                               Math.max(i.net_income || 0, i.capex || 0)
                             )
                           );
@@ -531,7 +536,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                                 ></div>
                               </div>
                               <div className="mt-2 text-center">
-                                <p className="text-xs font-medium text-gray-600">Year {item.year}</p>
+                                <p className="text-xs font-medium text-gray-600">Anno {item.year}</p>
                                 <p className="text-xs font-bold text-blue-600">
                                   €{(item.net_income / 1000)?.toFixed(0)}K
                                 </p>
@@ -564,7 +569,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                         <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl p-6 border border-orange-200">
                           <h4 className="text-lg font-semibold text-gray-800 mb-6 flex items-center gap-2">
                             <PieChart className="w-5 h-5 text-orange-600" />
-                            Key Performance Ratios - Year{" "}
+                            Indicatori di Performance Chiave - Anno{" "}
                             {
                               currentSlideData.content[
                                 currentSlideData.content.length - 1
@@ -579,15 +584,17 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                               <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 pr-2">
                                 {(() => {
                                   const maxValue = Math.max(
-                                    ...currentSlideData.content.map(
-                                      (item: any) =>
-                                        Math.max(
-                                          (item.roi || 0) * 100,
-                                          (item.roe || 0) * 100,
-                                          (item.gross_margin || 0) * 100,
-                                          item.current_ratio || 0
+                                    ...(Array.isArray(currentSlideData.content)
+                                      ? currentSlideData.content.map(
+                                          (item: any) =>
+                                            Math.max(
+                                              (item.roi || 0) * 100,
+                                              (item.roe || 0) * 100,
+                                              (item.gross_margin || 0) * 100,
+                                              item.current_ratio || 0
+                                            )
                                         )
-                                    )
+                                      : [0])
                                   );
                                   const step = maxValue / 4;
 
@@ -619,168 +626,175 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
 
                                 {/* Bar Chart */}
                                 <div className="absolute inset-0 flex items-end justify-between px-2 sm:px-4">
-                                  {currentSlideData.content.map(
-                                    (item: any, index: number) => {
-                                      const maxValue = Math.max(
-                                        ...currentSlideData.content.map(
-                                          (i: any) =>
-                                            Math.max(
-                                              (i.roi || 0) * 100,
-                                              (i.roe || 0) * 100,
-                                              (i.gross_margin || 0) * 100,
-                                              i.current_ratio || 0
-                                            )
-                                        )
-                                      );
+                                  {Array.isArray(currentSlideData.content) &&
+                                    currentSlideData.content.map(
+                                      (item: any, index: number) => {
+                                        const maxValue = Math.max(
+                                          ...(Array.isArray(
+                                            currentSlideData.content
+                                          )
+                                            ? currentSlideData.content.map(
+                                                (i: any) =>
+                                                  Math.max(
+                                                    (i.roi || 0) * 100,
+                                                    (i.roe || 0) * 100,
+                                                    (i.gross_margin || 0) * 100,
+                                                    i.current_ratio || 0
+                                                  )
+                                              )
+                                            : [0])
+                                        );
 
-                                      const roiHeight =
-                                        (((item.roi || 0) * 100) / maxValue) *
-                                        100;
-                                      const roeHeight =
-                                        (((item.roe || 0) * 100) / maxValue) *
-                                        100;
-                                      const grossMarginHeight =
-                                        (((item.gross_margin || 0) * 100) /
-                                          maxValue) *
-                                        100;
-                                      const currentRatioHeight =
-                                        ((item.current_ratio || 0) / maxValue) *
-                                        100;
+                                        const roiHeight =
+                                          (((item.roi || 0) * 100) / maxValue) *
+                                          100;
+                                        const roeHeight =
+                                          (((item.roe || 0) * 100) / maxValue) *
+                                          100;
+                                        const grossMarginHeight =
+                                          (((item.gross_margin || 0) * 100) /
+                                            maxValue) *
+                                          100;
+                                        const currentRatioHeight =
+                                          ((item.current_ratio || 0) /
+                                            maxValue) *
+                                          100;
 
-                                      return (
-                                        <div
-                                          key={index}
-                                          className="flex flex-col items-center group flex-1 mx-0.5 sm:mx-1"
-                                        >
-                                          <div className="flex items-end gap-0.5 sm:gap-1 w-full h-40 sm:h-48">
-                                            {/* ROI Bar */}
-                                            <div className="flex flex-col items-center flex-1">
-                                              <div
-                                                className="bg-gradient-to-t from-green-500 to-green-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg group-hover:shadow-xl"
-                                                style={{
-                                                  height: `${Math.max(
-                                                    roiHeight,
-                                                    5
-                                                  )}%`,
-                                                }}
-                                              ></div>
-                                              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                                        return (
+                                          <div
+                                            key={index}
+                                            className="flex flex-col items-center group flex-1 mx-0.5 sm:mx-1"
+                                          >
+                                            <div className="flex items-end gap-0.5 sm:gap-1 w-full h-40 sm:h-48">
+                                              {/* ROI Bar */}
+                                              <div className="flex flex-col items-center flex-1">
+                                                <div
+                                                  className="bg-gradient-to-t from-green-500 to-green-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg group-hover:shadow-xl"
+                                                  style={{
+                                                    height: `${Math.max(
+                                                      roiHeight,
+                                                      5
+                                                    )}%`,
+                                                  }}
+                                                ></div>
+                                                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                  <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                                                    ROI:{" "}
+                                                    {(
+                                                      (item.roi || 0) * 100
+                                                    ).toFixed(1)}
+                                                    %
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                              {/* ROE Bar */}
+                                              <div className="flex flex-col items-center flex-1">
+                                                <div
+                                                  className="bg-gradient-to-t from-blue-500 to-blue-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg group-hover:shadow-xl"
+                                                  style={{
+                                                    height: `${Math.max(
+                                                      roeHeight,
+                                                      5
+                                                    )}%`,
+                                                  }}
+                                                ></div>
+                                                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                  <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                                                    ROE:{" "}
+                                                    {(
+                                                      (item.roe || 0) * 100
+                                                    ).toFixed(1)}
+                                                    %
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                              {/* Gross Margin Bar */}
+                                              <div className="flex flex-col items-center flex-1">
+                                                <div
+                                                  className="bg-gradient-to-t from-purple-500 to-purple-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg group-hover:shadow-xl"
+                                                  style={{
+                                                    height: `${Math.max(
+                                                      grossMarginHeight,
+                                                      5
+                                                    )}%`,
+                                                  }}
+                                                ></div>
+                                                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                  <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                                                    GM:{" "}
+                                                    {(
+                                                      (item.gross_margin || 0) *
+                                                      100
+                                                    ).toFixed(1)}
+                                                    %
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                              {/* Current Ratio Bar */}
+                                              <div className="flex flex-col items-center flex-1">
+                                                <div
+                                                  className="bg-gradient-to-t from-orange-500 to-orange-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg group-hover:shadow-xl"
+                                                  style={{
+                                                    height: `${Math.max(
+                                                      currentRatioHeight,
+                                                      5
+                                                    )}%`,
+                                                  }}
+                                                ></div>
+                                                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                  <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                                                    CR:{" "}
+                                                    {(
+                                                      item.current_ratio || 0
+                                                    ).toFixed(2)}
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            {/* Year label */}
+                                            <div className="mt-2 sm:mt-3 text-center">
+                                              <p className="text-xs sm:text-sm font-medium text-gray-600">
+                                                Anno {item.year}
+                                              </p>
+                                              <div className="space-y-0.5 sm:space-y-1 mt-1 sm:mt-2">
+                                                <p className="text-xs font-bold text-green-600">
                                                   ROI:{" "}
                                                   {(
                                                     (item.roi || 0) * 100
                                                   ).toFixed(1)}
                                                   %
-                                                </div>
-                                              </div>
-                                            </div>
-
-                                            {/* ROE Bar */}
-                                            <div className="flex flex-col items-center flex-1">
-                                              <div
-                                                className="bg-gradient-to-t from-blue-500 to-blue-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg group-hover:shadow-xl"
-                                                style={{
-                                                  height: `${Math.max(
-                                                    roeHeight,
-                                                    5
-                                                  )}%`,
-                                                }}
-                                              ></div>
-                                              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                                                </p>
+                                                <p className="text-xs font-bold text-blue-600">
                                                   ROE:{" "}
                                                   {(
                                                     (item.roe || 0) * 100
                                                   ).toFixed(1)}
                                                   %
-                                                </div>
-                                              </div>
-                                            </div>
-
-                                            {/* Gross Margin Bar */}
-                                            <div className="flex flex-col items-center flex-1">
-                                              <div
-                                                className="bg-gradient-to-t from-purple-500 to-purple-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg group-hover:shadow-xl"
-                                                style={{
-                                                  height: `${Math.max(
-                                                    grossMarginHeight,
-                                                    5
-                                                  )}%`,
-                                                }}
-                                              ></div>
-                                              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                                                </p>
+                                                <p className="text-xs font-bold text-purple-600">
                                                   GM:{" "}
                                                   {(
                                                     (item.gross_margin || 0) *
                                                     100
                                                   ).toFixed(1)}
                                                   %
-                                                </div>
-                                              </div>
-                                            </div>
-
-                                            {/* Current Ratio Bar */}
-                                            <div className="flex flex-col items-center flex-1">
-                                              <div
-                                                className="bg-gradient-to-t from-orange-500 to-orange-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg group-hover:shadow-xl"
-                                                style={{
-                                                  height: `${Math.max(
-                                                    currentRatioHeight,
-                                                    5
-                                                  )}%`,
-                                                }}
-                                              ></div>
-                                              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                                                </p>
+                                                <p className="text-xs font-bold text-orange-600">
                                                   CR:{" "}
                                                   {(
                                                     item.current_ratio || 0
                                                   ).toFixed(2)}
-                                                </div>
+                                                </p>
                                               </div>
                                             </div>
                                           </div>
-
-                                          {/* Year label */}
-                                          <div className="mt-2 sm:mt-3 text-center">
-                                            <p className="text-xs sm:text-sm font-medium text-gray-600">
-                                              Year {item.year}
-                                            </p>
-                                            <div className="space-y-0.5 sm:space-y-1 mt-1 sm:mt-2">
-                                              <p className="text-xs font-bold text-green-600">
-                                                ROI:{" "}
-                                                {(
-                                                  (item.roi || 0) * 100
-                                                ).toFixed(1)}
-                                                %
-                                              </p>
-                                              <p className="text-xs font-bold text-blue-600">
-                                                ROE:{" "}
-                                                {(
-                                                  (item.roe || 0) * 100
-                                                ).toFixed(1)}
-                                                %
-                                              </p>
-                                              <p className="text-xs font-bold text-purple-600">
-                                                GM:{" "}
-                                                {(
-                                                  (item.gross_margin || 0) * 100
-                                                ).toFixed(1)}
-                                                %
-                                              </p>
-                                              <p className="text-xs font-bold text-orange-600">
-                                                CR:{" "}
-                                                {(
-                                                  item.current_ratio || 0
-                                                ).toFixed(2)}
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      );
-                                    }
-                                  )}
+                                        );
+                                      }
+                                    )}
                                 </div>
                               </div>
                             </div>
@@ -824,7 +838,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                           <table className="w-full">
                             <thead className="bg-gray-50">
                               <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anno</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ROI (%)</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ROE (%)</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gross Margin (%)</th>
@@ -832,7 +846,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                              {currentSlideData.content.map((item: any, index: number) => (
+                              {Array.isArray(currentSlideData.content) && currentSlideData.content.map((item: any, index: number) => (
                                 <tr key={index} className="hover:bg-gray-50">
                                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {item.year}
@@ -865,12 +879,12 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                       {/* <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-200">
                         <h4 className="text-lg font-semibold text-gray-800 mb-6 flex items-center gap-2">
                           <Activity className="w-5 h-5 text-blue-600" />
-                          Cash Flow Trends
+                          Tendenze del Flusso di Cassa
                         </h4>
                         <div className="flex items-end justify-between h-40 gap-3">
-                          {currentSlideData.content.map((item: any, index: number) => {
+                          {Array.isArray(currentSlideData.content) && currentSlideData.content.map((item: any, index: number) => {
                             const maxValue = Math.max(
-                              ...currentSlideData.content.map((i: any) =>
+                                  ...(Array.isArray(currentSlideData.content) ? currentSlideData.content.map((i: any) =>
                                 Math.max(Math.abs(i.operating || 0), Math.abs(i.investing || 0), Math.abs(i.financing || 0))
                               )
                             );
@@ -915,7 +929,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                                   </div>
                                 </div>
                                 <div className="mt-3 text-center">
-                                  <p className="text-sm font-medium text-gray-600">Year {item.year}</p>
+                                  <p className="text-sm font-medium text-gray-600">Anno {item.year}</p>
                                   <div className="space-y-1">
                                     <p className="text-xs font-bold text-green-600">
                                       €{(item.operating / 1000)?.toFixed(0)}K
@@ -935,15 +949,15 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                         <div className="mt-6 flex justify-center gap-8">
                           <div className="flex items-center gap-2">
                             <div className="w-4 h-4 bg-green-500 rounded"></div>
-                            <span className="text-sm font-medium text-gray-600">Operating</span>
+                            <span className="text-sm font-medium text-gray-600">Operativo</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="w-4 h-4 bg-red-500 rounded"></div>
-                            <span className="text-sm font-medium text-gray-600">Investing</span>
+                            <span className="text-sm font-medium text-gray-600">Investimenti</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="w-4 h-4 bg-purple-500 rounded"></div>
-                            <span className="text-sm font-medium text-gray-600">Financing</span>
+                            <span className="text-sm font-medium text-gray-600">Finanziamenti</span>
                           </div>
                         </div>
                       </div> */}
@@ -957,15 +971,15 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                           <table className="w-full">
                             <thead className="bg-gray-50">
                               <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Operating</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Investing</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Financing</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Net Cash</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anno</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Operativo</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Investimenti</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Finanziamenti</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liquidità Netta</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                              {currentSlideData.content.map((item: any, index: number) => (
+                              {Array.isArray(currentSlideData.content) && currentSlideData.content.map((item: any, index: number) => (
                                 <tr key={index} className="hover:bg-gray-50">
                                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {item.year}
@@ -996,87 +1010,94 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                     <div className="bg-gradient-to-r from-cyan-50 to-teal-50 rounded-xl p-6 border border-cyan-200 mb-6">
                       <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                         <Users className="w-5 h-5 text-cyan-600" />
-                        Operating Cost Distribution
+                        Distribuzione Costi Operativi
                       </h4>
                       <div className="flex items-end justify-between h-32 gap-2">
-                        {currentSlideData.content.map(
-                          (item: any, index: number) => {
-                            const maxCost = Math.max(
-                              ...currentSlideData.content.map((i: any) =>
-                                Math.max(
-                                  i.employee_costs || 0,
-                                  i.marketing || 0,
-                                  i.rent || 0,
-                                  i.administration || 0
-                                )
-                              )
-                            );
-                            const employeeHeight =
-                              ((item.employee_costs || 0) / maxCost) * 100;
-                            const marketingHeight =
-                              ((item.marketing || 0) / maxCost) * 100;
-                            const rentHeight =
-                              ((item.rent || 0) / maxCost) * 100;
-                            const adminHeight =
-                              ((item.administration || 0) / maxCost) * 100;
-                            return (
-                              <div
-                                key={index}
-                                className="flex flex-col items-center flex-1"
-                              >
-                                <div className="flex items-end gap-1 w-full">
-                                  <div
-                                    className="bg-gradient-to-t from-blue-500 to-blue-400 rounded-t w-1/4 min-h-[20px] transition-all duration-500"
-                                    style={{
-                                      height: `${Math.max(
-                                        employeeHeight,
-                                        10
-                                      )}%`,
-                                    }}
-                                  ></div>
-                                  <div
-                                    className="bg-gradient-to-t from-green-500 to-green-400 rounded-t w-1/4 min-h-[20px] transition-all duration-500"
-                                    style={{
-                                      height: `${Math.max(
-                                        marketingHeight,
-                                        10
-                                      )}%`,
-                                    }}
-                                  ></div>
-                                  <div
-                                    className="bg-gradient-to-t from-purple-500 to-purple-400 rounded-t w-1/4 min-h-[20px] transition-all duration-500"
-                                    style={{
-                                      height: `${Math.max(rentHeight, 10)}%`,
-                                    }}
-                                  ></div>
-                                  <div
-                                    className="bg-gradient-to-t from-orange-500 to-orange-400 rounded-t w-1/4 min-h-[20px] transition-all duration-500"
-                                    style={{
-                                      height: `${Math.max(adminHeight, 10)}%`,
-                                    }}
-                                  ></div>
+                        {Array.isArray(currentSlideData.content) &&
+                          currentSlideData.content.map(
+                            (item: any, index: number) => {
+                              const maxCost = Math.max(
+                                ...(Array.isArray(currentSlideData.content)
+                                  ? currentSlideData.content.map((i: any) =>
+                                      Math.max(
+                                        i.employee_costs || 0,
+                                        i.marketing || 0,
+                                        i.rent || 0,
+                                        i.administration || 0
+                                      )
+                                    )
+                                  : [0])
+                              );
+                              const employeeHeight =
+                                ((item.employee_costs || 0) / maxCost) * 100;
+                              const marketingHeight =
+                                ((item.marketing || 0) / maxCost) * 100;
+                              const rentHeight =
+                                ((item.rent || 0) / maxCost) * 100;
+                              const adminHeight =
+                                ((item.administration || 0) / maxCost) * 100;
+                              return (
+                                <div
+                                  key={index}
+                                  className="flex flex-col items-center flex-1"
+                                >
+                                  <div className="flex items-end gap-1 w-full">
+                                    <div
+                                      className="bg-gradient-to-t from-blue-500 to-blue-400 rounded-t w-1/4 min-h-[20px] transition-all duration-500"
+                                      style={{
+                                        height: `${Math.max(
+                                          employeeHeight,
+                                          10
+                                        )}%`,
+                                      }}
+                                    ></div>
+                                    <div
+                                      className="bg-gradient-to-t from-green-500 to-green-400 rounded-t w-1/4 min-h-[20px] transition-all duration-500"
+                                      style={{
+                                        height: `${Math.max(
+                                          marketingHeight,
+                                          10
+                                        )}%`,
+                                      }}
+                                    ></div>
+                                    <div
+                                      className="bg-gradient-to-t from-purple-500 to-purple-400 rounded-t w-1/4 min-h-[20px] transition-all duration-500"
+                                      style={{
+                                        height: `${Math.max(rentHeight, 10)}%`,
+                                      }}
+                                    ></div>
+                                    <div
+                                      className="bg-gradient-to-t from-orange-500 to-orange-400 rounded-t w-1/4 min-h-[20px] transition-all duration-500"
+                                      style={{
+                                        height: `${Math.max(adminHeight, 10)}%`,
+                                      }}
+                                    ></div>
+                                  </div>
+                                  <div className="mt-2 text-center">
+                                    <p className="text-xs font-medium text-gray-600">
+                                      Anno {item.year}
+                                    </p>
+                                    <p className="text-xs font-bold text-blue-600">
+                                      €
+                                      {(item.employee_costs / 1000)?.toFixed(0)}
+                                      K
+                                    </p>
+                                    <p className="text-xs font-bold text-green-600">
+                                      €{(item.marketing / 1000)?.toFixed(0)}K
+                                    </p>
+                                    <p className="text-xs font-bold text-purple-600">
+                                      €{(item.rent / 1000)?.toFixed(0)}K
+                                    </p>
+                                    <p className="text-xs font-bold text-orange-600">
+                                      €
+                                      {(item.administration / 1000)?.toFixed(0)}
+                                      K
+                                    </p>
+                                  </div>
                                 </div>
-                                <div className="mt-2 text-center">
-                                  <p className="text-xs font-medium text-gray-600">
-                                    Year {item.year}
-                                  </p>
-                                  <p className="text-xs font-bold text-blue-600">
-                                    €{(item.employee_costs / 1000)?.toFixed(0)}K
-                                  </p>
-                                  <p className="text-xs font-bold text-green-600">
-                                    €{(item.marketing / 1000)?.toFixed(0)}K
-                                  </p>
-                                  <p className="text-xs font-bold text-purple-600">
-                                    €{(item.rent / 1000)?.toFixed(0)}K
-                                  </p>
-                                  <p className="text-xs font-bold text-orange-600">
-                                    €{(item.administration / 1000)?.toFixed(0)}K
-                                  </p>
-                                </div>
-                              </div>
-                            );
-                          }
-                        )}
+                              );
+                            }
+                          )}
                       </div>
                       <div className="mt-4 flex justify-center gap-4">
                         <div className="flex items-center gap-2">
@@ -1182,7 +1203,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                                         <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white rounded-full flex items-center justify-center shadow-lg">
                                           <div className="text-center">
                                             <div className="text-sm sm:text-base lg:text-lg font-bold text-gray-700">
-                                              Average
+                                              Media
                                             </div>
                                             <div className="text-xs sm:text-sm text-gray-500">
                                               Balance Sheet
@@ -1199,7 +1220,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                                       <div className="flex items-center gap-2 sm:gap-3">
                                         <div className="w-4 h-4 sm:w-5 sm:h-5 bg-green-500 rounded"></div>
                                         <span className="text-xs sm:text-sm font-medium text-gray-600">
-                                          Average Assets
+                                          Attività Medie
                                         </span>
                                       </div>
                                       <div className="text-right">
@@ -1216,7 +1237,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                                       <div className="flex items-center gap-2 sm:gap-3">
                                         <div className="w-4 h-4 sm:w-5 sm:h-5 bg-red-500 rounded"></div>
                                         <span className="text-xs sm:text-sm font-medium text-gray-600">
-                                          Average Liabilities
+                                          Passività Medie
                                         </span>
                                       </div>
                                       <div className="text-right">
@@ -1233,7 +1254,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                                       <div className="flex items-center gap-2 sm:gap-3">
                                         <div className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-500 rounded"></div>
                                         <span className="text-xs sm:text-sm font-medium text-gray-600">
-                                          Average Equity
+                                          Patrimonio Netto Medio
                                         </span>
                                       </div>
                                       <div className="text-right">
@@ -1262,15 +1283,15 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                           <table className="w-full">
                             <thead className="bg-gray-50">
                               <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Assets</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Liabilities</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Equity</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Debt-to-Equity</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anno</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attività Totali</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Passività Totali</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patrimonio Netto</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rapporto Debito/Patrimonio</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                              {currentSlideData.content.map((item: any, index: number) => {
+                              {Array.isArray(currentSlideData.content) && currentSlideData.content.map((item: any, index: number) => {
                                 const debtToEquity = item.liabilities && item.equity ? (item.liabilities / item.equity).toFixed(2) : "N/A";
                                 return (
                                   <tr key={index} className="hover:bg-gray-50">
@@ -1306,7 +1327,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                       <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 sm:p-6 border border-purple-200">
                         <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 sm:mb-6 flex items-center gap-2">
                           <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
-                          Net Financial Position Trend
+                          Tendenza Posizione Finanziaria Netta
                         </h4>
                         <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm">
                           <div className="h-64 sm:h-80 relative">
@@ -1314,14 +1335,18 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                             <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 pr-2">
                               {(() => {
                                 const maxValue = Math.max(
-                                  ...currentSlideData.content.map(
-                                    (item: any) => item.net_position || 0
-                                  )
+                                  ...(Array.isArray(currentSlideData.content)
+                                    ? currentSlideData.content.map(
+                                        (item: any) => item.net_position || 0
+                                      )
+                                    : [0])
                                 );
                                 const minValue = Math.min(
-                                  ...currentSlideData.content.map(
-                                    (item: any) => item.net_position || 0
-                                  )
+                                  ...(Array.isArray(currentSlideData.content)
+                                    ? currentSlideData.content.map(
+                                        (item: any) => item.net_position || 0
+                                      )
+                                    : [0])
                                 );
                                 const range = maxValue - minValue;
                                 const step = range / 4;
@@ -1354,56 +1379,67 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
 
                               {/* Data points and line */}
                               <div className="absolute inset-0 flex items-end justify-between px-4">
-                                {currentSlideData.content.map(
-                                  (item: any, index: number) => {
-                                    const maxValue = Math.max(
-                                      ...currentSlideData.content.map(
-                                        (i: any) => i.net_position || 0
-                                      )
-                                    );
-                                    const minValue = Math.min(
-                                      ...currentSlideData.content.map(
-                                        (i: any) => i.net_position || 0
-                                      )
-                                    );
-                                    const range = maxValue - minValue;
-                                    const height =
-                                      range > 0
-                                        ? ((item.net_position - minValue) /
-                                            range) *
-                                          100
-                                        : 50;
+                                {Array.isArray(currentSlideData.content) &&
+                                  currentSlideData.content.map(
+                                    (item: any, index: number) => {
+                                      const maxValue = Math.max(
+                                        ...(Array.isArray(
+                                          currentSlideData.content
+                                        )
+                                          ? currentSlideData.content.map(
+                                              (i: any) => i.net_position || 0
+                                            )
+                                          : [0])
+                                      );
+                                      const minValue = Math.min(
+                                        ...(Array.isArray(
+                                          currentSlideData.content
+                                        )
+                                          ? currentSlideData.content.map(
+                                              (i: any) => i.net_position || 0
+                                            )
+                                          : [0])
+                                      );
+                                      const range = maxValue - minValue;
+                                      const height =
+                                        range > 0
+                                          ? ((item.net_position - minValue) /
+                                              range) *
+                                            100
+                                          : 50;
 
-                                    return (
-                                      <div
-                                        key={index}
-                                        className="flex flex-col items-center group"
-                                      >
-                                        {/* Data point */}
+                                      return (
                                         <div
-                                          className="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg relative z-10 group-hover:scale-125 transition-transform"
-                                          style={{ marginBottom: `${height}%` }}
+                                          key={index}
+                                          className="flex flex-col items-center group"
                                         >
-                                          {/* Tooltip */}
-                                          <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-                                              €
-                                              {item.net_position?.toLocaleString() ||
-                                                "0"}
+                                          {/* Data point */}
+                                          <div
+                                            className="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg relative z-10 group-hover:scale-125 transition-transform"
+                                            style={{
+                                              marginBottom: `${height}%`,
+                                            }}
+                                          >
+                                            {/* Tooltip */}
+                                            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                              <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                                                €
+                                                {item.net_position?.toLocaleString() ||
+                                                  "0"}
+                                              </div>
                                             </div>
                                           </div>
-                                        </div>
 
-                                        {/* Year label */}
-                                        <div className="mt-2 text-xs font-medium text-gray-600">
-                                          {item.year
-                                            ? `Year ${item.year}`
-                                            : `Year ${index + 1}`}
+                                          {/* Year label */}
+                                          <div className="mt-2 text-xs font-medium text-gray-600">
+                                            {item.year
+                                              ? `Year ${item.year}`
+                                              : `Year ${index + 1}`}
+                                          </div>
                                         </div>
-                                      </div>
-                                    );
-                                  }
-                                )}
+                                      );
+                                    }
+                                  )}
 
                                 {/* Line connecting points */}
                                 <svg
@@ -1414,34 +1450,50 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                                     fill="none"
                                     stroke="#3b82f6"
                                     strokeWidth="3"
-                                    points={currentSlideData.content
-                                      .map((item: any, index: number) => {
-                                        const maxValue = Math.max(
-                                          ...currentSlideData.content.map(
-                                            (i: any) => i.net_position || 0
-                                          )
-                                        );
-                                        const minValue = Math.min(
-                                          ...currentSlideData.content.map(
-                                            (i: any) => i.net_position || 0
-                                          )
-                                        );
-                                        const range = maxValue - minValue;
-                                        const height =
-                                          range > 0
-                                            ? ((item.net_position - minValue) /
-                                                range) *
-                                              100
-                                            : 50;
-                                        const x =
-                                          (index /
-                                            (currentSlideData.content.length -
-                                              1)) *
-                                          100;
-                                        const y = 100 - height;
-                                        return `${x}%,${y}%`;
-                                      })
-                                      .join(" ")}
+                                    points={
+                                      Array.isArray(currentSlideData.content)
+                                        ? currentSlideData.content
+                                            .map((item: any, index: number) => {
+                                              const maxValue = Math.max(
+                                                ...(Array.isArray(
+                                                  currentSlideData.content
+                                                )
+                                                  ? currentSlideData.content.map(
+                                                      (i: any) =>
+                                                        i.net_position || 0
+                                                    )
+                                                  : [0])
+                                              );
+                                              const minValue = Math.min(
+                                                ...(Array.isArray(
+                                                  currentSlideData.content
+                                                )
+                                                  ? currentSlideData.content.map(
+                                                      (i: any) =>
+                                                        i.net_position || 0
+                                                    )
+                                                  : [0])
+                                              );
+                                              const range = maxValue - minValue;
+                                              const height =
+                                                range > 0
+                                                  ? ((item.net_position -
+                                                      minValue) /
+                                                      range) *
+                                                    100
+                                                  : 50;
+                                              const x =
+                                                (index /
+                                                  (currentSlideData.content
+                                                    .length -
+                                                    1)) *
+                                                100;
+                                              const y = 100 - height;
+                                              return `${x}%,${y}%`;
+                                            })
+                                            .join(" ")
+                                        : ""
+                                    }
                                   />
                                 </svg>
                               </div>
@@ -1469,7 +1521,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                         <div className="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
                           <h4 className="text-base sm:text-lg font-semibold text-gray-800">
-                            Debt Structure Details
+                            Dettagli Struttura del Debito
                           </h4>
                         </div>
                         <div className="overflow-x-auto">
@@ -1497,45 +1549,46 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                              {currentSlideData.content.map(
-                                (item: any, index: number) => {
-                                  const debtToEquity =
-                                    item.outstanding_debt && item.equity
-                                      ? (
-                                          item.outstanding_debt / item.equity
-                                        ).toFixed(2)
-                                      : "N/A";
-                                  return (
-                                    <tr
-                                      key={index}
-                                      className="hover:bg-gray-50"
-                                    >
-                                      <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
-                                        {item.year || `Year ${index + 1}`}
-                                      </td>
-                                      <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-red-600 font-semibold">
-                                        €
-                                        {item.repayment?.toLocaleString() ||
-                                          "N/A"}
-                                      </td>
-                                      <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-blue-600 font-semibold">
-                                        {item.interest_rate || "N/A"}%
-                                      </td>
-                                      <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-blue-600 font-semibold">
-                                        {item.non_current_assets || "N/A"}%
-                                      </td>
-                                      <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-purple-600 font-semibold">
-                                        €
-                                        {item.outstanding_debt?.toLocaleString() ||
-                                          "N/A"}
-                                      </td>
-                                      <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-600">
-                                        {debtToEquity}
-                                      </td>
-                                    </tr>
-                                  );
-                                }
-                              )}
+                              {Array.isArray(currentSlideData.content) &&
+                                currentSlideData.content.map(
+                                  (item: any, index: number) => {
+                                    const debtToEquity =
+                                      item.outstanding_debt && item.equity
+                                        ? (
+                                            item.outstanding_debt / item.equity
+                                          ).toFixed(2)
+                                        : "N/A";
+                                    return (
+                                      <tr
+                                        key={index}
+                                        className="hover:bg-gray-50"
+                                      >
+                                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
+                                          {item.year || `Year ${index + 1}`}
+                                        </td>
+                                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-red-600 font-semibold">
+                                          €
+                                          {item.repayment?.toLocaleString() ||
+                                            "N/A"}
+                                        </td>
+                                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-blue-600 font-semibold">
+                                          {item.interest_rate || "N/A"}%
+                                        </td>
+                                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-blue-600 font-semibold">
+                                          {item.non_current_assets || "N/A"}%
+                                        </td>
+                                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-purple-600 font-semibold">
+                                          €
+                                          {item.outstanding_debt?.toLocaleString() ||
+                                            "N/A"}
+                                        </td>
+                                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-600">
+                                          {debtToEquity}
+                                        </td>
+                                      </tr>
+                                    );
+                                  }
+                                )}
                             </tbody>
                           </table>
                         </div>
@@ -1545,309 +1598,329 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
 
                   {/* Data Tables */}
                   <div className="space-y-4">
-                    {currentSlideData.content.map(
-                      (item: any, index: number) => (
-                        <div key={index} className="bg-gray-50 rounded-lg p-4">
-                          <h3 className="font-semibold text-gray-800 mb-2">
-                            Year {item.year}
-                          </h3>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {/* Financial Highlights */}
-                            {item.revenue !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">Revenue</p>
-                                <p className="font-bold text-green-600">
-                                  €{item.revenue?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.net_income !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Net Income
-                                </p>
-                                <p className="font-bold text-blue-600">
-                                  €{item.net_income?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.capex !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">Capex</p>
-                                <p className="font-bold text-purple-600">
-                                  €{item.capex?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.debt_repayment !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Debt Repayment
-                                </p>
-                                <p className="font-bold text-orange-600">
-                                  €
-                                  {item.debt_repayment?.toLocaleString() ||
-                                    "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {/* Cash Flow Analysis */}
-                            {item.operating !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Operating
-                                </p>
-                                <p className="font-bold text-green-600">
-                                  €{item.operating?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.investing !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Investing
-                                </p>
-                                <p className="font-bold text-red-600">
-                                  €{item.investing?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.financing !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Financing
-                                </p>
-                                <p className="font-bold text-purple-600">
-                                  €{item.financing?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.net_cash !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Net Cash
-                                </p>
-                                <p className="font-bold text-blue-600">
-                                  €{item.net_cash?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {/* Profit & Loss */}
-                            {item.cogs !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">COGS</p>
-                                <p className="font-bold text-red-600">
-                                  €{item.cogs?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.gross_profit !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Gross Profit
-                                </p>
-                                <p className="font-bold text-blue-600">
-                                  €
-                                  {item.gross_profit?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.ebitda !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">EBITDA</p>
-                                <p className="font-bold text-purple-600">
-                                  €{item.ebitda?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {/* Balance Sheet */}
-                            {item.assets !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Total Assets
-                                </p>
-                                <p className="font-bold text-green-600">
-                                  €{item.assets?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.current_assets !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Current Assets
-                                </p>
-                                <p className="font-bold text-blue-600">
-                                  €
-                                  {item.current_assets?.toLocaleString() ||
-                                    "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.liabilities !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Total Liabilities
-                                </p>
-                                <p className="font-bold text-red-600">
-                                  €{item.liabilities?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.equity !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">Equity</p>
-                                <p className="font-bold text-purple-600">
-                                  €{item.equity?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {/* Key Ratios */}
-                            {item.roi !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">ROI</p>
-                                <p className="font-bold text-green-600">
-                                  {(item.roi * 100)?.toFixed(1) || "N/A"}%
-                                </p>
-                              </div>
-                            )}
-                            {item.roe !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">ROE</p>
-                                <p className="font-bold text-blue-600">
-                                  {(item.roe * 100)?.toFixed(1) || "N/A"}%
-                                </p>
-                              </div>
-                            )}
-                            {item.gross_margin !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Gross Margin
-                                </p>
-                                <p className="font-bold text-purple-600">
-                                  {(item.gross_margin * 100)?.toFixed(1) ||
-                                    "N/A"}
-                                  %
-                                </p>
-                              </div>
-                            )}
-                            {item.current_ratio !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Current Ratio
-                                </p>
-                                <p className="font-bold text-orange-600">
-                                  {item.current_ratio?.toFixed(2) || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {/* Operating Cost Breakdown */}
-                            {item.employee_costs !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Employee Costs
-                                </p>
-                                <p className="font-bold text-blue-600">
-                                  €
-                                  {item.employee_costs?.toLocaleString() ||
-                                    "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.marketing !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Marketing
-                                </p>
-                                <p className="font-bold text-green-600">
-                                  €{item.marketing?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.rent !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">Rent</p>
-                                <p className="font-bold text-purple-600">
-                                  €{item.rent?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.administration !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Administration
-                                </p>
-                                <p className="font-bold text-orange-600">
-                                  €
-                                  {item.administration?.toLocaleString() ||
-                                    "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {/* Net Financial Position */}
-                            {item.net_position !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Net Position
-                                </p>
-                                <p className="font-bold text-teal-600">
-                                  €
-                                  {item.net_position?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {/* Debt Structure */}
-                            {item.repayment !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Repayment
-                                </p>
-                                <p className="font-bold text-red-600">
-                                  €{item.repayment?.toLocaleString() || "N/A"}
-                                </p>
-                              </div>
-                            )}
-                            {item.interest_rate !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Interest Rate
-                                </p>
-                                <p className="font-bold text-blue-600">
-                                  {item.interest_rate || "N/A"}%
-                                </p>
-                              </div>
-                            )}
-                            {item.non_current_assets !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Non Current Assets
-                                </p>
-                                <p className="font-bold text-blue-600">
-                                  {item.non_current_assets || "N/A"}%
-                                </p>
-                              </div>
-                            )}
-                            {item.outstanding_debt !== undefined && (
-                              <div>
-                                <p className="text-sm text-gray-600">
-                                  Outstanding Debt
-                                </p>
-                                <p className="font-bold text-purple-600">
-                                  €
-                                  {item.outstanding_debt?.toLocaleString() ||
-                                    "N/A"}
-                                </p>
-                              </div>
-                            )}
+                    {Array.isArray(currentSlideData.content) &&
+                      currentSlideData.content.map(
+                        (item: any, index: number) => (
+                          <div
+                            key={index}
+                            className="bg-gray-50 rounded-lg p-4"
+                          >
+                            <h3 className="font-semibold text-gray-800 mb-2">
+                              Anno {item.year}
+                            </h3>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                              {/* Financial Highlights */}
+                              {item.revenue !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Revenue
+                                  </p>
+                                  <p className="font-bold text-green-600">
+                                    €{item.revenue?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.net_income !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Net Income
+                                  </p>
+                                  <p className="font-bold text-blue-600">
+                                    €
+                                    {item.net_income?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.capex !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">Capex</p>
+                                  <p className="font-bold text-purple-600">
+                                    €{item.capex?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.debt_repayment !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Debt Repayment
+                                  </p>
+                                  <p className="font-bold text-orange-600">
+                                    €
+                                    {item.debt_repayment?.toLocaleString() ||
+                                      "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {/* Cash Flow Analysis */}
+                              {item.operating !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Operating
+                                  </p>
+                                  <p className="font-bold text-green-600">
+                                    €{item.operating?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.investing !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Investimenti
+                                  </p>
+                                  <p className="font-bold text-red-600">
+                                    €{item.investing?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.financing !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Finanziamenti
+                                  </p>
+                                  <p className="font-bold text-purple-600">
+                                    €{item.financing?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.net_cash !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Net Cash
+                                  </p>
+                                  <p className="font-bold text-blue-600">
+                                    €{item.net_cash?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {/* Profit & Loss */}
+                              {item.cogs !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">COGS</p>
+                                  <p className="font-bold text-red-600">
+                                    €{item.cogs?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.gross_profit !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Gross Profit
+                                  </p>
+                                  <p className="font-bold text-blue-600">
+                                    €
+                                    {item.gross_profit?.toLocaleString() ||
+                                      "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.ebitda !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    EBITDA
+                                  </p>
+                                  <p className="font-bold text-purple-600">
+                                    €{item.ebitda?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {/* Balance Sheet */}
+                              {item.assets !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Attività Totali
+                                  </p>
+                                  <p className="font-bold text-green-600">
+                                    €{item.assets?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.current_assets !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Current Assets
+                                  </p>
+                                  <p className="font-bold text-blue-600">
+                                    €
+                                    {item.current_assets?.toLocaleString() ||
+                                      "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.liabilities !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Passività Totali
+                                  </p>
+                                  <p className="font-bold text-red-600">
+                                    €
+                                    {item.liabilities?.toLocaleString() ||
+                                      "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.equity !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Equity
+                                  </p>
+                                  <p className="font-bold text-purple-600">
+                                    €{item.equity?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {/* Key Ratios */}
+                              {item.roi !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">ROI</p>
+                                  <p className="font-bold text-green-600">
+                                    {(item.roi * 100)?.toFixed(1) || "N/A"}%
+                                  </p>
+                                </div>
+                              )}
+                              {item.roe !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">ROE</p>
+                                  <p className="font-bold text-blue-600">
+                                    {(item.roe * 100)?.toFixed(1) || "N/A"}%
+                                  </p>
+                                </div>
+                              )}
+                              {item.gross_margin !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Gross Margin
+                                  </p>
+                                  <p className="font-bold text-purple-600">
+                                    {(item.gross_margin * 100)?.toFixed(1) ||
+                                      "N/A"}
+                                    %
+                                  </p>
+                                </div>
+                              )}
+                              {item.current_ratio !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Current Ratio
+                                  </p>
+                                  <p className="font-bold text-orange-600">
+                                    {item.current_ratio?.toFixed(2) || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {/* Operating Cost Breakdown */}
+                              {item.employee_costs !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Costi del Personale
+                                  </p>
+                                  <p className="font-bold text-blue-600">
+                                    €
+                                    {item.employee_costs?.toLocaleString() ||
+                                      "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.marketing !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Marketing
+                                  </p>
+                                  <p className="font-bold text-green-600">
+                                    €{item.marketing?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.rent !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">Affitto</p>
+                                  <p className="font-bold text-purple-600">
+                                    €{item.rent?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.administration !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Amministrazione
+                                  </p>
+                                  <p className="font-bold text-orange-600">
+                                    €
+                                    {item.administration?.toLocaleString() ||
+                                      "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {/* Net Financial Position */}
+                              {item.net_position !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Posizione Netta
+                                  </p>
+                                  <p className="font-bold text-teal-600">
+                                    €
+                                    {item.net_position?.toLocaleString() ||
+                                      "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {/* Debt Structure */}
+                              {item.repayment !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Repayment
+                                  </p>
+                                  <p className="font-bold text-red-600">
+                                    €{item.repayment?.toLocaleString() || "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                              {item.interest_rate !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Interest Rate
+                                  </p>
+                                  <p className="font-bold text-blue-600">
+                                    {item.interest_rate || "N/A"}%
+                                  </p>
+                                </div>
+                              )}
+                              {item.non_current_assets !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Non Current Assets
+                                  </p>
+                                  <p className="font-bold text-blue-600">
+                                    {item.non_current_assets || "N/A"}%
+                                  </p>
+                                </div>
+                              )}
+                              {item.outstanding_debt !== undefined && (
+                                <div>
+                                  <p className="text-sm text-gray-600">
+                                    Outstanding Debt
+                                  </p>
+                                  <p className="font-bold text-purple-600">
+                                    €
+                                    {item.outstanding_debt?.toLocaleString() ||
+                                      "N/A"}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      )
-                    )}
+                        )
+                      )}
                   </div>
                 </div>
               ) : (
                 <div className="prose max-w-none">
                   <p className="text-gray-700 leading-relaxed text-lg">
-                    {currentSlideData.content}
+                    {typeof currentSlideData.content === 'string' 
+                      ? currentSlideData.content 
+                      : typeof currentSlideData.content === 'object' && currentSlideData.content !== null
+                        ? JSON.stringify(currentSlideData.content, null, 2)
+                        : String(currentSlideData.content || '')
+                    }
                   </p>
                 </div>
               )}
@@ -1861,10 +1934,10 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                 <Building className="w-8 h-8 text-gray-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                No Plan Data Available
+                Nessun Dato Piano Disponibile
               </h3>
               <p className="text-gray-500">
-                This plan doesn't have any content to display.
+                Questo piano non ha contenuti da visualizzare.
               </p>
             </div>
           )}
