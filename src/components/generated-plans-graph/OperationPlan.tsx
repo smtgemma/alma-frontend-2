@@ -967,16 +967,16 @@ export default function OperationsDashboard({
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
           7.2 Ripartizione dei costi operativi
         </h2>
-        <div className="flex justify-center items-start gap-8">
-          <div className="relative w-96 h-96">
+        <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8">
+          <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg h-80 sm:h-96">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={pieChartData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={80}
-                  outerRadius={175}
+                  innerRadius="35%"
+                  outerRadius="90%"
                   paddingAngle={2}
                   dataKey="value"
                   label={CustomLabel}
@@ -1008,15 +1008,15 @@ export default function OperationsDashboard({
             </ResponsiveContainer>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-lg font-semibold text-gray-900">
+                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">
                   {/* Operating */}
                   Costi
                 </div>
-                <div className="text-lg font-semibold text-gray-900">
+                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">
                   {/* Cost */}
                   Operativi
                 </div>
-                <div className="text-lg font-semibold text-gray-900">
+                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">
                   {/* Breakdown */}
                   Ripartizione
                 </div>
@@ -1025,36 +1025,38 @@ export default function OperationsDashboard({
           </div>
 
           {/* Enhanced Legend with actual values */}
-          <div className="flex flex-col gap-4 mt-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+          <div className="flex flex-col gap-4 mt-4 lg:mt-8 w-full lg:w-auto">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 text-center lg:text-left">
               {/* Cost Breakdown */}
               Ripartizione costi
             </h3>
-            {pieChartData.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg min-w-[250px]"
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-4 h-4 rounded-full"
-                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                  ></div>
-                  <span className="text-sm font-medium text-gray-700">
-                    {item.name}
-                  </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+              {pieChartData.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg min-w-0 lg:min-w-[250px]"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div
+                      className="w-3 h-3 sm:w-4 sm:h-4 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    ></div>
+                    <span className="text-xs sm:text-sm font-medium text-gray-700 truncate">
+                      {item.name}
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-end ml-2">
+                    <span className="text-xs sm:text-sm font-bold text-gray-900">
+                      {item.value}%
+                    </span>
+                    <span className="text-xs text-gray-600">
+                      {item.formattedValue ||
+                        formatCurrency(item.actualValue || 0)}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-col items-end">
-                  <span className="text-sm font-bold text-gray-900">
-                    {item.value}%
-                  </span>
-                  <span className="text-xs text-gray-600">
-                    {item.formattedValue ||
-                      formatCurrency(item.actualValue || 0)}
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

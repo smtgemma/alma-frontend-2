@@ -6,7 +6,7 @@ import {
   useAdminGetSingleBusinessPlanQuery,
   useAdminUpdateBusinessPlanMutation,
 } from "@/redux/api/admin/adminAPI";
-
+// src/app/update-business-plan/page.tsx
 const UpdateBusinessPlanPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -36,8 +36,7 @@ const UpdateBusinessPlanPage = () => {
     operationsPlan: "",
     managementTeam: "",
     financialHighlights: [] as any[],
-    // cashFlowAnalysis: [] as any[],
-    cashFlowAnalysis: "",
+    cashFlowAnalysis: [] as any[],
     profitLossProjection: [] as any[],
     balanceSheet: [] as any[],
     netFinancialPosition: [] as any[],
@@ -62,6 +61,8 @@ const UpdateBusinessPlanPage = () => {
     user_input: {
       uploaded_file: [] as any[],
       user_input: [] as any[],
+      language: "English",
+      currency: "English",
     },
   });
 
@@ -82,7 +83,7 @@ const UpdateBusinessPlanPage = () => {
         operationsPlan: businessPlan.data.operationsPlan || "",
         managementTeam: businessPlan.data.managementTeam || "",
         financialHighlights: businessPlan.data.financialHighlights || [],
-        cashFlowAnalysis: businessPlan.data.cashFlowAnalysis || "",
+        cashFlowAnalysis: businessPlan.data.cashFlowAnalysis || [],
         profitLossProjection: businessPlan.data.profitLossProjection || [],
         balanceSheet: businessPlan.data.balanceSheet || [],
         netFinancialPosition: businessPlan.data.netFinancialPosition || [],
@@ -113,7 +114,9 @@ const UpdateBusinessPlanPage = () => {
         user_input: {
           uploaded_file: businessPlan.data.user_input?.uploaded_file || [],
           user_input: businessPlan.data.user_input?.user_input || [],
-        },
+          language: businessPlan.data.user_input?.language || "English",
+          currency: businessPlan.data.user_input?.currency || "English",
+        } as any,
       });
     }
   }, [businessPlan]);
@@ -186,69 +189,94 @@ const UpdateBusinessPlanPage = () => {
       console.log("Form data to be sent:", formData);
       console.log("Plan ID:", planId);
 
-      // Send all fields that backend supports for update
-      // Based on backend code: text fields, financial arrays, and other fields
+      // Simple approach: Send only non-empty fields to reduce payload size
       const updateData = {
-        // Text fields
-        executiveSummary: formData.executiveSummary || "",
-        businessOverview: formData.businessOverview || "",
-        marketAnalysis: formData.marketAnalysis || "",
-        businessModel: formData.businessModel || "",
-        marketingSalesStrategy: formData.marketingSalesStrategy || "",
-        sectorStrategy: formData.sectorStrategy || "",
-        fundingSources: JSON.stringify(formData.fundingSources || {}),
-        operationsPlan: formData.operationsPlan || "",
-        managementTeam: formData.managementTeam || "",
+        // Send only non-empty financial arrays
+        ...(formData.financialHighlights &&
+          formData.financialHighlights.length > 0 && {
+            financialHighlights: formData.financialHighlights,
+          }),
+        ...(formData.ratiosAnalysis &&
+          formData.ratiosAnalysis.length > 0 && {
+            ratiosAnalysis: formData.ratiosAnalysis,
+          }),
+        ...(formData.productionSalesForecast &&
+          formData.productionSalesForecast.length > 0 && {
+            productionSalesForecast: formData.productionSalesForecast,
+          }),
+        ...(formData.profitLossProjection &&
+          formData.profitLossProjection.length > 0 && {
+            profitLossProjection: formData.profitLossProjection,
+          }),
+        ...(formData.financialAnalysis &&
+          formData.financialAnalysis.length > 0 && {
+            financialAnalysis: formData.financialAnalysis,
+          }),
+        ...(formData.cashFlowAnalysisAnalysis &&
+          formData.cashFlowAnalysisAnalysis.length > 0 && {
+            cashFlowAnalysisData: formData.cashFlowAnalysisAnalysis,
+          }),
 
-        // Financial arrays (JSON fields)
-        financialHighlights: JSON.stringify(formData.financialHighlights || []),
-        cashFlowAnalysis: JSON.stringify(formData.cashFlowAnalysis || []),
-        // cashFlowAnalysis: formData.cashFlowAnalysis,
-        profitLossProjection: JSON.stringify(
-          formData.profitLossProjection || []
-        ),
-        balanceSheet: JSON.stringify(formData.balanceSheet || []),
-        netFinancialPosition: JSON.stringify(
-          formData.netFinancialPosition || []
-        ),
-        debtStructure: JSON.stringify(formData.debtStructure || []),
-        keyRatios: JSON.stringify(formData.keyRatios || []),
-        operatingCostBreakdown: JSON.stringify(
-          formData.operatingCostBreakdown || []
-        ),
-        financialAnalysis: JSON.stringify(formData.financialAnalysis || []),
-        ratiosAnalysis: JSON.stringify(formData.ratiosAnalysis || []),
-        productionSalesForecast: JSON.stringify(
-          formData.productionSalesForecast || []
-        ),
+        // Text fields - only if non-empty
+        ...(formData.executiveSummary && {
+          executiveSummary: formData.executiveSummary,
+        }),
+        ...(formData.businessOverview && {
+          businessOverview: formData.businessOverview,
+        }),
+        ...(formData.marketAnalysis && {
+          marketAnalysis: formData.marketAnalysis,
+        }),
+        ...(formData.businessModel && {
+          businessModel: formData.businessModel,
+        }),
+        ...(formData.marketingSalesStrategy && {
+          marketingSalesStrategy: formData.marketingSalesStrategy,
+        }),
 
-        // Analysis fields
-        financialHighlightsAnalysis: formData.financialHighlightsAnalysis || "",
-        cashFlowAnalysisAnalysis: JSON.stringify(
-          formData.cashFlowAnalysisAnalysis || []
-        ),
-        profitLossProjectionAnalysis:
-          formData.profitLossProjectionAnalysis || "",
-        balanceSheetAnalysis: formData.balanceSheetAnalysis || "",
-        netFinancialPositionAnalysis:
-          formData.netFinancialPositionAnalysis || "",
-        debtStructureAnalysis: formData.debtStructureAnalysis || "",
-        keyRatiosAnalysis: formData.keyRatiosAnalysis || "",
-        ratiosAnalysisAnalysis: formData.ratiosAnalysisAnalysis || "",
-        financialAnalysisAnalysis: formData.financialAnalysisAnalysis || "",
-        productionSalesForecastAnalysis:
-          formData.productionSalesForecastAnalysis || "",
-        kpiAnalysis: JSON.stringify(formData.kpiAnalysis || {}),
+        // Analysis fields - only if non-empty
+        ...(formData.fundingSources &&
+          Object.keys(formData.fundingSources).length > 0 && {
+            fundingSources: formData.fundingSources,
+          }),
+        ...(formData.managementTeam && {
+          managementTeam: formData.managementTeam,
+        }),
+        ...(formData.financialHighlightsAnalysis && {
+          financialHighlightsAnalysis: formData.financialHighlightsAnalysis,
+        }),
+        ...(formData.profitLossProjectionAnalysis && {
+          profitLossProjectionAnalysis: formData.profitLossProjectionAnalysis,
+        }),
+        ...(formData.balanceSheetAnalysis && {
+          balanceSheetAnalysis: formData.balanceSheetAnalysis,
+        }),
+        ...(formData.netFinancialPositionAnalysis && {
+          netFinancialPositionAnalysis: formData.netFinancialPositionAnalysis,
+        }),
+        ...(formData.debtStructureAnalysis && {
+          debtStructureAnalysis: formData.debtStructureAnalysis,
+        }),
+        ...(formData.keyRatiosAnalysis && {
+          keyRatiosAnalysis: formData.keyRatiosAnalysis,
+        }),
+        ...(formData.ratiosAnalysisAnalysis && {
+          ratiosAnalysisAnalysis: formData.ratiosAnalysisAnalysis,
+        }),
+        ...(formData.financialAnalysisAnalysis && {
+          financialAnalysisAnalysis: formData.financialAnalysisAnalysis,
+        }),
+        ...(formData.productionSalesForecastAnalysis && {
+          productionSalesForecastAnalysis:
+            formData.productionSalesForecastAnalysis,
+        }),
 
-        // Other fields
-        user_input: JSON.stringify(
-          formData.user_input || {
-            uploaded_file: [],
-            user_input: [],
-          }
-        ),
-        // Note: status and subscriptionType are not included in formData
-        // as they are not displayed in the form
+        // User input field
+        ...(formData.user_input &&
+          (formData.user_input.user_input?.length > 0 ||
+            formData.user_input.uploaded_file?.length > 0) && {
+            user_input: formData.user_input,
+          }),
       };
 
       console.log("Update data being sent:", updateData);
@@ -261,7 +289,7 @@ const UpdateBusinessPlanPage = () => {
       }).unwrap();
 
       console.log("Update successful:", result);
-      showToast("Business plan updated successfully!", "success");
+      showToast("Piano aziendale aggiornato con successo!", "success");
 
       // Navigate back to the previous page after a short delay
       setTimeout(() => {
@@ -272,7 +300,7 @@ const UpdateBusinessPlanPage = () => {
       console.error("Error details:", JSON.stringify(error, null, 2));
 
       // Extract more detailed error information
-      let errorMessage = "Failed to update business plan. Please try again.";
+      let errorMessage = "Impossibile aggiornare il piano aziendale. Riprova.";
       if (error && typeof error === "object") {
         if ("data" in error && error.data) {
           console.error("Error data:", error.data);
@@ -304,7 +332,7 @@ const UpdateBusinessPlanPage = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading business plan...</p>
+          <p className="mt-4 text-gray-600 italic">Caricamento in corso...</p>
         </div>
       </div>
     );
@@ -314,10 +342,10 @@ const UpdateBusinessPlanPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">
-            Error Loading Plan
+          <h1 className="text-2xl font-bold text-red-600 mb-4 italic">
+            Errore
           </h1>
-          <p className="text-gray-600">Failed to load business plan data</p>
+          <p className="text-gray-600 italic">Impossibile caricare i dati</p>
         </div>
       </div>
     );
@@ -328,8 +356,8 @@ const UpdateBusinessPlanPage = () => {
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            Update Business Plan
+          <h1 className="text-4xl font-bold text-gray-800 mb-2 italic">
+            Aggiorna Piano Aziendale
           </h1>
           {/* {planId && (
             <p className="text-lg text-gray-700">
@@ -359,7 +387,7 @@ const UpdateBusinessPlanPage = () => {
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-            <span className="hidden sm:inline">Cancel</span>
+            <span className="hidden sm:inline italic">Annulla</span>
           </button>
           <button
             type="button"
@@ -388,7 +416,9 @@ const UpdateBusinessPlanPage = () => {
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                <span className="hidden sm:inline">Updating...</span>
+                <span className="hidden sm:inline italic">
+                  Aggiornamento...
+                </span>
               </>
             ) : (
               <>
@@ -406,7 +436,7 @@ const UpdateBusinessPlanPage = () => {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                <span className="hidden sm:inline">Update</span>
+                <span className="hidden sm:inline italic">Aggiorna</span>
               </>
             )}
           </button>
@@ -464,8 +494,8 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Executive Summary */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Executive Summary
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                  Sintesi
                 </label>
                 <textarea
                   value={formData.executiveSummary}
@@ -474,14 +504,14 @@ const UpdateBusinessPlanPage = () => {
                   }
                   rows={6}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter executive summary"
+                  placeholder="Inserisci il riassunto esecutivo"
                 />
               </div>
 
               {/* Business Overview */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Business Overview
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                 Panoramica aziendal
                 </label>
                 <textarea
                   value={formData.businessOverview}
@@ -490,30 +520,30 @@ const UpdateBusinessPlanPage = () => {
                   }
                   rows={6}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter business overview"
+                  placeholder="Inserisci la panoramica aziendale"
                 />
               </div>
 
-              {/* Market Analysis */}
-              <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Market Analysis
+               {/* Management Team */}
+               <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                 Management Team
                 </label>
                 <textarea
-                  value={formData.marketAnalysis}
+                  value={formData.managementTeam}
                   onChange={(e) =>
-                    handleInputChange("marketAnalysis", e.target.value)
+                    handleInputChange("managementTeam", e.target.value)
                   }
                   rows={6}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter market analysis"
+                  placeholder="Inserisci le informazioni del team di gestione"
                 />
               </div>
 
               {/* Business Model */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Business Model
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                   Modello di Business
                 </label>
                 <textarea
                   value={formData.businessModel}
@@ -522,14 +552,297 @@ const UpdateBusinessPlanPage = () => {
                   }
                   rows={6}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter business model"
+                  placeholder="Inserisci il modello di business"
                 />
               </div>
 
+              {/* Market Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                   Analisi di Mercato
+                </label>
+                <textarea
+                  value={formData.marketAnalysis}
+                  onChange={(e) =>
+                    handleInputChange("marketAnalysis", e.target.value)
+                  }
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Inserisci l'analisi di mercato"
+                />
+              </div>
+
+               {/* Funding Sources */}
+               <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                   Fonti di Finanziamento
+                </label>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                      Da Casa (Importo)
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.fundingSources?.fromHome || ""}
+                      onChange={(e) =>
+                        handleInputChange("fundingSources", {
+                          ...formData.fundingSources,
+                          fromHome: parseFloat(e.target.value) || 0,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Inserisci l'importo del finanziamento da casa"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Profit Loss Projection Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                   Proiezione di Profitti e Perdite
+                </label>
+                <textarea
+                  value={formData.profitLossProjectionAnalysis}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "profitLossProjectionAnalysis",
+                      e.target.value
+                    )
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Inserisci l'analisi della proiezione di profitti e perdite"
+                />
+              </div>
+
+              {/* Profit Loss Projection */}
+              {formData.profitLossProjection &&
+                Array.isArray(formData.profitLossProjection) &&
+                formData.profitLossProjection.length > 0 && (
+                  <div>
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                     8.1 Proiezione di Profitti e Perdite
+                    </label>
+                    <div className="space-y-4">
+                      {formData.profitLossProjection.map(
+                        (item: any, index: number) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border border-gray-200 rounded-lg bg-white"
+                          >
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Anno
+                              </label>
+                              <input
+                                type="number"
+                                value={item.year || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "year",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Ricavi
+                              </label>
+                              <input
+                                type="number"
+                                value={item.revenue || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "revenue",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Costo delle Merci Vendute
+                              </label>
+                              <input
+                                type="number"
+                                value={item.cogs || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "cogs",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Profitto Lordo
+                              </label>
+                              <input
+                                type="number"
+                                value={item.gross_profit || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "gross_profit",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Spese Operative
+                              </label>
+                              <input
+                                type="number"
+                                value={item.operating_expenses || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "operating_expenses",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                EBITDA
+                              </label>
+                              <input
+                                type="number"
+                                value={item.ebitda || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "ebitda",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Ammortamento e Svalutazione
+                              </label>
+                              <input
+                                type="number"
+                                value={item.depreciation_amortization || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "depreciation_amortization",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                EBIT
+                              </label>
+                              <input
+                                type="number"
+                                value={item.ebit || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "ebit",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Interessi
+                              </label>
+                              <input
+                                type="number"
+                                value={item.interest || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "interest",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Tasse
+                              </label>
+                              <input
+                                type="number"
+                                value={item.taxes || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "taxes",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Reddito Netto
+                              </label>
+                              <input
+                                type="number"
+                                value={item.net_income || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "profitLossProjection",
+                                    index,
+                                    "net_income",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+              
+
               {/* Marketing & Sales Strategy */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Marketing & Sales Strategy
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                  Strategia di Marketing e Vendite
                 </label>
                 <textarea
                   value={formData.marketingSalesStrategy}
@@ -538,7 +851,7 @@ const UpdateBusinessPlanPage = () => {
                   }
                   rows={6}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter marketing & sales strategy"
+                  placeholder="Inserisci la strategia di marketing e vendite"
                 />
               </div>
 
@@ -558,31 +871,7 @@ const UpdateBusinessPlanPage = () => {
                 />
               </div> */}
 
-              {/* Funding Sources */}
-              <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Funding Sources
-                </label>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      From Home (Amount)
-                    </label>
-                    <input
-                      type="number"
-                      value={formData.fundingSources?.fromHome || ""}
-                      onChange={(e) =>
-                        handleInputChange("fundingSources", {
-                          ...formData.fundingSources,
-                          fromHome: parseFloat(e.target.value) || 0,
-                        })
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Enter funding amount from home"
-                    />
-                  </div>
-                </div>
-              </div>
+             
 
               {/* Operations Plan */}
               {/* <div>
@@ -600,26 +889,12 @@ const UpdateBusinessPlanPage = () => {
                 />
               </div> */}
 
-              {/* Management Team */}
-              <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Management Team
-                </label>
-                <textarea
-                  value={formData.managementTeam}
-                  onChange={(e) =>
-                    handleInputChange("managementTeam", e.target.value)
-                  }
-                  rows={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter management team information"
-                />
-              </div>
+             
 
               {/* Financial Highlights Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Financial Highlights Analysis
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                  Analisi degli Evidenziatori Finanziari
                 </label>
                 <textarea
                   value={formData.financialHighlightsAnalysis}
@@ -631,49 +906,128 @@ const UpdateBusinessPlanPage = () => {
                   }
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter financial highlights analysis"
+                  placeholder="Inserisci l'analisi degli evidenziatori finanziari"
                 />
               </div>
 
               {/* Cash Flow Analysis */}
-              <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Cash Flow Analysis
-                </label>
-                <textarea
-                  value={formData.cashFlowAnalysis}
-                  onChange={(e) =>
-                    handleInputChange("cashFlowAnalysis", e.target.value)
-                  }
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter cash flow analysis"
-                />
-              </div>
+              {formData.cashFlowAnalysis &&
+                Array.isArray(formData.cashFlowAnalysis) &&
+                formData.cashFlowAnalysis.length > 0 && (
+                  <div>
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                      Analisi del Flusso di Cassa
+                    </label>
+                    <div className="space-y-4">
+                      {formData.cashFlowAnalysis.map(
+                        (item: any, index: number) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border border-gray-200 rounded-lg bg-white"
+                          >
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Anno
+                              </label>
+                              <input
+                                type="number"
+                                value={item.year || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "cashFlowAnalysis",
+                                    index,
+                                    "year",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Operativo
+                              </label>
+                              <input
+                                type="number"
+                                value={item.operating || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "cashFlowAnalysis",
+                                    index,
+                                    "operating",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Investimento
+                              </label>
+                              <input
+                                type="number"
+                                value={item.investing || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "cashFlowAnalysis",
+                                    index,
+                                    "investing",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Finanziamento
+                              </label>
+                              <input
+                                type="number"
+                                value={item.financing || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "cashFlowAnalysis",
+                                    index,
+                                    "financing",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Cassa Netta
+                              </label>
+                              <input
+                                type="number"
+                                value={item.net_cash || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "cashFlowAnalysis",
+                                    index,
+                                    "net_cash",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
 
-              {/* Profit Loss Projection Analysis */}
-              <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Profit Loss Projection Analysis
-                </label>
-                <textarea
-                  value={formData.profitLossProjectionAnalysis}
-                  onChange={(e) =>
-                    handleInputChange(
-                      "profitLossProjectionAnalysis",
-                      e.target.value
-                    )
-                  }
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter profit loss projection analysis"
-                />
-              </div>
+              
 
               {/* Balance Sheet Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Balance Sheet Analysis
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+               Stato Patrimoniale
                 </label>
                 <textarea
                   value={formData.balanceSheetAnalysis}
@@ -682,14 +1036,14 @@ const UpdateBusinessPlanPage = () => {
                   }
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter balance sheet analysis"
+                  placeholder="Inserisci l'analisi dello stato patrimoniale"
                 />
               </div>
 
               {/* Net Financial Position Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Net Financial Position Analysis
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                   Posizione Finanziaria Netta
                 </label>
                 <textarea
                   value={formData.netFinancialPositionAnalysis}
@@ -701,14 +1055,14 @@ const UpdateBusinessPlanPage = () => {
                   }
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter net financial position analysis"
+                  placeholder="Inserisci l'analisi della posizione finanziaria netta"
                 />
               </div>
 
               {/* Debt Structure Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Debt Structure Analysis
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                  Struttura del Debito
                 </label>
                 <textarea
                   value={formData.debtStructureAnalysis}
@@ -717,46 +1071,14 @@ const UpdateBusinessPlanPage = () => {
                   }
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter debt structure analysis"
-                />
-              </div>
-
-              {/* Key Ratios Analysis */}
-              <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Key Ratios Analysis
-                </label>
-                <textarea
-                  value={formData.keyRatiosAnalysis}
-                  onChange={(e) =>
-                    handleInputChange("keyRatiosAnalysis", e.target.value)
-                  }
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter key ratios analysis"
-                />
-              </div>
-
-              {/* Ratios Analysis */}
-              <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Ratios Analysis
-                </label>
-                <textarea
-                  value={formData.ratiosAnalysisAnalysis}
-                  onChange={(e) =>
-                    handleInputChange("ratiosAnalysisAnalysis", e.target.value)
-                  }
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter ratios analysis"
+                  placeholder="Inserisci l'analisi della struttura del debito"
                 />
               </div>
 
               {/* Financial Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Financial Analysis
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                   Analisi Finanziaria
                 </label>
                 <textarea
                   value={formData.financialAnalysisAnalysis}
@@ -768,14 +1090,48 @@ const UpdateBusinessPlanPage = () => {
                   }
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter financial analysis"
+                  placeholder="Inserisci l'analisi finanziaria"
                 />
               </div>
 
+              {/* Key Ratios Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                  Analisi dei Rapporti Chiave
+                </label>
+                <textarea
+                  value={formData.keyRatiosAnalysis}
+                  onChange={(e) =>
+                    handleInputChange("keyRatiosAnalysis", e.target.value)
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Inserisci l'analisi dei rapporti chiave"
+                />
+              </div>
+
+              {/* Ratios Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                  Analisi dei Rapporti
+                </label>
+                <textarea
+                  value={formData.ratiosAnalysisAnalysis}
+                  onChange={(e) =>
+                    handleInputChange("ratiosAnalysisAnalysis", e.target.value)
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Inserisci l'analisi dei rapporti"
+                />
+              </div>
+
+              
+
               {/* Production Sales Forecast Analysis */}
               <div>
-                <label className="block text-xl font-semibold text-gray-800 mb-3">
-                  Production Sales Forecast Analysis
+                <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                  Analisi della Previsione di Produzione e Vendite
                 </label>
                 <textarea
                   value={formData.productionSalesForecastAnalysis}
@@ -787,7 +1143,7 @@ const UpdateBusinessPlanPage = () => {
                   }
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter production sales forecast analysis"
+                  placeholder="Inserisci l'analisi della previsione di produzione e vendite"
                 />
               </div>
 
@@ -795,8 +1151,8 @@ const UpdateBusinessPlanPage = () => {
               {formData.kpiAnalysis &&
                 Object.keys(formData.kpiAnalysis).length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3">
-                      KPI Analysis
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                      Analisi KPI
                     </label>
                     <div className="space-y-4">
                       {Object.entries(formData.kpiAnalysis).map(
@@ -805,13 +1161,13 @@ const UpdateBusinessPlanPage = () => {
                             key={year}
                             className="border border-gray-200 rounded-lg p-4 bg-white"
                           >
-                            <h4 className="font-semibold text-gray-700 mb-3">
-                              Year {year}
+                            <h4 className="font-semibold text-gray-700 mb-3 italic">
+                              Anno {year}
                             </h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  Overall Score
+                                <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                  Punteggio Complessivo
                                 </label>
                                 <input
                                   type="number"
@@ -830,8 +1186,8 @@ const UpdateBusinessPlanPage = () => {
                                 />
                               </div>
                               <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  Warnings (comma separated)
+                                <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                  Avvisi (separati da virgola)
                                 </label>
                                 <input
                                   type="text"
@@ -849,12 +1205,12 @@ const UpdateBusinessPlanPage = () => {
                                     })
                                   }
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                  placeholder="Enter warnings separated by commas"
+                                  placeholder="Inserisci gli avvisi separati da virgole"
                                 />
                               </div>
                               <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  Recommendations (comma separated)
+                                <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                  Raccomandazioni (separate da virgola)
                                 </label>
                                 <input
                                   type="text"
@@ -872,7 +1228,7 @@ const UpdateBusinessPlanPage = () => {
                                     })
                                   }
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                  placeholder="Enter recommendations separated by commas"
+                                  placeholder="Inserisci le raccomandazioni separate da virgole"
                                 />
                               </div>
                             </div>
@@ -885,10 +1241,11 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Financial Highlights */}
               {formData.financialHighlights &&
+                Array.isArray(formData.financialHighlights) &&
                 formData.financialHighlights.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3">
-                      Financial Highlights
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                      Evidenziatori Finanziari
                     </label>
                     <div className="space-y-4">
                       {formData.financialHighlights.map(
@@ -899,7 +1256,7 @@ const UpdateBusinessPlanPage = () => {
                           >
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Year
+                                Anno
                               </label>
                               <input
                                 type="text"
@@ -917,7 +1274,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Revenue
+                                Ricavi
                               </label>
                               <input
                                 type="text"
@@ -935,7 +1292,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Net Income
+                                Reddito Netto
                               </label>
                               <input
                                 type="text"
@@ -953,7 +1310,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Capex
+                                Spese in Conto Capitale
                               </label>
                               <input
                                 type="text"
@@ -971,7 +1328,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Debt Repayment
+                                Rimborso del Debito
                               </label>
                               <input
                                 type="text"
@@ -996,10 +1353,11 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Cash Flow Analysis Data*/}
               {formData.cashFlowAnalysisAnalysis &&
+                Array.isArray(formData.cashFlowAnalysisAnalysis) &&
                 formData.cashFlowAnalysisAnalysis.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3">
-                      Cash Flow Analysis Data
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                      Dati dell'Analisi del Flusso di Cassa
                     </label>
                     <div className="space-y-4">
                       {formData.cashFlowAnalysisAnalysis.map(
@@ -1010,7 +1368,7 @@ const UpdateBusinessPlanPage = () => {
                           >
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Year
+                                Anno
                               </label>
                               <input
                                 type="number"
@@ -1028,7 +1386,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Operating
+                                Operativo
                               </label>
                               <input
                                 type="number"
@@ -1046,7 +1404,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Investing
+                                Investimento
                               </label>
                               <input
                                 type="number"
@@ -1064,7 +1422,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Financing
+                                Finanziamento
                               </label>
                               <input
                                 type="number"
@@ -1082,7 +1440,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Net Cash
+                                Cassa Netta
                               </label>
                               <input
                                 type="number"
@@ -1108,15 +1466,15 @@ const UpdateBusinessPlanPage = () => {
               {/* User Input */}
               {formData.user_input && (
                 <div>
-                  <label className="block text-xl font-semibold text-gray-800 mb-3">
-                    User Input
+                  <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                    Input dell'Utente
                   </label>
                   <div className="space-y-4">
                     {formData.user_input.user_input &&
                       formData.user_input.user_input.length > 0 && (
                         <div>
-                          <label className="block text-lg font-medium text-gray-700 mb-2">
-                            Questions & Answers
+                          <label className="block text-lg font-medium text-gray-700 mb-2 italic">
+                            Domande e Risposte
                           </label>
                           {formData.user_input.user_input.map(
                             (item: any, index: number) => (
@@ -1125,8 +1483,8 @@ const UpdateBusinessPlanPage = () => {
                                 className="bg-white p-4 rounded-lg mb-2 space-y-2 border border-gray-200"
                               >
                                 <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Question {index + 1}
+                                  <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                    Domanda {index + 1}
                                   </label>
                                   <input
                                     type="text"
@@ -1150,8 +1508,8 @@ const UpdateBusinessPlanPage = () => {
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Answer {index + 1}
+                                  <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                    Risposta {index + 1}
                                   </label>
                                   <textarea
                                     value={item.answer || ""}
@@ -1180,8 +1538,8 @@ const UpdateBusinessPlanPage = () => {
                     {formData.user_input.uploaded_file &&
                       formData.user_input.uploaded_file.length > 0 && (
                         <div>
-                          <label className="block text-lg font-medium text-gray-700 mb-2">
-                            Uploaded Files
+                          <label className="block text-lg font-medium text-gray-700 mb-2 italic">
+                            File Caricati
                           </label>
                           {formData.user_input.uploaded_file.map(
                             (file: any, index: number) => (
@@ -1190,8 +1548,8 @@ const UpdateBusinessPlanPage = () => {
                                 className="bg-white p-4 rounded-lg mb-2 space-y-2 border border-gray-200"
                               >
                                 <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Document Type
+                                  <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                    Tipo di Documento
                                   </label>
                                   <input
                                     type="text"
@@ -1215,8 +1573,8 @@ const UpdateBusinessPlanPage = () => {
                                   />
                                 </div>
                                 <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Page Count
+                                  <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                    Numero di Pagine
                                   </label>
                                   <input
                                     type="text"
@@ -1242,8 +1600,8 @@ const UpdateBusinessPlanPage = () => {
                                 {file.financial_data && (
                                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                                     <div>
-                                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Total Assets
+                                      <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                        Totale Attività
                                       </label>
                                       <input
                                         type="text"
@@ -1257,8 +1615,8 @@ const UpdateBusinessPlanPage = () => {
                                       />
                                     </div>
                                     <div>
-                                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Total Revenue
+                                      <label className="block text-sm font-medium text-gray-700 mb-1 italic">
+                                        Ricavi Totali
                                       </label>
                                       <input
                                         type="text"
@@ -1297,242 +1655,26 @@ const UpdateBusinessPlanPage = () => {
                 </div>
               )}
 
-              {/* Profit Loss Projection */}
-              {formData.profitLossProjection &&
-                formData.profitLossProjection.length > 0 && (
-                  <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3">
-                      Profit & Loss Projection
-                    </label>
-                    <div className="space-y-4">
-                      {formData.profitLossProjection.map(
-                        (item: any, index: number) => (
-                          <div
-                            key={index}
-                            className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border border-gray-200 rounded-lg bg-white"
-                          >
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Year
-                              </label>
-                              <input
-                                type="number"
-                                value={item.year || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "year",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Revenue
-                              </label>
-                              <input
-                                type="number"
-                                value={item.revenue || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "revenue",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                COGS
-                              </label>
-                              <input
-                                type="number"
-                                value={item.cogs || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "cogs",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Gross Profit
-                              </label>
-                              <input
-                                type="number"
-                                value={item.gross_profit || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "gross_profit",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Operating Expenses
-                              </label>
-                              <input
-                                type="number"
-                                value={item.operating_expenses || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "operating_expenses",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                EBITDA
-                              </label>
-                              <input
-                                type="number"
-                                value={item.ebitda || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "ebitda",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Depreciation & Amortization
-                              </label>
-                              <input
-                                type="number"
-                                value={item.depreciation_amortization || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "depreciation_amortization",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                EBIT
-                              </label>
-                              <input
-                                type="number"
-                                value={item.ebit || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "ebit",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Interest
-                              </label>
-                              <input
-                                type="number"
-                                value={item.interest || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "interest",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Taxes
-                              </label>
-                              <input
-                                type="number"
-                                value={item.taxes || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "taxes",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Net Income
-                              </label>
-                              <input
-                                type="number"
-                                value={item.net_income || ""}
-                                onChange={(e) =>
-                                  handleArrayItemChange(
-                                    "profitLossProjection",
-                                    index,
-                                    "net_income",
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              />
-                            </div>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
+              
 
               {/* Financial Analysis */}
               {formData.financialAnalysis &&
+                Array.isArray(formData.financialAnalysis) &&
                 formData.financialAnalysis.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3">
-                      Financial Analysis
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                      Analisi Finanziaria
                     </label>
                     <div className="space-y-4">
                       {formData.financialAnalysis.map(
                         (item: any, index: number) => (
                           <div
                             key={index}
-                            className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border border-gray-200 rounded-lg bg-white"
+                            className="grid grid-cols-1 md:grid-cols-6 gap-4 p-4 border border-gray-200 rounded-lg bg-white"
                           >
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Year
+                                Anno
                               </label>
                               <input
                                 type="number"
@@ -1550,7 +1692,25 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Sales Revenue
+                                Flusso di Cassa Netto
+                              </label>
+                              <input
+                                type="number"
+                                value={item.net_cash_flow || ""}
+                                onChange={(e) =>
+                                  handleArrayItemChange(
+                                    "financialAnalysis",
+                                    index,
+                                    "net_cash_flow",
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Ricavi delle Vendite
                               </label>
                               <input
                                 type="number"
@@ -1568,16 +1728,16 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                EBIT
+                                EBT
                               </label>
                               <input
                                 type="number"
-                                value={item.ebit || ""}
+                                value={item.ebt || ""}
                                 onChange={(e) =>
                                   handleArrayItemChange(
                                     "financialAnalysis",
                                     index,
-                                    "ebit",
+                                    "ebt",
                                     parseFloat(e.target.value) || 0
                                   )
                                 }
@@ -1586,7 +1746,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Net Income
+                                Reddito Netto
                               </label>
                               <input
                                 type="number"
@@ -1611,10 +1771,11 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Ratios Analysis */}
               {formData.ratiosAnalysis &&
+                Array.isArray(formData.ratiosAnalysis) &&
                 formData.ratiosAnalysis.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3">
-                      Ratios Analysis
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                      Analisi dei Rapporti
                     </label>
                     <div className="space-y-4">
                       {formData.ratiosAnalysis.map(
@@ -1625,7 +1786,7 @@ const UpdateBusinessPlanPage = () => {
                           >
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Year
+                                Anno
                               </label>
                               <input
                                 type="number"
@@ -1681,7 +1842,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Current Ratio
+                                Rapporto Corrente
                               </label>
                               <input
                                 type="number"
@@ -1707,10 +1868,11 @@ const UpdateBusinessPlanPage = () => {
 
               {/* Production Sales Forecast */}
               {formData.productionSalesForecast &&
+                Array.isArray(formData.productionSalesForecast) &&
                 formData.productionSalesForecast.length > 0 && (
                   <div>
-                    <label className="block text-xl font-semibold text-gray-800 mb-3">
-                      Production Sales Forecast
+                    <label className="block text-xl font-semibold text-gray-800 mb-3 italic">
+                      Previsione di Produzione e Vendite
                     </label>
                     <div className="space-y-4">
                       {formData.productionSalesForecast.map(
@@ -1721,7 +1883,7 @@ const UpdateBusinessPlanPage = () => {
                           >
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Year
+                                Anno
                               </label>
                               <input
                                 type="number"
@@ -1739,7 +1901,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Sales Revenue
+                                Ricavi delle Vendite
                               </label>
                               <input
                                 type="number"
@@ -1757,7 +1919,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Revenue Growth (%)
+                                Crescita dei Ricavi (%)
                               </label>
                               <input
                                 type="number"
@@ -1776,7 +1938,7 @@ const UpdateBusinessPlanPage = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Units Sold
+                                Unità Vendute
                               </label>
                               <input
                                 type="number"

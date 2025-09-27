@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import GeneratedBusinessPlanforAdmin, {
   demoBusinessPlanData,
 } from "@/components/consultant/GeneratedBusinessPlanforAdmin";
-import { useParams } from "next/navigation";
+import { useParams, useRouter, usePathname } from "next/navigation";
 import { useAdminGetSingleBusinessPlanQuery } from "@/redux/api/admin/adminAPI";
 import Navbar from "@/components/shared/Navbar/Navbar";
 import FinancialDashboard from "@/components/generated-plans-graph/FinancialHighlights";
@@ -15,14 +15,36 @@ import BalanceSheet from "@/components/generated-plans-graph/BalanceSheet";
 import FinancialAnalysis from "@/components/generated-plans-graph/FinancalAnalysis";
 import RatiosAnalysis from "@/components/generated-plans-graph/RatiosAnalysis";
 import ProductionSalesForecast from "@/components/generated-plans-graph/ProductionSalesForecast";
+import { RiEdit2Fill } from "react-icons/ri";
+import { GoDownload } from "react-icons/go";
+import { IoIosShareAlt } from "react-icons/io";
+import { generateEmpathyPDF } from "@/components/generated-plans-graph/pdf-downloader/PdfDownload";
+import { generateWordDocument } from "@/components/consultant/DocDownload";
+import DownloadOptionsModal from "@/components/consultant/DownloadOptionsModal";
+import SocialShareModal from "@/components/shared/SocialShareModal";
 
 const GeneratedPlanForAdminPage = () => {
   const { id } = useParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const {
     data: planInfo,
     error,
     isLoading,
   } = useAdminGetSingleBusinessPlanQuery(id);
+
+  // Floating button states
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isSocialShareModalOpen, setIsSocialShareModalOpen] = useState(false);
+
+  // Check if coming from expert review route using URL parameter
+  const isFromExpertReview =
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("from") === "expert-review";
+
+  // Only show Share/Download if coming from Expert Review
+  const shouldShowShareDownload = isFromExpertReview;
 
   // State for countdown timer - MUST be at the top level
   const [timeLeft, setTimeLeft] = useState({
@@ -131,6 +153,58 @@ const GeneratedPlanForAdminPage = () => {
   // Map cashFlowAnalysisData to cashFlowAnalysis for compatibility
   const cashFlowAnalysisArray = cashFlowAnalysisData || [];
 
+  // Floating button handlers
+  const handleEdit = () => {
+    if (planId) {
+      router.push(`/update-business-plan?id=${planId}`);
+    } else {
+      router.push("/update-business-plan");
+    }
+  };
+
+  const handleDownloadClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleShareClick = () => {
+    setIsShareModalOpen(true);
+  };
+
+  const handleSocialShareClick = () => {
+    setIsSocialShareModalOpen(true);
+  };
+
+  const handleDownloadPDF = () => {
+    // Use the original PDF download functionality
+    generateEmpathyPDF("businessplan");
+  };
+
+  const handleDownloadDOC = () => {
+    // Use the comprehensive Word document download functionality
+    generateWordDocument({
+      executiveSummary: executiveSummary,
+      businessOverview: businessOverview,
+      marketAnalysis: marketAnalysis,
+      businessModel: businessModel,
+      marketingSalesStrategy: marketingSalesStrategy,
+      sectorStrategy: sectorStrategy,
+      fundingSources: fundingSources,
+      operationsPlan: operationsPlan,
+      managementTeam: managementTeam,
+      financialHighlights,
+      cashFlowAnalysis: cashFlowAnalysisArray,
+      profitLossProjection,
+      balanceSheet,
+      netFinancialPosition,
+      debtStructure,
+      keyRatios,
+      operatingCostBreakdown,
+      financialAnalysis,
+      ratiosAnalysis,
+      productionSalesForecast,
+    });
+  };
+
   // Render loading state
   if (isLoading) {
     return (
@@ -181,7 +255,7 @@ const GeneratedPlanForAdminPage = () => {
       <Navbar />
       <div
         id="businessplan"
-        className="max-w-[1440px] mx-auto xl:mx-auto px-4 md:px-8"
+        className="max-w-[1440px] mx-auto xl:mx-auto px-4 md:px-8 overflow-x-hidden"
       >
         <header className="   py-6 ">
           <div className="">
@@ -199,50 +273,50 @@ const GeneratedPlanForAdminPage = () => {
               </div>
 
               {/* Time Left Section */}
-              <div className="flex flex-col items-start space-x-4 space-y-2 mt-4 ">
+              <div className="flex flex-col items-start space-y-2 mt-4">
                 <div>
-                  <span className="text-xl font-medium text-primary-text">
+                  <span className="text-lg sm:text-xl font-medium text-primary-text">
                     Tempo Rimanente
                   </span>
                 </div>
-                <div className="flex space-x-2">
+                <div className="flex flex-wrap gap-2 sm:gap-3">
                   <div className="flex items-center">
-                    <div className="border-b-2 border-red-500 px-1 py-2">
-                      <span className="text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
+                    <div className="border-b-2 border-red-500 px-1 py-1 sm:py-2">
+                      <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded-lg">
                         {timeLeft.days.toString().padStart(2, "0")}
                       </span>
                     </div>
-                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
+                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-1 sm:ml-2">
                       Giorni
                     </span>
                   </div>
                   <div className="flex items-center">
-                    <div className="border-b-2 border-red-500 px-1 py-2">
-                      <span className="text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
+                    <div className="border-b-2 border-red-500 px-1 py-1 sm:py-2">
+                      <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded-lg">
                         {timeLeft.hours.toString().padStart(2, "0")}
                       </span>
                     </div>
-                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
+                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-1 sm:ml-2">
                       Ore
                     </span>
                   </div>
                   <div className="flex items-center">
-                    <div className="border-b-2 border-red-500 px-1 py-2">
-                      <span className="text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
+                    <div className="border-b-2 border-red-500 px-1 py-1 sm:py-2">
+                      <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded-lg">
                         {timeLeft.minutes.toString().padStart(2, "0")}
                       </span>
                     </div>
-                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
+                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-1 sm:ml-2">
                       Minuti
                     </span>
                   </div>
                   <div className="flex items-center">
-                    <div className="border-b-2 border-red-500 px-1 py-2">
-                      <span className="text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-3 py-2 rounded-lg ">
+                    <div className="border-b-2 border-red-500 px-1 py-1 sm:py-2">
+                      <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded-lg">
                         {timeLeft.seconds.toString().padStart(2, "0")}
                       </span>
                     </div>
-                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
+                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-1 sm:ml-2">
                       Secondi
                     </span>
                     {/* Will delete this later */}
@@ -276,6 +350,10 @@ const GeneratedPlanForAdminPage = () => {
           debtStructure={debtStructure}
           keyRatios={keyRatios}
           operatingCostBreakdown={operatingCostBreakdown}
+          onEdit={handleEdit}
+          onDownload={handleDownloadClick}
+          onSocialShare={handleSocialShareClick}
+          shouldShowShareDownload={shouldShowShareDownload}
         />
         <ProductionSalesForecast
           productionSalesForecast={productionSalesForecast}
@@ -309,6 +387,121 @@ const GeneratedPlanForAdminPage = () => {
           La condivisione o riproduzione non autorizzata è severamente vietata.
         </p>
       </div>
+
+      {/* Floating Action Buttons */}
+      <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 flex justify-end gap-2 sm:gap-4 cursor-pointer z-50">
+        {shouldShowShareDownload ? (
+          // Share and Download buttons for expert review
+          <>
+            <button
+              onClick={handleSocialShareClick}
+              className="w-12 h-12 sm:w-14 sm:h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"
+              aria-label="Share business plan"
+            >
+              <IoIosShareAlt className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+            <button
+              onClick={handleDownloadClick}
+              className="w-12 h-12 sm:w-14 sm:h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"
+              aria-label="Download business plan"
+            >
+              <GoDownload className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+          </>
+        ) : (
+          // Edit button for other routes
+          <button
+            onClick={handleEdit}
+            className="w-12 h-12 sm:w-14 sm:h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"
+            aria-label="Edit business plan"
+          >
+            <RiEdit2Fill className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+        )}
+      </div>
+
+      {/* Download Options Modal */}
+      <DownloadOptionsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onDownloadPDF={handleDownloadPDF}
+        onDownloadDOC={handleDownloadDOC}
+      />
+
+      {/* Social Share Modal */}
+      <SocialShareModal
+        isOpen={isSocialShareModalOpen}
+        onClose={() => setIsSocialShareModalOpen(false)}
+        url={typeof window !== "undefined" ? window.location.href : ""}
+        title="Pianifico Suite"
+        description="Check out this amazing business plan generated by AI! This comprehensive plan includes executive summary, market analysis, and financial projections."
+      />
+
+      {/* Share Modal */}
+      {isShareModalOpen && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">
+                Expert's Review
+              </h3>
+              <button
+                onClick={() => setIsShareModalOpen(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <p className="text-gray-600 mb-6">
+              Enter expert's email address to send the selected plan for review
+              and feedback.
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Email Address:
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Enter email address"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+                  required
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  onClick={() => setIsShareModalOpen(false)}
+                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

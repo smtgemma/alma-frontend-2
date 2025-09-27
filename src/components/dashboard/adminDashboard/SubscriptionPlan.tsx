@@ -48,6 +48,7 @@ const SubscriptionPlan = () => {
       }
     }
   }, [plansData]);
+  console.log("soloPlanData, teamPlanData", soloPlanData, teamPlanData);
 
   // get active plan
   const currentPlanData = activeTab === "solo" ? soloPlanData : teamPlanData;

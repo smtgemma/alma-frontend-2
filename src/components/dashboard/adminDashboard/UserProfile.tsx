@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import Image from "next/image";
 import PlanSlideModal from "@/components/common/PlanSlideModal";
-
+// src/components/dashboard/adminDashboard/UserProfile.tsx
 const UserProfile = ({ id }: { id: string }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,7 +40,7 @@ const UserProfile = ({ id }: { id: string }) => {
   }
 
   if (!subscriptionDetails || !subscriptionDetails.data) {
-    return <p>No subscription details found.</p>;
+    return <p className="">Nessun dettaglio di abbonamento trovato.</p>;
   }
 
   const {
@@ -90,10 +90,10 @@ const UserProfile = ({ id }: { id: string }) => {
     const res = await suspendUser({ id, body: { status } });
     // Check response success
     if (res.data?.success) {
-      toast.success(res.data.message || "User suspended successfully!");
+      toast.success(res.data.message || "Utente sospeso con successo!");
       setIsSuspendModalOpen(false);
     } else {
-      toast.error(res.data?.message || "Failed to suspend user!");
+      toast.error(res.data?.message || "Impossibile sospendere l'utente!");
     }
 
     // console.log(`Suspending user: ${user.firstName} ${user.lastName}`);
@@ -108,8 +108,8 @@ const UserProfile = ({ id }: { id: string }) => {
     <div className="space-y-4 sm:space-y-6 px-4 lg:px-6 py-6">
       {/* Header */}
       <div className="flex flex-col space-y-2">
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary">
-          User Profile
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary ">
+          Profilo Utente
         </h1>
       </div>
 
@@ -148,7 +148,7 @@ const UserProfile = ({ id }: { id: string }) => {
               onClick={handleSuspendUser}
               className="w-full sm:w-auto border cursor-pointer border-red-500 text-red-500 px-4 py-2 text-sm sm:text-base rounded-md hover:bg-red-50 transition-colors min-w-[120px]"
             >
-              {user.status === "BLOCKED" ? "Unblock User" : "Block User"}
+              {user.status === "BLOCKED" ? "Sblocca Utente" : "Blocca Utente"}
             </button>
           </div>
         </div>
@@ -156,8 +156,8 @@ const UserProfile = ({ id }: { id: string }) => {
         {/* User Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-200 p-3 sm:p-4 rounded-lg min-h-[80px] sm:min-h-[100px]">
-            <h3 className="text-sm md:text-base font-medium text-accent mb-1 sm:mb-0 flex-shrink-0">
-              Subscription Type
+            <h3 className="text-sm md:text-base font-medium text-accent mb-1 sm:mb-0 flex-shrink-0 ">
+              Tipo di Abbonamento
             </h3>
             <div className="hidden sm:block w-px h-8 lg:h-12 bg-gray-300 mx-2 lg:mx-4"></div>
             <p className="text-base sm:text-lg lg:text-xl font-medium text-primary break-words text-right sm:text-left">
@@ -166,8 +166,8 @@ const UserProfile = ({ id }: { id: string }) => {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-200 p-3 sm:p-4 rounded-lg min-h-[80px] sm:min-h-[100px]">
-            <h3 className="text-sm md:text-base font-medium text-accent mb-1 sm:mb-0 flex-shrink-0">
-              Member Since
+            <h3 className="text-sm md:text-base font-medium text-accent mb-1 sm:mb-0 flex-shrink-0 ">
+              Membro Dal
             </h3>
             <div className="hidden sm:block w-px h-8 lg:h-12 bg-gray-300 mx-2 lg:mx-4"></div>
             <p className="text-base sm:text-lg lg:text-xl font-medium text-primary break-words text-right sm:text-left">
@@ -176,8 +176,8 @@ const UserProfile = ({ id }: { id: string }) => {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-200 p-3 sm:p-4 rounded-lg min-h-[80px] sm:min-h-[100px]">
-            <h3 className="text-sm md:text-base font-medium text-accent mb-1 sm:mb-0 flex-shrink-0">
-              Total Plan Generated
+            <h3 className="text-sm md:text-base font-medium text-accent mb-1 sm:mb-0 flex-shrink-0 ">
+              Totale Piani Generati
             </h3>
             <div className="hidden sm:block w-px h-8 lg:h-12 bg-gray-300 mx-2 lg:mx-4"></div>
             <p className="text-xl sm:text-[1.4rem] lg:text-[2rem] font-medium text-primary text-right sm:text-left">
@@ -186,8 +186,8 @@ const UserProfile = ({ id }: { id: string }) => {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-200 p-3 sm:p-4 rounded-lg min-h-[80px] sm:min-h-[100px]">
-            <h3 className="text-sm md:text-base font-medium text-accent mb-1 sm:mb-0 flex-shrink-0">
-              Team Members
+            <h3 className="text-sm md:text-base font-medium text-accent mb-1 sm:mb-0 flex-shrink-0 ">
+              Membri del Team
             </h3>
             <div className="hidden sm:block w-px h-8 lg:h-12 bg-gray-300 mx-2 lg:mx-4"></div>
             <p className="text-xl sm:text-[1.4rem] lg:text-[2rem] font-medium text-primary text-right sm:text-left">
@@ -197,8 +197,8 @@ const UserProfile = ({ id }: { id: string }) => {
 
           {subscriptionType === "TEAM" && planExpireDate && (
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border border-gray-200 p-3 sm:p-4 rounded-lg min-h-[80px] sm:min-h-[100px]">
-              <h3 className="text-sm md:text-base font-medium text-accent mb-1 sm:mb-0 flex-shrink-0">
-                Plan Validation
+              <h3 className="text-sm md:text-base font-medium text-accent mb-1 sm:mb-0 flex-shrink-0 ">
+                Validità del Piano
               </h3>
               <div className="hidden sm:block w-px h-8 lg:h-12 bg-gray-300 mx-2 lg:mx-4"></div>
               <p className="text-base sm:text-xl lg:text-2xl font-medium text-primary break-words text-right sm:text-left">
@@ -213,8 +213,8 @@ const UserProfile = ({ id }: { id: string }) => {
       <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 lg:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 sm:mb-6">
           <div className="">
-            <h2 className="text-lg sm:text-xl lg:text-2xl font-medium text-accent">
-              Generated Plans
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-medium text-accent ">
+              Piani Generati
             </h2>
           </div>
 
@@ -224,7 +224,7 @@ const UserProfile = ({ id }: { id: string }) => {
               <BsSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
               <input
                 type="text"
-                placeholder="Search plans..."
+                placeholder="Cerca piani..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 text-sm sm:text-base border border-gray-300 rounded-[41px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -240,19 +240,19 @@ const UserProfile = ({ id }: { id: string }) => {
               <thead className="bg-[#475466]">
                 <tr>
                   <th className="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm md:text-base lg:text-lg font-medium text-white uppercase tracking-wider whitespace-nowrap">
-                    Date
+                    Data
                   </th>
                   <th className="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm md:text-base lg:text-lg font-medium text-white uppercase tracking-wider whitespace-nowrap">
-                    Plan Name
+                    Nome Piano
                   </th>
                   <th className="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm md:text-base lg:text-lg font-medium text-white uppercase tracking-wider whitespace-nowrap">
-                    Presentation
+                    Presentazione
                   </th>
                   <th className="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm md:text-base lg:text-lg font-medium text-white uppercase tracking-wider whitespace-nowrap">
-                    Status
+                    Stato
                   </th>
                   <th className="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm md:text-base lg:text-lg font-medium text-white uppercase tracking-wider whitespace-nowrap">
-                    Action
+                    Azione
                   </th>
                 </tr>
               </thead>
@@ -279,15 +279,16 @@ const UserProfile = ({ id }: { id: string }) => {
                         onClick={() => handleViewPresentation(plan)}
                         className="bg-gray-100 text-info px-4 lg:px-6 py-1 rounded-[76px] text-xs sm:text-sm hover:bg-gray-200 transition-colors border border-[#99A6B8] cursor-pointer"
                       >
-                        View
+                        <span className="">Visualizza</span>
                       </button>
                     </td>
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <span
-                        className={`inline-flex px-2 py-1 text-[10px] sm:text-xs font-semibold rounded-full ${plan.status === "COMPLETED"
+                        className={`inline-flex px-2 py-1 text-[10px] sm:text-xs font-semibold rounded-full ${
+                          plan.status === "COMPLETED"
                             ? "bg-green-100 text-green-800/40 border border-green-800/40"
                             : "bg-red-100 text-red-800/40 border border-red-800/40"
-                          }`}
+                        }`}
                       >
                         {plan.status}
                       </span>
@@ -302,7 +303,7 @@ const UserProfile = ({ id }: { id: string }) => {
                         href={`/generated-planfor-admin/${plan.id}`}
                         className="text-primary hover:text-primary/80 font-medium underline text-xs sm:text-sm lg:text-base"
                       >
-                        View Plan
+                        <span className="">Visualizza Piano</span>
                       </Link>
                     </td>
                   </tr>
@@ -313,7 +314,7 @@ const UserProfile = ({ id }: { id: string }) => {
 
           {/* Mobile scroll indicator */}
           <div className="sm:hidden mt-2 text-xs text-gray-500 text-center">
-            ← Scroll horizontally to see more →
+            ← Scorri orizzontalmente per vedere di più →
           </div>
         </div>
       </div>
@@ -323,7 +324,7 @@ const UserProfile = ({ id }: { id: string }) => {
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-700">
-              Showing {currentPlans.length} out of {filteredPlans.length}
+              Mostrando {currentPlans.length} di {filteredPlans.length}
             </span>
             <select
               value={rowsPerPage}
@@ -343,7 +344,7 @@ const UserProfile = ({ id }: { id: string }) => {
               disabled={currentPage === 1}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              &lt; Previous
+              &lt; <span className="">Precedente</span>
             </button>
 
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -352,10 +353,11 @@ const UserProfile = ({ id }: { id: string }) => {
                 <button
                   key={pageNum}
                   onClick={() => setCurrentPage(pageNum)}
-                  className={`px-3 py-1 text-sm rounded ${currentPage === pageNum
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === pageNum
                       ? "bg-primary text-white"
                       : "border border-gray-300 hover:bg-gray-50"
-                    }`}
+                  }`}
                 >
                   {pageNum}
                 </button>
@@ -381,7 +383,7 @@ const UserProfile = ({ id }: { id: string }) => {
               disabled={currentPage === totalPages}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next &gt;
+              <span className="">Successivo</span> &gt;
             </button>
           </div>
         </div>

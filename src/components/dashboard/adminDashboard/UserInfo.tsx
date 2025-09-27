@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { SuspendUserModal } from "../SuspendUserModal";
 import Loading from "@/components/Others/Loading";
 import { format } from "date-fns";
-
+// src/components/dashboard/adminDashboard/UserInfo.tsx
 const UserInfo = ({ id }: { id: string }) => {
   const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false);
   const { data: subscriptionDetails, isLoading } =
@@ -22,10 +22,10 @@ const UserInfo = ({ id }: { id: string }) => {
     const res = await suspendUser({ id, body: { status } });
     // Check response success
     if (res.data?.success) {
-      toast.success(res.data.message || "User suspended successfully!");
+      toast.success(res.data.message || "Utente sospeso con successo!");
       setIsSuspendModalOpen(false);
     } else {
-      toast.error(res.data?.message || "Failed to suspend user!");
+      toast.error(res.data?.message || "Impossibile sospendere l'utente!");
     }
 
     // console.log(`Suspending user: ${user.firstName} ${user.lastName}`);
@@ -37,7 +37,7 @@ const UserInfo = ({ id }: { id: string }) => {
   const handleCloseSuspendModal = () => {
     setIsSuspendModalOpen(false);
   };
-  
+
   const {
     subscriptionType,
     memberSince,
@@ -53,9 +53,11 @@ const UserInfo = ({ id }: { id: string }) => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className=" ">
-          <h1 className="text-2xl font-semibold text-gray-900">User Info</h1>
-          <p className="text-gray-600">
-            This profile belongs to a member of a team plan user.
+          <h1 className="text-2xl font-semibold text-gray-900 ">
+            Informazioni Utente
+          </h1>
+          <p className="text-gray-600 ">
+            Questo profilo appartiene a un membro di un utente del piano team.
           </p>
         </div>
         <div>
@@ -63,7 +65,7 @@ const UserInfo = ({ id }: { id: string }) => {
             onClick={handleSuspendUser}
             className="border cursor-pointer border-red-500 text-red-500 px-4 py-2 rounded-md hover:bg-red-50 transition-colors"
           >
-            {"BLOCKED" == "BLOCKED" ? "Unblock User" : "Block User"}
+            {"BLOCKED" == "BLOCKED" ? "Sblocca Utente" : "Blocca Utente"}
           </button>
         </div>
       </div>
@@ -75,7 +77,7 @@ const UserInfo = ({ id }: { id: string }) => {
             <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-200">
               <img
                 src={user.image ? user.image : "/images/placeholderProfile.jpg"}
-                alt="Jerome Bell"
+                alt="Profilo Utente"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -100,8 +102,8 @@ const UserInfo = ({ id }: { id: string }) => {
           <div className=" border-t border-gray-200 ">
             <div className="space-y-6">
               <div className="flex justify-between items-center py-2 pt-8">
-                <span className="text-base font-medium text-gray-600">
-                  User Name
+                <span className="text-base font-medium text-gray-600 ">
+                  Nome Utente
                 </span>
                 <span className="text-[20px] text-gray-900">
                   {user.firstName} {user.lastName}
@@ -109,8 +111,8 @@ const UserInfo = ({ id }: { id: string }) => {
               </div>
 
               <div className="flex justify-between items-center py-2 ">
-                <span className="text-base font-medium text-gray-600">
-                  User Email
+                <span className="text-base font-medium text-gray-600 ">
+                  Email Utente
                 </span>
                 <span className="text-[20px] text-gray-900">{user.email}</span>
               </div>
@@ -123,8 +125,8 @@ const UserInfo = ({ id }: { id: string }) => {
               </div> */}
 
               <div className="flex justify-between items-center py-2 ">
-                <span className="text-base font-medium text-gray-600">
-                  Admin Name
+                <span className="text-base font-medium text-gray-600 ">
+                  Nome Amministratore
                 </span>
                 <span className="text-[20px] text-primary underline">
                   {teamInfo?.owner.firstName}
@@ -132,24 +134,24 @@ const UserInfo = ({ id }: { id: string }) => {
                 </span>
               </div>
               <div className="flex justify-between items-center py-2 ">
-                <span className="text-base font-medium text-gray-600">
-                  Admin Email
+                <span className="text-base font-medium text-gray-600 ">
+                  Email Amministratore
                 </span>
                 <span className="text-[20px] text-primary underline">
                   {teamInfo?.owner.email}
                 </span>
               </div>
               <div className="flex justify-between items-center py-2 ">
-                <span className="text-base font-medium text-gray-600">
-                  Location
+                <span className="text-base font-medium text-gray-600 ">
+                  Posizione
                 </span>
                 <span className="text-[20px] text-primary underline">
                   {teamInfo?.owner.location || "N/A"}
                 </span>
               </div>
               <div className="flex justify-between items-center py-2 ">
-                <span className="text-base font-medium text-gray-600">
-                  Join Date
+                <span className="text-base font-medium text-gray-600 ">
+                  Data di Iscrizione
                 </span>
                 <span className="text-[20px] text-primary underline">
                   {format(new Date(memberSince), "MMM dd, yyyy")}

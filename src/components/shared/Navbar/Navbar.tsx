@@ -214,9 +214,12 @@ const Navbar = () => {
               />
             </div>
             <div>
-              <h3 className="text-black font-medium text-xl md:text-2xl ">
-                Pianifico Suite
-              </h3>
+              <Link href="/">
+                <h3 className="text-black font-medium text-2xl ">
+                  Pianifico Suite
+                </h3>
+              </Link>
+              
             </div>
           </div>
 

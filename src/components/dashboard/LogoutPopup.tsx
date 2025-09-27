@@ -42,14 +42,14 @@ export const LogoutPopup = ({
           <div className="mt-3 flex justify-end gap-6 ">
             <button
               onClick={onConfirm}
-              className="px-10 py-2 rounded-md bg-white text-accent border border-accent w-full cursor-pointer"
+              className="px-4 md:px-10 py-2 rounded-md bg-white text-accent border border-accent w-full cursor-pointer"
             >
               Disconnetti
             </button>
 
             <button
               onClick={onClose}
-              className="px-10 py-2 rounded-md bg-primary text-white w-full cursor-pointer"
+              className="px-4 md:px-10 py-2 rounded-md bg-primary text-white w-full cursor-pointer"
             >
               Annulla
             </button>

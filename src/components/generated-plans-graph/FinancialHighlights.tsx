@@ -195,7 +195,7 @@ export default function FinancialDashboard({
 
       {/* Cash Flow Analysis Data */}
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        12.3 Analisi del flusso di cassa
+        12.3 Dati dell'Analisi del Flusso di Cassa
       </h2>
       <div className="">
         <div className="overflow-x-auto">

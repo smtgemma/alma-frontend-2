@@ -1,16 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { RiEdit2Fill } from "react-icons/ri";
-import { GoDownload } from "react-icons/go";
-import { IoIosShareAlt } from "react-icons/io";
-import { useRouter, usePathname } from "next/navigation";
-import SendPlanToExpert from "../dashboard/adminDashboard/SendPlanToExpert";
 import AdminEditBusinessPlan from "./AdminEditBusinessPlan";
-import { generateEmpathyPDF } from "../generated-plans-graph/pdf-downloader/PdfDownload";
-import { generateWordDocument } from "./DocDownload";
-import DownloadOptionsModal from "./DownloadOptionsModal";
-import SocialShareModal from "../shared/SocialShareModal";
-import Link from "next/link";
 
 interface GeneratedBusinessPlanforAdminProps {
   executiveSummary: string;
@@ -36,6 +26,11 @@ interface GeneratedBusinessPlanforAdminProps {
   ratiosAnalysis?: any[];
   productionSalesForecast?: any[];
   cashFlowAnalysisText?: string; // Add missing field
+  // Floating button handlers passed from parent
+  onEdit?: () => void;
+  onDownload?: () => void;
+  onSocialShare?: () => void;
+  shouldShowShareDownload?: boolean;
 }
 
 const GeneratedBusinessPlanforAdmin = ({
@@ -62,21 +57,12 @@ const GeneratedBusinessPlanforAdmin = ({
   ratiosAnalysis = [],
   productionSalesForecast = [],
   cashFlowAnalysisText = "",
+  onEdit,
+  onDownload,
+  onSocialShare,
+  shouldShowShareDownload = false,
 }: GeneratedBusinessPlanforAdminProps) => {
-  const router = useRouter();
-  const pathname = usePathname();
   const [isEditing, setIsEditing] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [isSocialShareModalOpen, setIsSocialShareModalOpen] = useState(false);
-
-  // Check if coming from expert review route using URL parameter
-  const isFromExpertReview =
-    typeof window !== "undefined" &&
-    new URLSearchParams(window.location.search).get("from") === "expert-review";
-
-  // Only show Share/Download if coming from Expert Review
-  const shouldShowShareDownload = isFromExpertReview;
   const [currentPlanData, setCurrentPlanData] = useState({
     executiveSummary,
     businessOverview,
@@ -89,14 +75,6 @@ const GeneratedBusinessPlanforAdmin = ({
     managementTeam,
   });
 
-  const handleEdit = () => {
-    if (planId) {
-      router.push(`/update-business-plan?id=${planId}`);
-    } else {
-      router.push("/update-business-plan");
-    }
-  };
-
   const handleUpdate = (updatedData: any) => {
     console.log("Plan updated with data:", updatedData);
     setCurrentPlanData(updatedData);
@@ -108,49 +86,6 @@ const GeneratedBusinessPlanforAdmin = ({
 
   const handleCancel = () => {
     setIsEditing(false);
-  };
-
-  const handleDownloadClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleShareClick = () => {
-    setIsShareModalOpen(true);
-  };
-
-  const handleSocialShareClick = () => {
-    setIsSocialShareModalOpen(true);
-  };
-
-  const handleDownloadPDF = () => {
-    // Use the original PDF download functionality
-    generateEmpathyPDF("businessplan");
-  };
-
-  const handleDownloadDOC = () => {
-    // Use the comprehensive Word document download functionality
-    generateWordDocument({
-      executiveSummary: currentPlanData.executiveSummary,
-      businessOverview: currentPlanData.businessOverview,
-      marketAnalysis: currentPlanData.marketAnalysis,
-      businessModel: currentPlanData.businessModel,
-      marketingSalesStrategy: currentPlanData.marketingSalesStrategy,
-      sectorStrategy: currentPlanData.sectorStrategy,
-      fundingSources: currentPlanData.fundingSources,
-      operationsPlan: currentPlanData.operationsPlan,
-      managementTeam: currentPlanData.managementTeam || managementTeam,
-      financialHighlights,
-      cashFlowAnalysis,
-      profitLossProjection,
-      balanceSheet,
-      netFinancialPosition,
-      debtStructure,
-      keyRatios,
-      operatingCostBreakdown,
-      financialAnalysis,
-      ratiosAnalysis,
-      productionSalesForecast,
-    });
   };
 
   // If editing mode, show edit component
@@ -384,120 +319,6 @@ const GeneratedBusinessPlanforAdmin = ({
         </div>
       </main>
 
-      {/* Floating Action Buttons */}
-      <div className=" max-w-[1440px] mx-auto fixed bottom-8 right-8 flex justify-end gap-4 cursor-pointer">
-        {shouldShowShareDownload ? (
-          // Share and Download buttons for expert review
-          <>
-            <button
-              onClick={handleSocialShareClick}
-              className="w-14 h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"
-              aria-label="Share business plan"
-            >
-              <IoIosShareAlt className="w-6 h-6" />
-            </button>
-            <button
-              onClick={handleDownloadClick}
-              className="w-14 h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"
-              aria-label="Download business plan"
-            >
-              <GoDownload className="w-6 h-6" />
-            </button>
-          </>
-        ) : (
-          // Edit button for other routes
-          <button
-            onClick={handleEdit}
-            className="w-14 h-14 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center text-white cursor-pointer"
-            aria-label="Edit business plan"
-          >
-            <RiEdit2Fill className="w-6 h-6" />
-          </button>
-        )}
-      </div>
-
-      {/* Download Options Modal */}
-      <DownloadOptionsModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onDownloadPDF={handleDownloadPDF}
-        onDownloadDOC={handleDownloadDOC}
-      />
-
-      {/* Social Share Modal */}
-      <SocialShareModal
-        isOpen={isSocialShareModalOpen}
-        onClose={() => setIsSocialShareModalOpen(false)}
-        url={typeof window !== "undefined" ? window.location.href : ""}
-        title="Pianifico Suite"
-        description="Check out this amazing business plan generated by AI! This comprehensive plan includes executive summary, market analysis, and financial projections."
-      />
-
-      {/* Share Modal */}
-      {isShareModalOpen && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">
-                Expert's Review
-              </h3>
-              <button
-                onClick={() => setIsShareModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <p className="text-gray-600 mb-6">
-              Enter expert's email address to send the selected plan for review
-              and feedback.
-            </p>
-
-            <div className="space-y-4">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Email Address:
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  placeholder="Enter email address"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
-                  required
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-4">
-                <button
-                  onClick={() => setIsShareModalOpen(false)}
-                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-                  Send
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

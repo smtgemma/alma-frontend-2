@@ -18,10 +18,10 @@ const Footer = () => {
                     />
                 </div>
                 <div>
-                    <h3 className="text-black font-medium text-2xl ">Business AI Plan</h3>
+                    <h3 className="text-black font-medium text-2xl ">Pianifico Suite</h3>
                 </div>
             </div>
-            <p className='text-[20px] text-[#475466] font-medium text-center py-6'>Contact us at: help@businessaiPlan.info</p>
+            <p className='text-base md:text-[20px] text-[#475466] font-medium text-center py-6'>Contattaci a: help@businessaiPlan.info</p>
             <div className='flex items-center justify-center gap-4 mt-4'>
                 <FaFacebook className='text-blue-600 text-4xl' />
                 <FaXTwitter className='text-4xl' />
