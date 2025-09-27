@@ -79,11 +79,7 @@ export default function SubscriptionPlan() {
         }
       }
 
-      if (
-        respData.success &&
-        respData?.data?.approvalUrl &&
-        respData?.data?.paypalSubscriptionId
-      ) {
+      if (respData.success && respData?.data?.approvalUrl && respData?.data?.paypalSubscriptionId) {
         try {
           if (typeof window !== "undefined") {
             sessionStorage.setItem(
