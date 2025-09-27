@@ -1,17 +1,30 @@
-'use client';
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { FiUpload } from "react-icons/fi";
-import { useGetUserProfileQuery, useUpdateProfileMutation, useUploadProfileImageMutation } from "@/redux/api/auth/authApi";
+import {
+  useGetUserProfileQuery,
+  useUpdateProfileMutation,
+  useUploadProfileImageMutation,
+} from "@/redux/api/auth/authApi";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import { store } from "@/redux/store";
 import { CiLock } from "react-icons/ci";
-import DashboardLoading from './soloDashboard/DashboardLoading';
+import DashboardLoading from "./soloDashboard/DashboardLoading";
 
-const Label = ({ htmlFor, children }: { htmlFor?: string; children: React.ReactNode }) => (
-  <label htmlFor={htmlFor} className="text-lg text-accent font-normal mb-1 block">
+const Label = ({
+  htmlFor,
+  children,
+}: {
+  htmlFor?: string;
+  children: React.ReactNode;
+}) => (
+  <label
+    htmlFor={htmlFor}
+    className="text-lg text-accent font-normal mb-1 block"
+  >
     {children}
   </label>
 );
@@ -19,36 +32,44 @@ const Label = ({ htmlFor, children }: { htmlFor?: string; children: React.ReactN
 export default function MyProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    firstName: "",
+    lastName: "",
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Get user from Redux store
-  const { user } = useSelector((state: ReturnType<typeof store.getState>) => state.user);
+  const { user } = useSelector(
+    (state: ReturnType<typeof store.getState>) => state.user
+  );
 
   // API hooks
-  const { data: profileData, isLoading, error, refetch } = useGetUserProfileQuery({});
+  const {
+    data: profileData,
+    isLoading,
+    error,
+    refetch,
+  } = useGetUserProfileQuery({});
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
-  const [uploadImage, { isLoading: isUploading }] = useUploadProfileImageMutation();
+  const [uploadImage, { isLoading: isUploading }] =
+    useUploadProfileImageMutation();
 
   // Initialize form data when profile data is loaded
   useEffect(() => {
     if (profileData?.data) {
       setFormData({
-        firstName: profileData.data.firstName || '',
-        lastName: profileData.data.lastName || '',
+        firstName: profileData.data.firstName || "",
+        lastName: profileData.data.lastName || "",
       });
     }
   }, [profileData]);
 
   // Handle form input changes
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -74,7 +95,7 @@ export default function MyProfile() {
 
     try {
       const formData = new FormData();
-      formData.append('profileImage', selectedImage);
+      formData.append("profileImage", selectedImage);
 
       await uploadImage(formData).unwrap();
       toast.success("Profile image updated successfully!");
@@ -117,8 +138,8 @@ export default function MyProfile() {
   const handleCancel = () => {
     if (profileData?.data) {
       setFormData({
-        firstName: profileData.data.firstName || '',
-        lastName: profileData.data.lastName || '',
+        firstName: profileData.data.firstName || "",
+        lastName: profileData.data.lastName || "",
       });
     }
     setSelectedImage(null);
@@ -142,7 +163,7 @@ export default function MyProfile() {
     if (user) {
       return `${user.firstName} ${user.lastName}`;
     }
-    return '';
+    return "";
   };
 
   // Get user email
@@ -153,15 +174,15 @@ export default function MyProfile() {
     if (user?.email) {
       return user.email;
     }
-    return '';
+    return "";
   };
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <DashboardLoading 
-          type="profile" 
-          title="Loading Profile" 
+        <DashboardLoading
+          type="profile"
+          title="Loading Profile"
           message="Retrieving your account information..."
         />
       </div>
@@ -171,9 +192,9 @@ export default function MyProfile() {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <DashboardLoading 
-          type="profile" 
-          title="Error Loading Profile" 
+        <DashboardLoading
+          type="profile"
+          title="Error Loading Profile"
           message="Failed to load your profile. Please try again."
         />
       </div>
@@ -184,9 +205,9 @@ export default function MyProfile() {
   if (!profileData?.data && !user) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <DashboardLoading 
-          type="profile" 
-          title="No Profile Data" 
+        <DashboardLoading
+          type="profile"
+          title="No Profile Data"
           message="No user data available. Please contact support."
         />
       </div>
@@ -199,7 +220,9 @@ export default function MyProfile() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center pb-10 border-b-2 border-b-[#99A6B8] gap-4">
         <div>
           <h1 className="text-[24px] mb-2 font-medium">Personal Info</h1>
-          <p className="text-[1rem] font-regular text-info">Upload your photo and personal info here</p>
+          <p className="text-[1rem] font-regular text-info">
+            Upload your photo and personal info here
+          </p>
         </div>
 
         <div className="flex gap-4 w-full md:w-auto">
@@ -225,7 +248,9 @@ export default function MyProfile() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 py-8 border-b border-b-[#99a6b888] overflow-x-hidden">
           <div>
             <h2 className="font-normal mb-2 text-[20px]">Your Photo</h2>
-            <p className="text-[1rem] font-regular text-info">This photo will be displayed on your profile</p>
+            <p className="text-[1rem] font-regular text-info">
+              This photo will be displayed on your profile
+            </p>
           </div>
           <div className="flex flex-col-reverse md:flex-row gap-4 items-center">
             <div className="flex flex-col gap-2">
@@ -279,7 +304,7 @@ export default function MyProfile() {
                 placeholder="First Name"
                 value={formData.firstName}
                 onChange={(e) => {
-                  handleInputChange('firstName', e.target.value);
+                  handleInputChange("firstName", e.target.value);
                   setIsEditing(true);
                 }}
                 disabled={isUpdating}
@@ -293,7 +318,7 @@ export default function MyProfile() {
                 placeholder="Last Name"
                 value={formData.lastName}
                 onChange={(e) => {
-                  handleInputChange('lastName', e.target.value);
+                  handleInputChange("lastName", e.target.value);
                   setIsEditing(true);
                 }}
                 disabled={isUpdating}
@@ -336,7 +361,6 @@ export default function MyProfile() {
             </div>
             {/* <p className="text-sm text-gray-500 mt-1">Email cannot be changed</p> */}
           </div>
-
         </div>
 
         {/* Account Status Section */}
@@ -345,8 +369,16 @@ export default function MyProfile() {
           <div className="w-full max-w-[600px] space-y-4">
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Email Verified:</span>
-              <span className={`text-sm font-medium ${profileData?.data?.isEmailVerified ? 'text-green-600' : 'text-red-600'}`}>
-                {profileData?.data?.isEmailVerified ? '✓ Verified' : '✗ Not Verified'}
+              <span
+                className={`text-sm font-medium ${
+                  profileData?.data?.isEmailVerified
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {profileData?.data?.isEmailVerified
+                  ? "✓ Verified"
+                  : "✗ Not Verified"}
               </span>
             </div>
             {/* <div className="flex justify-between items-center">
@@ -357,79 +389,116 @@ export default function MyProfile() {
             </div> */}
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Pro Member:</span>
-              <span className={`text-sm font-medium ${profileData?.data?.isProMember ? 'text-green-600' : 'text-gray-600'}`}>
-                {profileData?.data?.isProMember ? '✓ Pro Member' : 'Free User'}
+              <span
+                className={`text-sm font-medium ${
+                  profileData?.data?.isProMember
+                    ? "text-green-600"
+                    : "text-gray-600"
+                }`}
+              >
+                {profileData?.data?.isProMember ? "✓ Pro Member" : "Free User"}
               </span>
             </div>
             {profileData?.data?.membershipEnds && (
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Membership Ends:</span>
                 <span className="text-sm font-medium text-gray-800">
-                  {new Date(profileData.data.membershipEnds).toLocaleDateString()}
+                  {new Date(
+                    profileData.data.membershipEnds
+                  ).toLocaleDateString()}
                 </span>
               </div>
             )}
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">User ID:</span>
               <span className="text-sm font-medium text-gray-800">
-                {profileData?.data?.id || user?.id || 'N/A'}
+                {profileData?.data?.id || user?.id || "N/A"}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Role:</span>
               <span className="text-sm font-medium text-gray-800">
-                {profileData?.data?.role || user?.role || 'N/A'}
+                {profileData?.data?.role || user?.role || "N/A"}
               </span>
             </div>
           </div>
         </div>
 
         {/* Subscription History Section */}
-        {profileData?.data?.Subscription && profileData.data.Subscription.length > 0 && (
-          <div className="flex flex-col md:flex-row justify-between items-start py-8 border-b border-b-[#99a6b888]">
-            <h2 className="font-normal mb-2 text-[20px]">Subscription History</h2>
-            <div className="w-full max-w-[600px]">
-              <div className="space-y-3">
-                {profileData.data.Subscription.slice(0, 3).map((sub:any, index:number) => (
-                  <div key={sub.id} className="bg-gray-50 p-3 rounded-lg">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-gray-800">
-                        Subscription #{index + 1}
-                      </span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${sub.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                        }`}>
-                        {sub.status}
-                      </span>
-                    </div>
-                    <div className="text-xs text-gray-600 space-y-1">
-                      <div>Started: {new Date(sub.startDate).toLocaleDateString()}</div>
-                      {sub.endDate && <div>Ended: {new Date(sub.endDate).toLocaleDateString()}</div>}
-                      <div>Plan ID: {sub.planId}</div>
-                      <div>Stripe ID: {sub.stripeSubscriptionId}</div>
-                    </div>
-                  </div>
-                ))}
-                {profileData.data.Subscription.length > 3 && (
-                  <p className="text-xs text-gray-500 text-center">
-                    +{profileData.data.Subscription.length - 3} more subscriptions
-                  </p>
-                )}
+        {profileData?.data?.Subscription &&
+          profileData.data.Subscription.length > 0 && (
+            <div className="flex flex-col md:flex-row justify-between items-start py-8 border-b border-b-[#99a6b888]">
+              <h2 className="font-normal mb-2 text-[20px]">
+                Subscription History
+              </h2>
+              <div className="w-full max-w-[600px]">
+                <div className="space-y-3">
+                  {profileData.data.Subscription.slice(0, 3).map(
+                    (sub: any, index: number) => (
+                      <div key={sub.id} className="bg-gray-50 p-3 rounded-lg">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-sm font-medium text-gray-800">
+                            Subscription #{index + 1}
+                          </span>
+                          <span
+                            className={`text-xs px-2 py-1 rounded-full ${
+                              sub.status === "ACTIVE"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
+                            {sub.status}
+                          </span>
+                        </div>
+                        <div className="text-xs text-gray-600 space-y-1">
+                          <div>
+                            Started:{" "}
+                            {new Date(sub.startDate).toLocaleDateString()}
+                          </div>
+                          {sub.endDate && (
+                            <div>
+                              Ended:{" "}
+                              {new Date(sub.endDate).toLocaleDateString()}
+                            </div>
+                          )}
+                          <div>Plan ID: {sub.planId}</div>
+                          <div>Stripe ID: {sub.stripeSubscriptionId}</div>
+                        </div>
+                      </div>
+                    )
+                  )}
+                  {profileData.data.Subscription.length > 3 && (
+                    <p className="text-xs text-gray-500 text-center">
+                      +{profileData.data.Subscription.length - 3} more
+                      subscriptions
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* Debug Information (for development) */}
-        {process.env.NODE_ENV === 'development' && (
+        {process.env.NODE_ENV === "development" && (
           <div className="flex flex-col md:flex-row justify-between items-start py-8 border-b border-b-[#99a6b888]">
             <h2 className="font-normal mb-2 text-[20px]">Debug Info</h2>
             <div className="w-full max-w-[600px]">
               <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-xs text-gray-600 mb-2">Profile Data Loaded: {profileData ? 'Yes' : 'No'}</p>
-                <p className="text-xs text-gray-600 mb-2">User Data Loaded: {user ? 'Yes' : 'No'}</p>
-                <p className="text-xs text-gray-600 mb-2">Current Name: {getDisplayName()}</p>
-                <p className="text-xs text-gray-600 mb-2">Current Email: {getDisplayEmail()}</p>
-                <p className="text-xs text-gray-600">Profile Image: {getProfileImage()}</p>
+                <p className="text-xs text-gray-600 mb-2">
+                  Profile Data Loaded: {profileData ? "Yes" : "No"}
+                </p>
+                <p className="text-xs text-gray-600 mb-2">
+                  User Data Loaded: {user ? "Yes" : "No"}
+                </p>
+                <p className="text-xs text-gray-600 mb-2">
+                  Current Name: {getDisplayName()}
+                </p>
+                <p className="text-xs text-gray-600 mb-2">
+                  Current Email: {getDisplayEmail()}
+                </p>
+                <p className="text-xs text-gray-600">
+                  Profile Image: {getProfileImage()}
+                </p>
               </div>
             </div>
           </div>

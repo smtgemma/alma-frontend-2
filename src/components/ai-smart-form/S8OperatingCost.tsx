@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
-
+//
 interface OperatingCostItem {
   id: string;
   name: string;
@@ -48,18 +48,18 @@ export default function S8OperatingCost() {
     }
 
     // Calculate initial total investment for default values
-    const initialInvestment = step6Data?.investmentItems 
+    const initialInvestment = step6Data?.investmentItems
       ? step6Data.investmentItems.reduce((total: number, item: any) => {
           const amount = parseFloat(item.amount) || 0;
           return total + amount;
         }, 0)
       : 100000; // Default fallback
 
-      console.log(initialInvestment);
+    console.log(initialInvestment);
 
     // Helper function to calculate default total cost based on percentage
     const calculateDefaultTotalCost = (percentage: string): string => {
-      const percentageValue = parseFloat(percentage.replace('%', '')) || 0;
+      const percentageValue = parseFloat(percentage.replace("%", "")) || 0;
       const totalCost = (percentageValue / 100) * initialInvestment;
       return `€${totalCost.toLocaleString("en-US", {
         minimumFractionDigits: 0,
@@ -151,7 +151,7 @@ export default function S8OperatingCost() {
   // Helper function to extract revenue from range strings (e.g., "€50,000 - €150,000")
   const extractRevenueValue = (revenueString: string): number => {
     if (!revenueString) return 0;
-    
+
     // Handle text descriptions like "Expected first-year revenue: approximately $750,000"
     // Extract all numbers with currency symbols from the text
     const currencyMatches = revenueString.match(/[€$£¥]\s*[\d,]+/g);
@@ -160,40 +160,43 @@ export default function S8OperatingCost() {
       const lastMatch = currencyMatches[currencyMatches.length - 1];
       return extractNumericValue(lastMatch);
     }
-    
+
     // Handle standalone numbers like "750,000" or "750000"
     const numberMatches = revenueString.match(/[\d,]+/g);
     if (numberMatches && numberMatches.length > 0) {
       // Take the largest number found
-      const numbers = numberMatches.map(match => parseFloat(match.replace(/,/g, '')));
+      const numbers = numberMatches.map((match) =>
+        parseFloat(match.replace(/,/g, ""))
+      );
       const largestNumber = Math.max(...numbers);
-      if (largestNumber > 1000) { // Assume it's a revenue amount if > 1000
+      if (largestNumber > 1000) {
+        // Assume it's a revenue amount if > 1000
         return largestNumber;
       }
     }
-    
+
     // Handle range formats like "€50,000 - €150,000"
-    if (revenueString.includes('-')) {
+    if (revenueString.includes("-")) {
       // Extract the higher value from the range for conservative estimation
-      const parts = revenueString.split('-');
+      const parts = revenueString.split("-");
       if (parts.length === 2) {
         const higherValue = parts[1].trim();
         return extractNumericValue(higherValue);
       }
     }
-    
+
     // Handle "Under €50,000" format
-    if (revenueString.toLowerCase().includes('under')) {
-      const value = revenueString.replace(/under/gi, '').trim();
+    if (revenueString.toLowerCase().includes("under")) {
+      const value = revenueString.replace(/under/gi, "").trim();
       return extractNumericValue(value);
     }
-    
+
     // Handle "Over €500,000" format
-    if (revenueString.toLowerCase().includes('over')) {
-      const value = revenueString.replace(/over/gi, '').trim();
+    if (revenueString.toLowerCase().includes("over")) {
+      const value = revenueString.replace(/over/gi, "").trim();
       return extractNumericValue(value);
     }
-    
+
     // Handle direct currency values like "€100,000"
     return extractNumericValue(revenueString);
   };
@@ -245,7 +248,10 @@ export default function S8OperatingCost() {
   ) => {
     // Calculate total operating costs
     const totalOperatingCosts = operatingCostItems.reduce((total, item) => {
-      const itemCost = calculateItemTotalCost(item.percentage, totalInitialInvestment);
+      const itemCost = calculateItemTotalCost(
+        item.percentage,
+        totalInitialInvestment
+      );
       return total + itemCost;
     }, 0);
 
@@ -283,7 +289,10 @@ export default function S8OperatingCost() {
   // Update item total cost when percentage changes
   const updateItemTotalCost = (id: string, percentage: string) => {
     const totalInitialInvestment = calculateTotalInitialInvestment();
-    const totalCost = calculateItemTotalCost(percentage, totalInitialInvestment);
+    const totalCost = calculateItemTotalCost(
+      percentage,
+      totalInitialInvestment
+    );
 
     setForm((prev) => ({
       ...prev,
@@ -298,11 +307,14 @@ export default function S8OperatingCost() {
   // Recalculate all item costs when total initial investment changes
   const recalculateAllItemCosts = () => {
     const totalInitialInvestment = calculateTotalInitialInvestment();
-    
+
     setForm((prev) => ({
       ...prev,
       operatingCostItems: prev.operatingCostItems.map((item) => {
-        const totalCost = calculateItemTotalCost(item.percentage, totalInitialInvestment);
+        const totalCost = calculateItemTotalCost(
+          item.percentage,
+          totalInitialInvestment
+        );
         return { ...item, totalCost: formatCurrency(totalCost) };
       }),
     }));
@@ -373,7 +385,7 @@ export default function S8OperatingCost() {
   ) => {
     if (field === "percentage") {
       // Ensure percentage has % symbol if not present
-      const formattedPercentage = value.includes('%') ? value : `${value}%`;
+      const formattedPercentage = value.includes("%") ? value : `${value}%`;
       // Update the percentage and recalculate total cost
       updateItemTotalCost(id, formattedPercentage);
     } else {
@@ -411,12 +423,12 @@ export default function S8OperatingCost() {
         <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
-            Step 08 out of 10
+            Passo 08 di 10
           </p>
 
           <div className="text-center mb-8">
             <h2 className="text-[2rem] text-accent font-medium">
-              Operating Costs
+              Costi Operativi
             </h2>
           </div>
 
@@ -442,12 +454,12 @@ export default function S8OperatingCost() {
                 {/* Question: What are your operating costs? */}
                 <div>
                   <label className="text-[24px] font-medium text-accent">
-                    What are your operating costs?
+                    Quali sono i tuoi costi operativi?
                   </label>
                   <div className="mt-12 border-b border-b-[#888888]/30 ">
                     <h1 className="question-text pb-2">
-                      Input Annual Operating Expenses (Edit percentages or leave
-                      as is):
+                      Inserisci Spese Operative Annuali (Modifica percentuali o
+                      lascia così):
                     </h1>
                   </div>
                 </div>
@@ -459,20 +471,20 @@ export default function S8OperatingCost() {
                       <thead>
                         <tr className="space-x-2">
                           <th className="text-left py-3 px-4 text-[1rem] font-medium text-accent w-1/2">
-                            Operating Cost Item
+                            Elemento di Costo Operativo
                           </th>
                           <th className="text-center py-3 px-2 mx-4 text-[1rem] font-medium text-accent w-1/4 border-b border-b-[#888888]/30">
-                            % of Revenue
+                            % dei Ricavi
                             <br />
                             <span className="text-sm font-normal">
-                              (pre-set but changeable)
+                              (preimpostato ma modificabile)
                             </span>
                           </th>
                           <th className="text-center py-3 px-2 mx-4 text-[1rem] font-medium text-accent w-1/4 border-b border-b-[#888888]/30">
-                            Total Cost
+                            Costo Totale
                             <br />
                             <span className="text-sm font-normal">
-                              (automatically calculated)
+                              (calcolato automaticamente)
                             </span>
                           </th>
                         </tr>
@@ -516,7 +528,7 @@ export default function S8OperatingCost() {
                   <div className="space-y-4 px-4">
                     <div className="flex flex-col justify-start items-start py-2">
                       <span className="question-text">
-                        Your first year total cost is:
+                        Il tuo costo totale del primo anno è:
                       </span>
                       <span className="text-lg font-bold  text-accent">
                         {form.firstYearTotalCost}
@@ -524,7 +536,7 @@ export default function S8OperatingCost() {
                     </div>
                     <div className="flex flex-col justify-start items-start py-2">
                       <span className="question-text">
-                        Your first year net profit is:
+                        Il tuo profitto netto del primo anno è:
                       </span>
                       <span className="text-lg font-bold  text-accent">
                         {form.firstYearNetProfit}
@@ -532,7 +544,7 @@ export default function S8OperatingCost() {
                     </div>
                     <div className="flex flex-col justify-start items-start py-2">
                       <span className="question-text">
-                        Your net profit margin is:
+                        Il tuo margine di profitto netto è:
                       </span>
                       <span className="text-lg font-bold text-accent">
                         {form.netProfitMargin}
@@ -548,13 +560,13 @@ export default function S8OperatingCost() {
                     onClick={prevStep}
                     className="w-full py-3 cursor-pointer bg-white border border-[#888888] text-accent text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Back
+                    Indietro
                   </button>
                   <button
                     type="submit"
                     className="w-full py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Next
+                    Avanti
                   </button>
                 </div>
               </form>

@@ -35,7 +35,7 @@ export const LogoutPopup = ({
           </div>
           <div>
             <h1 className="text-[20px] font-medium text-gray-900 text-center">
-              Are you sure you want to <br /> Log out?
+              Sei sicuro di voler <br /> Disconnetterti?
             </h1>
           </div>
 
@@ -44,14 +44,14 @@ export const LogoutPopup = ({
               onClick={onConfirm}
               className="px-10 py-2 rounded-md bg-white text-accent border border-accent w-full cursor-pointer"
             >
-              Logout
+              Disconnetti
             </button>
 
             <button
               onClick={onClose}
               className="px-10 py-2 rounded-md bg-primary text-white w-full cursor-pointer"
             >
-              Cancel
+              Annulla
             </button>
           </div>
         </div>

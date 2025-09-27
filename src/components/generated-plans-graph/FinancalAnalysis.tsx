@@ -17,41 +17,53 @@ export default function FinancialAnalysis({
 
   // Define the metrics to display in rows
   const metrics = [
-    { key: 'sales_revenue', label: 'Sales Revenue' },
-    { key: 'production_value', label: 'Production Value' },
-    { key: 'gross_operating_margin', label: 'Gross Operating Margin' },
-    { key: 'ebit', label: 'EBIT' },
-    { key: 'ebt', label: 'EBT' },
-    { key: 'net_income', label: 'Net Income' },
-    { key: 'gross_operating_cash_flow', label: 'Gross Operating Cash Flow' },
-    { key: 'working_capital_change', label: 'Working Capital Change' },
-    { key: 'current_management_cash_flow', label: 'Current Management Cash Flow' },
-    { key: 'operating_cash_flow', label: 'Operating Cash Flow' },
-    { key: 'debt_service_cash_flow', label: 'Debt Service Cash Flow' },
-    { key: 'shareholders_cash_flow', label: 'Shareholders Cash Flow' },
-    { key: 'net_cash_flow', label: 'Net Cash Flow' },
-    { key: 'net_tangible_assets', label: 'Net Tangible Assets' },
-    { key: 'net_intangible_assets', label: 'Net Intangible Assets' },
-    { key: 'financial_assets', label: 'Financial Assets' },
-    { key: 'trade_assets', label: 'Trade Assets' },
-    { key: 'inventory', label: 'Inventory' },
-    { key: 'deferred_liquidity', label: 'Deferred Liquidity' },
-    { key: 'immediate_liquidity', label: 'Immediate Liquidity' },
-    { key: 'equity', label: 'Equity' },
-    { key: 'long_term_debt', label: 'Long Term Debt' },
-    { key: 'short_term_debt', label: 'Short Term Debt' },
-    { key: 'net_financial_position', label: 'Net Financial Position' },
-    { key: 'mortgage_loans', label: 'Mortgage Loans' },
-    { key: 'other_financial_debts', label: 'Other Financial Debts' },
-    { key: 'cash_and_banks', label: 'Cash & Banks' },
-    { key: 'dividends', label: 'Dividends' },
+    { key: "sales_revenue", label: "Ricavi delle vendite" },
+    { key: "production_value", label: "Valore della produzione" },
+    { key: "gross_operating_margin", label: "Margine operativo lordo" },
+    { key: "ebit", label: "EBIT" },
+    { key: "ebt", label: "EBT" },
+    { key: "net_income", label: "Reddito netto" },
+    {
+      key: "gross_operating_cash_flow",
+      label: "Flusso di cassa operativo lordo",
+    },
+    {
+      key: "working_capital_change",
+      label: "Variazione del capitale circolante",
+    },
+    {
+      key: "current_management_cash_flow",
+      label: "Flusso di cassa di gestione corrente",
+    },
+    { key: "operating_cash_flow", label: "Flusso di cassa operativo" },
+    {
+      key: "debt_service_cash_flow",
+      label: "Flusso di cassa per il servizio del debito",
+    },
+    { key: "shareholders_cash_flow", label: "Flusso di cassa degli azionisti" },
+    { key: "net_cash_flow", label: "Flusso di cassa netto" },
+    { key: "net_tangible_assets", label: "Attività materiali nette" },
+    { key: "net_intangible_assets", label: "Attività immateriali nette" },
+    { key: "financial_assets", label: "Attività finanziarie" },
+    { key: "trade_assets", label: "Attività commerciali" },
+    { key: "inventory", label: "Inventario" },
+    { key: "deferred_liquidity", label: "Liquidità differita" },
+    { key: "immediate_liquidity", label: "Liquidità immediata" },
+    { key: "equity", label: "Patrimonio netto" },
+    { key: "long_term_debt", label: "Debito a lungo termine" },
+    { key: "short_term_debt", label: "Debito a breve termine" },
+    { key: "net_financial_position", label: "Posizione finanziaria netta" },
+    { key: "mortgage_loans", label: "Mutui ipotecari" },
+    { key: "other_financial_debts", label: "Altri debiti finanziari" },
+    { key: "cash_and_banks", label: "Cassa e banche" },
+    { key: "dividends", label: "Dividendi" },
   ];
 
   return (
     <div className="mx-auto space-y-10 mt-10">
       {/* Comprehensive Financial Analysis Table */}
-      <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
-        Financial Analysis
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+        12. Analisi Finanziaria
       </h2>
       <div className="rounded-lg border border-gray-200">
         <div className="overflow-x-auto">
@@ -59,11 +71,12 @@ export default function FinancialAnalysis({
             <thead>
               <tr className="bg-[#E6D8FF]">
                 <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  Metrics
+                  {/* Metrics */}
+                  Metriche
                 </th>
                 {financialAnalysis.map((item) => (
-                  <th 
-                    key={item.year} 
+                  <th
+                    key={item.year}
                     className="px-4 py-3 text-left text-sm font-medium text-[#121417]"
                   >
                     {item.year}
@@ -83,11 +96,13 @@ export default function FinancialAnalysis({
                     {metric.label}
                   </td>
                   {financialAnalysis.map((item) => (
-                    <td 
-                      key={`${item.year}-${metric.key}`} 
+                    <td
+                      key={`${item.year}-${metric.key}`}
                       className="px-4 py-3 text-sm font-normal text-[#61758A]"
                     >
-                      {formatCurrency(item[metric.key as keyof typeof item] as number)}
+                      {formatCurrency(
+                        item[metric.key as keyof typeof item] as number
+                      )}
                     </td>
                   ))}
                 </tr>

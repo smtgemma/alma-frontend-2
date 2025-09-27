@@ -48,6 +48,7 @@ const SubscriptionPlan = () => {
       }
     }
   }, [plansData]);
+  console.log("soloPlanData, teamPlanData", soloPlanData, teamPlanData);
 
   // get active plan
   const currentPlanData = activeTab === "solo" ? soloPlanData : teamPlanData;
@@ -67,9 +68,9 @@ const SubscriptionPlan = () => {
           features: currentPlanData.facilities,
         },
       }).unwrap();
-      toast.success("Plan updated successfully!");
+      toast.success("Piano aggiornato con successo!");
     } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to update plan");
+      toast.error(error?.data?.message || "Impossibile aggiornare il piano");
     }
   };
 
@@ -77,15 +78,16 @@ const SubscriptionPlan = () => {
     return <Loading />;
   }
 
-  if (!soloPlanData || !teamPlanData) {
-    return <div>No plans found</div>;
+  if (!soloPlanData && !teamPlanData) {
+    return <div>Nessun piano trovato</div>;
   }
+  console.log("currentPlanData", currentPlanData);
 
   return (
     <div className="space-y-6 px-4 lg:px-6 py-6">
       <div className="">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-accent mb-6">
-          Subscription plan
+          Piano di Abbonamento
         </h2>
 
         {/* Tabs */}
@@ -99,7 +101,7 @@ const SubscriptionPlan = () => {
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
-              Solo Plan
+              Piano Solo
             </button>
             <button
               onClick={() => setActiveTab("team")}
@@ -109,7 +111,7 @@ const SubscriptionPlan = () => {
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
-              Team Plan
+              Piano Team
             </button>
           </div>
         </div>
@@ -120,7 +122,7 @@ const SubscriptionPlan = () => {
             {/* Plan Title */}
             <div className="md:w-1/2">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Plan Title
+                Titolo Piano
               </label>
               <input
                 type="text"
@@ -138,7 +140,7 @@ const SubscriptionPlan = () => {
             {/* Plan Price */}
             <div className="md:w-1/2">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Plan Price/Per {activeTab === "solo" ? "Plan" : "Month"}
+                Prezzo Piano/Per {activeTab === "solo" ? "Piano" : "Mese"}
               </label>
               <div className="flex">
                 <button className="bg-primary text-white px-4 py-2 rounded-l-lg border border-primary/80">
@@ -162,7 +164,7 @@ const SubscriptionPlan = () => {
           {/* Supporting Text */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Supporting Text (No more than 50 characters)
+              Testo di Supporto (Massimo 50 caratteri)
             </label>
             <textarea
               value={currentPlanData.supportingText}
@@ -184,14 +186,15 @@ const SubscriptionPlan = () => {
           {/* Plan Facilities */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-4">
-              Plan Facilities
+              Strutture del Piano
             </label>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {currentPlanData.facilities.map(
                 (facility: string, index: number) => (
                   <div key={index}>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Plan Facilities {(index + 1).toString().padStart(2, "0")}
+                      Strutture del Piano{" "}
+                      {(index + 1).toString().padStart(2, "0")}
                     </label>
                     <input
                       type="text"
@@ -219,13 +222,13 @@ const SubscriptionPlan = () => {
             className="px-6 cursor-pointer py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
             onClick={() => window.location.reload()}
           >
-            Cancel
+            Annulla
           </button>
           <button
             onClick={handleSave}
             className="px-6 cursor-pointer py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition-colors duration-200"
           >
-            Save Changes
+            Salva Modifiche
           </button>
         </div>
       </div>

@@ -38,26 +38,26 @@ export default function HeroSection() {
               </div>
               <div className="flex items-center">
                 <p className="text-[0.9rem] md:text-[1rem] text-accent font-medium">
-                  Faster Payment Gateways
+                  Gateway di pagamento più veloci
                 </p>
               </div>
             </div>
 
             <h1 className="text-4xl md:text-6xl font-medium text-accent leading-tight">
-              Unlock Your{" "}
+              Sblocca la Tua{" "}
               <span className="text-primary">
-                Vision. <br /> Launch{" "}
+                Visione. <br /> Lancia{" "}
               </span>
-              with Confidence
+              con Fiducia
             </h1>
             <p className="text-[#475466] text-[16px] md:text-[20px] font-medium mt-4 max-w-xl">
-              Our AI transforms your passion into a powerful business plan.
-              Fast. Zero stress. All strategy.
+              La nostra IA trasforma la tua passione in un piano aziendale
+              potente. Veloce. Zero stress. Tutta strategia.
             </p>
 
             <Link href="/ai-smart-form">
               <button className="flex items-center gap-2 mt-6 px-6 py-3 cursor-pointer bg-primary text-white text-[1rem] md:text-[1.3rem] font-medium rounded-[52px] shadow-lg">
-                Build Your Plan now{" "}
+                Crea il Tuo Piano Ora{" "}
                 <LuMoveUpRight className="text-accent text-2xl bg-white p-1 rounded-full" />
               </button>
             </Link>

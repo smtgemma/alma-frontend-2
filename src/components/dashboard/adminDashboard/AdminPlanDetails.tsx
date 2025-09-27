@@ -70,7 +70,7 @@ const AdminPlanDetails = ({ planData }: any) => {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Current Plans</p>
+              <p className="text-sm font-medium text-gray-600">Piani Attuali</p>
               <p className="text-2xl font-bold text-gray-900">
                 {planData?.count || 0}
               </p>
@@ -91,7 +91,7 @@ const AdminPlanDetails = ({ planData }: any) => {
             )) || (
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-gray-600">
-                  No plans available
+                  Nessun piano disponibile
                 </p>
                 <p className="text-lg font-semibold text-gray-900">-</p>
               </div>
@@ -104,7 +104,7 @@ const AdminPlanDetails = ({ planData }: any) => {
               href="admin/subscription-plan"
               className="w-full bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-medium cursor-pointer text-center block"
             >
-              Sub Management
+              Gestione Abbonamenti
             </Link>
           </div>
         </div>
@@ -172,7 +172,7 @@ const AdminPlanDetails = ({ planData }: any) => {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Current Plans</p>
+              <p className="text-sm font-medium text-gray-600">Piani Attuali</p>
               <p className="text-2xl font-bold text-gray-900">
                 {planData?.count || 0}
               </p>
@@ -196,7 +196,7 @@ const AdminPlanDetails = ({ planData }: any) => {
             )) || (
               <div className="flex items-center gap-1">
                 <p className="text-sm font-medium text-gray-600">
-                  No plans available
+                  Nessun piano disponibile
                 </p>
                 <p className="text-lg font-semibold text-gray-900">-</p>
               </div>
@@ -212,7 +212,7 @@ const AdminPlanDetails = ({ planData }: any) => {
               href="admin/subscription-plan"
               className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-medium cursor-pointer"
             >
-              Subscriptions Management
+              Gestione Abbonamenti
             </Link>
           </div>
         </div>

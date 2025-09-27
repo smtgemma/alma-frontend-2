@@ -385,7 +385,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
                   </svg>
                 </div>
                 <span className="text-xl font-semibold text-accent">
-                  Business AI Plan
+                  Pianifico Suite
                 </span>
               </div>
               <button

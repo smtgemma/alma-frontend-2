@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
-
+//
 interface ValueGenerationForm {
   uniqueValue: string;
   problemSolved: string;
@@ -403,12 +403,12 @@ export default function S3ValueGeneration() {
         <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
-            Step 03 out of 10
+            Passo 03 di 10
           </p>
 
           <div className="text-center mb-8">
             <h2 className="text-[2rem] text-accent font-medium">
-              Value Generation
+              Generazione di Valore
             </h2>
           </div>
 
@@ -434,7 +434,7 @@ export default function S3ValueGeneration() {
                 {/* Question 1: What makes your product/service unique */}
                 <div>
                   <label className="question-text">
-                    What makes your product/service unique?
+                    Cosa rende unico il tuo prodotto/servizio?
                   </label>
                   <div className="mt-4 relative">
                     <input
@@ -457,7 +457,7 @@ export default function S3ValueGeneration() {
                           }));
                         }
                       }}
-                      placeholder="E.g, Renewable Energy, Architecture & Interior, Legal Consultancy, Event Management"
+                      placeholder="Es. Energia Rinnovabile, Architettura e Interni, Consulenza Legale, Gestione Eventi"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
@@ -465,7 +465,7 @@ export default function S3ValueGeneration() {
                     {form.selectedUniqueOptions.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedUniqueOptions.map((option, index) => (
@@ -495,7 +495,7 @@ export default function S3ValueGeneration() {
                           <div className="flex items-center p-2  rounded-lg">
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                             <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                              Loading AI suggestions...
+                              Caricamento suggerimenti AI...
                             </span>
                           </div>
                         ) : (
@@ -558,7 +558,7 @@ export default function S3ValueGeneration() {
                 {/* Question 2: What problem does your product or service solve */}
                 <div>
                   <label className="question-text">
-                    What problem does your product or service solve?
+                    Quale problema risolve il tuo prodotto o servizio?
                   </label>
                   <div className="mt-4 relative">
                     <input
@@ -584,7 +584,7 @@ export default function S3ValueGeneration() {
                           }));
                         }
                       }}
-                      placeholder="E.g. Helps small businesses manage their inventory without hiring extra staff"
+                      placeholder="Es. Aiuta le piccole aziende a gestire il loro inventario senza assumere personale aggiuntivo"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
@@ -592,7 +592,7 @@ export default function S3ValueGeneration() {
                     {form.selectedProblemOptions.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedProblemOptions.map((option, index) => (
@@ -624,7 +624,7 @@ export default function S3ValueGeneration() {
                           <div className="flex items-center p-2  rounded-lg ">
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                             <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                              Loading AI suggestions...
+                              Caricamento suggerimenti AI...
                             </span>
                           </div>
                         ) : (
@@ -687,12 +687,12 @@ export default function S3ValueGeneration() {
                 {/* Question 3: Do you offer any other value-add support or guarantees */}
                 <div>
                   <label className="question-text">
-                    Do you offer any other value-add support or guarantees?
+                    Offri altri supporti o garanzie a valore aggiunto?
                   </label>
                   <div className="mt-4 relative">
                     <input
                       type="text"
-                      placeholder="E.g. We provide a dedicated account manager and 24/7 technical support"
+                      placeholder="Es. Forniamo un account manager dedicato e supporto tecnico 24/7"
                       value={
                         form.selectedValueAddOptions.length > 0
                           ? form.selectedValueAddOptions.join(", ")
@@ -734,7 +734,7 @@ export default function S3ValueGeneration() {
                     {form.selectedValueAddOptions.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedValueAddOptions.map((option, index) => (
@@ -768,7 +768,7 @@ export default function S3ValueGeneration() {
                             <div className="flex items-center p-2  rounded-lg ">
                               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                               <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                                Loading AI suggestions...
+                                Caricamento suggerimenti AI...
                               </span>
                             </div>
                           )}
@@ -841,13 +841,13 @@ export default function S3ValueGeneration() {
                     onClick={prevStep}
                     className="w-full py-3 cursor-pointer bg-white border border-[#888888] text-accent text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Back
+                    Indietro
                   </button>
                   <button
                     type="submit"
                     className="w-full py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Next
+                    Avanti
                   </button>
                 </div>
               </form>

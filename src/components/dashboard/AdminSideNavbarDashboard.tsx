@@ -48,7 +48,7 @@ export default function AdminSideNavbarDashboard() {
     Cookies.remove("user", { path: "/" });
 
     dispatch(logout());
-    toast.success("Logged out successfully");
+    toast.success("Disconnesso con successo");
     router.push("/");
     //admin-signin
     setIsLogoutOpen(false);
@@ -173,7 +173,7 @@ export default function AdminSideNavbarDashboard() {
                       : "text-[#99A6B8] group-hover:text-white"
                   )}
                 />
-                Overview
+                Panoramica
               </button>
             </Link>
 
@@ -195,7 +195,7 @@ export default function AdminSideNavbarDashboard() {
                       : "text-[#99A6B8] group-hover:text-white"
                   )}
                 />
-                Pending Plans
+                Piani in Sospeso
               </button>
             </Link>
 
@@ -217,7 +217,7 @@ export default function AdminSideNavbarDashboard() {
                       : "text-[#99A6B8] group-hover:text-white"
                   )}
                 />
-                Solo Users
+                Utenti Solo
               </button>
             </Link>
 
@@ -239,7 +239,7 @@ export default function AdminSideNavbarDashboard() {
                       : "text-[#99A6B8] group-hover:text-white"
                   )}
                 />
-                Team Users
+                Utenti Team
               </button>
             </Link>
 
@@ -261,7 +261,7 @@ export default function AdminSideNavbarDashboard() {
                       : "text-[#99A6B8] group-hover:text-white"
                   )}
                 />
-                Expert Review
+                Revisione Esperto
               </button>
             </Link>
 
@@ -283,7 +283,7 @@ export default function AdminSideNavbarDashboard() {
                       : "text-[#99A6B8] group-hover:text-white"
                   )}
                 />
-                Subscription Plan
+                Piano di Abbonamento
               </button>
             </Link>
 
@@ -305,7 +305,7 @@ export default function AdminSideNavbarDashboard() {
                       : "text-[#99A6B8] group-hover:text-white"
                   )}
                 />
-                Setting
+                Impostazioni
               </button>
             </Link>
           </div>
@@ -330,7 +330,7 @@ export default function AdminSideNavbarDashboard() {
                   : "text-[#99A6B8] group-hover:text-white"
               )}
             />
-            Log Out
+            Disconnetti
           </button>
         </div>
       </aside>

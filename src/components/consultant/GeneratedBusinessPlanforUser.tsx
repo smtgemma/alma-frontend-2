@@ -88,14 +88,14 @@ const GeneratedBusinessPlanforUser = ({
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen ">
       {/* Main Content */}
       <main className="max-w-[1440px] mx-auto px-2 py-8 ">
         <div className="space-y-8">
           {/* Business Overview Section */}
           <section className=" ">
             <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-              Executive Summary
+              1. Sintesi
             </h3>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl text-justify">
@@ -107,7 +107,7 @@ const GeneratedBusinessPlanforUser = ({
           {/* Business Origins Section */}
           <section className="">
             <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-              Business Overview
+              2. Panoramica aziendale
             </h3>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl  text-justify">
@@ -116,10 +116,30 @@ const GeneratedBusinessPlanforUser = ({
             </div>
           </section>
 
+          {/* Management Team */}
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+            3. Management Team
+          </h2>
+          <div className="">
+            <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-justify">
+              {managementTeam}
+            </p>
+          </div>
+
+          {/* Business Model */}
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+            4. Modello di business
+          </h2>
+          <div className="">
+            <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-justify">
+              {businessModel}
+            </p>
+          </div>
+
           {/* Competitive Advantage Section */}
           <section className="">
             <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-              Market Analysis
+              5. Analisi di mercato
             </h3>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl text-justify">
@@ -127,6 +147,34 @@ const GeneratedBusinessPlanforUser = ({
               </p>
             </div>
           </section>
+
+          {/* Funding Sources */}
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+            6. Fonti di finanziamento
+          </h2>
+          <div className="">
+            <div className="prose max-w-none">
+              <p className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl text-justify">
+                {typeof fundingSources === "string"
+                  ? fundingSources
+                  : typeof fundingSources === "object" &&
+                    fundingSources !== null
+                  ? Object.entries(fundingSources)
+                      .map(
+                        ([key, value]) =>
+                          `${key
+                            .replace(/([A-Z])/g, " $1")
+                            .replace(/^./, (str) => str.toUpperCase())}: ${
+                            typeof value === "number"
+                              ? `$${value.toLocaleString()}`
+                              : value
+                          }`
+                      )
+                      .join(", ")
+                  : "No funding information available"}
+              </p>
+            </div>
+          </div>
         </div>
       </main>
 

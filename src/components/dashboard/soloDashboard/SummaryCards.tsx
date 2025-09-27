@@ -73,9 +73,11 @@ export default function SummaryCards() {
             </div>
             <div className="text-center">
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                Account Pending Approval
+                Account in Attesa di Approvazione
               </h3>
-              <p className="text-gray-500">Your account is not accepted yet!</p>
+              <p className="text-gray-500">
+                Il tuo account non è ancora stato accettato!
+              </p>
             </div>
           </div>
         </div>
@@ -85,19 +87,19 @@ export default function SummaryCards() {
 
   const cards = [
     {
-      title: "Plans Generated",
+      title: "Piani Generati",
       count: data?.data?.totalPlans || 0,
       icon: <BsFileText className="text-2xl text-blue-600" />,
       color: "bg-blue-50",
     },
     {
-      title: "Plans Completed",
+      title: "Piani Completati",
       count: data?.data?.completedPlans || 0,
       icon: <BsCheckCircle className="text-2xl text-green-600" />,
       color: "bg-green-50",
     },
     {
-      title: "Plans Reviewed again",
+      title: "Piani da Rivedere",
       count: data?.data?.incompletedPlans || 0,
       icon: <BsSearch className="text-2xl text-purple-600" />,
       color: "bg-purple-50",

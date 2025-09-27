@@ -292,13 +292,13 @@ export default function GeneratedPlanOutput({
           {renderFinancialTable(businessPlanData?.operating_cost_breakdown, 'Operating Cost Breakdown', ['Revenue', 'COGS', 'Employee Costs', 'Marketing', 'Rent', 'Administration', 'Other Expenses', 'Interest Expenses', 'Tax'])}
 
           {/* Sector Strategy */}
-          {renderTextSection('Sector Strategy', businessPlanData?.sector_strategy)}
+          {/* {renderTextSection('Sector Strategy', businessPlanData?.sector_strategy)} */}
 
           {/* Funding Sources */}
           {renderTextSection('Funding Sources', businessPlanData?.funding_sources)}
 
           {/* Operations Plan */}
-          {renderTextSection('Operations Plan', businessPlanData?.operations_plan)}
+          {/* {renderTextSection('Operations Plan', businessPlanData?.operations_plan)} */}
         </div>
 
         {/* Action Buttons */}

@@ -15,6 +15,10 @@ export interface AggregatedFormData {
   }>;
   language?: string;
   currency?: string;
+  fundingSources?: {
+    initialInvestment?: string;
+    fromHome?: number;
+  };
 }
 
 // Question mappings for each step - based on the form labels in your components
@@ -85,7 +89,6 @@ const stepQuestions: Record<string, Record<string, string>> = {
   step6: {
     initialInvestment: "Initial Investment",
     investmentItems: "Investment breakdown items",
-    selectedInitialInvestmentOptions: "Selected initial investment options",
   },
   step7: {
     expectedRevenue: "Expected Revenue",
@@ -126,6 +129,12 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
     user_input: [],
     language: formData.step1?.sourceLanguage || undefined,
     currency: formData.step1?.targetLanguage || undefined,
+    fundingSources: {
+      initialInvestment: formData.step6?.initialInvestment || undefined,
+      fromHome: formData.step9?.yourOwnEquity
+        ? parseInt(formData.step9.yourOwnEquity) || undefined
+        : undefined,
+    },
   };
 
   // Process uploaded files from step1
@@ -253,6 +262,7 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
   console.log("📊 Final aggregated data:", aggregated);
   console.log("📈 Total user inputs:", aggregated.user_input.length);
   console.log("📁 Total uploaded files:", aggregated.uploaded_file.length);
+  console.log("💰 Funding sources:", aggregated.fundingSources);
 
   return aggregated;
 }
@@ -273,6 +283,8 @@ export function getDataSummary(aggregatedData: AggregatedFormData) {
       )?.answer || "",
     totalDataPoints:
       aggregatedData.uploaded_file.length + aggregatedData.user_input.length,
+    hasFundingSources: !!aggregatedData.fundingSources,
+    fundingSources: aggregatedData.fundingSources,
   };
 }
 
@@ -287,7 +299,8 @@ export function validateAggregatedData(aggregatedData: AggregatedFormData) {
   // Check if we have any data at all
   if (
     aggregatedData.uploaded_file.length === 0 &&
-    aggregatedData.user_input.length === 0
+    aggregatedData.user_input.length === 0 &&
+    !aggregatedData.fundingSources
   ) {
     issues.push("No data found to aggregate");
   }

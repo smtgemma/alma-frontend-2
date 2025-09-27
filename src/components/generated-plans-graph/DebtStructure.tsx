@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { IDebt } from "@/redux/types"
+import { IDebt } from "@/redux/types";
 
 // Format currency
 const formatCurrency = (value: number) => {
@@ -9,39 +9,46 @@ const formatCurrency = (value: number) => {
     currency: "USD",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(value)
-}
+  }).format(value);
+};
 
 // Format percentage
 const formatPercentage = (value: number) => {
-  return `${(value * 100).toFixed(1)}%`
-}
+  return `${(value * 100).toFixed(1)}%`;
+};
 
-export default function DebtDashboard({debtStructure,fundingSources}:IDebt) {
+export default function DebtDashboard({ debtStructure }: IDebt) {
   return (
     <div className="mt-10 mx-auto space-y-8">
       {/* Debt Structure Table */}
-          <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">Debt Structure</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+        11. Struttura del debito
+      </h2>
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6">
-
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="bg-purple-100">
                   <th className="px-6 py-3 text-left text-sm font-medium text-[#121417] border-r border-purple-200">
-                    Year
+                    {/* Year */}
+                    Anno
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-[#121417] border-r border-purple-200">
-                    Repayment
+                    {/* Repayment */}
+                    Rimborso
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-[#121417] border-r border-purple-200">
-                    Interest Rate
+                    {/* Interest Rate */}
+                    Tasso di interesse
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-[#121417] border-r border-purple-200">
-                    Non Current Assets
+                    {/* Non Current Assets */}
+                    Attività non correnti
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-[#121417]">Outstanding Debt</th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-[#121417]">
+                    Debito Residuo
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -59,7 +66,9 @@ export default function DebtDashboard({debtStructure,fundingSources}:IDebt) {
                     <td className="px-6 py-4 text-sm font-normal text-[#61758A] border-r border-gray-200">
                       {formatCurrency(70000)}
                     </td>
-                    <td className="px-6 py-4 text-sm font-normal text-[#61758A]">{formatCurrency(item.outstanding_debt)}</td>
+                    <td className="px-6 py-4 text-sm font-normal text-[#61758A]">
+                      {formatCurrency(item.outstanding_debt)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -67,16 +76,6 @@ export default function DebtDashboard({debtStructure,fundingSources}:IDebt) {
           </div>
         </div>
       </div>
-
-      {/* Funding Sources */}
-        <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">Funding Sources</h2>
-      <div className="">
-        <div className="prose max-w-none">
-          <p className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl text-justify">{fundingSources}
-          </p>
-        </div>
-      </div>
-
     </div>
-  )
+  );
 }

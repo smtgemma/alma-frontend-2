@@ -4,7 +4,7 @@ import React, { useState } from "react";
 const AdminRevenueChart = ({ chartData }: any) => {
   const [hoveredPoint, setHoveredPoint] = useState<{
     index: number;
-    type: 'solo' | 'team';
+    type: "solo" | "team";
     x: number;
     y: number;
     value: number;
@@ -44,12 +44,12 @@ const AdminRevenueChart = ({ chartData }: any) => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4 md:mb-6">
         <h3 className="text-sm sm:text-md md:text-lg font-semibold text-gray-900">
-          Total Revenue {chartData?.year && `(${chartData.year})`}
+          Ricavi Totali {chartData?.year && `(${chartData.year})`}
         </h3>
         <div className="flex flex-wrap items-center gap-2 md:gap-4">
           <div className="flex items-center space-x-1 md:space-x-2">
             <div className="w-3 h-3 bg-[#31FF50] rounded-full"></div>
-            <span className="text-xs md:text-sm text-[#A3A3A3]">Solo</span>
+            <span className="text-xs md:text-sm text-[#A3A3A3]">Singolo</span>
           </div>
           <div className="flex items-center space-x-1 md:space-x-2">
             <div className="w-3 h-3 bg-[#FF5B5B] rounded-full"></div>
@@ -110,7 +110,7 @@ const AdminRevenueChart = ({ chartData }: any) => {
                 )
                 .join(" ")}
             />
-            
+
             {/* Solo hover points */}
             {soloRevenue.map((value: number, index: number) => {
               const x = (index / (months.length - 1)) * 100;
@@ -128,17 +128,17 @@ const AdminRevenueChart = ({ chartData }: any) => {
                     const rect = e.currentTarget.getBoundingClientRect();
                     setHoveredPoint({
                       index,
-                      type: 'solo',
+                      type: "solo",
                       x: rect.left + rect.width / 2,
                       y: rect.top,
-                      value
+                      value,
                     });
                   }}
                   onMouseLeave={() => setHoveredPoint(null)}
                 />
               );
             })}
-            
+
             {/* Team hover points */}
             {teamRevenue.map((value: number, index: number) => {
               const x = (index / (months.length - 1)) * 100;
@@ -156,10 +156,10 @@ const AdminRevenueChart = ({ chartData }: any) => {
                     const rect = e.currentTarget.getBoundingClientRect();
                     setHoveredPoint({
                       index,
-                      type: 'team',
+                      type: "team",
                       x: rect.left + rect.width / 2,
                       y: rect.top,
-                      value
+                      value,
                     });
                   }}
                   onMouseLeave={() => setHoveredPoint(null)}
@@ -184,27 +184,33 @@ const AdminRevenueChart = ({ chartData }: any) => {
           style={{
             left: hoveredPoint.x,
             top: hoveredPoint.y - 60,
-            transform: 'translateX(-50%)'
+            transform: "translateX(-50%)",
           }}
         >
-          <div className={`px-3 py-2 rounded-lg shadow-lg text-white text-sm font-medium ${
-            hoveredPoint.type === 'solo' ? 'bg-[#31FF50]' : 'bg-[#FF5B5B]'
-          }`}>
+          <div
+            className={`px-3 py-2 rounded-lg shadow-lg text-white text-sm font-medium ${
+              hoveredPoint.type === "solo" ? "bg-[#31FF50]" : "bg-[#FF5B5B]"
+            }`}
+          >
             <div className="text-center">
               <div className="font-bold">
-                €{hoveredPoint.value.toLocaleString('en-US', {
+                €
+                {hoveredPoint.value.toLocaleString("en-US", {
                   minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
+                  maximumFractionDigits: 2,
                 })}
               </div>
               <div className="text-xs opacity-90">
-                {months[hoveredPoint.index]} - {hoveredPoint.type === 'solo' ? 'Solo' : 'Team'}
+                {months[hoveredPoint.index]} -{" "}
+                {hoveredPoint.type === "solo" ? "Singolo" : "Team"}
               </div>
             </div>
             {/* Tooltip arrow */}
-            <div 
+            <div
               className={`absolute left-1/2 transform -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent ${
-                hoveredPoint.type === 'solo' ? 'border-t-[#31FF50]' : 'border-t-[#FF5B5B]'
+                hoveredPoint.type === "solo"
+                  ? "border-t-[#31FF50]"
+                  : "border-t-[#FF5B5B]"
               }`}
             />
           </div>

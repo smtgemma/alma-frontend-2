@@ -209,21 +209,21 @@ export default function AdminEditBusinessPlan({
               "marketingSalesStrategy",
               formData.marketingSalesStrategy
             )}
-            {renderField(
+            {/* {renderField(
               "Sector Strategy",
               "sectorStrategy",
               formData.sectorStrategy
-            )}
+            )} */}
             {renderField(
               "Funding Sources",
               "fundingSources",
               formData.fundingSources
             )}
-            {renderField(
+            {/* {renderField(
               "Operations Plan",
               "operationsPlan",
               formData.operationsPlan
-            )}
+            )} */}
           </div>
         </div>
       </div>

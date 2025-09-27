@@ -7,22 +7,22 @@ const TeamMemberSummary = () => {
 
   const summaryCards = [
     {
-      title: "Total Member",
+      title: "Membri Totali",
       value: teamMembers?.data?.team?.totalMember || 0,
       icon: BsPeople,
     },
     {
-      title: "Remaining Member",
+      title: "Membri Rimanenti",
       value: teamMembers?.data?.team?.remainingMember || 0,
       icon: BsPeople,
     },
     {
-      title: "Plans Completed",
+      title: "Piani Completati",
       value: teamMembers?.data?.totals?.complete || 0,
       icon: BsCalendar2Check,
     },
     {
-      title: "Plans Reviewed",
+      title: "Piani In Revisione",
       value: teamMembers?.data?.totals?.incomplete || 0,
       icon: BsClock,
     },

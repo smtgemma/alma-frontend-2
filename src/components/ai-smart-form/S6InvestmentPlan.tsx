@@ -10,15 +10,10 @@ interface InvestmentItem {
   id: string;
   description: string;
   amount: string;
-  showOptions?: boolean;
-  selectedOptions?: string[];
 }
 
 interface InvestmentPlanForm {
   initialInvestment: string;
-  customInitialInvestment: string[];
-  selectedInitialInvestmentOptions: string[];
-  showInitialInvestmentOptions: boolean;
   investmentItems: InvestmentItem[];
 }
 
@@ -54,30 +49,21 @@ export default function S6InvestmentPlan() {
   const [form, setForm] = useState<InvestmentPlanForm>(
     persistedData || {
       initialInvestment: "",
-      customInitialInvestment: [],
-      selectedInitialInvestmentOptions: [],
-      showInitialInvestmentOptions: false,
       investmentItems: [
         {
           id: "1",
           description: "",
           amount: "",
-          showOptions: false,
-          selectedOptions: [],
         },
         {
           id: "2",
           description: "",
           amount: "",
-          showOptions: false,
-          selectedOptions: [],
         },
         {
           id: "3",
           description: "",
           amount: "",
-          showOptions: false,
-          selectedOptions: [],
         },
       ],
     }
@@ -167,138 +153,6 @@ export default function S6InvestmentPlan() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleAddCustomOption = (
-    field: "customInitialInvestment",
-    value: string
-  ) => {
-    if (value.trim()) {
-      setForm((prev) => ({
-        ...prev,
-        [field]: [...prev[field], value.trim()],
-      }));
-    }
-  };
-
-  const handleKeyPress = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    field: "customInitialInvestment",
-    textareaField: "initialInvestment"
-  ) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      const value = form[textareaField] as string;
-      if (value.trim()) {
-        handleAddCustomOption(field, value);
-        setForm((prev) => ({ ...prev, [textareaField]: "" }));
-      }
-    }
-  };
-
-  // Refs for dropdown containers
-  const initialInvestmentDropdownRef = useRef<HTMLDivElement>(null);
-  const investmentItemRefs = useRef<{ [key: string]: HTMLDivElement | null }>(
-    {}
-  );
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        initialInvestmentDropdownRef.current &&
-        !initialInvestmentDropdownRef.current.contains(event.target as Node)
-      ) {
-        setForm((prev) => ({ ...prev, showInitialInvestmentOptions: false }));
-      }
-      // Close investment item dropdowns
-      Object.entries(investmentItemRefs.current).forEach(([id, ref]) => {
-        if (ref && !ref.contains(event.target as Node)) {
-          setForm((prev) => ({
-            ...prev,
-            investmentItems: prev.investmentItems.map((item) =>
-              item.id === id ? { ...item, showOptions: false } : item
-            ),
-          }));
-        }
-      });
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  // Option selection handlers
-  const handleInitialInvestmentOptionSelect = (option: string) => {
-    setForm((prev) => {
-      const currentOptions = prev.selectedInitialInvestmentOptions;
-      const isSelected = currentOptions.includes(option);
-
-      if (isSelected) {
-        // Remove if already selected
-        return {
-          ...prev,
-          selectedInitialInvestmentOptions: currentOptions.filter(
-            (opt) => opt !== option
-          ),
-        };
-      } else {
-        // Add if not selected
-        return {
-          ...prev,
-          selectedInitialInvestmentOptions: [...currentOptions, option],
-        };
-      }
-    });
-  };
-
-  const handleInvestmentItemOptionSelect = (itemId: string, option: string) => {
-    setForm((prev) => ({
-      ...prev,
-      investmentItems: prev.investmentItems.map((item) => {
-        if (item.id === itemId) {
-          const currentOptions = item.selectedOptions || [];
-          const isSelected = currentOptions.includes(option);
-
-          let newOptions;
-          if (isSelected) {
-            // Remove if already selected
-            newOptions = currentOptions.filter((opt) => opt !== option);
-          } else {
-            // Add if not selected
-            newOptions = [...currentOptions, option];
-          }
-
-          return {
-            ...item,
-            selectedOptions: newOptions,
-            description: newOptions.join(", "), // Set input field value
-            showOptions: false,
-          };
-        }
-        return item;
-      }),
-    }));
-  };
-
-  const handleTextareaClick = (optionField: "showInitialInvestmentOptions") => {
-    const isCurrentlyOpen = form[optionField];
-
-    setForm((prev) => ({
-      ...prev,
-      [optionField]: !prev[optionField],
-      investmentItems: prev.investmentItems.map((item) => ({
-        ...item,
-        showOptions: false,
-      })),
-    }));
-
-    // Fetch AI suggestions when opening dropdown
-    if (!isCurrentlyOpen && initialInvestmentAiSuggestions.length === 0) {
-      fetchInitialInvestmentAISuggestions();
-    }
-  };
-
   const handleInvestmentItemChange = (
     id: string,
     field: "description" | "amount",
@@ -312,34 +166,13 @@ export default function S6InvestmentPlan() {
     }));
   };
 
-  const handleInvestmentItemClick = (id: string) => {
-    const isCurrentlyOpen = form.investmentItems.find(
-      (item) => item.id === id
-    )?.showOptions;
-
-    setForm((prev) => ({
-      ...prev,
-      showInitialInvestmentOptions: false,
-      investmentItems: prev.investmentItems.map((item) =>
-        item.id === id
-          ? { ...item, showOptions: !item.showOptions }
-          : { ...item, showOptions: false }
-      ),
-    }));
-
-    // Fetch AI suggestions when opening dropdown
-    if (!isCurrentlyOpen && investmentItemAiSuggestions.length === 0) {
-      fetchInvestmentItemAISuggestions();
-    }
-  };
-
   const addInvestmentItem = () => {
     const newId = (form.investmentItems.length + 1).toString();
     setForm((prev) => ({
       ...prev,
       investmentItems: [
         ...prev.investmentItems,
-        { id: newId, description: "", amount: "", showOptions: false },
+        { id: newId, description: "", amount: "" },
       ],
     }));
   };
@@ -354,14 +187,28 @@ export default function S6InvestmentPlan() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Create the proper object structure for fundingSources
+    const formData = {
+      fundingSources: {
+        initialInvestment: form.initialInvestment,
+        fromHome: calculateTotal(),
+      },
+      investmentItems: form.investmentItems.map((item) => ({
+        id: item.id,
+        description: item.description,
+        amount: item.amount,
+      })),
+    };
+
     // Save current form data to context before validation
-    updateFormData("step6", form);
+    updateFormData("step6", formData);
 
     // Validate the form before proceeding
     const isValid = validateStep(5); // 0-based index for step 6
 
     if (isValid) {
-      console.log("Investment Plan Form Submitted:", form);
+      console.log("Investment Plan Form Submitted:", formData);
+      console.log("Funding Sources:", formData.fundingSources);
       nextStep();
     } else {
       console.log("Validation failed, showing errors:", errors);
@@ -383,12 +230,12 @@ export default function S6InvestmentPlan() {
         <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
-            Step 06 out of 10
+            Passo 06 di 10
           </p>
 
           <div className="text-center mb-8">
             <h2 className="text-[2rem] text-accent font-medium">
-              Investment Plan
+              Piano di Investimento
             </h2>
           </div>
 
@@ -414,177 +261,22 @@ export default function S6InvestmentPlan() {
                 {/* Question: What will you spend your initial investment on? */}
                 <div>
                   <label className="question-text">
-                    What will you spend your initial investment on ?
+                    Su cosa spenderai il tuo investimento iniziale?
                   </label>
                   <div className="mt-4">
                     <input
                       type="text"
-                      value={
-                        form.selectedInitialInvestmentOptions.length > 0
-                          ? form.selectedInitialInvestmentOptions.join(", ")
-                          : form.initialInvestment
-                      }
+                      value={form.initialInvestment}
                       onChange={(e) =>
                         handleTextareaChange(
                           "initialInvestment",
                           e.target.value
                         )
                       }
-                      onKeyPress={(e) =>
-                        handleKeyPress(
-                          e,
-                          "customInitialInvestment",
-                          "initialInvestment"
-                        )
-                      }
-                      onClick={() =>
-                        handleTextareaClick("showInitialInvestmentOptions")
-                      }
-                      placeholder="Equipment"
+                      placeholder="Attrezzature"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
-
-                    {/* Selected Options Display */}
-                    {form.selectedInitialInvestmentOptions.length > 0 && (
-                      <div className="mt-3">
-                        <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {form.selectedInitialInvestmentOptions.map(
-                            (option, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
-                              >
-                                <span className="mr-2">{option}</span>
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleInitialInvestmentOptionSelect(option)
-                                  }
-                                  className="text-primary hover:text-primary/70"
-                                >
-                                  ×
-                                </button>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
                   </div>
-
-                  {/* Sub-options */}
-                  {form.showInitialInvestmentOptions && (
-                    <div
-                      ref={initialInvestmentDropdownRef}
-                      className="mt-4 space-y-2"
-                    >
-                      {/* AI Suggestions */}
-                      {isLoadingInitialInvestmentSuggestions ? (
-                        <div className="flex items-center p-2 rounded-lg">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                          <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                            Loading AI suggestions...
-                          </span>
-                        </div>
-                      ) : (
-                        initialInvestmentAiSuggestions.map((option, index) => {
-                          const isSelected =
-                            form.selectedInitialInvestmentOptions.includes(
-                              option
-                            );
-                          return (
-                            <button
-                              key={`${option}-${index}`}
-                              type="button"
-                              onClick={() =>
-                                handleInitialInvestmentOptionSelect(option)
-                              }
-                              className={`flex items-center w-full text-left p-2 rounded transition-colors ${
-                                isSelected
-                                  ? "bg-primary/10 border border-primary"
-                                  : "hover:bg-gray-50"
-                              }`}
-                            >
-                              <div
-                                className={`w-4 h-4 border-2 rounded mr-3 ml-7 flex items-center justify-center ${
-                                  isSelected
-                                    ? "bg-primary border-primary"
-                                    : "border-gray-300"
-                                }`}
-                              >
-                                {isSelected && (
-                                  <svg
-                                    className="w-3 h-3 text-white"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
-                              <span className="text-[1rem] font-normal text-accent">
-                                {option}
-                              </span>
-                            </button>
-                          );
-                        })
-                      )}
-
-                      {/* Custom options */}
-                      {form.customInitialInvestment.map((option, index) => {
-                        const isSelected =
-                          form.selectedInitialInvestmentOptions.includes(
-                            option
-                          );
-                        return (
-                          <button
-                            key={`custom-investment-${index}`}
-                            type="button"
-                            onClick={() =>
-                              handleInitialInvestmentOptionSelect(option)
-                            }
-                            className={`flex items-center w-full text-left p-2 rounded transition-colors ${
-                              isSelected
-                                ? "bg-primary/10 border border-primary"
-                                : "hover:bg-gray-50"
-                            }`}
-                          >
-                            <div
-                              className={`w-4 h-4 border-2 rounded mr-3 ml-7 flex items-center justify-center ${
-                                isSelected
-                                  ? "bg-primary border-primary"
-                                  : "border-gray-300"
-                              }`}
-                            >
-                              {isSelected && (
-                                <svg
-                                  className="w-3 h-3 text-white"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              )}
-                            </div>
-                            <span className="text-[1rem] font-normal text-accent">
-                              {option}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
                 </div>
 
                 {/* Investment Items Section */}
@@ -593,16 +285,16 @@ export default function S6InvestmentPlan() {
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className="text-[1rem] font-medium text-accent">
-                        Investment Item
+                        Elemento di Investimento
                       </label>
                     </div>
                     <div>
                       <label className="text-[1rem] font-medium text-accent">
-                        Investment Amount
+                        Importo di Investimento
                       </label>
                     </div>
                   </div>
-
+                  
                   {/* Investment Items */}
                   {form.investmentItems.map((item, index) => (
                     <div key={item.id} className="space-y-4">
@@ -622,14 +314,13 @@ export default function S6InvestmentPlan() {
                                 e.target.value
                               )
                             }
-                            onClick={() => handleInvestmentItemClick(item.id)}
-                            placeholder="Write item here"
+                            placeholder="Scrivi elemento qui"
                             className="flex-1 px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                           />
                         </div>
                         <div className="flex items-center gap-4 ml-8 md:ml-0">
                           <label className="text-[0.875rem] font-medium text-accent flex-shrink-0 md:hidden">
-                            Amount:
+                            Importo:
                           </label>
                           <input
                             type="text"
@@ -641,55 +332,13 @@ export default function S6InvestmentPlan() {
                                 e.target.value
                               )
                             }
-                            placeholder="E.g. 20000"
+                            placeholder="Es. 20000"
                             className="flex-1 px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                           />
                         </div>
                       </div>
-
-                      {/* Sub-options for investment items */}
-                      {item.showOptions && (
-                        <div
-                          ref={(el) => {
-                            investmentItemRefs.current[item.id] = el;
-                          }}
-                          className="ml-8 space-y-1"
-                        >
-                          {/* AI Suggestions */}
-                          {isLoadingInvestmentItemSuggestions ? (
-                            <div className="flex items-center p-2 rounded-lg">
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                              <span className="text-[0.875rem] font-normal text-gray-500 ml-2">
-                                Loading AI suggestions...
-                              </span>
-                            </div>
-                          ) : (
-                            investmentItemAiSuggestions.map(
-                              (option, optIndex) => (
-                                <button
-                                  key={`item-${item.id}-option-${optIndex}`}
-                                  type="button"
-                                  onClick={() =>
-                                    handleInvestmentItemOptionSelect(
-                                      item.id,
-                                      option
-                                    )
-                                  }
-                                  className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                                >
-                                  <div className="w-2 h-2 bg-[#6B4AFF] rounded-full mr-2 ml-4"></div>
-                                  <span className="text-[1rem] font-normal text-accent">
-                                    {option}
-                                  </span>
-                                </button>
-                              )
-                            )
-                          )}
-                        </div>
-                      )}
                     </div>
                   ))}
-
                   {/* Add Investment Item Button */}
                   <div className="flex justify-start ml-9">
                     <button
@@ -698,14 +347,13 @@ export default function S6InvestmentPlan() {
                       className="flex items-center px-6 py-3 bg-[#A9A4FE] text-white text-[0.875rem] font-medium rounded-lg hover:bg-primary/90 transition-all duration-200"
                     >
                       <FiPlus className="w-5 h-5 mr-2" />
-                      Add New Item
+                      Aggiungi Nuovo Elemento
                     </button>
                   </div>
-
                   {/* Total Investment */}
                   <div className="text-center pt-6">
                     <p className="text-[1.25rem] font-medium text-accent">
-                      Total Initial Investment: €
+                      Investimento Iniziale Totale: €
                       {calculateTotal().toLocaleString()}
                     </p>
                   </div>
@@ -718,13 +366,13 @@ export default function S6InvestmentPlan() {
                     onClick={prevStep}
                     className="w-full py-3 cursor-pointer bg-white border border-[#888888] text-accent text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Back
+                    Indietro
                   </button>
                   <button
                     type="submit"
                     className="w-full py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Next
+                    Avanti
                   </button>
                 </div>
               </form>

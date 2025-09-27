@@ -1,18 +1,18 @@
-'use client';
-import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
-import { BsUpload, BsEye, BsEyeSlash, BsLock } from 'react-icons/bs';
-import Loading from '@/components/Others/Loading';
-import { format } from 'date-fns';
-import { toast } from 'sonner';
-import { useSelector } from 'react-redux';
-import { store } from '@/redux/store';
+"use client";
+import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import { BsUpload, BsEye, BsEyeSlash, BsLock } from "react-icons/bs";
+import Loading from "@/components/Others/Loading";
+import { format } from "date-fns";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import { store } from "@/redux/store";
 import {
   useGetUserProfileQuery,
   useUpdateProfileMutation,
   useUploadProfileImageMutation,
   useChangePasswordMutation,
-} from '@/redux/api/auth/authApi';
+} from "@/redux/api/auth/authApi";
 
 export default function ProfileForm() {
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -35,21 +35,21 @@ export default function ProfileForm() {
     useChangePasswordMutation();
 
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    firstName: "",
+    lastName: "",
     location: "",
-    oldPassword: '',
-    newPassword: '',
+    oldPassword: "",
+    newPassword: "",
   });
 
   useEffect(() => {
     if (data?.data) {
       setFormData({
-        firstName: data.data.firstName || '',
-        lastName: data.data.lastName || '',
-        location: data.data.location || '',
-        oldPassword: '',
-        newPassword: '',
+        firstName: data.data.firstName || "",
+        lastName: data.data.lastName || "",
+        location: data.data.location || "",
+        oldPassword: "",
+        newPassword: "",
       });
     }
   }, [data]);
@@ -70,17 +70,17 @@ export default function ProfileForm() {
   };
 
   const handleImageUpload = async () => {
-    if (!selectedImage) return toast.error('Please select an image first');
+    if (!selectedImage) return toast.error("Seleziona prima un'immagine");
     try {
       const fd = new FormData();
-      fd.append('profileImage', selectedImage);
+      fd.append("profileImage", selectedImage);
       await uploadImage(fd).unwrap();
-      toast.success('Profile image updated successfully!');
+      toast.success("Immagine del profilo aggiornata con successo!");
       setSelectedImage(null);
       setPreviewImage(null);
       refetch();
     } catch (err: any) {
-      toast.error(err?.data?.message || 'Failed to upload image');
+      toast.error(err?.data?.message || "Caricamento immagine fallito");
     }
   };
 
@@ -90,13 +90,16 @@ export default function ProfileForm() {
 
       // Only update profile if firstName, lastName, or location changed
       const updateData: any = {};
-      if (formData.firstName !== data?.data.firstName) updateData.firstName = formData.firstName;
-      if (formData.lastName !== data?.data.lastName) updateData.lastName = formData.lastName;
-      if (formData.location !== data?.data.location) updateData.location = formData.location;
+      if (formData.firstName !== data?.data.firstName)
+        updateData.firstName = formData.firstName;
+      if (formData.lastName !== data?.data.lastName)
+        updateData.lastName = formData.lastName;
+      if (formData.location !== data?.data.location)
+        updateData.location = formData.location;
 
       if (Object.keys(updateData).length > 0) {
         await updateProfile(updateData).unwrap();
-        toast.success("Profile updated successfully!");
+        toast.success("Profilo aggiornato con successo!");
         hasChanges = true;
         refetch();
       }
@@ -107,30 +110,30 @@ export default function ProfileForm() {
           oldPassword: formData.oldPassword,
           newPassword: formData.newPassword,
         }).unwrap();
-        toast.success("Password changed successfully!");
-        setFormData(prev => ({ ...prev, oldPassword: "", newPassword: "" }));
+        toast.success("Password cambiata con successo!");
+        setFormData((prev) => ({ ...prev, oldPassword: "", newPassword: "" }));
         hasChanges = true;
       }
 
       if (!hasChanges) {
-        toast.error("No changes to save");
+        toast.error("Nessuna modifica da salvare");
         return;
       }
 
       setIsEditing(false);
     } catch (error: any) {
-      toast.error(error?.data?.message || "Something went wrong");
+      toast.error(error?.data?.message || "Qualcosa è andato storto");
     }
   };
 
   const handleCancel = () => {
     if (data?.data) {
       setFormData({
-        firstName: data.data.firstName || '',
-        lastName: data.data.lastName || '',
+        firstName: data.data.firstName || "",
+        lastName: data.data.lastName || "",
         location: data.data.location || "",
-        oldPassword: '',
-        newPassword: '',
+        oldPassword: "",
+        newPassword: "",
       });
     }
     setSelectedImage(null);
@@ -142,12 +145,16 @@ export default function ProfileForm() {
     if (previewImage) return previewImage;
     if (data?.data?.image) return data.data.image;
     if (user?.image) return user.image;
-    return '/images/profile.jpg';
+    return "/images/profile.jpg";
   };
 
   if (isLoading) return <Loading />;
   if (error)
-    return <div className="text-center text-red-500">Failed to load profile</div>;
+    return (
+      <div className="text-center text-red-500">
+        Caricamento profilo fallito
+      </div>
+    );
 
   return (
     <div className="bg-card p-4 md:p-6 lg:p-6">
@@ -155,9 +162,11 @@ export default function ProfileForm() {
         {/* Header */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-accent mb-2">
-            Personal Info
+            Informazioni Personali
           </h2>
-          <p className="text-info">Upload your photo and personal info here</p>
+          <p className="text-info">
+            Carica la tua foto e le informazioni personali qui
+          </p>
           <hr className="mt-4 border-1 border-gray-200" />
         </div>
 
@@ -166,10 +175,10 @@ export default function ProfileForm() {
           <div className="mb-8 flex md:flex-row flex-col items-center md:justify-between justify-start">
             <div>
               <h3 className="text-lg font-medium text-accent mb-2">
-                Your Photo
+                La Tua Foto
               </h3>
               <p className="text-sm text-info mb-4">
-                This photo will be displayed on your profile
+                Questa foto sarà visualizzata nel tuo profilo
               </p>
             </div>
             <div className="flex md:flex-row flex-col-reverse items-center gap-6">
@@ -179,7 +188,7 @@ export default function ProfileForm() {
                   disabled={isUploading}
                   className="bg-primary text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-primary/90 cursor-pointer"
                 >
-                  <BsUpload className="text-xl" /> Upload Photo
+                  <BsUpload className="text-xl" /> Carica Foto
                 </button>
                 {selectedImage && (
                   <button
@@ -187,7 +196,7 @@ export default function ProfileForm() {
                     disabled={isUploading}
                     className="bg-primary/90 text-white px-6 py-3 rounded-lg hover:bg-primary/80"
                   >
-                    {isUploading ? "Uploading..." : "Save Image"}
+                    {isUploading ? "Caricamento..." : "Salva Immagine"}
                   </button>
                 )}
               </div>
@@ -215,7 +224,7 @@ export default function ProfileForm() {
         <div className="mb-8 border-b border-gray-200 pb-8 pt-8 flex items-center">
           <div className="w-1/3">
             <label className="block text-base font-semibold text-accent">
-              Name
+              Nome
             </label>
           </div>
           <div className="w-2/3 flex gap-4">
@@ -224,14 +233,14 @@ export default function ProfileForm() {
               value={formData.firstName}
               onChange={(e) => handleInputChange("firstName", e.target.value)}
               className="w-1/2 px-4 py-3 border border-gray-300 rounded-lg"
-              placeholder="First Name"
+              placeholder="Nome"
             />
             <input
               type="text"
               value={formData.lastName}
               onChange={(e) => handleInputChange("lastName", e.target.value)}
               className="w-1/2 px-4 py-3 border border-gray-300 rounded-lg"
-              placeholder="Last Name"
+              placeholder="Cognome"
             />
           </div>
         </div>
@@ -258,7 +267,7 @@ export default function ProfileForm() {
         <div className="mb-8 border-b border-gray-200 pb-8 flex items-center">
           <div className="w-1/3">
             <label className="block text-base font-semibold text-accent">
-              Location
+              Posizione
             </label>
           </div>
           <div className="w-2/3">
@@ -267,7 +276,7 @@ export default function ProfileForm() {
               value={formData.location}
               onChange={(e) => handleInputChange("location", e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-              placeholder="Location"
+              placeholder="Posizione"
             />
           </div>
         </div>
@@ -276,7 +285,7 @@ export default function ProfileForm() {
         <div className="mb-8 border-b border-gray-200 pb-8 flex items-center">
           <div className="w-1/3">
             <label className="block text-base font-semibold text-accent">
-              Membership End
+              Fine Abbonamento
             </label>
           </div>
           {data?.data?.Subscription[0]?.endDate ? (
@@ -307,7 +316,7 @@ export default function ProfileForm() {
           {/* Label */}
           <div className="w-full md:w-1/3 mb-4 md:mb-0">
             <label className="block text-base font-semibold text-accent">
-              Change Password
+              Cambia Password
             </label>
           </div>
 
@@ -322,7 +331,7 @@ export default function ProfileForm() {
                   handleInputChange("oldPassword", e.target.value)
                 }
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                placeholder="Old Password"
+                placeholder="Vecchia Password"
               />
               <button
                 type="button"
@@ -342,7 +351,7 @@ export default function ProfileForm() {
                   handleInputChange("newPassword", e.target.value)
                 }
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                placeholder="New Password"
+                placeholder="Nuova Password"
               />
               <button
                 type="button"
@@ -362,7 +371,7 @@ export default function ProfileForm() {
             disabled={isUpdating || isUploading || isChangingPassword}
             className="px-6 py-3 border border-accent text-accent rounded-lg cursor-pointer"
           >
-            Cancel
+            Annulla
           </button>
           <button
             onClick={handleSaveChanges}
@@ -371,7 +380,7 @@ export default function ProfileForm() {
             }
             className="px-6 py-3 bg-primary text-white rounded-lg cursor-pointer"
           >
-            {isUpdating || isChangingPassword ? "Saving..." : "Save"}
+            {isUpdating || isChangingPassword ? "Salvataggio..." : "Salva"}
           </button>
         </div>
       </div>

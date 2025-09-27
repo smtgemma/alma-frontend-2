@@ -2,8 +2,6 @@
 import { useRouter } from "next/navigation";
 import { useGetPlansQuery } from "@/redux/api/plans/plansApi";
 import { toast } from "sonner";
-import { useDispatch } from "react-redux";
-import { setSubscriptionData } from "@/redux/features/subscription/subscriptionSlice";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import Cookies from "js-cookie";
@@ -14,7 +12,6 @@ interface PlanFeature {
 
 export default function S11SubscriptionPlan() {
   const { data, error, isLoading } = useGetPlansQuery({});
-  const dispatch = useDispatch();
   const router = useRouter();
   const { prevStep } = useSmartForm();
 
@@ -32,7 +29,7 @@ export default function S11SubscriptionPlan() {
     }
 
     try {
-      // Create subscription with backend to get clientSecret
+      // Create subscription with backend (PayPal)
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/billing/subscribe`,
         {
@@ -47,7 +44,7 @@ export default function S11SubscriptionPlan() {
         }
       );
 
-      const data = await response.json();
+      const respData = await response.json();
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -65,25 +62,32 @@ export default function S11SubscriptionPlan() {
         } else {
           // Show the specific error message from API response
           const errorMessage =
-            data?.message ||
+            respData?.message ||
             `Server error: ${response.status}. Please try again.`;
           toast.error(errorMessage);
           return;
         }
       }
 
-      if (data.success) {
-        router.push("/billing/" + id);
-        // Store subscription data in Redux
-        dispatch(
-          setSubscriptionData({
-            clientSecret: data.data.clientSecret,
-            paymentIntentId: data.data.paymentIntentId,
-          })
-        );
+      if (respData.success && respData?.data?.approvalUrl && respData?.data?.paypalSubscriptionId) {
+        try {
+          if (typeof window !== "undefined") {
+            sessionStorage.setItem(
+              "paypalSubscriptionId",
+              respData.data.paypalSubscriptionId
+            );
+            // After confirming payment, return user to AI Smart Form review step
+            sessionStorage.setItem(
+              "postPaymentRedirectPath",
+              "/ai-smart-form?step=10"
+            );
+          }
+        } catch {}
+        // Redirect user to PayPal approval URL
+        window.location.href = respData.data.approvalUrl;
       } else {
         // Show the specific error message from API response
-        const errorMessage = data?.message || "Failed to create subscription";
+        const errorMessage = respData?.message || "Failed to create subscription";
         toast.error(errorMessage);
       }
     } catch (error: any) {

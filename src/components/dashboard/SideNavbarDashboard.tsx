@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { BsCalendar2Check, BsCreditCard } from "react-icons/bs";
+import { BsCalendar2Check, BsCreditCard, BsEnvelope } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { GrPower } from "react-icons/gr";
 import Link from "next/link";
@@ -74,7 +74,7 @@ export default function SideNavbarDashboard() {
     persistor.purge();
 
     // Show success message
-    toast.success("Logged out successfully");
+    toast.success("Disconnesso con successo");
 
     // Redirect to home page
     router.push("/");
@@ -155,13 +155,15 @@ export default function SideNavbarDashboard() {
       )}
 
       {/* Sidebar */}
-      <aside className={clsx(
-        "bg-white  h-full flex flex-col transition-transform duration-300 ease-in-out",
-        "lg:w-64 lg:relative lg:translate-x-0",
-        isMobileMenuOpen
-          ? "fixed top-0 left-0 w-64 z-50 translate-x-0"
-          : "fixed top-0 left-0 w-64 z-50 -translate-x-full lg:translate-x-0"
-      )}>
+      <aside
+        className={clsx(
+          "bg-white  h-full flex flex-col transition-transform duration-300 ease-in-out",
+          "lg:w-64 lg:relative lg:translate-x-0",
+          isMobileMenuOpen
+            ? "fixed top-0 left-0 w-64 z-50 translate-x-0"
+            : "fixed top-0 left-0 w-64 z-50 -translate-x-full lg:translate-x-0"
+        )}
+      >
         {/* Profile Section */}
         <div className="flex flex-col justify-center items-center mx-6 pt-14 pb-4 border-b border-gray-300 ">
           <div className="w-[110px] h-[110px] rounded-full overflow-hidden">
@@ -207,7 +209,7 @@ export default function SideNavbarDashboard() {
                       : "text-[#99A6B8] group-hover:text-white" // 👈 changes on hover
                   )}
                 />
-                Generated Plan
+                Piano Generato
               </button>
             </Link>
 
@@ -229,12 +231,12 @@ export default function SideNavbarDashboard() {
                       : "text-[#99A6B8] group-hover:text-white" // 👈 icon follows parent hover
                   )}
                 />
-                My Profile
+                Il Mio Profilo
               </button>
             </Link>
             {MyProfileData?.data?.Subscription?.length > 0 &&
               MyProfileData?.data?.Subscription[0]?.subscriptionType ===
-              "TEAM" && (
+                "TEAM" && (
                 <Link href="/dashboard/manage-users">
                   <button
                     onClick={() => handleMenuClick("/dashboard/manage-users")}
@@ -253,7 +255,7 @@ export default function SideNavbarDashboard() {
                           : "text-[#99A6B8] group-hover:text-white" // 👈 icon turns white on hover
                       )}
                     />
-                    Manage Users
+                    Gestisci Utenti
                   </button>
                 </Link>
               )}
@@ -276,10 +278,31 @@ export default function SideNavbarDashboard() {
                       : "text-[#99A6B8] group-hover:text-white" // 👈 icon changes to white on hover
                   )}
                 />
-                Subscription plan
+                Piano Abbonamento
               </button>
             </Link>
 
+            <Link href="/contact">
+              <button
+                onClick={() => handleMenuClick("/contact")}
+                className={clsx(
+                  "w-full flex items-center gap-3 text-left px-4 py-4 rounded-md text-[1rem] font-medium cursor-pointer group",
+                  currentSelectedPath === "/contact"
+                    ? "bg-primary text-white"
+                    : "bg-white hover:bg-primary hover:text-white"
+                )}
+              >
+                <BsEnvelope
+                  className={clsx(
+                    "text-2xl transition-colors",
+                    currentSelectedPath === "/contact"
+                      ? "text-white"
+                      : "text-[#99A6B8] group-hover:text-white"
+                  )}
+                />
+                Contatto
+              </button>
+            </Link>
           </div>
         </nav>
 
@@ -302,9 +325,8 @@ export default function SideNavbarDashboard() {
                   : "text-[#99A6B8] group-hover:text-white" // 👈 stroke turns white when parent button hovered
               )}
             />
-            Log Out
+            Disconnetti
           </button>
-
         </div>
       </aside>
 

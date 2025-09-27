@@ -14,7 +14,7 @@ import {
 
 export default function FinancialDashboard({
   financialHighlights,
-  businessModel,
+  cashFlowAnalysisText,
   cashFlowAnalysis,
 }: IFinancial) {
   // console.log("Tis is ",financialHighlights)
@@ -36,12 +36,11 @@ export default function FinancialDashboard({
     Revenue: item.revenue,
   }));
 
-
   return (
     <div className="mx-auto space-y-10 mt-10">
       {/* Financial Highlights Table */}
-      <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
-        Financial Highlights
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+        12.1 Punti salienti finanziari
       </h2>
       <div className=" rounded-lg  border border-gray-200 ">
         <div className="overflow-x-auto">
@@ -49,19 +48,24 @@ export default function FinancialDashboard({
             <thead>
               <tr className="bg-[#E6D8FF] ">
                 <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
-                  Year
+                  {/* Year */}
+                  Anno
                 </th>
                 <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
-                  Revenue
+                  {/* Revenue */}
+                  Ricavi
                 </th>
                 <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
-                  Net Income
+                  {/* Net Income */}
+                  Reddito netto
                 </th>
                 <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                  {/* CAPEX */}
                   CAPEX
                 </th>
                 <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
-                  Debt Repayment
+                  {/* Debt Repayment */}
+                  Rimborso del debito
                 </th>
               </tr>
             </thead>
@@ -99,20 +103,28 @@ export default function FinancialDashboard({
       <div className="bg-gray-50 rounded-lg  p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-800">
-            FinancialHighlights{" "}
+            {/* FinancialHighlights */}
+            Punti salienti finanziari{" "}
             <span className="px-3 py-1 ml-3 bg-purple-100 text-purple-700 rounded-full text-sm">
-              Yearly
+              {/* Yearly */}
+              Annuale
             </span>
           </h2>
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-4 text-sm">
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                <span className="text-gray-600">Net Income</span>
+                <span className="text-gray-600">
+                  {/* Net Income */}
+                  Reddito netto
+                </span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-                <span className="text-gray-600">Revenue</span>
+                <span className="text-gray-600">
+                  {/* Revenue */}
+                  Ricavi
+                </span>
               </div>
             </div>
           </div>
@@ -171,19 +183,19 @@ export default function FinancialDashboard({
         </div>
       </div>
 
-      {/* Business Model */}
-      <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
-        Business Model
+      {/* Cash Flow Analysis */}
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+        12.2 Analisi del flusso di cassa
       </h2>
       <div className="">
         <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-justify">
-          {businessModel}
+          {cashFlowAnalysisText}
         </p>
       </div>
 
-      {/* Cash Flow Analysis */}
-      <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
-        Cash Flow Analysis
+      {/* Cash Flow Analysis Data */}
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+        12.3 Analisi del flusso di cassa
       </h2>
       <div className="">
         <div className="overflow-x-auto">
@@ -191,19 +203,24 @@ export default function FinancialDashboard({
             <thead>
               <tr className="bg-purple-100 ">
                 <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
-                  Year
+                  {/* Year */}
+                  Anno
                 </th>
                 <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
-                  Operating
+                  {/* Operating */}
+                  Operativo
                 </th>
                 <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
-                  Investing
+                  {/* Investing */}
+                  Investimenti
                 </th>
                 <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
-                  Financing
+                  {/* Financing */}
+                  Finanziamento
                 </th>
                 <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
-                  Net Cash
+                  {/* Net Cash */}
+                  Cassa netta
                 </th>
               </tr>
             </thead>

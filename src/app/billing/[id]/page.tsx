@@ -1,30 +1,18 @@
-
-import SmartNavbar from "@/components/ai-smart-form/SmartNavbar";
-import BillingPlan from "@/components/LandingPage/BillingPlan";
-import StripePaymentForm from "@/components/LandingPage/StripePaymentForm";
-// import { useRouter } from "next/navigation";
 import React from "react";
 
-const BillingPage = async({params}: any) => {
-    const {id} = await params;
-    //   const router = useRouter();
+// Deprecated Stripe billing page. Kept to avoid 404 if linked elsewhere.
+// For PayPal subscriptions, users are redirected directly to PayPal approval URL.
 
-console.log("id", id);
-
+const BillingPage = async ({ params }: any) => {
+  const { id } = await params;
+  console.log("Deprecated /billing page accessed for plan:", id);
 
   return (
-    <div>
-      {/* <SmartNavbar
-        rightButtons={
-          <button
-            onClick={handleBack}
-            className="text-accent px-12 py-2 rounded-md border border-accent hover:bg-primary hover:text-white transition-colors duration-200"
-          >
-            Back
-          </button>
-        }
-      /> */}
-      <StripePaymentForm id={id} />
+    <div className="min-h-[50vh] flex items-center justify-center">
+      <div className="text-center space-y-2">
+        <h1 className="text-xl font-semibold">This billing page is no longer used.</h1>
+        <p className="text-gray-600">Please choose a plan again to start the PayPal checkout.</p>
+      </div>
     </div>
   );
 };

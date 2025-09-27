@@ -2,8 +2,10 @@
 
 import Chart from "chart.js/auto";
 import html2canvas from "html2canvas";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
-// Don't register ChartDataLabels globally to avoid conflicts
+// Register ChartDataLabels plugin
+Chart.register(ChartDataLabels);
 
 interface DocDownloadProps {
   executiveSummary: string;
@@ -64,9 +66,9 @@ const generateChartImage = async (
     }
 
     const colors = [
-      "#3498db",
-      "#e74c3c",
-      "#2ecc71",
+      "#8B5CF6", // Purple for Assets (first)
+      "#1E1B4B", // Dark Blue for Liabilities (second)
+      "#EF4444", // Red for Equity (third)
       "#f39c12",
       "#9b59b6",
       "#1abc9c",
@@ -130,38 +132,49 @@ const generateChartImage = async (
         },
       };
     } else if (type === "pie") {
+      // For balance sheet, use donut chart with center text
+      const isBalanceSheet = title.includes("Balance Sheet");
+
       chartConfig = {
-        type: "pie",
+        type: "doughnut",
         data: {
           labels: data.map(
             (item) =>
               item.name || item.category || `Item ${data.indexOf(item) + 1}`
           ),
+          originalData: data, // Store original data for formatting
           datasets: [
             {
-              data: data.map((item) =>
-                parseFloat(item.value || item.amount || 0)
-              ),
+              data: data.map((item) => {
+                const value = parseFloat(item.value || item.amount || 0);
+                // Use absolute values for percentage calculation
+                return Math.abs(value);
+              }),
               backgroundColor: colors.slice(0, data.length),
-              borderColor: "#2c3e50",
+              borderColor: "#ffffff",
               borderWidth: 2,
+              cutout: isBalanceSheet ? "60%" : "0%", // Donut for balance sheet
             },
           ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          backgroundColor: "white",
           plugins: {
             title: {
-              display: true,
+              display: !isBalanceSheet,
               text: title,
               font: { size: 16, weight: "bold" },
             },
             legend: {
+              display: isBalanceSheet,
               position: "right",
               labels: {
                 color: "#2c3e50",
                 font: { size: 12 },
+                usePointStyle: true,
+                pointStyle: "circle",
                 generateLabels: function (chart: any) {
                   const data = chart.data;
                   if (data.labels.length && data.datasets.length) {
@@ -171,15 +184,21 @@ const generateChartImage = async (
                         (a: number, b: number) => a + b,
                         0
                       );
-                      const percentage = ((value / total) * 100).toFixed(0);
+                      const percentage =
+                        total > 0 ? ((value / total) * 100).toFixed(0) : "0";
+
+                      // Get original value for formatting
+                      const originalData = data.originalData || data;
+                      const originalValue =
+                        originalData[i]?.value || originalData[i]?.amount || 0;
                       const formattedValue =
-                        !value || isNaN(value)
+                        !originalValue || isNaN(originalValue)
                           ? "$0"
-                          : value >= 1000000
-                            ? `$${(value / 1000000).toFixed(1)}M`
-                            : value >= 1000
-                              ? `$${(value / 1000).toFixed(0)}K`
-                              : `$${value.toLocaleString()}`;
+                          : originalValue >= 1000000
+                          ? `$${(originalValue / 1000000).toFixed(1)}M`
+                          : originalValue >= 1000
+                          ? `$${(originalValue / 1000).toFixed(0)}K`
+                          : `$${originalValue.toLocaleString()}`;
 
                       return {
                         text: `${label}: ${percentage}% (${formattedValue})`,
@@ -195,6 +214,24 @@ const generateChartImage = async (
                 },
               },
             },
+            datalabels: {
+              display: isBalanceSheet,
+              color: "#ffffff",
+              font: {
+                size: 14,
+                weight: "bold",
+              },
+              formatter: function (value: number, context: any) {
+                const total = context.dataset.data.reduce(
+                  (a: number, b: number) => a + b,
+                  0
+                );
+                const percentage =
+                  total > 0 ? ((value / total) * 100).toFixed(0) : "0";
+                const label = context.chart.data.labels[context.dataIndex];
+                return `${percentage}%\n${label}`;
+              },
+            },
             tooltip: {
               callbacks: {
                 label: function (context: any) {
@@ -203,15 +240,16 @@ const generateChartImage = async (
                     (a: number, b: number) => a + b,
                     0
                   );
-                  const percentage = ((value / total) * 100).toFixed(0);
+                  const percentage =
+                    total > 0 ? ((value / total) * 100).toFixed(0) : "0";
                   const formattedValue =
                     !value || isNaN(value)
                       ? "$0"
                       : value >= 1000000
-                        ? `$${(value / 1000000).toFixed(1)}M`
-                        : value >= 1000
-                          ? `$${(value / 1000).toFixed(0)}K`
-                          : `$${value.toLocaleString()}`;
+                      ? `$${(value / 1000000).toFixed(1)}M`
+                      : value >= 1000
+                      ? `$${(value / 1000).toFixed(0)}K`
+                      : `$${value.toLocaleString()}`;
 
                   return `${context.label}: ${percentage}% (${formattedValue})`;
                 },
@@ -221,6 +259,19 @@ const generateChartImage = async (
         },
       };
     } else if (type === "line") {
+      const chartData = data.map((item) =>
+        parseFloat(item.value || item.amount || 0)
+      );
+
+      // Calculate min and max values for better scaling
+      const minValue = Math.min(...chartData);
+      const maxValue = Math.max(...chartData);
+      const range = maxValue - minValue;
+
+      // Set y-axis bounds with some padding
+      const yAxisMin = minValue - range * 0.1;
+      const yAxisMax = maxValue + range * 0.1;
+
       chartConfig = {
         type: "line",
         data: {
@@ -231,9 +282,7 @@ const generateChartImage = async (
           datasets: [
             {
               label: title,
-              data: data.map((item) =>
-                parseFloat(item.value || item.amount || 0)
-              ),
+              data: chartData,
               borderColor: "#3498db",
               backgroundColor: "rgba(52, 152, 219, 0.1)",
               borderWidth: 3,
@@ -252,12 +301,40 @@ const generateChartImage = async (
               font: { size: 16, weight: "bold" },
             },
             legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (context: any) {
+                  const value = context.parsed.y;
+                  const formattedValue =
+                    !value || isNaN(value)
+                      ? "$0"
+                      : value >= 1000000
+                      ? `$${(value / 1000000).toFixed(1)}M`
+                      : value >= 1000
+                      ? `$${(value / 1000).toFixed(0)}K`
+                      : `$${value.toLocaleString()}`;
+                  return `${context.dataset.label}: ${formattedValue}`;
+                },
+              },
+            },
           },
           scales: {
             y: {
-              beginAtZero: true,
+              min: yAxisMin,
+              max: yAxisMax,
               grid: { color: "#e0e0e0" },
-              ticks: { color: "#2c3e50" },
+              ticks: {
+                color: "#2c3e50",
+                callback: function (value: any) {
+                  if (!value || isNaN(value)) return "$0";
+                  if (value >= 1000000) {
+                    return `$${(value / 1000000).toFixed(1)}M`;
+                  } else if (value >= 1000) {
+                    return `$${(value / 1000).toFixed(0)}K`;
+                  }
+                  return `$${value.toLocaleString()}`;
+                },
+              },
             },
             x: {
               grid: { color: "#e0e0e0" },
@@ -329,10 +406,10 @@ export const generateWordDocument = async ({
         const item = data[0]; // Use first year's data
         const costComponents = [
           { name: "COGS", value: item.cogs || 0 },
-          { name: "Employee Costs", value: item.employee_costs || 0 },
+          { name: "Costi del personale", value: item.employee_costs || 0 },
           { name: "Marketing", value: item.marketing || 0 },
-          { name: "Rent", value: item.rent || 0 },
-          { name: "Administration", value: item.administration || 0 },
+          { name: "Affitto", value: item.rent || 0 },
+          { name: "Amministrazione", value: item.administration || 0 },
         ];
 
         return costComponents
@@ -346,12 +423,63 @@ export const generateWordDocument = async ({
       // For balance sheet - show Assets, Liabilities, Equity
       if (data.length > 0) {
         const item = data[0]; // Use first year's data
-        return [
-          { name: "Assets", value: item.assets || 0 },
-          { name: "Liabilities", value: item.liabilities || 0 },
-          { name: "Equity", value: item.equity || 0 },
-        ].filter((comp) => comp.value > 0);
+        const chartData = [
+          { name: "Attività", value: item.assets || 0 },
+          { name: "Passività", value: item.liabilities || 0 },
+          { name: "Patrimonio netto", value: item.equity || 0 },
+        ];
+        // Store original data for formatting
+        (chartData as any).originalData = chartData;
+        // Always show all three components (Assets, Liabilities, Equity)
+        return chartData;
       }
+      return [];
+    }
+
+    if (chartType === "net_financial") {
+      // For net financial position - show net position over years
+      return data.map((item, index) => {
+        // Try multiple possible field names for net financial position
+        let netPosition = 0;
+
+        // Check for common field names
+        if (item.net_financial_position !== undefined) {
+          netPosition = parseFloat(item.net_financial_position);
+        } else if (item.netPosition !== undefined) {
+          netPosition = parseFloat(item.netPosition);
+        } else if (item.net_position !== undefined) {
+          netPosition = parseFloat(item.net_position);
+        } else if (item.value !== undefined) {
+          netPosition = parseFloat(item.value);
+        } else if (item.amount !== undefined) {
+          netPosition = parseFloat(item.amount);
+        } else {
+          // If no specific field found, try to find any numeric field that could be net position
+          const numericFields = Object.keys(item).filter(
+            (key) =>
+              typeof item[key] === "number" ||
+              (!isNaN(parseFloat(item[key])) && isFinite(parseFloat(item[key])))
+          );
+
+          // Exclude year field and use the first numeric field found
+          const nonYearFields = numericFields.filter(
+            (key) =>
+              key.toLowerCase() !== "year" &&
+              key.toLowerCase() !== "id" &&
+              key.toLowerCase() !== "index"
+          );
+
+          if (nonYearFields.length > 0) {
+            netPosition = parseFloat(item[nonYearFields[0]]);
+          }
+        }
+
+        return {
+          name: `Year ${item.year || index + 1}`,
+          value: netPosition,
+          amount: netPosition,
+        };
+      });
     }
 
     // Generic conversion for other data types
@@ -386,50 +514,57 @@ export const generateWordDocument = async ({
 
   // Generate chart images with proper data conversion
 
-
   const financialChart =
     financialHighlights.length > 0
       ? await generateChartImage(
-        "bar",
-        convertDataForChart(financialHighlights, "financial"),
-        "Financial Highlights Bar Chart"
-      )
+          "bar",
+          convertDataForChart(financialHighlights, "financial"),
+          "Grafico a barre punti salienti finanziari"
+        )
       : "";
 
   const profitLossChart =
     profitLossProjection.length > 0
       ? await generateChartImage(
-        "line",
-        convertDataForChart(profitLossProjection, "financial"),
-        "Profit Loss Trend Chart"
-      )
+          "line",
+          convertDataForChart(profitLossProjection, "financial"),
+          "Grafico tendenza profitti e perdite"
+        )
+      : "";
+  const netFinancialPositionChart =
+    netFinancialPosition.length > 0
+      ? await generateChartImage(
+          "line",
+          convertDataForChart(netFinancialPosition, "net_financial"),
+          "Grafico posizione finanziaria netta"
+        )
       : "";
 
   const balanceSheetChart =
     balanceSheet.length > 0
       ? await generateChartImage(
-        "pie",
-        convertDataForChart(balanceSheet, "balance_sheet"),
-        "Balance Sheet Distribution Chart"
-      )
+          "pie",
+          convertDataForChart(balanceSheet, "balance_sheet"),
+          "Grafico distribuzione stato patrimoniale"
+        )
       : "";
 
   const keyRatiosChart =
     keyRatios.length > 0
       ? await generateChartImage(
-        "bar",
-        convertDataForChart(keyRatios),
-        "Key Ratios Bar Chart"
-      )
+          "bar",
+          convertDataForChart(keyRatios),
+          "Grafico a barre rapporti chiave"
+        )
       : "";
 
   const operatingCostChart =
     operatingCostBreakdown.length > 0
       ? await generateChartImage(
-        "pie",
-        convertDataForChart(operatingCostBreakdown, "operating_cost"),
-        "Operating Cost Distribution Chart"
-      )
+          "pie",
+          convertDataForChart(operatingCostBreakdown, "operating_cost"),
+          "Grafico distribuzione costi operativi"
+        )
       : "";
 
   // Helper function to check if a value is likely a year
@@ -442,12 +577,15 @@ export const generateWordDocument = async ({
   const formatNumber = (value: any, columnName?: string): string => {
     if (!value || isNaN(parseFloat(value))) return "0";
     const num = parseFloat(value);
-    
+
     // Don't add dollar sign to years or year-related columns
-    if (isYear(value) || (columnName && columnName.toLowerCase().includes('year'))) {
+    if (
+      isYear(value) ||
+      (columnName && columnName.toLowerCase().includes("year"))
+    ) {
       return num.toString();
     }
-    
+
     if (num >= 1000000) {
       return `$${(num / 1000000).toFixed(1)}M`;
     } else if (num >= 1000) {
@@ -461,16 +599,17 @@ export const generateWordDocument = async ({
     if (!data || data.length === 0) return "";
 
     const headers = Object.keys(data[0] || {});
-    
+
     // Create transposed structure: each original column becomes a row
-    const transposedRows = headers.map(header => {
-      const row = [header.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())];
-      data.forEach(item => {
+    const transposedRows = headers.map((header) => {
+      const row = [
+        header.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+      ];
+      data.forEach((item) => {
         const cellValue = item[header];
         const formattedValue =
           typeof cellValue === "number" ||
-            (!isNaN(parseFloat(cellValue)) &&
-              isFinite(parseFloat(cellValue)))
+          (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
             ? formatNumber(cellValue, header)
             : String(cellValue || "");
         row.push(formattedValue);
@@ -486,11 +625,11 @@ export const generateWordDocument = async ({
             ${row
               .map((cell, cellIndex) => {
                 const isHeader = cellIndex === 0;
-                const cellStyle = isHeader 
+                const cellStyle = isHeader
                   ? "background-color: #f5f5f5; font-weight: bold; font-size: 12px; padding: 8px 6px; text-align: left; white-space: nowrap;"
                   : "font-size: 11px; padding: 6px 4px; text-align: center; white-space: nowrap;";
-                
-                return isHeader 
+
+                return isHeader
                   ? `<th style="${cellStyle}">${cell}</th>`
                   : `<td style="${cellStyle}">${cell}</td>`;
               })
@@ -624,8 +763,10 @@ export const generateWordDocument = async ({
     const headerRow = headers
       .map(
         (header, index) =>
-          `<th style="width: ${columnWidths[index]
-          }; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${columnWidths[index]
+          `<th style="width: ${
+            columnWidths[index]
+          }; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${
+            columnWidths[index]
           };">${header
             .replace(/_/g, " ")
             .replace(/\b\w/g, (l) => l.toUpperCase())}</th>`
@@ -642,8 +783,8 @@ export const generateWordDocument = async ({
               const cellValue = row[header];
               const formattedValue =
                 typeof cellValue === "number" ||
-                  (!isNaN(parseFloat(cellValue)) &&
-                    isFinite(parseFloat(cellValue)))
+                (!isNaN(parseFloat(cellValue)) &&
+                  isFinite(parseFloat(cellValue)))
                   ? formatNumber(cellValue, header)
                   : String(cellValue || "");
 
@@ -878,14 +1019,53 @@ export const generateWordDocument = async ({
     </head>
     <body>
       <div class="header">
-        <h1>Business Plan</h1>
-        <p>Generated on: ${new Date().toLocaleDateString()}</p>
+        <h1>Piano aziendale</h1>
+        <p>Generato il: ${new Date().toLocaleDateString()}</p>
+      </div>
+
+      <!-- Index Section -->
+      <div class="section" style="page-break-inside: avoid;">
+        <div class="section-title">
+          <h2>Indice</h2>
+        </div>
+        <div class="section-content">
+          <div style="margin: 20px 0; font-size: 14px; line-height: 1.8;">
+            <p style="margin: 10px 0;"><strong>Sommario</strong></p>
+            <p style="margin: 10px 0;">1. Sintesi esecutiva</p>
+            <p style="margin: 10px 0;">2. Panoramica aziendale</p>
+            <p style="margin: 10px 0;">3. Team di gestione</p>
+            <p style="margin: 10px 0;">4. Modello di business</p>
+            <p style="margin: 10px 0;">5. Analisi di mercato</p>
+            <p style="margin: 10px 0;">6. Fonti di finanziamento</p>
+            <p style="margin: 10px 0;">7. Conto economico a valore aggiunto</p>
+            <p style="margin: 10px 0; padding-left: 20px;">7.1 Ripartizione dei costi operativi</p>
+            <p style="margin: 10px 0;">8. Proiezione di profitti e perdite</p>
+            <p style="margin: 10px 0;">9. Stato Patrimoniale</p>
+            <p style="margin: 10px 0;">10. Posizione finanziaria netta</p>
+            <p style="margin: 10px 0;">11. Struttura del debito</p>
+            <p style="margin: 10px 0;">12. Analisi finanziaria</p>
+            <p style="margin: 10px 0;">13. Analisi rapporti</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disclaimer Section -->
+      <div class="section" >
+        <div class="section-title">
+          <h2>Disclaimer</h2>
+        </div>
+        <div class="section-content">
+            La presente relazione contiene dichiarazioni previsionali ("forward-looking statements"). Queste dichiarazioni sono basate sulle attuali aspettative e proiezioni della Società relativamente ad eventi futuri e, per loro natura, sono soggette ad una componente intrinseca di rischiosità ed incertezza. Sono dichiarazioni che si riferiscono ad eventi e dipendono da circostanze che possono, o non possono, accadere o verificarsi in futuro e, come tali, non si deve fare un indebito affidamento su di esse.
+          
+            I risultati effettivi potrebbero differire significativamente da quelli contenuti in dette dichiarazioni a causa di una molteplicità di fattori, incluse la volatilità e il deterioramento dei mercati del capitale e finanziari, variazioni nei prezzi di materie prime, cambi nelle condizioni macroeconomiche e nella crescita economica ed altre variazioni delle condizioni di business, mutamenti della normativa e del contesto istituzionale (sia in Italia che all'estero), e molti altri fattori, la maggioranza dei quali è al di fuori del controllo della Società.
+          
+        </div>
       </div>
 
       <!-- Executive Summary - First page, no page break before -->
       <div class="section executive-summary">
         <div class="section-title">
-          <h2>Executive Summary</h2>
+          <h2>1. Sintesi esecutiva</h2>
         </div>
         <div class="section-content">
           <p>${executiveSummary.replace(/\n/g, "</p><p>")}</p>
@@ -895,295 +1075,425 @@ export const generateWordDocument = async ({
       <!-- Business Overview - New page -->
       <div class="section">
         <div class="section-title">
-          <h2>Business Overview</h2>
+          <h2>2. Panoramica aziendale</h2>
         </div>
         <div class="section-content">
           <p>${businessOverview.replace(/\n/g, "</p><p>")}</p>
         </div>
       </div>
 
-      <!-- Market Analysis - New page -->
+       ${
+         managementTeam
+           ? `
       <div class="section">
         <div class="section-title">
-          <h2>Market Analysis</h2>
-        </div>
-        <div class="section-content">
-          <p>${marketAnalysis.replace(/\n/g, "</p><p>")}</p>
-        </div>
-      </div>
-
-        ${financialHighlights.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Financial Highlights</h2>
-        </div>
-        <div class="section-content">
-          ${generateTableHTML(
-        financialHighlights,
-        "Financial Highlights Table"
-      )}
-          ${financialChart
-        ? `
-            <div style="text-align: center;">
-              <img src="${financialChart}" alt="Financial Highlights Chart" />
-            </div>
-          `
-        : ""
-      }
-          <div class="chart-note">
-            <strong>Note:</strong> This section includes bar charts showing Revenue and Net Income trends over multiple years.
-          </div>
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-      ${businessModel
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Business Model</h2>
-        </div>
-        <div class="section-content">
-          <p>${businessModel.replace(/\n/g, "</p><p>")}</p>
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-       ${cashFlowAnalysis.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Cash Flow Analysis</h2>
-        </div>
-        <div class="section-content">
-          ${generateTableHTML(cashFlowAnalysis, "Cash Flow Analysis Table")}
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-      ${marketingSalesStrategy
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Marketing & Sales Strategy</h2>
-        </div>
-        <div class="section-content">
-          <p>${marketingSalesStrategy.replace(/\n/g, "</p><p>")}</p>
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-      ${profitLossProjection.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Profit Loss Projection</h2>
-        </div>
-        <div class="section-content">
-          ${generateTransposedTableHTML(
-        profitLossProjection,
-        "Profit Loss Projection Table"
-      )}
-          ${profitLossChart
-        ? `
-            <div style="text-align: center;">
-              <img src="${profitLossChart}" alt="Profit Loss Trend Chart" />
-            </div>
-          `
-        : ""
-      }
-          <div class="chart-note">
-            <strong>Note:</strong> This section includes line charts showing profit and loss trends over time.
-          </div>
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-      ${sectorStrategy
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Sector Strategy</h2>
-        </div>
-        <div class="section-content">
-          <p>${sectorStrategy.replace(/\n/g, "</p><p>")}</p>
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-    ${balanceSheet.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Balance Sheet</h2>
-        </div>
-        <div class="section-content">
-          ${generateTransposedTableHTML(balanceSheet, "Balance Sheet Table")}
-          ${balanceSheetChart
-        ? `
-            <div style="text-align: center;">
-              <img src="${balanceSheetChart}" alt="Balance Sheet Distribution Chart" />
-            </div>
-          `
-        : ""
-      }
-          <div class="chart-note">
-            <strong>Note:</strong> This section includes donut charts showing Assets, Liabilities, and Equity distribution.
-          </div>
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-    ${debtStructure.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Debt Structure</h2>
-        </div>
-        <div class="section-content">
-          ${generateTableHTML(debtStructure, "Debt Structure Table")}
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-      ${fundingSources
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Funding Sources</h2>
-        </div>
-        <div class="section-content">
-          <p>${fundingSources.replace(/\n/g, "</p><p>")}</p>
-        </div>
-      </div>
-      `
-      : ""
-    }
-  
-
-      ${operationsPlan
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Operations Plan</h2>
-        </div>
-        <div class="section-content">
-          <p>${operationsPlan.replace(/\n/g, "</p><p>")}</p>
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-    ${operatingCostBreakdown.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Operating Cost Breakdown</h2>
-        </div>
-        <div class="section-content">
-          ${generateTransposedTableHTML(
-        operatingCostBreakdown,
-        "Operating Cost Breakdown Table"
-      )}
-          ${operatingCostChart
-        ? `
-            <div style="text-align: center;">
-              <img src="${operatingCostChart}" alt="Operating Cost Distribution Chart" />
-            </div>
-          `
-        : ""
-      }
-          <div class="chart-note">
-            <strong>Note:</strong> This section includes donut charts showing cost distribution across different categories.
-          </div>
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-      
-
-      ${financialAnalysis.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Financial Analysis</h2>
-        </div>
-        <div class="section-content">
-          ${generateFinancialAnalysisTableHTML(financialAnalysis, "Financial Analysis Table")}
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-      ${ratiosAnalysis.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Ratios Analysis</h2>
-        </div>
-        <div class="section-content">
-          ${generateTransposedTableHTML(ratiosAnalysis, "Ratios Analysis Table")}
-        </div>
-      </div>
-      `
-      : ""
-    }
-
-    ${managementTeam
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Management Team</h2>
+          <h2>3. Team di gestione</h2>
         </div>
         <div class="section-content">
           <p>${managementTeam.replace(/\n/g, "</p><p>")}</p>
         </div>
       </div>
       `
-      : ""
-    }
-      
-      ${productionSalesForecast.length > 0
-      ? `
+           : ""
+       }
+
+        ${
+          businessModel
+            ? `
       <div class="section">
         <div class="section-title">
-          <h2>Production Sales Forecast </h2>
+          <h2>4. Modello di business</h2>
         </div>
         <div class="section-content">
-          ${generateTableHTML(productionSalesForecast, "Production Sales Forecast  Table")}
+          <p>${businessModel.replace(/\n/g, "</p><p>")}</p>
         </div>
       </div>
       `
-      : ""
-    }
+            : ""
+        }
 
+
+      <!-- Market Analysis - New page -->
+      <div class="section">
+        <div class="section-title">
+          <h2>5. Analisi di mercato</h2>
+        </div>
+        <div class="section-content">
+          <p>${marketAnalysis.replace(/\n/g, "</p><p>")}</p>
+        </div>
+      </div>
+
+      ${
+        fundingSources
+          ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>6. Fonti di finanziamento</h2>
+        </div>
+        <div class="section-content">
+          <p>${
+            typeof fundingSources === "string"
+              ? fundingSources.replace(/\n/g, "</p><p>")
+              : typeof fundingSources === "object" && fundingSources !== null
+              ? Object.entries(fundingSources)
+                  .map(
+                    ([key, value]) =>
+                      `${key
+                        .replace(/([A-Z])/g, " $1")
+                        .replace(/^./, (str) => str.toUpperCase())}: ${
+                        typeof value === "number"
+                          ? `$${value.toLocaleString()}`
+                          : value
+                      }`
+                  )
+                  .join(", ")
+              : "No funding information available"
+          }</p>
+        </div>
+      </div>
+      `
+          : ""
+      }
+
+      ${
+        productionSalesForecast.length > 0
+          ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>7. Previsione vendite produzione</h2>
+        </div>
+        <div class="section-content">
+          ${generateTableHTML(
+            productionSalesForecast,
+            "Tabella previsione vendite produzione"
+          )}
+        </div>
+      </div>
+      `
+          : ""
+      }
+
+       ${
+         operatingCostBreakdown.length > 0
+           ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>7.1 Ripartizione costi operativi</h2>
+        </div>
+        <div class="section-content">
+          ${generateTransposedTableHTML(
+            operatingCostBreakdown,
+            "Tabella ripartizione costi operativi 7.2"
+          )}
+          ${
+            operatingCostChart
+              ? `
+            <div style="text-align: center;">
+              <img src="${operatingCostChart}" alt="Grafico distribuzione costi operativi" />
+            </div>
+          `
+              : ""
+          }
+          <div class="chart-note">
+            <strong>Nota:</strong> Questa sezione include grafici a ciambella che mostrano la distribuzione dei costi tra diverse categorie.
+          </div>
+        </div>
+      </div>
+      `
+           : ""
+       }
+
+        ${
+          marketingSalesStrategy
+            ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>8. Strategia marketing e vendite</h2>
+        </div>
+        <div class="section-content">
+          <p>${marketingSalesStrategy.replace(/\n/g, "</p><p>")}</p>
+        </div>
+      </div>
+      `
+            : ""
+        }
+
+        ${
+          profitLossProjection.length > 0
+            ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>8.1 Proiezione profitti e perdite</h2>
+        </div>
+        <div class="section-content">
+          ${generateTransposedTableHTML(
+            profitLossProjection,
+            "Tabella proiezione profitti e perdite"
+          )}
+          ${
+            profitLossChart
+              ? `
+            <div style="text-align: center;">
+              <img src="${profitLossChart}" alt="Grafico tendenza profitti e perdite" />
+            </div>
+          `
+              : ""
+          }
+          <div class="chart-note">
+            <strong>Nota:</strong> Questa sezione include grafici a linee che mostrano le tendenze di profitti e perdite nel tempo.
+          </div>
+        </div>
+      </div>
+      `
+            : ""
+        }
+
+        ${
+          balanceSheet.length > 0
+            ? `
+          <div class="section">
+            <div class="section-title">
+              <h2>9. Stato patrimoniale</h2>
+            </div>
+            <div class="section-content">
+              ${generateTransposedTableHTML(
+                balanceSheet,
+                "Tabella stato patrimoniale"
+              )}
+              ${
+                balanceSheetChart
+                  ? `
+                <div style="display: flex; align-items: center; gap: 20px; margin: 20px 0;">
+                  <div style="flex: 1; max-width: 400px; display: flex; justify-content: center;">
+                    <img src="${balanceSheetChart}" alt="Grafico distribuzione stato patrimoniale" style="width: 100%; height: auto;" />
+                  </div>
+                  <div style="flex: 1; padding-left: 20px;">
+                    <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: bold; color: #2c3e50;">Componenti stato patrimoniale</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                      ${
+                        balanceSheet.length > 0
+                          ? (() => {
+                              const item = balanceSheet[0];
+                              const assets = item.assets || 0;
+                              const liabilities = item.liabilities || 0;
+                              const equity = item.equity || 0;
+
+                              // Calculate percentages using absolute values
+                              const absAssets = Math.abs(assets);
+                              const absLiabilities = Math.abs(liabilities);
+                              const absEquity = Math.abs(equity);
+                              const total =
+                                absAssets + absLiabilities + absEquity;
+
+                              const assetsPercentage =
+                                total > 0
+                                  ? Math.round((absAssets / total) * 100)
+                                  : 0;
+                              const liabilitiesPercentage =
+                                total > 0
+                                  ? Math.round((absLiabilities / total) * 100)
+                                  : 0;
+                              const equityPercentage =
+                                total > 0
+                                  ? Math.round((absEquity / total) * 100)
+                                  : 0;
+
+                              // Format currency
+                              const formatCurrency = (value: any) => {
+                                if (!value || isNaN(value)) return "$0";
+                                if (value >= 1000000)
+                                  return `$${(value / 1000000).toFixed(1)}M`;
+                                if (value >= 1000)
+                                  return `$${(value / 1000).toFixed(0)}K`;
+                                return `$${value.toLocaleString()}`;
+                              };
+
+                              return `
+                          <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: #f8f9fa; border-radius: 6px;">
+                            <div style="width: 12px; height: 12px; background: #8B5CF6; border-radius: 50%;"></div>
+                            <span style="font-weight: 500; color: #2c3e50;">Attività</span>
+                            <span style="margin-left: auto; font-weight: bold; color: #2c3e50;">${assetsPercentage}%</span>
+                            <span style="font-size: 12px; color: #666;">${formatCurrency(
+                              assets
+                            )}</span>
+                          </div>
+                          <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: #f8f9fa; border-radius: 6px;">
+                            <div style="width: 12px; height: 12px; background: #1E1B4B; border-radius: 50%;"></div>
+                            <span style="font-weight: 500; color: #2c3e50;">Passività</span>
+                            <span style="margin-left: auto; font-weight: bold; color: #2c3e50;">${liabilitiesPercentage}%</span>
+                            <span style="font-size: 12px; color: #666;">${formatCurrency(
+                              liabilities
+                            )}</span>
+                          </div>
+                          <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: #f8f9fa; border-radius: 6px;">
+                            <div style="width: 12px; height: 12px; background: #EF4444; border-radius: 50%;"></div>
+                            <span style="font-weight: 500; color: #2c3e50;">Patrimonio netto</span>
+                            <span style="margin-left: auto; font-weight: bold; color: #2c3e50;">${equityPercentage}%</span>
+                            <span style="font-size: 12px; color: #666;">${formatCurrency(
+                              equity
+                            )}</span>
+                          </div>
+                        `;
+                            })()
+                          : ""
+                      }
+                    </div>
+                  </div>
+                </div>
+              `
+                  : ""
+              }
+              <div class="chart-note">
+                <strong>Nota:</strong> Questa sezione include grafici a ciambella che mostrano la distribuzione di Attività, Passività e Patrimonio netto.
+              </div>
+            </div>
+          </div>
+          `
+            : ""
+        }
+  
+
+
+    
+
+    ${
+      netFinancialPosition.length > 0
+        ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>10. Posizione finanziaria netta</h2>
+        </div>
+        <div class="section-content">
+          ${generateTransposedTableHTML(
+            netFinancialPosition,
+            "Tabella posizione finanziaria netta"
+          )}
+          ${
+            netFinancialPositionChart
+              ? `
+            <div style="text-align: center;">
+              <img src="${netFinancialPositionChart}" alt="Grafico posizione finanziaria netta" />
+            </div>
+          `
+              : ""
+          }
+          <div class="chart-note">
+            <strong>Nota:</strong> Questa sezione include grafici a linee che mostrano le tendenze della posizione finanziaria netta nel tempo.
+          </div>
+        </div>
+      </div>
+      `
+        : ""
+    }  
+    ${
+      debtStructure.length > 0
+        ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>11. Struttura del debito</h2>
+        </div>
+        <div class="section-content">
+          ${generateTableHTML(debtStructure, "Tabella struttura debito")}
+        </div>
+      </div>
+      `
+        : ""
+    }  
+
+      ${
+        financialAnalysis.length > 0
+          ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>12. Analisi finanziaria</h2>
+        </div>
+        <div class="section-content">
+          ${generateFinancialAnalysisTableHTML(
+            financialAnalysis,
+            "Tabella analisi finanziaria"
+          )}
+        </div>
+      </div>
+      `
+          : ""
+      }
+
+        ${
+          financialHighlights.length > 0
+            ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>12.1 Punti salienti finanziari</h2>
+        </div>
+        <div class="section-content">
+          ${generateTableHTML(
+            financialHighlights,
+            "Tabella punti salienti finanziari"
+          )}
+          ${
+            financialChart
+              ? `
+            <div style="text-align: center;">
+              <img src="${financialChart}" alt="Grafico punti salienti finanziari" />
+            </div>
+          `
+              : ""
+          }
+          <div class="chart-note">
+            <strong>Nota:</strong> Questa sezione include grafici a barre che mostrano le tendenze di Ricavi e Reddito netto su più anni.
+          </div>
+        </div>
+      </div>
+      `
+            : ""
+        }
+
+        
+       ${
+         cashFlowAnalysis.length > 0
+           ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>12.2 Analisi flusso di cassa</h2>
+        </div>
+        <div class="section-content">
+          ${generateTableHTML(
+            cashFlowAnalysis,
+            "Tabella analisi flusso di cassa"
+          )}
+        </div>
+      </div>
+      `
+           : ""
+       }
+
+      ${
+        ratiosAnalysis.length > 0
+          ? `
+      <div class="section">
+        <div class="section-title">
+          <h2>13. Analisi rapporti</h2>
+        </div>
+        <div class="section-content">
+          ${generateTransposedTableHTML(
+            ratiosAnalysis,
+            "Tabella analisi rapporti"
+          )}
+        </div>
+      </div>
+      `
+          : ""
+      }
+
+   
+      
+      
 
       
 
       <div class="footer">
-        <p>This document was generated by BusinessPlanAI</p>
-        <p>© ${new Date().getFullYear()} All rights reserved</p>
+        <p>Questo documento è stato generato da BusinessPlanAI</p>
+        <p>© ${new Date().getFullYear()} Tutti i diritti riservati</p>
       </div>
     </body>
     </html>

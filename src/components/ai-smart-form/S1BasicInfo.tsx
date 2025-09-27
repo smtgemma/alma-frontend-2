@@ -1,5 +1,5 @@
 "use client";
-
+//
 import { useState, useRef, useEffect } from "react";
 import { GrAttachment } from "react-icons/gr";
 import { FiUpload, FiX, FiCheck } from "react-icons/fi";
@@ -531,14 +531,14 @@ export default function S1BasicInfo() {
         <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8 ">
           {/* Step Info */}
           <p className="text-center text-[1rem] text-info font-medium mb-2">
-            Step 01 out of 10
+            Passo 01 di 10
           </p>
 
           <div className="text-center mb-8">
             <h2 className="text-[2rem] text-accent font-medium ">
-              Enter Basic
+              Inserisci le Informazioni
               <br />
-              Business Information
+              Aziendali di Base
             </h2>
           </div>
 
@@ -564,7 +564,7 @@ export default function S1BasicInfo() {
                 {/* Business Name */}
                 <div>
                   <label className=" question-text">
-                    What is your business name? (Required)
+                    Qual è il nome della tua azienda? (Obbligatorio)
                   </label>
                   <input
                     type="text"
@@ -588,7 +588,7 @@ export default function S1BasicInfo() {
                 {/* Business Stage */}
                 <div>
                   <label className="question-text">
-                    Is this an existing or an upcoming business? (Required)
+                    È un'azienda esistente o in arrivo? (Obbligatorio)
                   </label>
 
                   {/* Radio Button Options */}
@@ -621,7 +621,7 @@ export default function S1BasicInfo() {
                           }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent ">
-                          Existing Business
+                          Azienda Esistente
                         </span>
                       </div>
 
@@ -638,8 +638,8 @@ export default function S1BasicInfo() {
                                 <GrAttachment className="text-primary" />
                               </div>
                               <span className="text-sm text-gray-600">
-                                Attach business documents (single or multiple
-                                PDFs)
+                                Allega documenti aziendali (PDF singoli o
+                                multipli)
                               </span>
                               <input
                                 ref={fileInputRef}
@@ -657,8 +657,8 @@ export default function S1BasicInfo() {
                             <div className="flex items-center gap-2">
                               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                               <span className="text-sm text-gray-600">
-                                Processing document with AI... (This may take up
-                                to 30 seconds)
+                                Elaborazione documento con AI... (Potrebbe
+                                richiedere fino a 30 secondi)
                               </span>
                             </div>
                           )}
@@ -672,8 +672,8 @@ export default function S1BasicInfo() {
                                 <div className="flex items-center gap-2">
                                   <FiCheck className="text-green-600 w-4 h-4" />
                                   <span className="text-sm text-green-600">
-                                    {form.businessDocument.name} uploaded
-                                    successfully
+                                    {form.businessDocument.name} caricato con
+                                    successo
                                   </span>
                                   <button
                                     type="button"
@@ -805,7 +805,7 @@ export default function S1BasicInfo() {
                           }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent ">
-                          New Business
+                          Nuova Azienda
                         </span>
                       </div>
 
@@ -819,7 +819,7 @@ export default function S1BasicInfo() {
                           <div className="mb-4">
                             <input
                               type="text"
-                              placeholder="Others(E.g. When are you planning to establish the business?)"
+                              placeholder="Altri (Es. Quando stai pianificando di stabilire l'azienda?)"
                               value={form.businessStage}
                               onChange={handleInputChange}
                               name="businessStage"
@@ -833,7 +833,7 @@ export default function S1BasicInfo() {
                               form.selectedBusinessStagesOptions.length > 0 && (
                                 <div className="mt-3">
                                   <div className="text-sm text-gray-600 mb-2">
-                                    Selected options:
+                                    Opzioni selezionate:
                                   </div>
                                   <div className="flex flex-wrap gap-2">
                                     {form.selectedBusinessStagesOptions.map(
@@ -880,7 +880,7 @@ export default function S1BasicInfo() {
                                     {/* <div className="w-2 h-2 bg-gray-400 rounded-full mr-3 animate-pulse"></div> */}
                                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                                     <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                                      Loading AI suggestions...
+                                      Caricamento suggerimenti AI...
                                     </span>
                                   </div>
                                 )}
@@ -1077,8 +1077,8 @@ export default function S1BasicInfo() {
                 {/* Location */}
                 <div>
                   <label className="question-text">
-                    In what State / City will the business be located?
-                    (Required)
+                    In quale Stato / Città sarà ubicata l'azienda?
+                    (Obbligatorio)
                   </label>
                   <input
                     type="text"
@@ -1100,7 +1100,7 @@ export default function S1BasicInfo() {
                 {/* Activity Description */}
                 <div>
                   <label className="question-text">
-                    Describe your activity? (Required)
+                    Descrivi la tua attività? (Obbligatorio)
                   </label>
                   <textarea
                     name="activity"
@@ -1122,7 +1122,7 @@ export default function S1BasicInfo() {
                 {/* Total Employees */}
                 <div>
                   <label className="question-text">
-                    Total employees (Required)
+                    Totale dipendenti (Obbligatorio)
                   </label>
                   <input
                     type="number"
@@ -1146,7 +1146,7 @@ export default function S1BasicInfo() {
                 {/* Website */}
                 <div>
                   <label className="question-text">
-                    Do you have a website or online presence? (Required)
+                    Hai un sito web o presenza online? (Obbligatorio)
                   </label>
                   <input
                     type="text"
@@ -1170,7 +1170,7 @@ export default function S1BasicInfo() {
                 <div className="flex flex-col md:flex-row items-center justify-between gap-2">
                   <div className="flex items-center gap-4">
                     <label className="question-text">
-                      Source plan language:
+                      Lingua del piano sorgente:
                     </label>
                     <div className="relative">
                       <select
@@ -1205,7 +1205,7 @@ export default function S1BasicInfo() {
 
                   <div className="flex items-center gap-4">
                     <label className="question-text">
-                      Target plan Currency:
+                      Valuta del piano target:
                     </label>
                     <div className="relative">
                       <select
@@ -1245,7 +1245,7 @@ export default function S1BasicInfo() {
                     type="submit"
                     className="w-full bg-primary cursor-pointer text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] text-[1rem]"
                   >
-                    Next
+                    Avanti
                   </button>
                 </div>
               </form>

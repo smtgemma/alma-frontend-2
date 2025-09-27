@@ -16,7 +16,6 @@ export default function UserProfile({
   onRemoveUser,
   onBackToList,
 }: UserProfileProps) {
-
   return (
     <div className="space-y-4 sm:space-y-6 px-2 sm:px-4 lg:px-0 ">
       {/* User Info Section */}
@@ -24,11 +23,11 @@ export default function UserProfile({
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 sm:gap-6 mb-4 sm:mb-6 border-b-2 border-gray-400 pb-4">
           <div className="flex-1">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
-              User Info
+              Informazioni Utente
             </h2>
             <p className="text-gray-600 mt-1 text-sm sm:text-base lg:text-lg">
-              All the key details about your team members in one place <br /> quick,
-              clear, and easy to manage
+              Tutti i dettagli chiave sui tuoi membri del team in un posto{" "}
+              <br /> veloce, chiaro e facile da gestire
             </p>
           </div>
           <div className="w-full sm:w-auto flex justify-center sm:justify-end">
@@ -36,7 +35,7 @@ export default function UserProfile({
               onClick={() => onRemoveUser()}
               className="w-full sm:w-auto px-4 cursor-pointer py-2 text-sm sm:text-base bg-red-50 border border-red-500 text-red-500  rounded-lg hover:bg-red-50 transition-colors min-w-[120px]"
             >
-              Remove User
+              Rimuovi Utente
             </button>
           </div>
         </div>
@@ -72,7 +71,7 @@ export default function UserProfile({
           <div className="space-y-3 sm:space-y-4">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 py-2 sm:py-3 border-b border-gray-100">
               <span className="text-gray-600 text-sm sm:text-base font-medium sm:font-normal">
-                Full Name:
+                Nome Completo:
               </span>
               <span className="font-medium text-gray-900 text-sm sm:text-base break-words text-right sm:text-left">
                 {user?.firstName} {user?.lastName}
@@ -80,7 +79,7 @@ export default function UserProfile({
             </div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 py-2 sm:py-3 border-b border-gray-100">
               <span className="text-gray-600 text-sm sm:text-base font-medium sm:font-normal">
-                Email Address:
+                Indirizzo Email:
               </span>
               <span className="font-medium text-gray-900 text-sm sm:text-base break-all text-right sm:text-left">
                 {user?.email}
@@ -88,7 +87,7 @@ export default function UserProfile({
             </div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 py-2 sm:py-3 border-b border-gray-100">
               <span className="text-gray-600 text-sm sm:text-base font-medium sm:font-normal">
-                User No:
+                Numero Utente:
               </span>
               <span className="font-medium text-gray-900 text-sm sm:text-base break-words text-right sm:text-left">
                 {/* {user?.location ? user?.location : "N/A"} */}
@@ -96,7 +95,7 @@ export default function UserProfile({
             </div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 py-2 sm:py-3 border-b border-gray-100">
               <span className="text-gray-600 text-sm sm:text-base font-medium sm:font-normal">
-                Location:
+                Posizione:
               </span>
               <span className="font-medium text-gray-900 text-sm sm:text-base break-words text-right sm:text-left">
                 {user?.location ? user?.location : "N/A"}
@@ -104,7 +103,7 @@ export default function UserProfile({
             </div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 py-2 sm:py-3">
               <span className="text-gray-600 text-sm sm:text-base font-medium sm:font-normal">
-                Join Date:
+                Data di Iscrizione:
               </span>
               <span className="font-medium text-gray-900 text-sm sm:text-base text-right sm:text-left">
                 {format(new Date(user.createdAt), "MMMM dd, yyyy")}

@@ -7,8 +7,6 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { setSubscriptionData } from "@/redux/features/subscription/subscriptionSlice";
 
 interface PlanFeature {
   id: string;
@@ -30,21 +28,20 @@ interface Plan {
 export default function SubscriptionPlan() {
   const { data: plansData, isLoading } = useGetCurrentPlansQuery({});
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const handlePlanSelect = async (id: any) => {
     // Check if user is authenticated
     const token = localStorage.getItem("token") || Cookies.get("token");
     if (!token) {
       // Show toast notification
-      toast.error("Please sign in first to subscribe to a plan");
+      toast.error("Accedi prima per sottoscrivere un piano");
       // Redirect to signin page
       router.push("/signIn");
       return;
     }
 
     try {
-      // Create subscription with backend to get clientSecret
+      // Create subscription with backend (PayPal)
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/billing/subscribe`,
         {
@@ -59,47 +56,52 @@ export default function SubscriptionPlan() {
         }
       );
 
-      const data = await response.json();
+      const respData = await response.json();
 
       if (!response.ok) {
         if (response.status === 401) {
           // Clear invalid token
           localStorage.removeItem("token");
           // Show toast and redirect to signin
-          toast.error("Authentication failed. Please sign in again.");
+          toast.error("Autenticazione fallita. Accedi di nuovo.");
           router.push("/signIn");
           return;
         } else if (response.status === 403) {
-          toast.error(
-            "Access denied. You do not have permission to subscribe."
-          );
+          toast.error("Accesso negato. Non hai il permesso di sottoscrivere.");
           return;
         } else {
           // Show the specific error message from API response
           const errorMessage =
-            data?.message ||
-            `Server error: ${response.status}. Please try again.`;
+            respData?.message ||
+            `Errore del server: ${response.status}. Riprova.`;
           toast.error(errorMessage);
           return;
         }
       }
 
-      if (data.success) {
-        router.push("/billing/" + id);
-        // Store subscription data in Redux
-        dispatch(
-          setSubscriptionData({
-            clientSecret: data.data.clientSecret,
-            paymentIntentId: data.data.paymentIntentId,
-          })
-        );
+      if (
+        respData.success &&
+        respData?.data?.approvalUrl &&
+        respData?.data?.paypalSubscriptionId
+      ) {
+        try {
+          if (typeof window !== "undefined") {
+            sessionStorage.setItem(
+              "paypalSubscriptionId",
+              respData.data.paypalSubscriptionId
+            );
+          }
+        } catch {}
+        // Redirect user to PayPal approval URL
+        window.location.href = respData.data.approvalUrl;
       } else {
         // Show the specific error message from API response
-        const errorMessage = data?.message || "Failed to create subscription";
+        const errorMessage =
+          respData?.message || "Creazione sottoscrizione fallita";
         toast.error(errorMessage);
       }
     } catch (error: any) {
-      toast.error(error.message || "An unexpected error occurred");
+      toast.error(error.message || "Si è verificato un errore imprevisto");
     }
   };
   if (isLoading) {
@@ -110,7 +112,7 @@ export default function SubscriptionPlan() {
       {/* Header */}
       <div className="mb-8 border-b border-gray-200">
         <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4">
-          Manage Subscription
+          Gestisci Abbonamento
         </h1>
       </div>
 
@@ -118,7 +120,7 @@ export default function SubscriptionPlan() {
       {plansData?.data?.currentPlan && (
         <div className="  py-6 mb-8">
           <h2 className="text-base font-medium text-gray-800 mb-2">
-            Current Plan
+            Piano Attuale
           </h2>
 
           <div className="flex flex-col lg:flex-row gap-6 items-start">
@@ -128,14 +130,14 @@ export default function SubscriptionPlan() {
                   {plansData?.data?.currentPlan?.publicName}
                 </h3>
                 <p className="text-gray-600">
-                  Active since{" "}
+                  Attivo dal{" "}
                   <span className="text-blue-600 font-medium">
                     {format(
                       new Date(plansData?.data?.startDate),
                       "MMM dd, yyyy"
                     )}
                   </span>{" "}
-                  to <br />
+                  al <br />
                   <span className="text-red-600 font-medium">
                     {format(
                       new Date(
@@ -151,10 +153,10 @@ export default function SubscriptionPlan() {
 
               <button className="bg-primary text-white px-6 py-3 rounded-[52px] flex items-center gap-2  transition-colors">
                 <span>
-                  Switch to {""}
+                  Passa a {""}
                   {plansData?.data.currentPlan?.name == "Solo Plan"
-                    ? "Team Plan"
-                    : "Solo Plan"}
+                    ? "Piano Team"
+                    : "Piano Solo"}
                 </span>
                 <BsArrowRight className="text-lg" />
               </button>
@@ -176,7 +178,7 @@ export default function SubscriptionPlan() {
       {/* Compare Plans Section */}
       <div className="">
         <h2 className="text-[24px] font-medium text-gray-800 mb-6">
-          Compare Plans
+          Confronta Piani
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -191,7 +193,7 @@ export default function SubscriptionPlan() {
               {plan.access == "full" && (
                 <div className="absolute -top-3 right-4">
                   <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
-                    Current
+                    Attuale
                   </span>
                 </div>
               )}
@@ -230,7 +232,7 @@ export default function SubscriptionPlan() {
                 }`}
                 disabled={plan.access == "full" ? true : false}
               >
-                {plan.access == "full" ? "Current Plan" : "Choose Plan"}
+                {plan.access == "full" ? "Piano Attuale" : "Scegli Piano"}
               </button>
             </div>
           ))}

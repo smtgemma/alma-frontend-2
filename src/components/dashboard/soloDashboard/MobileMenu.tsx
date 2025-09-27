@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { BsCalendar2Check, BsCreditCard } from "react-icons/bs";
+import { BsCalendar2Check, BsCreditCard, BsEnvelope } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { GrPower } from "react-icons/gr";
 import Link from "next/link";
@@ -141,20 +141,22 @@ export default function MobileMenu() {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 bg-black opacity-50 z-40"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside className={clsx(
-        "bg-white border-r border-r-[#99A6B8] h-full flex flex-col transition-transform duration-300 ease-in-out",
-        "lg:w-64 lg:relative lg:translate-x-0",
-        isMobileMenuOpen 
-          ? "fixed top-0 left-0 w-64 z-50 translate-x-0" 
-          : "fixed top-0 left-0 w-64 z-50 -translate-x-full lg:translate-x-0"
-      )}>
+      <aside
+        className={clsx(
+          "bg-white border-r border-r-[#99A6B8] h-full flex flex-col transition-transform duration-300 ease-in-out",
+          "lg:w-64 lg:relative lg:translate-x-0",
+          isMobileMenuOpen
+            ? "fixed top-0 left-0 w-64 z-50 translate-x-0"
+            : "fixed top-0 left-0 w-64 z-50 -translate-x-full lg:translate-x-0"
+        )}
+      >
         {/* Profile Section */}
         <div className="flex flex-col justify-center items-center px-8 pt-14 pb-4">
           <div className="w-[110px] h-[110px] rounded-full overflow-hidden">
@@ -267,6 +269,27 @@ export default function MobileMenu() {
                   }
                 />{" "}
                 Subscription plan
+              </button>
+            </Link>
+
+            <Link href="/contact">
+              <button
+                onClick={() => handleMenuClick("/contact")}
+                className={clsx(
+                  "w-full flex items-center gap-3 text-left px-4 py-2 rounded-md text-[1rem] font-medium text-accent cursor-pointer mb-2",
+                  currentSelectedPath === "/contact"
+                    ? "bg-primary text-white"
+                    : "bg-white hover:bg-primary hover:text-white"
+                )}
+              >
+                <BsEnvelope
+                  className={
+                    currentSelectedPath === "/contact"
+                      ? "text-white text-2xl"
+                      : "text-[#99A6B8] text-2xl"
+                  }
+                />{" "}
+                Contact
               </button>
             </Link>
           </div>

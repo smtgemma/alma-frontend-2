@@ -27,8 +27,8 @@ export default function AdminDashboardPage() {
         <AdminDashboardHeader />
         <AdminDashboardLoading
           type="summary"
-          title="Loading Admin Dashboard"
-          message="Gathering analytics and user statistics..."
+          title="Caricamento Dashboard Amministratore"
+          message="Raccolta di analisi e statistiche utenti..."
         />
       </div>
     );
@@ -52,22 +52,22 @@ export default function AdminDashboardPage() {
         <AdminDashboardHeader />
         <AdminDashboardLoading
           type="summary"
-          title="Error Loading Dashboard"
-          message="Failed to load admin dashboard data. Please try again."
+          title="Errore Caricamento Dashboard"
+          message="Impossibile caricare i dati della dashboard amministratore. Riprova."
         />
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-red-900 mb-2">
-            Error Details
+            Dettagli Errore
           </h2>
           <div className="bg-red-100 p-3 rounded text-sm mb-4">
             <p>
-              <strong>Error Status:</strong> {errorStatus}
+              <strong>Stato Errore:</strong> {errorStatus}
             </p>
             <p>
-              <strong>Error Message:</strong> {errorMessage}
+              <strong>Messaggio Errore:</strong> {errorMessage}
             </p>
             <p>
-              <strong>Error Data:</strong> {JSON.stringify(errorData, null, 2)}
+              <strong>Dati Errore:</strong> {JSON.stringify(errorData, null, 2)}
             </p>
           </div>
           <div className="flex gap-4">
@@ -75,13 +75,13 @@ export default function AdminDashboardPage() {
               onClick={() => refetch()}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
             >
-              Retry API Call
+              Riprova Chiamata API
             </button>
             <button
               onClick={() => window.location.reload()}
               className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
             >
-              Reload Page
+              Ricarica Pagina
             </button>
           </div>
         </div>
@@ -106,12 +106,12 @@ export default function AdminDashboardPage() {
     // Transform current plans data
     const transformedCurrentPlans = {
       solo: {
-        name: "Solo Plan",
+        name: "Piano Singolo",
         price: 15,
         users: cards?.soloPlanUsers || 0,
       },
       team: {
-        name: "Team Plan",
+        name: "Piano Team",
         price: 25,
         users: cards?.teamPlanUsers || 0,
       },
@@ -161,8 +161,8 @@ export default function AdminDashboardPage() {
             totalPlanGenerated: 0,
           },
           currentPlans: {
-            solo: { name: "Solo Plan", price: 15, users: 0 },
-            team: { name: "Team Plan", price: 25, users: 0 },
+            solo: { name: "Piano Singolo", price: 15, users: 0 },
+            team: { name: "Piano Team", price: 25, users: 0 },
           },
         },
       };
@@ -187,8 +187,8 @@ export default function AdminDashboardPage() {
         totalPlanGenerated: 0,
       },
       currentPlans: {
-        solo: { name: "Solo Plan", price: 15, users: 0 },
-        team: { name: "Team Plan", price: 25, users: 0 },
+        solo: { name: "Piano Singolo", price: 15, users: 0 },
+        team: { name: "Piano Team", price: 25, users: 0 },
       },
     },
   };
@@ -204,7 +204,7 @@ export default function AdminDashboardPage() {
       <AdminDashboardHeader />
       <div className="">
         <h2 className="text-xl font-semibold text-gray-900 mb-6 px-4 lg:px-6">
-          Overview
+          Panoramica
         </h2>
 
         <div className="space-y-6">

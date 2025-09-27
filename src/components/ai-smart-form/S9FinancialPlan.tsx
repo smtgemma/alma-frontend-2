@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
-
+//
 interface FinancialPlanForm {
   yourOwnEquity: string;
   bankingSystem: string;
@@ -64,12 +64,12 @@ export default function S9FinancialPlan() {
         <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
-            Step 09 out of 10
+            Passo 09 di 10
           </p>
 
           <div className="text-center mb-8">
             <h2 className="text-[2rem] text-accent font-medium">
-              Financial Plan
+              Piano Finanziario
             </h2>
           </div>
 
@@ -95,12 +95,14 @@ export default function S9FinancialPlan() {
                 {/* Question: How do you plan to finance your business idea? */}
                 <div>
                   <label className="question-text">
-                    How do you plan to finance your business idea?
+                    Come pianifichi di finanziare la tua idea di business?
                   </label>
 
                   {/* Your own equity */}
                   <div className="mt-6">
-                    <label className="question-text">Your own equity:</label>
+                    <label className="question-text">
+                      Il tuo capitale proprio:
+                    </label>
                     <div className="mt-2">
                       <input
                         type="text"
@@ -108,7 +110,7 @@ export default function S9FinancialPlan() {
                         onChange={(e) =>
                           handleInputChange("yourOwnEquity", e.target.value)
                         }
-                        placeholder="Enter your own equity amount"
+                        placeholder="Inserisci l'importo del tuo capitale proprio"
                         className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                       />
                     </div>
@@ -116,7 +118,7 @@ export default function S9FinancialPlan() {
 
                   {/* Banking System */}
                   <div className="mt-6">
-                    <label className="question-text">Banking System:</label>
+                    <label className="question-text">Sistema Bancario:</label>
                     <div className="mt-2">
                       <input
                         type="text"
@@ -124,7 +126,7 @@ export default function S9FinancialPlan() {
                         onChange={(e) =>
                           handleInputChange("bankingSystem", e.target.value)
                         }
-                        placeholder="Enter banking system details"
+                        placeholder="Inserisci i dettagli del sistema bancario"
                         className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                       />
                     </div>
@@ -132,7 +134,7 @@ export default function S9FinancialPlan() {
 
                   {/* Other investors */}
                   <div className="mt-6">
-                    <label className="question-text">Other investors:</label>
+                    <label className="question-text">Altri investitori:</label>
                     <div className="mt-2">
                       <input
                         type="text"
@@ -140,7 +142,7 @@ export default function S9FinancialPlan() {
                         onChange={(e) =>
                           handleInputChange("otherInvestors", e.target.value)
                         }
-                        placeholder="Enter other investors details"
+                        placeholder="Inserisci i dettagli di altri investitori"
                         className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                       />
                     </div>
@@ -154,13 +156,13 @@ export default function S9FinancialPlan() {
                     onClick={prevStep}
                     className="w-full py-3 cursor-pointer bg-white border border-[#888888] text-accent text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Back
+                    Indietro
                   </button>
                   <button
                     type="submit"
                     className="w-full py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Next
+                    Avanti
                   </button>
                 </div>
               </form>

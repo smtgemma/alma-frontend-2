@@ -19,7 +19,11 @@ const TeamUsers = () => {
     id: string;
     name: string;
   } | null>(null);
-  const { data: teamAnalyticsData, isLoading, error } = useTeamAnalyticsQuery({
+  const {
+    data: teamAnalyticsData,
+    isLoading,
+    error,
+  } = useTeamAnalyticsQuery({
     page: currentPage,
     limit: itemsPerPage,
     search: searchTerm,
@@ -29,12 +33,12 @@ const TeamUsers = () => {
     return (
       <div className="space-y-6">
         <div className="flex flex-col space-y-2">
-          <h1 className="text-2xl font-semibold text-gray-900">Team Users</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Utenti Team</h1>
         </div>
         <DashboardLoading
           type="table"
-          title="Loading Team Users"
-          message="Fetching team analytics and plan data..."
+          title="Caricamento Utenti Team"
+          message="Recupero analisi team e dati dei piani..."
         />
       </div>
     );
@@ -44,12 +48,12 @@ const TeamUsers = () => {
     return (
       <div className="space-y-6">
         <div className="flex flex-col space-y-2">
-          <h1 className="text-2xl font-semibold text-gray-900">Team Users</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Utenti Team</h1>
         </div>
         <DashboardLoading
           type="table"
-          title="Error Loading Team Users"
-          message="Failed to load team users data. Please try again."
+          title="Errore nel Caricamento degli Utenti Team"
+          message="Impossibile caricare i dati degli utenti team. Si prega di riprovare."
         />
       </div>
     );
@@ -59,21 +63,21 @@ const TeamUsers = () => {
 
   const summaryData = [
     {
-      title: "Total Team Plan Users",
+      title: "Totale Utenti Piano Team",
       value: stats?.totalUsers || 0,
       icon: <HiOutlineUserGroup className="w-8 h-8 text-primary" />,
       bgColor: "bg-white",
       textColor: "text-blue-600",
     },
     {
-      title: "Total Team Plan Generated",
+      title: "Totale Piani Team Generati",
       value: stats?.totalPlansGenerated || 0,
       icon: <CgProfile className="w-8 h-8 text-primary" />,
       bgColor: "bg-white",
       textColor: "text-green-600",
     },
     {
-      title: "Team Plan Total Revenue",
+      title: "Ricavi Totali Piano Team",
       value: stats?.totalRevenue || 0,
       icon: <MdOutlineGroupAdd className="w-8 h-8 text-primary" />,
       bgColor: "bg-white",
@@ -109,7 +113,7 @@ const TeamUsers = () => {
   return (
     <div className="space-y-6 px-4 lg:px-6 py-6">
       <div className="flex flex-col space-y-2">
-        <h1 className="text-2xl font-semibold text-gray-900">Team Users</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Utenti Team</h1>
       </div>
 
       {/* Metrics Cards */}
@@ -134,7 +138,7 @@ const TeamUsers = () => {
       <div className="flex items-center justify-between mb-4">
         <div className="">
           <h2 className="text-xl md:text-3xl font-medium text-accent">
-            Generated Plans
+            Piani Generati
           </h2>
         </div>
 
@@ -143,7 +147,7 @@ const TeamUsers = () => {
           <BsSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder="Search plans..."
+            placeholder="Cerca piani..."
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
@@ -160,22 +164,22 @@ const TeamUsers = () => {
             <thead className="bg-[#475466]">
               <tr>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Date & Time
+                  Data e Ora
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Plan Name
+                  Nome Piano
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  User Name
+                  Nome Utente
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Profile
+                  Profilo
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Status
+                  Stato
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Action
+                  Azione
                 </th>
               </tr>
             </thead>
@@ -195,18 +199,19 @@ const TeamUsers = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm cursor-pointer">
                     <Link href={`/admin/user-profile/${user.user.id}`}>
                       <button className="px-3 cursor-pointer py-1 text-sm border border-gray-300 rounded-[41px] bg-gray-100 hover:bg-gray-200 text-gray-700">
-                        view
+                        visualizza
                       </button>
                     </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <span
-                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${user.status === "INCOMPLETED"
-                        ? "bg-red-100 text-red-800 border-red-200"
-                        : user.status === "Pending"
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${
+                        user.status === "INCOMPLETED"
+                          ? "bg-red-100 text-red-800 border-red-200"
+                          : user.status === "Pending"
                           ? "bg-orange-100 text-orange-800 border-orange-200"
                           : "bg-green-100 text-green-800 border-green-200"
-                        }`}
+                      }`}
                     >
                       {user.status}
                     </span>
@@ -216,7 +221,7 @@ const TeamUsers = () => {
                       href={`/generated-planfor-admin/${user.id}`}
                       className="text-primary underline info"
                     >
-                      View Plan
+                      Visualizza Piano
                     </Link>
                   </td>
                 </tr>
@@ -224,17 +229,14 @@ const TeamUsers = () => {
             </tbody>
           </table>
         </div>
-
-
       </div>
-
 
       {/* Pagination */}
       <div className="">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-700">
-              Showing {plans.length} of {pagination?.total || 0}
+              Mostrando {plans.length} di {pagination?.total || 0}
             </span>
             <select
               value={itemsPerPage}
@@ -257,7 +259,7 @@ const TeamUsers = () => {
               disabled={currentPage === 1}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              &lt; Previous
+              &lt; Precedente
             </button>
 
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -266,10 +268,11 @@ const TeamUsers = () => {
                 <button
                   key={pageNum}
                   onClick={() => setCurrentPage(pageNum)}
-                  className={`px-3 py-1 text-sm rounded ${currentPage === pageNum
-                    ? "bg-primary text-white"
-                    : "border border-gray-300 hover:bg-gray-50"
-                    }`}
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === pageNum
+                      ? "bg-primary text-white"
+                      : "border border-gray-300 hover:bg-gray-50"
+                  }`}
                 >
                   {pageNum}
                 </button>
@@ -295,7 +298,7 @@ const TeamUsers = () => {
               disabled={currentPage === totalPages}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next &gt;
+              Successivo &gt;
             </button>
           </div>
         </div>

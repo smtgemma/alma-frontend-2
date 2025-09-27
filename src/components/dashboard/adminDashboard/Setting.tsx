@@ -87,17 +87,17 @@ const Setting = () => {
   };
 
   const handleImageUpload = async () => {
-    if (!selectedImage) return toast.error("Select an image first");
+    if (!selectedImage) return toast.error("Seleziona prima un'immagine");
     try {
       const fd = new FormData();
       fd.append("profileImage", selectedImage);
       await uploadImage(fd).unwrap();
-      toast.success("Profile image updated");
+      toast.success("Immagine profilo aggiornata");
       setSelectedImage(null);
       setPreviewImage(null);
       refetch();
     } catch (err: any) {
-      toast.error(err?.data?.message || "Image upload failed");
+      toast.error(err?.data?.message || "Caricamento immagine fallito");
     }
   };
 
@@ -112,26 +112,26 @@ const Setting = () => {
         updateData.location = formData.location;
 
       if (Object.keys(updateData).length === 0)
-        return toast.error("No changes to save");
+        return toast.error("Nessuna modifica da salvare");
 
       await updateProfile(updateData).unwrap();
-      toast.success("Profile updated!");
+      toast.success("Profilo aggiornato!");
       refetch();
     } catch (err: any) {
-      toast.error(err?.data?.message || "Update failed");
+      toast.error(err?.data?.message || "Aggiornamento fallito");
     }
   };
 
   const handlePasswordChange = async () => {
     if (!passwords.oldPassword || !passwords.newPassword) {
-      return toast.error("Fill both password fields");
+      return toast.error("Compila entrambi i campi password");
     }
     try {
       await changePassword(passwords).unwrap();
-      toast.success("Password updated successfully!");
+      toast.success("Password aggiornata con successo!");
       setPasswords({ oldPassword: "", newPassword: "" });
     } catch (err: any) {
-      toast.error(err?.data?.message || "Password change failed");
+      toast.error(err?.data?.message || "Cambio password fallito");
     }
   };
 
@@ -144,15 +144,15 @@ const Setting = () => {
 
   // ===== RENDER =====
   if (isLoading) return <Loading />;
-  if (error) return <p>Error loading profile</p>;
+  if (error) return <p>Errore nel caricamento del profilo</p>;
 
   const handleConfirmSuspend = async (id: string, status: string) => {
     const res = await suspendUser({ id, body: { status } });
     // Check response success
     if (res.data?.success) {
-      toast.success(res.data.message || "User suspended successfully!");
+      toast.success(res.data.message || "Utente sospeso con successo!");
     } else {
-      toast.error(res.data?.message || "Failed to suspend user!");
+      toast.error(res.data?.message || "Impossibile sospendere l'utente!");
     }
 
     // console.log(`Suspending user: ${user.firstName} ${user.lastName}`);
@@ -162,12 +162,12 @@ const Setting = () => {
   return (
     <div className="space-y-6 px-4 lg:px-6 py-6">
       <h2 className="text-[32px] font-medium text-gray-900 mb-6">
-          Admin Information
-        </h2>
+        Informazioni Amministratore
+      </h2>
       {/* Admin Information Section */}
       <div className="bg-white p-6 rounded-lg border border-gray-200">
         <h2 className="text-[24px] font-medium text-gray-900 mb-6">
-          Profile Picture:
+          Foto Profilo:
         </h2>
 
         <div className="flex flex-col gap-6">
@@ -195,7 +195,7 @@ const Setting = () => {
                   disabled={isUploading}
                   className="mt-3 px-4 py-2 bg-primary text-white rounded-lg"
                 >
-                  {isUploading ? "Uploading..." : "Save Image"}
+                  {isUploading ? "Caricamento..." : "Salva Immagine"}
                 </button>
               )}
               <input
@@ -213,7 +213,7 @@ const Setting = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name
+                  Nome
                 </label>
                 <input
                   type="text"
@@ -226,7 +226,7 @@ const Setting = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name
+                  Cognome
                 </label>
                 <input
                   type="text"
@@ -242,7 +242,7 @@ const Setting = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Location
+                  Posizione
                 </label>
                 <input
                   type="text"
@@ -269,14 +269,14 @@ const Setting = () => {
             {/* Action Buttons */}
             <div className="flex justify-end space-x-4 pt-4">
               <button className="px-6 py-2 border border-gray-300 rounded-lg cursor-pointer">
-                Cancel
+                Annulla
               </button>
               <button
                 onClick={handleProfileUpdate}
                 disabled={isUpdating}
                 className="px-6 py-2 bg-primary text-white rounded-lg cursor-pointer"
               >
-                {isUpdating ? "Saving..." : "Save"}
+                {isUpdating ? "Salvataggio..." : "Salva"}
               </button>
             </div>
           </div>
@@ -288,7 +288,7 @@ const Setting = () => {
         <div className="flex flex-col lg:flex-row lg:items-start gap-6">
           <div className="lg:w-1/3">
             <h3 className="text-lg font-semibold text-gray-900">
-              Change Password
+              Cambia Password
             </h3>
           </div>
 
@@ -297,7 +297,7 @@ const Setting = () => {
               {/* Old Password */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Old Password
+                  Password Attuale
                 </label>
                 <div className="relative">
                   <input
@@ -345,7 +345,7 @@ const Setting = () => {
               {/* New Password */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  New Password
+                  Nuova Password
                 </label>
                 <div className="relative">
                   <input
@@ -394,14 +394,14 @@ const Setting = () => {
             {/* Buttons */}
             <div className="flex justify-end space-x-4 pt-4">
               <button className="px-6 py-2 border border-gray-300 rounded-lg">
-                Cancel
+                Annulla
               </button>
               <button
                 onClick={handlePasswordChange}
                 disabled={isChanging}
                 className="px-6 py-2 bg-primary text-white rounded-lg"
               >
-                {isChanging ? "Saving..." : "Save"}
+                {isChanging ? "Salvataggio..." : "Salva"}
               </button>
             </div>
           </div>
@@ -411,7 +411,7 @@ const Setting = () => {
       <div className="bg-white p-6 rounded-lg border border-gray-200">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-900">
-            Suspended Users
+            Utenti Sospesi
           </h2>
 
           {/* Search Bar */}
@@ -433,7 +433,7 @@ const Setting = () => {
             </div>
             <input
               type="text"
-              placeholder="Search"
+              placeholder="Cerca"
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-[41px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -445,18 +445,18 @@ const Setting = () => {
             <thead className="bg-[#475466]">
               <tr>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Date & Time
+                  Data e Ora
                 </th>
-             
+
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  User Name
+                  Nome Utente
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Profile
+                  Profilo
                 </th>
-               
+
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Suspension
+                  Sospensione
                 </th>
               </tr>
             </thead>
@@ -478,7 +478,7 @@ const Setting = () => {
                       href={`/admin/user-profile/${user.id}`}
                       className="px-3 py-1 text-sm border border-gray-300 rounded-[41px] bg-gray-100 hover:bg-gray-200 text-gray-700"
                     >
-                      View
+                      Visualizza
                     </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -486,7 +486,7 @@ const Setting = () => {
                       onClick={() => handleConfirmSuspend(user.id, "ACTIVE")}
                       className="bg-[#84CC16] text-white px-3 cursor-pointer py-1 rounded-sm hover:bg-[#84CC16]/90 transition-colors duration-200 text-sm"
                     >
-                      End Suspension
+                      Termina Sospensione
                     </button>
                   </td>
                 </tr>

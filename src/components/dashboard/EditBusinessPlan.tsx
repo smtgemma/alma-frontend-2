@@ -110,7 +110,18 @@ export default function EditBusinessPlan({
   }, [planData]);
 
   const handleInputChange = (
-    field: keyof Pick<BusinessPlanData, 'executiveSummary' | 'businessOverview' | 'marketAnalysis' | 'businessModel' | 'marketingSalesStrategy' | 'sectorStrategy' | 'fundingSources' | 'operationsPlan' | 'managementTeam'>, 
+    field: keyof Pick<
+      BusinessPlanData,
+      | "executiveSummary"
+      | "businessOverview"
+      | "marketAnalysis"
+      | "businessModel"
+      | "marketingSalesStrategy"
+      | "sectorStrategy"
+      | "fundingSources"
+      | "operationsPlan"
+      | "managementTeam"
+    >,
     value: string
   ) => {
     setFormData({
@@ -164,7 +175,18 @@ export default function EditBusinessPlan({
 
   const renderField = (
     title: string,
-    field: keyof Pick<BusinessPlanData, 'executiveSummary' | 'businessOverview' | 'marketAnalysis' | 'businessModel' | 'marketingSalesStrategy' | 'sectorStrategy' | 'fundingSources' | 'operationsPlan' | 'managementTeam'>,
+    field: keyof Pick<
+      BusinessPlanData,
+      | "executiveSummary"
+      | "businessOverview"
+      | "marketAnalysis"
+      | "businessModel"
+      | "marketingSalesStrategy"
+      | "sectorStrategy"
+      | "fundingSources"
+      | "operationsPlan"
+      | "managementTeam"
+    >,
     placeholder: string
   ) => (
     <div className="space-y-4">
@@ -180,7 +202,8 @@ export default function EditBusinessPlan({
         />
       ) : (
         <p className="text-gray-700 leading-relaxed text-lg">
-          {(formData[field] as string) || `No ${title.toLowerCase()} available.`}
+          {(formData[field] as string) ||
+            `No ${title.toLowerCase()} available.`}
         </p>
       )}
     </div>
@@ -271,11 +294,11 @@ export default function EditBusinessPlan({
           )}
 
           {/* Sector Strategy */}
-          {renderField(
+          {/* {renderField(
             "Sector Strategy",
             "sectorStrategy",
             "Enter sector strategy..."
-          )}
+          )} */}
 
           {/* Funding Sources */}
           {renderField(
@@ -285,11 +308,11 @@ export default function EditBusinessPlan({
           )}
 
           {/* Operations Plan */}
-          {renderField(
+          {/* {renderField(
             "Operations Plan",
             "operationsPlan",
             "Enter operations plan..."
-          )}
+          )} */}
 
           {/* Management Team */}
           {renderField(
@@ -311,105 +334,107 @@ export default function EditBusinessPlan({
               Comprehensive financial metrics and analysis data
             </p>
           </div>
-          <FinancialAnalysis 
-            financialAnalysis={formData.financialAnalysis && formData.financialAnalysis.length > 0 
-              ? formData.financialAnalysis 
-              : [
-                  {
-                    year: 1,
-                    gross_operating_cash_flow: 0,
-                    working_capital_change: 0,
-                    current_management_cash_flow: 0,
-                    operating_cash_flow: 0,
-                    debt_service_cash_flow: 0,
-                    shareholders_cash_flow: 0,
-                    net_cash_flow: 0,
-                    sales_revenue: 0,
-                    production_value: 0,
-                    gross_operating_margin: 0,
-                    ebit: 0,
-                    ebt: 0,
-                    net_income: 0,
-                    dividends: 0,
-                    net_tangible_assets: 0,
-                    net_intangible_assets: 0,
-                    financial_assets: 0,
-                    trade_assets: 0,
-                    inventory: 0,
-                    deferred_liquidity: 0,
-                    immediate_liquidity: 0,
-                    equity: 0,
-                    long_term_debt: 0,
-                    short_term_debt: 0,
-                    net_financial_position: 0,
-                    mortgage_loans: 0,
-                    other_financial_debts: 0,
-                    cash_and_banks: 0,
-                  },
-                  {
-                    year: 2,
-                    gross_operating_cash_flow: 0,
-                    working_capital_change: 0,
-                    current_management_cash_flow: 0,
-                    operating_cash_flow: 0,
-                    debt_service_cash_flow: 0,
-                    shareholders_cash_flow: 0,
-                    net_cash_flow: 0,
-                    sales_revenue: 0,
-                    production_value: 0,
-                    gross_operating_margin: 0,
-                    ebit: 0,
-                    ebt: 0,
-                    net_income: 0,
-                    dividends: 0,
-                    net_tangible_assets: 0,
-                    net_intangible_assets: 0,
-                    financial_assets: 0,
-                    trade_assets: 0,
-                    inventory: 0,
-                    deferred_liquidity: 0,
-                    immediate_liquidity: 0,
-                    equity: 0,
-                    long_term_debt: 0,
-                    short_term_debt: 0,
-                    net_financial_position: 0,
-                    mortgage_loans: 0,
-                    other_financial_debts: 0,
-                    cash_and_banks: 0,
-                  },
-                  {
-                    year: 3,
-                    gross_operating_cash_flow: 0,
-                    working_capital_change: 0,
-                    current_management_cash_flow: 0,
-                    operating_cash_flow: 0,
-                    debt_service_cash_flow: 0,
-                    shareholders_cash_flow: 0,
-                    net_cash_flow: 0,
-                    sales_revenue: 0,
-                    production_value: 0,
-                    gross_operating_margin: 0,
-                    ebit: 0,
-                    ebt: 0,
-                    net_income: 0,
-                    dividends: 0,
-                    net_tangible_assets: 0,
-                    net_intangible_assets: 0,
-                    financial_assets: 0,
-                    trade_assets: 0,
-                    inventory: 0,
-                    deferred_liquidity: 0,
-                    immediate_liquidity: 0,
-                    equity: 0,
-                    long_term_debt: 0,
-                    short_term_debt: 0,
-                    net_financial_position: 0,
-                    mortgage_loans: 0,
-                    other_financial_debts: 0,
-                    cash_and_banks: 0,
-                  }
-                ]
-            } 
+          <FinancialAnalysis
+            financialAnalysis={
+              formData.financialAnalysis &&
+              formData.financialAnalysis.length > 0
+                ? formData.financialAnalysis
+                : [
+                    {
+                      year: 1,
+                      gross_operating_cash_flow: 0,
+                      working_capital_change: 0,
+                      current_management_cash_flow: 0,
+                      operating_cash_flow: 0,
+                      debt_service_cash_flow: 0,
+                      shareholders_cash_flow: 0,
+                      net_cash_flow: 0,
+                      sales_revenue: 0,
+                      production_value: 0,
+                      gross_operating_margin: 0,
+                      ebit: 0,
+                      ebt: 0,
+                      net_income: 0,
+                      dividends: 0,
+                      net_tangible_assets: 0,
+                      net_intangible_assets: 0,
+                      financial_assets: 0,
+                      trade_assets: 0,
+                      inventory: 0,
+                      deferred_liquidity: 0,
+                      immediate_liquidity: 0,
+                      equity: 0,
+                      long_term_debt: 0,
+                      short_term_debt: 0,
+                      net_financial_position: 0,
+                      mortgage_loans: 0,
+                      other_financial_debts: 0,
+                      cash_and_banks: 0,
+                    },
+                    {
+                      year: 2,
+                      gross_operating_cash_flow: 0,
+                      working_capital_change: 0,
+                      current_management_cash_flow: 0,
+                      operating_cash_flow: 0,
+                      debt_service_cash_flow: 0,
+                      shareholders_cash_flow: 0,
+                      net_cash_flow: 0,
+                      sales_revenue: 0,
+                      production_value: 0,
+                      gross_operating_margin: 0,
+                      ebit: 0,
+                      ebt: 0,
+                      net_income: 0,
+                      dividends: 0,
+                      net_tangible_assets: 0,
+                      net_intangible_assets: 0,
+                      financial_assets: 0,
+                      trade_assets: 0,
+                      inventory: 0,
+                      deferred_liquidity: 0,
+                      immediate_liquidity: 0,
+                      equity: 0,
+                      long_term_debt: 0,
+                      short_term_debt: 0,
+                      net_financial_position: 0,
+                      mortgage_loans: 0,
+                      other_financial_debts: 0,
+                      cash_and_banks: 0,
+                    },
+                    {
+                      year: 3,
+                      gross_operating_cash_flow: 0,
+                      working_capital_change: 0,
+                      current_management_cash_flow: 0,
+                      operating_cash_flow: 0,
+                      debt_service_cash_flow: 0,
+                      shareholders_cash_flow: 0,
+                      net_cash_flow: 0,
+                      sales_revenue: 0,
+                      production_value: 0,
+                      gross_operating_margin: 0,
+                      ebit: 0,
+                      ebt: 0,
+                      net_income: 0,
+                      dividends: 0,
+                      net_tangible_assets: 0,
+                      net_intangible_assets: 0,
+                      financial_assets: 0,
+                      trade_assets: 0,
+                      inventory: 0,
+                      deferred_liquidity: 0,
+                      immediate_liquidity: 0,
+                      equity: 0,
+                      long_term_debt: 0,
+                      short_term_debt: 0,
+                      net_financial_position: 0,
+                      mortgage_loans: 0,
+                      other_financial_debts: 0,
+                      cash_and_banks: 0,
+                    },
+                  ]
+            }
           />
         </div>
       </div>
@@ -425,63 +450,64 @@ export default function EditBusinessPlan({
               Financial ratios and performance indicators
             </p>
           </div>
-          <RatiosAnalysis 
-            ratiosAnalysis={formData.ratiosAnalysis && formData.ratiosAnalysis.length > 0 
-              ? formData.ratiosAnalysis 
-              : [
-                  {
-                    year: 1,
-                    roi: 0,
-                    roe: 0,
-                    ros: 0,
-                    ebit_margin: 0,
-                    net_debt_to_ebitda: 0,
-                    net_debt_to_equity: 0,
-                    net_debt_to_revenue: 0,
-                    current_ratio: 0,
-                    quick_ratio: 0,
-                    debt_to_equity: 0,
-                    treasury_margin: 0,
-                    structural_margin: 0,
-                    net_working_capital: 0,
-                    altman_z_score: 0,
-                  },
-                  {
-                    year: 2,
-                    roi: 0,
-                    roe: 0,
-                    ros: 0,
-                    ebit_margin: 0,
-                    net_debt_to_ebitda: 0,
-                    net_debt_to_equity: 0,
-                    net_debt_to_revenue: 0,
-                    current_ratio: 0,
-                    quick_ratio: 0,
-                    debt_to_equity: 0,
-                    treasury_margin: 0,
-                    structural_margin: 0,
-                    net_working_capital: 0,
-                    altman_z_score: 0,
-                  },
-                  {
-                    year: 3,
-                    roi: 0,
-                    roe: 0,
-                    ros: 0,
-                    ebit_margin: 0,
-                    net_debt_to_ebitda: 0,
-                    net_debt_to_equity: 0,
-                    net_debt_to_revenue: 0,
-                    current_ratio: 0,
-                    quick_ratio: 0,
-                    debt_to_equity: 0,
-                    treasury_margin: 0,
-                    structural_margin: 0,
-                    net_working_capital: 0,
-                    altman_z_score: 0,
-                  }
-                ]
-            } 
+          <RatiosAnalysis
+            ratiosAnalysis={
+              formData.ratiosAnalysis && formData.ratiosAnalysis.length > 0
+                ? formData.ratiosAnalysis
+                : [
+                    {
+                      year: 1,
+                      roi: 0,
+                      roe: 0,
+                      ros: 0,
+                      ebit_margin: 0,
+                      net_debt_to_ebitda: 0,
+                      net_debt_to_equity: 0,
+                      net_debt_to_revenue: 0,
+                      current_ratio: 0,
+                      quick_ratio: 0,
+                      debt_to_equity: 0,
+                      treasury_margin: 0,
+                      structural_margin: 0,
+                      net_working_capital: 0,
+                      altman_z_score: 0,
+                    },
+                    {
+                      year: 2,
+                      roi: 0,
+                      roe: 0,
+                      ros: 0,
+                      ebit_margin: 0,
+                      net_debt_to_ebitda: 0,
+                      net_debt_to_equity: 0,
+                      net_debt_to_revenue: 0,
+                      current_ratio: 0,
+                      quick_ratio: 0,
+                      debt_to_equity: 0,
+                      treasury_margin: 0,
+                      structural_margin: 0,
+                      net_working_capital: 0,
+                      altman_z_score: 0,
+                    },
+                    {
+                      year: 3,
+                      roi: 0,
+                      roe: 0,
+                      ros: 0,
+                      ebit_margin: 0,
+                      net_debt_to_ebitda: 0,
+                      net_debt_to_equity: 0,
+                      net_debt_to_revenue: 0,
+                      current_ratio: 0,
+                      quick_ratio: 0,
+                      debt_to_equity: 0,
+                      treasury_margin: 0,
+                      structural_margin: 0,
+                      net_working_capital: 0,
+                      altman_z_score: 0,
+                    },
+                  ]
+            }
           />
         </div>
       </div>
@@ -494,43 +520,45 @@ export default function EditBusinessPlan({
               Production & Sales Forecast
             </h2>
             <p className="text-sm text-gray-600 mt-2">
-              Production metrics, sales forecasts, and management team information
+              Production metrics, sales forecasts, and management team
+              information
             </p>
           </div>
-          <ProductionSalesForecast 
-            productionSalesForecast={formData.productionSalesForecast && formData.productionSalesForecast.length > 0 
-              ? formData.productionSalesForecast 
-              : [
-                  {
-                    year: 1,
-                    sales_revenue: 0,
-                    revenue_growth: 0,
-                    units_sold: 0,
-                    average_price: 0,
-                    unit_production_cost: 0,
-                    unit_margin: 0,
-                  },
-                  {
-                    year: 2,
-                    sales_revenue: 0,
-                    revenue_growth: 0,
-                    units_sold: 0,
-                    average_price: 0,
-                    unit_production_cost: 0,
-                    unit_margin: 0,
-                  },
-                  {
-                    year: 3,
-                    sales_revenue: 0,
-                    revenue_growth: 0,
-                    units_sold: 0,
-                    average_price: 0,
-                    unit_production_cost: 0,
-                    unit_margin: 0,
-                  }
-                ]
+          <ProductionSalesForecast
+            productionSalesForecast={
+              formData.productionSalesForecast &&
+              formData.productionSalesForecast.length > 0
+                ? formData.productionSalesForecast
+                : [
+                    {
+                      year: 1,
+                      sales_revenue: 0,
+                      revenue_growth: 0,
+                      units_sold: 0,
+                      average_price: 0,
+                      unit_production_cost: 0,
+                      unit_margin: 0,
+                    },
+                    {
+                      year: 2,
+                      sales_revenue: 0,
+                      revenue_growth: 0,
+                      units_sold: 0,
+                      average_price: 0,
+                      unit_production_cost: 0,
+                      unit_margin: 0,
+                    },
+                    {
+                      year: 3,
+                      sales_revenue: 0,
+                      revenue_growth: 0,
+                      units_sold: 0,
+                      average_price: 0,
+                      unit_production_cost: 0,
+                      unit_margin: 0,
+                    },
+                  ]
             }
-            managementTeam={formData.managementTeam || ""}
           />
         </div>
       </div>
@@ -544,10 +572,11 @@ export default function EditBusinessPlan({
           <div>
             <span className="font-medium text-gray-700">Status:</span>
             <span
-              className={`ml-2 px-3 py-1 rounded-full text-xs font-medium ${planData.status === "COMPLETED"
-                ? "bg-green-100 text-green-800"
-                : "bg-yellow-100 text-yellow-800"
-                }`}
+              className={`ml-2 px-3 py-1 rounded-full text-xs font-medium ${
+                planData.status === "COMPLETED"
+                  ? "bg-green-100 text-green-800"
+                  : "bg-yellow-100 text-yellow-800"
+              }`}
             >
               {planData.status}
             </span>

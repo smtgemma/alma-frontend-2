@@ -41,7 +41,7 @@ export default function AddUser() {
       if (error?.data?.message) {
         toast.error(error.data.message);
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error("Qualcosa è andato storto. Riprova.");
       }
     }
   };
@@ -57,12 +57,14 @@ export default function AddUser() {
 
       {/* Add New User Section */}
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold text-gray-900 px-4 lg:px-6">Add New User</h1>
+        <h1 className="text-2xl font-bold text-gray-900 px-4 lg:px-6">
+          Aggiungi Nuovo Utente
+        </h1>
 
         {/* Add New User Card */}
         <div className="bg-white rounded-[20px] shadow-md border border-gray-100 p-6 mx-0 md:mx-28">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Add New User to Your Team
+            Aggiungi Nuovo Utente al Tuo Team
           </h2>
 
           {/* <p className="text-gray-600 mb-6 leading-relaxed">
@@ -72,7 +74,7 @@ export default function AddUser() {
           </p> */}
 
           <p className="text-gray-600 mb-6 leading-relaxed">
-            Write the Email to add member
+            Scrivi l'Email per aggiungere il membro
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -81,14 +83,14 @@ export default function AddUser() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Email Address:
+                Indirizzo Email:
               </label>
               <input
                 type="email"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter email address"
+                placeholder="Inserisci indirizzo email"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
                 required
               />
@@ -100,14 +102,14 @@ export default function AddUser() {
                 onClick={handleCancel}
                 className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
               >
-                Cancel
+                Annulla
               </button>
               <button
                 type="submit"
                 disabled={isLoading || !email.trim()}
                 className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors cursor-pointer"
               >
-                {isLoading ? "Sending..." : "Send Invitation"}
+                {isLoading ? "Invio..." : "Invia Invito"}
               </button>
             </div>
           </form>

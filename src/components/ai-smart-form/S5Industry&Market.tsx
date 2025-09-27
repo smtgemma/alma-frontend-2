@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
-
+//
 interface IndustryMarketForm {
   industry: string;
   idealClient: string;
@@ -621,12 +621,12 @@ export default function S5IndustryMarket() {
         <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
-            Step 05 out of 10
+            Passo 05 di 10
           </p>
 
           <div className="text-center mb-8">
             <h2 className="text-[2rem] text-accent font-medium">
-              Industry & Market Sector
+              Settore Industriale e di Mercato
             </h2>
           </div>
 
@@ -652,7 +652,7 @@ export default function S5IndustryMarket() {
                 {/* Question 1: Which industry does your business belong to? */}
                 <div>
                   <label className="question-text">
-                    Which industry does your business belong to? (Required)
+                    A quale industria appartiene la tua azienda? (Obbligatorio)
                   </label>
                   {errors.industry && (
                     <p className="text-red-500 text-sm mt-1">
@@ -670,7 +670,7 @@ export default function S5IndustryMarket() {
                         handleKeyPress(e, "customIndustry", "industry")
                       }
                       onClick={() => handleTextareaClick("showIndustryOptions")}
-                      placeholder="E.g. Technology, Finance, Healthcare, Legal Consultancy, Food Services..."
+                      placeholder="Es. Tecnologia, Finanza, Sanità, Consulenza Legale, Servizi Alimentari..."
                       className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
                         errors.industry
                           ? "border-red-500"
@@ -682,7 +682,7 @@ export default function S5IndustryMarket() {
                     {form.selectedIndustryOptions.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedIndustryOptions.map((option, index) => (
@@ -715,7 +715,7 @@ export default function S5IndustryMarket() {
                         <div className="flex items-center p-2 rounded-lg">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                           <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                            Loading AI suggestions...
+                            Caricamento suggerimenti AI...
                           </span>
                         </div>
                       ) : (
@@ -811,7 +811,7 @@ export default function S5IndustryMarket() {
                 {/* Question 2: Who is your ideal client? */}
                 <div>
                   <label className="question-text">
-                    Who is your ideal client?
+                    Chi è il tuo cliente ideale?
                   </label>
                   <div className="mt-4">
                     <input
@@ -826,7 +826,7 @@ export default function S5IndustryMarket() {
                       onClick={() =>
                         handleTextareaClick("showIdealClientOptions")
                       }
-                      placeholder="E.g. Professionals, Tech Startups, Retail Brands, Health..."
+                      placeholder="Es. Professionisti, Startup Tech, Marchi Retail, Sanità..."
                       className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent "
                     />
 
@@ -834,7 +834,7 @@ export default function S5IndustryMarket() {
                     {form.selectedIdealClientOptions.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedIdealClientOptions.map(
@@ -872,7 +872,7 @@ export default function S5IndustryMarket() {
                         <div className="flex items-center p-2 rounded-lg">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                           <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                            Loading AI suggestions...
+                            Caricamento suggerimenti AI...
                           </span>
                         </div>
                       ) : (
@@ -974,7 +974,7 @@ export default function S5IndustryMarket() {
                   {/* Client Type 01 */}
                   <div>
                     <label className="text-[1rem] font-medium text-accent mb-2 block">
-                      Client Type 01
+                      Tipo Cliente 01
                     </label>
                     <input
                       type="text"
@@ -995,7 +995,7 @@ export default function S5IndustryMarket() {
                     {form.selectedClientType01Options.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedClientType01Options.map(
@@ -1032,7 +1032,7 @@ export default function S5IndustryMarket() {
                           <div className="flex items-center p-2 rounded-lg">
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                             <span className="text-[0.875rem] font-normal text-gray-500 ml-2">
-                              Loading AI suggestions...
+                              Caricamento suggerimenti AI...
                             </span>
                           </div>
                         ) : (
@@ -1132,7 +1132,7 @@ export default function S5IndustryMarket() {
                   {/* Client Type 02 */}
                   <div>
                     <label className="text-[1rem] font-medium text-accent mb-2 block">
-                      Client Type 02
+                      Tipo Cliente 02
                     </label>
                     <input
                       type="text"
@@ -1156,7 +1156,7 @@ export default function S5IndustryMarket() {
                     {form.selectedClientType02Options.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedClientType02Options.map(
@@ -1193,7 +1193,7 @@ export default function S5IndustryMarket() {
                           <div className="flex items-center p-2 rounded-lg">
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                             <span className="text-[0.875rem] font-normal text-gray-500 ml-2">
-                              Loading AI suggestions...
+                              Caricamento suggerimenti AI...
                             </span>
                           </div>
                         ) : (
@@ -1293,7 +1293,7 @@ export default function S5IndustryMarket() {
                   {/* Client Type 03 */}
                   <div>
                     <label className="text-[1rem] font-medium text-accent mb-2 block">
-                      Client Type 03
+                      Tipo Cliente 03
                     </label>
                     <input
                       type="text"
@@ -1314,7 +1314,7 @@ export default function S5IndustryMarket() {
                     {form.selectedClientType03Options.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedClientType03Options.map(
@@ -1351,7 +1351,7 @@ export default function S5IndustryMarket() {
                           <div className="flex items-center p-2 rounded-lg">
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                             <span className="text-[0.875rem] font-normal text-gray-500 ml-2">
-                              Loading AI suggestions...
+                              Caricamento suggerimenti AI...
                             </span>
                           </div>
                         ) : (
@@ -1415,7 +1415,7 @@ export default function S5IndustryMarket() {
                     {form.selectedClientType04Options.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedClientType04Options.map(
@@ -1452,7 +1452,7 @@ export default function S5IndustryMarket() {
                           <div className="flex items-center p-2 rounded-lg">
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                             <span className="text-[0.875rem] font-normal text-gray-500 ml-2">
-                              Loading AI suggestions...
+                              Caricamento suggerimenti AI...
                             </span>
                           </div>
                         ) : (
@@ -1497,7 +1497,8 @@ export default function S5IndustryMarket() {
                 {/* Question 4: How do you plan to reach them? (marketing plan schemes) */}
                 <div>
                   <label className="question-text">
-                    How do you plan to reach them? (marketing plan schemes)
+                    Come pianifichi di raggiungerli? (schemi del piano di
+                    marketing)
                   </label>
                   <div className="mt-4">
                     <input
@@ -1516,7 +1517,7 @@ export default function S5IndustryMarket() {
                       onClick={() =>
                         handleTextareaClick("showMarketingPlanOptions")
                       }
-                      placeholder="E.g. Digital & Online marketing, Influencer & Blogging, SEO & Blogging..."
+                      placeholder="Es. Marketing digitale e online, Influencer e Blogging, SEO e Blogging..."
                       className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
 
@@ -1524,7 +1525,7 @@ export default function S5IndustryMarket() {
                     {form.selectedMarketingPlanOptions.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedMarketingPlanOptions.map(
@@ -1562,7 +1563,7 @@ export default function S5IndustryMarket() {
                         <div className="flex items-center p-2 rounded-lg">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                           <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                            Loading AI suggestions...
+                            Caricamento suggerimenti AI...
                           </span>
                         </div>
                       ) : (
@@ -1666,13 +1667,13 @@ export default function S5IndustryMarket() {
                     onClick={prevStep}
                     className="w-full py-3 cursor-pointer bg-white border border-[#888888] text-accent text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Back
+                    Indietro
                   </button>
                   <button
                     type="submit"
                     className="w-full py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Next
+                    Avanti
                   </button>
                 </div>
               </form>

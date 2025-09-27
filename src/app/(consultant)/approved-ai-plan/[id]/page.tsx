@@ -20,6 +20,7 @@ import { toast } from "sonner";
 const ApprovedAiPlanPage = () => {
   const { id } = useParams();
   const { data: planInfo } = useGetSingleBusinessPlanQuery(id);
+  console.log("planInfo", planInfo);
   const [submitExpertReview, { isLoading: isSubmitting }] =
     useSubmitExpertReviewMutation();
   const [isRequestSubmitted, setIsRequestSubmitted] = useState(false);
@@ -111,18 +112,18 @@ const ApprovedAiPlanPage = () => {
   // Handle expert review request
   const handleExpertReviewRequest = async () => {
     if (!id) {
-      toast.error("Plan ID is missing. Please try again.");
+      toast.error("ID del piano mancante. Riprova.");
       return;
     }
 
     if (isRequestSubmitted) {
-      toast.info("Expert review request has already been submitted!");
+      toast.info("Richiesta di revisione esperta già inviata!");
       return;
     }
 
     try {
       const result = await submitExpertReview(id as string).unwrap();
-      toast.success("Expert review request submitted successfully!");
+      toast.success("Richiesta di revisione esperta inviata con successo!");
       console.log("Expert review submitted:", result);
       setIsRequestSubmitted(true);
 
@@ -132,7 +133,8 @@ const ApprovedAiPlanPage = () => {
     } catch (error: any) {
       console.error("Error submitting expert review:", error);
       toast.error(
-        error?.data?.message || "Failed to submit expert review request"
+        error?.data?.message ||
+          "Impossibile inviare la richiesta di revisione esperta"
       );
     }
   };
@@ -141,7 +143,8 @@ const ApprovedAiPlanPage = () => {
     balanceSheet = [],
     businessModel = "",
     businessOverview = "",
-    cashFlowAnalysis = [],
+    cashFlowAnalysisData = [],
+    cashFlowAnalysis = "",
     createdAt = "",
     debtStructure = [],
     executiveSummary = "",
@@ -166,6 +169,9 @@ const ApprovedAiPlanPage = () => {
     productionSalesForecast = [],
   } = planInfo?.data || {}; // default to empty object if `data` is undefined
 
+  // Map cashFlowAnalysisData to cashFlowAnalysis for compatibility
+  const cashFlowAnalysisArray = cashFlowAnalysisData || [];
+
   return (
     <div>
       <Navbar />
@@ -174,7 +180,7 @@ const ApprovedAiPlanPage = () => {
         <header className="  px-4 py-6 sm:px-6 lg:px-8 pt-28">
           <div className="max-w-[1440px] mx-auto">
             <h2 className="text-xl sm:text-2xl text-center font-semibold text-[#015BE9] mb-2">
-              ✨ Congratulations! Your Business Plan Is Ready!
+              ✨ Congratulazioni! Il Tuo Piano Aziendale È Pronto!
             </h2>
           </div>
         </header>
@@ -187,12 +193,12 @@ const ApprovedAiPlanPage = () => {
                 {/* Left Content */}
                 <div className="flex-1">
                   <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-                    Expert's Review
+                    Revisione dell'Esperto
                   </h3>
                   <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-6">
-                    Reviewed by industry professionals to ensure accuracy,
-                    strategy, and <br /> investor readiness. Actionable insights
-                    included.
+                    Revisionato da professionisti del settore per garantire
+                    precisione, strategia e <br /> preparazione agli
+                    investitori. Inclusi approfondimenti pratici.
                   </p>
                   <button
                     onClick={handleExpertReviewRequest}
@@ -204,10 +210,10 @@ const ApprovedAiPlanPage = () => {
                     }`}
                   >
                     {isSubmitting
-                      ? "Submitting..."
+                      ? "Invio in corso..."
                       : isRequestSubmitted
-                      ? "Request Submitted ✓"
-                      : "View Expert Review"}
+                      ? "Richiesta Inviata ✓"
+                      : "Visualizza Revisione Esperta"}
                   </button>
                 </div>
 
@@ -217,7 +223,7 @@ const ApprovedAiPlanPage = () => {
                     <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center">
                       <Image
                         src="/images/approve.png"
-                        alt="Expert"
+                        alt="Esperto"
                         width={200}
                         height={200}
                       />
@@ -239,7 +245,7 @@ const ApprovedAiPlanPage = () => {
           operationsPlan={operationsPlan}
           managementTeam={managementTeam}
           financialHighlights={financialHighlights}
-          cashFlowAnalysis={cashFlowAnalysis}
+          cashFlowAnalysis={cashFlowAnalysisArray}
           profitLossProjection={profitLossProjection}
           balanceSheet={balanceSheet}
           netFinancialPosition={netFinancialPosition}
@@ -250,10 +256,13 @@ const ApprovedAiPlanPage = () => {
           ratiosAnalysis={ratiosAnalysis}
           productionSalesForecast={productionSalesForecast}
         />
-        <FinancialDashboard
-          financialHighlights={financialHighlights}
-          businessModel={businessModel}
-          cashFlowAnalysis={cashFlowAnalysis}
+        <ProductionSalesForecast
+          productionSalesForecast={productionSalesForecast}
+        />
+        <OperationsDashboard
+          operationsPlan={operationsPlan}
+          keyRatios={keyRatios}
+          operatingCostBreakdown={operatingCostBreakdown}
         />
         <MarketingDashboard
           marketingSalesStrategy={marketingSalesStrategy}
@@ -264,38 +273,19 @@ const ApprovedAiPlanPage = () => {
           balanceSheet={balanceSheet}
           netFinancialPosition={netFinancialPosition}
         />
-        <DebtDashboard
-          debtStructure={debtStructure}
-          fundingSources={fundingSources}
+        <DebtDashboard debtStructure={debtStructure} />
+        <FinancialAnalysis financialAnalysis={financialAnalysis} />
+        <FinancialDashboard
+          financialHighlights={financialHighlights}
+          cashFlowAnalysis={cashFlowAnalysisArray}
+          cashFlowAnalysisText={cashFlowAnalysis}
         />
-        <OperationsDashboard
-          operationsPlan={operationsPlan}
-          keyRatios={keyRatios}
-          operatingCostBreakdown={operatingCostBreakdown}
-        />
-        
-        {/* Financial Analysis Section */}
-        {financialAnalysis && financialAnalysis.length > 0 && (
-          <FinancialAnalysis financialAnalysis={financialAnalysis} />
-        )}
+        <RatiosAnalysis ratiosAnalysis={ratiosAnalysis} />
 
-        {/* Ratios Analysis Section */}
-        {ratiosAnalysis && ratiosAnalysis.length > 0 && (
-          <RatiosAnalysis ratiosAnalysis={ratiosAnalysis} />
-        )}
-
-        {/* Production Sales Forecast Section */}
-        {productionSalesForecast && productionSalesForecast.length > 0 && (
-          <ProductionSalesForecast 
-            productionSalesForecast={productionSalesForecast}
-            managementTeam={managementTeam}
-          />
-        )}
-        
         <p className="text-base font-normal text-[#B6BEC8] text-center py-10">
-          This plan document is generated and secured by [BusinessplanAI].{" "}
+          Questo documento di piano è generato e protetto da [BusinessplanAI].{" "}
           <br />
-          Unauthorized sharing or reproduction is strictly prohibited.
+          La condivisione o riproduzione non autorizzata è severamente vietata.
         </p>
       </div>
     </div>

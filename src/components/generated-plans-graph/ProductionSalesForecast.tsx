@@ -4,7 +4,6 @@ import { IProductionSalesForecast } from "@/redux/types";
 
 export default function ProductionSalesForecast({
   productionSalesForecast,
-  managementTeam,
 }: IProductionSalesForecast) {
   const formatCurrency = (value: number) => {
     if (!value || isNaN(value)) return "$0";
@@ -33,44 +32,42 @@ export default function ProductionSalesForecast({
 
   // Define the metrics to display in rows
   const metrics = [
-    { key: 'sales_revenue', label: 'Sales Revenue', format: 'currency' },
-    { key: 'revenue_growth', label: 'Revenue Growth', format: 'percentage' },
-    { key: 'units_sold', label: 'Units Sold', format: 'number' },
-    { key: 'average_price', label: 'Average Price', format: 'currency' },
-    { key: 'unit_production_cost', label: 'Unit Production Cost', format: 'currency' },
-    { key: 'unit_margin', label: 'Unit Margin', format: 'currency' },
+    { key: "sales_revenue", label: "Ricavi delle vendite", format: "currency" },
+    {
+      key: "revenue_growth",
+      label: "Crescita dei ricavi",
+      format: "percentage",
+    },
+    { key: "units_sold", label: "Unità vendute", format: "number" },
+    { key: "average_price", label: "Prezzo medio", format: "currency" },
+    {
+      key: "unit_production_cost",
+      label: "Costo di produzione unitario",
+      format: "currency",
+    },
+    { key: "unit_margin", label: "Margine unitario", format: "currency" },
   ];
 
   const formatValue = (value: number, format: string) => {
     switch (format) {
-      case 'percentage':
+      case "percentage":
         return formatPercentage(value);
-      case 'currency':
+      case "currency":
         return formatCurrency(value);
-      case 'number':
+      case "number":
         return formatNumber(value);
-      case 'decimal':
+      case "decimal":
         return formatDecimal(value);
       default:
-        return value?.toString() || '0';
+        return value?.toString() || "0";
     }
   };
 
   return (
     <div className="mx-auto space-y-10 mt-10">
-      {/* Management Team */}
-      <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
-        Management Team
-      </h2>
-      <div className="">
-        <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-justify">
-          {managementTeam}
-        </p>
-      </div>
-
       {/* Production Sales Forecast Table */}
-      <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
-        Production Sales Forecast
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+        7. Conto economico a valore aggiunto
       </h2>
       <div className="rounded-lg border border-gray-200">
         <div className="overflow-x-auto">
@@ -78,11 +75,11 @@ export default function ProductionSalesForecast({
             <thead>
               <tr className="bg-[#E6D8FF]">
                 <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  Metrics
+                  Metriche
                 </th>
                 {productionSalesForecast.map((item) => (
-                  <th 
-                    key={item.year} 
+                  <th
+                    key={item.year}
                     className="px-4 py-3 text-left text-sm font-medium text-[#121417]"
                   >
                     {item.year}
@@ -102,11 +99,14 @@ export default function ProductionSalesForecast({
                     {metric.label}
                   </td>
                   {productionSalesForecast.map((item) => (
-                    <td 
-                      key={`${item.year}-${metric.key}`} 
+                    <td
+                      key={`${item.year}-${metric.key}`}
                       className="px-4 py-3 text-sm font-normal text-[#61758A]"
                     >
-                      {formatValue(item[metric.key as keyof typeof item] as number, metric.format)}
+                      {formatValue(
+                        item[metric.key as keyof typeof item] as number,
+                        metric.format
+                      )}
                     </td>
                   ))}
                 </tr>

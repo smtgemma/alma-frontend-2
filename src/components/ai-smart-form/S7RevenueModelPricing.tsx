@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
-
+//
 interface ProductService {
   id: string;
   name: string;
@@ -545,12 +545,12 @@ export default function S7RevenueModelPricing() {
         <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
-            Step 07 out of 10
+            Passo 07 di 10
           </p>
 
           <div className="text-center mb-8">
             <h2 className="text-[2rem] text-accent font-medium">
-              Revenue Model & Pricing
+              Modello di Ricavi e Prezzi
             </h2>
           </div>
 
@@ -576,7 +576,7 @@ export default function S7RevenueModelPricing() {
                 {/* Question 1: What are the expected revenues on the first year? */}
                 <div>
                   <label className="question-text">
-                    What are the expected revenues on the first year?
+                    Quali sono i ricavi previsti nel primo anno?
                   </label>
                   <div className="mt-4">
                     <input
@@ -595,7 +595,7 @@ export default function S7RevenueModelPricing() {
                       onClick={() =>
                         handleTextareaClick("showExpectedRevenueOptions")
                       }
-                      placeholder="Enter a custom projection"
+                      placeholder="Inserisci una proiezione personalizzata"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
                   </div>
@@ -611,7 +611,7 @@ export default function S7RevenueModelPricing() {
                         <div className="flex items-center p-2 rounded-lg">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                           <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                            Loading AI suggestions...
+                            Caricamento suggerimenti AI...
                           </span>
                         </div>
                       ) : (
@@ -667,7 +667,7 @@ export default function S7RevenueModelPricing() {
                     {form.productServices.slice(0, 4).map((item, index) => (
                       <div key={item.id}>
                         <label className="text-[1rem] font-medium text-accent mb-2 block">
-                          Product/Service {index + 1}:
+                          Prodotto/Servizio {index + 1}:
                         </label>
                         <input
                           type="text"
@@ -689,8 +689,7 @@ export default function S7RevenueModelPricing() {
                 {/* Question 2: What can you age of growing do you expect from the second year? */}
                 <div>
                   <label className="question-text">
-                    What percentage of growing do you expect from the second
-                    year?
+                    Che percentuale di crescita ti aspetti dal secondo anno?
                   </label>
                   <div className="mt-4">
                     <input
@@ -709,7 +708,7 @@ export default function S7RevenueModelPricing() {
                       onClick={() =>
                         handleTextareaClick("showGrowthProjectionOptions")
                       }
-                      placeholder="Enter a custom projection"
+                      placeholder="Inserisci una proiezione personalizzata"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
                   </div>
@@ -725,7 +724,7 @@ export default function S7RevenueModelPricing() {
                         <div className="flex items-center p-2 rounded-lg">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                           <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                            Loading AI suggestions...
+                            Caricamento suggerimenti AI...
                           </span>
                         </div>
                       ) : (
@@ -777,8 +776,8 @@ export default function S7RevenueModelPricing() {
                 {/* Question 3: What percentage of business share will come from each group of product services? */}
                 <div>
                   <label className="question-text">
-                    What percentage of business share will come from each group
-                    of product services?
+                    Che percentuale di quota aziendale proverrà da ogni gruppo
+                    di prodotti/servizi?
                   </label>
 
                   {/* Product/Service Share Section */}
@@ -789,7 +788,7 @@ export default function S7RevenueModelPricing() {
                       {[1, 2, 3, 4].map((num) => (
                         <div key={num}>
                           <label className="text-[1rem] font-medium text-accent mb-2 block">
-                            Product/Service (%) {num}:
+                            Prodotto/Servizio (%) {num}:
                           </label>
                           <input
                             type="text"
@@ -804,7 +803,7 @@ export default function S7RevenueModelPricing() {
                 {/* Question 4: What is the expected pricing level? */}
                 <div>
                   <label className="question-text">
-                    What is the expected pricing level?
+                    Qual è il livello di prezzo previsto?
                   </label>
 
                   {/* Pricing Level Section */}
@@ -814,7 +813,7 @@ export default function S7RevenueModelPricing() {
                       {[1, 2, 3, 4].map((num) => (
                         <div key={num}>
                           <label className="text-[1rem] font-medium text-accent mb-2 block">
-                            Product/Service (approax.) {num}:
+                            Prodotto/Servizio (appross.) {num}:
                           </label>
                           <input
                             type="text"
@@ -833,13 +832,13 @@ export default function S7RevenueModelPricing() {
                     onClick={prevStep}
                     className="w-full py-3 cursor-pointer bg-white border border-[#888888] text-accent text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Back
+                    Indietro
                   </button>
                   <button
                     type="submit"
                     className="w-full py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Next
+                    Avanti
                   </button>
                 </div>
               </form>

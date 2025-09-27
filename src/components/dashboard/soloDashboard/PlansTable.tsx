@@ -18,11 +18,11 @@ interface Plan {
 const getStatusBadge = (status: string) => {
   const statusConfig = {
     COMPLETED: {
-      text: "COMPLETED",
+      text: "COMPLETATO",
       color: "bg-green-100 text-green-800/40 border border-green-800/40",
     },
     INCOMPLETED: {
-      text: "INCOMPLETED",
+      text: "INCOMPLETO",
       color: "bg-red-100 text-red-800/40 border border-red-800/40",
     },
     // COMPLETED: { text: 'Pending', color: 'bg-orange-100 text-orange-800/40 border border-orange-800/40' }
@@ -138,9 +138,11 @@ export default function PlansTable() {
             </div>
             <div className="text-center">
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                Account Pending Approval
+                Account in Attesa di Approvazione
               </h3>
-              <p className="text-gray-500">Your account is not accepted yet!</p>
+              <p className="text-gray-500">
+                Il tuo account non è ancora stato accettato!
+              </p>
             </div>
           </div>
         </div>
@@ -154,14 +156,14 @@ export default function PlansTable() {
       <div className="pb-6 border-b border-gray-200">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h2 className="text-[2rem] font-medium text-accent">
-            Generated Plans
+            Piani Generati
           </h2>
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto px-0">
             <div className="relative">
               <BsSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="Cerca"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 pr-4 py-2 border border-gray-300 bg-white rounded-[41px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -172,7 +174,7 @@ export default function PlansTable() {
               className=" text-white px-6 py-2 rounded-[10px] flex items-center gap-2 bg-primary transition-colors"
             >
               <BsPlus className="text-2xl text-white" />
-              Generate new Plan
+              Genera Nuovo Piano
             </Link>
           </div>
         </div>
@@ -184,19 +186,19 @@ export default function PlansTable() {
           <thead className="bg-[#475466] ">
             <tr>
               <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                Date & Time
+                Data e Ora
               </th>
               <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                Plan Name
+                Nome Piano
               </th>
               <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                Presentation
+                Presentazione
               </th>
               <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                Status
+                Stato
               </th>
               <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                Action
+                Azione
               </th>
             </tr>
           </thead>
@@ -216,7 +218,7 @@ export default function PlansTable() {
                         onClick={() => handleViewPresentation(plan)}
                         className="bg-gray-100 text-info px-6 py-1 rounded-[76px] text-xs hover:bg-gray-200 transition-colors border border-[#99A6B8] cursor-pointer"
                       >
-                        View
+                        Visualizza
                       </button>
                     </div>
                   </td>
@@ -228,7 +230,7 @@ export default function PlansTable() {
                       href={`/approved-ai-plan/${plan.id}`}
                       className="text-primary/80 underline hover:text-primary text-base font-medium"
                     >
-                      View plan
+                      Visualizza piano
                     </Link>
                   </td>
                 </tr>
@@ -254,7 +256,7 @@ export default function PlansTable() {
                     </div>
                     <div>
                       <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        No Data Found
+                        Nessun Dato Trovato
                       </h3>
                       {/* <p className="text-gray-500 mb-4">You haven't generated any business plans yet.</p>
                       <Link href="/ai-smart-form" className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
@@ -275,7 +277,7 @@ export default function PlansTable() {
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-700">
-              Showing {data?.data?.meta.total} out of {data?.data?.meta.limit}
+              Mostrando {data?.data?.meta.total} di {data?.data?.meta.limit}
             </span>
             <select
               value={itemsPerPage}
@@ -294,7 +296,7 @@ export default function PlansTable() {
               disabled={currentPage === 1}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              &lt; Previous
+              &lt; Precedente
             </button>
 
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -333,7 +335,7 @@ export default function PlansTable() {
               disabled={currentPage === totalPages}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next &gt;
+              Successivo &gt;
             </button>
           </div>
         </div>

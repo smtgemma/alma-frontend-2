@@ -1,5 +1,3 @@
-
-
 import BuildYourPlan from "@/components/LandingPage/BuildYourPlan";
 import DemoSolution from "@/components/LandingPage/DemoSolution";
 import ExpertConsultation from "@/components/LandingPage/ExpertConsultation";
@@ -20,7 +18,7 @@ const page = () => {
       <IdeatoPlan />
       {/* <DemoSolution /> */}
       <SubscriptionPlan />
-      <HandleStrategy /> 
+      <HandleStrategy />
       <ExpertConsultation />
       <Faq />
       <BuildYourPlan></BuildYourPlan>

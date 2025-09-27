@@ -90,7 +90,7 @@ export const adminApi = baseApi.injectEndpoints({
     // Admin endpoint to update any business plan
     adminUpdateBusinessPlan: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/businessPlan/admin/${id}`,
+        url: `businessPlan/admin/${id}`,
         method: "PATCH",
         body: data,
       }),

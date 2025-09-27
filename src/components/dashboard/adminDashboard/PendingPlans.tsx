@@ -102,7 +102,7 @@ const PendingPlans = () => {
   const handleRelease = async (id: string) => {
     await planReleased(id).unwrap();
     refetch();
-    toast.success("Business plan released successfully!");
+    toast.success("Piano aziendale rilasciato con successo!");
   };
 
   // Show loading state while checking user role
@@ -111,13 +111,13 @@ const PendingPlans = () => {
       <div className="space-y-6">
         <div className="flex flex-col space-y-2">
           <h1 className="text-2xl font-semibold text-gray-900">
-            Pending Plans
+            Piani in Sospeso
           </h1>
         </div>
         <DashboardLoading
           type="table"
-          title="Loading User Information"
-          message="Checking user permissions..."
+          title="Caricamento Informazioni Utente"
+          message="Controllo permessi utente..."
         />
       </div>
     );
@@ -129,7 +129,7 @@ const PendingPlans = () => {
       <div className="space-y-6">
         <div className="flex flex-col space-y-2">
           <h1 className="text-2xl font-semibold text-gray-900">
-            Access Denied
+            Accesso Negato
           </h1>
         </div>
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
@@ -149,16 +149,17 @@ const PendingPlans = () => {
             </div>
             <div className="ml-3">
               <h3 className="text-sm font-medium text-red-800">
-                Insufficient Permissions
+                Permessi Insufficienti
               </h3>
               <div className="mt-2 text-sm text-red-700">
                 <p>
-                  You need ADMIN or SUPERADMIN role to access this page. Current
-                  role: <strong>{currentUser?.role || "Unknown"}</strong>
+                  È necessario il ruolo ADMIN o SUPERADMIN per accedere a questa
+                  pagina. Ruolo attuale:{" "}
+                  <strong>{currentUser?.role || "Sconosciuto"}</strong>
                 </p>
                 <p className="mt-2">
-                  Please contact your administrator if you believe this is an
-                  error.
+                  Si prega di contattare l'amministratore se si ritiene che si
+                  tratti di un errore.
                 </p>
               </div>
             </div>
@@ -173,13 +174,13 @@ const PendingPlans = () => {
       <div className="space-y-6">
         <div className="flex flex-col space-y-2">
           <h1 className="text-2xl font-semibold text-gray-900">
-            Pending Plans
+            Piani in Sospeso
           </h1>
         </div>
         <DashboardLoading
           type="table"
-          title="Loading Pending Plans"
-          message="Fetching pending business plans for review..."
+          title="Caricamento Piani in Sospeso"
+          message="Recupero piani aziendali in sospeso per la revisione..."
         />
       </div>
     );
@@ -193,7 +194,7 @@ const PendingPlans = () => {
       <div className="space-y-6">
         <div className="flex flex-col space-y-2">
           <h1 className="text-2xl font-semibold text-gray-900">
-            Pending Plans
+            Piani in Sospeso
           </h1>
         </div>
         <div
@@ -226,8 +227,8 @@ const PendingPlans = () => {
                 }`}
               >
                 {isForbidden
-                  ? "Access Forbidden"
-                  : "Error Loading Pending Plans"}
+                  ? "Accesso Vietato"
+                  : "Errore nel Caricamento dei Piani in Sospeso"}
               </h3>
               <div
                 className={`mt-2 text-sm ${
@@ -237,21 +238,24 @@ const PendingPlans = () => {
                 {isForbidden ? (
                   <>
                     <p>
-                      You are not authorized to access this resource. This could
-                      be due to:
+                      Non sei autorizzato ad accedere a questa risorsa. Questo
+                      potrebbe essere dovuto a:
                     </p>
                     <ul className="list-disc list-inside mt-2 space-y-1">
-                      <li>Insufficient permissions</li>
-                      <li>Token expiration</li>
-                      <li>Role mismatch</li>
+                      <li>Permessi insufficienti</li>
+                      <li>Scadenza del token</li>
+                      <li>Discrepanza del ruolo</li>
                     </ul>
                     <p className="mt-2">
-                      Please try logging out and logging back in, or contact
-                      your administrator.
+                      Si prega di provare a disconnettersi e riconnettersi, o
+                      contattare l'amministratore.
                     </p>
                   </>
                 ) : (
-                  <p>Failed to load pending plans data. Please try again.</p>
+                  <p>
+                    Impossibile caricare i dati dei piani in sospeso. Si prega
+                    di riprovare.
+                  </p>
                 )}
               </div>
             </div>
@@ -265,7 +269,9 @@ const PendingPlans = () => {
     <div className="space-y-6 px-4 lg:px-6 py-6">
       {/* Header */}
       <div className="flex flex-col space-y-2">
-        <h1 className="text-2xl font-semibold text-gray-900">Pending Plans</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">
+          Piani in Sospeso
+        </h1>
       </div>
 
       {/* Metrics Cards */}
@@ -273,7 +279,7 @@ const PendingPlans = () => {
         <div className="bg-white p-6 rounded-lg ">
           <HiOutlineUserGroup className="w-8 h-8 text-primary" />
           <h3 className="text-lg font-semibold text-gray-900 my-2">
-            Total Pending
+            Totale in Sospeso
           </h3>
           <p className="text-3xl font-bold text-primary">
             {pendingPlans?.data?.stats?.totalPending ||
@@ -285,7 +291,7 @@ const PendingPlans = () => {
         <div className="bg-white p-6 rounded-lg ">
           <CgProfile className="w-8 h-8 text-primary" />
           <h3 className="text-lg font-semibold text-gray-900 my-2">
-            Individual Pending
+            Individuali in Sospeso
           </h3>
           <p className="text-3xl font-bold text-primary">
             {pendingPlans?.data?.stats?.totalSoloPending ||
@@ -297,7 +303,7 @@ const PendingPlans = () => {
         <div className="bg-white p-6 rounded-lg ">
           <MdOutlineGroupAdd className="w-8 h-8 text-primary" />
           <h3 className="text-lg font-semibold text-gray-900 my-2">
-            Team Pending
+            Team in Sospeso
           </h3>
           <p className="text-3xl font-bold text-primary">
             {pendingPlans?.data?.stats?.totalTeamPending ||
@@ -324,7 +330,7 @@ const PendingPlans = () => {
       <div className="">
         <div className="flex items-center justify-between mb-4 gap-5">
           <h2 className="text-2xl md:text-[2rem] font-medium text-accent uppercase">
-            Plans
+            Piani
           </h2>
 
           {/* Search Bar */}
@@ -333,7 +339,7 @@ const PendingPlans = () => {
               <BsSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search plans..."
+                placeholder="Cerca piani..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-[41px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -348,25 +354,25 @@ const PendingPlans = () => {
             <thead className="bg-[#475466]">
               <tr>
                 <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Date & Time
+                  Data e Ora
                 </th>
                 <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                  User Name
+                  Nome Utente
                 </th>
                 <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                  User Type
+                  Tipo Utente
                 </th>
                 <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Presentation
+                  Presentazione
                 </th>
                 <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Profile
+                  Profilo
                 </th>
                 <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Action 01
+                  Azione 01
                 </th>
                 <th className="px-6 py-3 text-left text-sm md:text-base lg:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Action 02
+                  Azione 02
                 </th>
               </tr>
             </thead>
@@ -393,7 +399,7 @@ const PendingPlans = () => {
                         onClick={() => handleViewPresentation(plan)}
                         className="text-info text-xs font-normal py-1 px-6 border border-info/50 rounded-full hover:bg-info/10 transition-colors cursor-pointer"
                       >
-                        View
+                        Visualizza
                       </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -402,14 +408,14 @@ const PendingPlans = () => {
                           href={`/admin/user-info/${plan.user.id}`}
                           className="text-info text-xs font-normal py-1 px-6 border border-info/50 rounded-full cursor-pointer"
                         >
-                          View
+                          Visualizza
                         </Link>
                       ) : (
                         <Link
                           href={`/admin/user-profile/${plan.user.id}`}
                           className="text-info text-xs font-normal py-1 px-6 border border-info/50 rounded-full cursor-pointer"
                         >
-                          View
+                          Visualizza
                         </Link>
                       )}
                     </td>
@@ -418,20 +424,20 @@ const PendingPlans = () => {
                         href={`/generated-planfor-admin/${plan.id}`}
                         className="text-primary underline info"
                       >
-                        View Plan
+                        Visualizza Piano
                       </Link>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                       {plan.status === "COMPLETED" ? (
                         <button className="bg-primary cursor-pointer text-white px-3 py-1 rounded-md hover:bg-primary/80 transition-colors flex items-center gap-1">
-                          Released
+                          Rilasciato
                         </button>
                       ) : (
                         <button
                           onClick={() => handleRelease(plan.id)}
                           className="bg-primary cursor-pointer text-white px-3 py-1 rounded-md hover:bg-primary/80 transition-colors flex items-center gap-1"
                         >
-                          Release
+                          Rilascia
                         </button>
                       )}
                     </td>
@@ -458,11 +464,11 @@ const PendingPlans = () => {
                       </div>
                       <div>
                         <h3 className="text-lg font-medium text-gray-900 mb-2">
-                          No Pending Plans Found
+                          Nessun Piano in Sospeso Trovato
                         </h3>
                         <p className="text-gray-500">
-                          There are currently no pending business plans for
-                          review.
+                          Attualmente non ci sono piani aziendali in sospeso per
+                          la revisione.
                         </p>
                       </div>
                     </div>
@@ -478,7 +484,7 @@ const PendingPlans = () => {
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-700">
-                Showing {currentPlans.length} out of {totalItems}
+                Mostrando {currentPlans.length} di {totalItems}
               </span>
               <select
                 value={itemsPerPage}
@@ -498,7 +504,7 @@ const PendingPlans = () => {
                 disabled={currentPage === 1}
                 className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                &lt; Previous
+                &lt; Precedente
               </button>
 
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -537,7 +543,7 @@ const PendingPlans = () => {
                 disabled={currentPage === totalPages}
                 className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Next &gt;
+                Successivo &gt;
               </button>
             </div>
           </div>

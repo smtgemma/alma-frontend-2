@@ -125,7 +125,7 @@ const Navbar = () => {
     dispatch(logout());
 
     // Show success message
-    toast.success("Logged out successfully");
+    toast.success("Disconnesso con successo");
 
     // Redirect to home page
     router.push("/");
@@ -159,7 +159,7 @@ const Navbar = () => {
     if (user?.firstName && user?.lastName) {
       return `${user.firstName} ${user.lastName}`;
     }
-    return "Guest User";
+    return "Utente Ospite";
   };
 
   const getDisplayEmail = () => {
@@ -203,7 +203,7 @@ const Navbar = () => {
             <div>
               <img
                 src="/images/logo.png"
-                alt="Business AI Plan Logo"
+                alt="Logo Pianifico Suite"
                 width={50}
                 height={50}
                 className="rounded-lg"
@@ -215,7 +215,7 @@ const Navbar = () => {
             </div>
             <div>
               <h3 className="text-black font-medium text-xl md:text-2xl ">
-                Business AI Plan
+                Pianifico Suite
               </h3>
             </div>
           </div>
@@ -230,10 +230,11 @@ const Navbar = () => {
               </div>
             )} */}
 
-            {/* Language Switcher */}
+            {/* Language Switcher 
             <div className="flex items-center">
               <LanguageSwitcher />
             </div>
+            */}
 
             {user && token ? (
               // User is logged in - show profile dropdown
@@ -245,7 +246,7 @@ const Navbar = () => {
                   <div className="w-8 h-8 rounded-full overflow-hidden">
                     <Image
                       src={getProfileImage()}
-                      alt="Profile"
+                      alt="Profilo"
                       width={32}
                       height={32}
                       className="object-cover"
@@ -289,7 +290,7 @@ const Navbar = () => {
                     >
                       <div className="w-full flex items-center justify-start gap-2 px-4 py-2 text-sm text-accent hover:bg-card transition-colors border-b border-gray-100 cursor-pointer">
                         <CgProfile className="text-xl text-[#99A6B8]" />
-                        <p className="text-[1rem] ">Dashboard</p>
+                        <p className="text-[1rem] ">Pannello di Controllo</p>
                       </div>
                     </Link>
                     <div
@@ -297,7 +298,7 @@ const Navbar = () => {
                       className="w-full flex items-center justify-start gap-2 px-4 py-2 text-sm hover:bg-card transition-colors cursor-pointer"
                     >
                       <MdLogout className="text-xl text-[#99A6B8]" />
-                      <button className="text-[1rem] ">Logout</button>
+                      <button className="text-[1rem] ">Disconnetti</button>
                     </div>
                   </div>
                 )}
@@ -308,12 +309,12 @@ const Navbar = () => {
               <>
                 <Link href="/signIn">
                   <button className="text-accent text-[0.8rem]  md:text-[1rem] font-medium px-3 md:px-4 py-2 rounded-[33px] transition bg-white cursor-pointer">
-                    Login
+                    Accedi
                   </button>
                 </Link>
                 <Link href="/signUp">
                   <button className="bg-primary text-[0.7rem] md:text-[1rem] font-medium hover:bg-primary/80 text-white px-2 md:px-5 py-2 rounded-[33px] transition cursor-pointer">
-                    Sign Up
+                    Registrati
                   </button>
                 </Link>
               </>

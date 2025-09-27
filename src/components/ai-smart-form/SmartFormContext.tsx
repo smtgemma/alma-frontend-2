@@ -1,5 +1,5 @@
 "use client";
-
+//
 import React, {
   createContext,
   useContext,
@@ -124,15 +124,10 @@ interface InvestmentItem {
   id: string;
   description: string;
   amount: string;
-  showOptions?: boolean;
-  selectedOptions?: string[];
 }
 
 interface InvestmentPlanForm {
   initialInvestment: string;
-  customInitialInvestment: string[];
-  selectedInitialInvestmentOptions: string[];
-  showInitialInvestmentOptions: boolean;
   investmentItems: InvestmentItem[];
 }
 
@@ -251,48 +246,50 @@ const validationRules = {
   step1: (data: BusinessInfoForm): ValidationErrors => {
     const errors: ValidationErrors = {};
     if (!data.businessName?.trim()) {
-      errors.businessName = "Business name is required";
+      errors.businessName = "Il nome dell'azienda è obbligatorio";
     }
     if (!data.businessType) {
       errors.businessType =
-        "Please select business type (Existing or New Business)";
+        "Seleziona il tipo di azienda (Esistente o Nuova Azienda)";
     }
     if (!data.location?.trim()) {
-      errors.location = "Location is required";
+      errors.location = "La posizione è obbligatoria";
     }
     if (!data.activity?.trim()) {
-      errors.activity = "Business activity is required";
+      errors.activity = "L'attività aziendale è obbligatoria";
     }
     if (!data.totalEmployees?.trim()) {
-      errors.totalEmployees = "Total employees is required";
+      errors.totalEmployees = "Il totale dei dipendenti è obbligatorio";
     }
     if (!data.website?.trim()) {
-      errors.website = "Website is required";
+      errors.website = "Il sito web è obbligatorio";
     }
     return errors;
   },
   step2: (data: BusinessIdeaForm): ValidationErrors => {
     const errors: ValidationErrors = {};
     if (!data.businessStage) {
-      errors.businessStage = "Please select your business stage";
+      errors.businessStage = "Seleziona la fase della tua azienda";
     }
     if (!data.productService) {
-      errors.productService = "Please select product or service";
+      errors.productService = "Seleziona prodotto o servizio";
     }
     if (
       data.productService === "Product" &&
       !data.selectedProductCategory?.trim()
     ) {
-      errors.selectedProductCategory = "Product category is required";
+      errors.selectedProductCategory =
+        "La categoria del prodotto è obbligatoria";
     }
     if (
       data.productService === "Service" &&
       !data.selectedServiceCategory?.trim()
     ) {
-      errors.selectedServiceCategory = "Service category is required";
+      errors.selectedServiceCategory =
+        "La categoria del servizio è obbligatoria";
     }
     if (!data.deliveryMethod) {
-      errors.deliveryMethod = "Delivery method is required";
+      errors.deliveryMethod = "Il metodo di consegna è obbligatorio";
     }
     return errors;
   },
@@ -307,7 +304,7 @@ const validationRules = {
   step5: (data: IndustryMarketForm): ValidationErrors => {
     const errors: ValidationErrors = {};
     if (!data.industry?.trim()) {
-      errors.industry = "Industry is required";
+      errors.industry = "L'industria è obbligatoria";
     }
     return errors;
   },
@@ -429,30 +426,21 @@ const getDefaultFormData = (): SmartFormData => ({
   },
   step6: {
     initialInvestment: "",
-    customInitialInvestment: [],
-    selectedInitialInvestmentOptions: [],
-    showInitialInvestmentOptions: false,
     investmentItems: [
       {
         id: "1",
         description: "",
         amount: "",
-        showOptions: false,
-        selectedOptions: [],
       },
       {
         id: "2",
         description: "",
         amount: "",
-        showOptions: false,
-        selectedOptions: [],
       },
       {
         id: "3",
         description: "",
         amount: "",
-        showOptions: false,
-        selectedOptions: [],
       },
     ],
   },

@@ -1,0 +1,1307 @@
+{
+    "success": true,
+    "statusCode": 200,
+    "message": "Business plan get!",
+    "data": {
+        "id": "68d2ad315521621fc13ff01e",
+        "userId": "68849044b2a64ac788c8cb5a",
+        "executiveSummary": "TechInnovate Solutions si posiziona come un'azienda innovativa specializzata nello sviluppo di software personalizzati basati sull'intelligenza artificiale, con particolare attenzione alle esigenze delle piccole e medie imprese (PMI). La sua offerta principale, InsightFlow, rappresenta una soluzione all'avanguardia progettata per ottimizzare l'analisi dei dati e automatizzare la generazione di report, rispondendo alle crescenti esigenze di efficienza e precisione nel settore aziendale. La domanda di strumenti intelligenti e scalabili è in forte crescita, specialmente tra le PMI che cercano di competere in un mercato sempre più digitale e complesso. La capacità di fornire interfacce user-friendly, soluzioni modulari e supporto personalizzato costituisce uno dei principali punti di forza di TechInnovate, che si distingue anche per il suo impegno continuo nell'innovazione tecnologica e nel miglioramento dei propri prodotti. Il team di TechInnovate vanta competenze multidisciplinari e un'esperienza consolidata nel settore IT e dell'intelligenza artificiale, elementi che rafforzano la credibilità e la capacità di adattamento alle esigenze di mercato. Finora, l'azienda ha già ottenuto una prima trazione commerciale attraverso collaborazioni strategiche e feedback positivi da parte dei primi clienti, che testimoniano l'efficacia e il valore aggiunto delle soluzioni offerte. La visione a lungo termine di TechInnovate è quella di diventare un punto di riferimento nel panorama delle soluzioni AI per le PMI italiane, espandendosi progressivamente anche in mercati esteri. La crescente digitalizzazione delle imprese e la necessità di strumenti intelligenti per la gestione dei dati rendono questa iniziativa particolarmente rilevante in questo momento storico, caratterizzato da un forte impulso all'innovazione tecnologica e alla trasformazione digitale. La strategia di crescita si basa sull'espansione del portafoglio prodotti, sull'incremento della base clienti e sulla costante ricerca di innovazioni che possano migliorare l'efficienza operativa e competitiva delle aziende clienti. In conclusione, TechInnovate Solutions si presenta come un'opportunità di investimento solida e promettente, in grado di rispondere alle esigenze di un mercato in rapida evoluzione e di contribuire alla digitalizzazione delle PMI italiane, favorendo uno sviluppo sostenibile e innovativo.",
+        "businessOverview": "La nostra azienda nasce dall'ispirazione di creare soluzioni tecnologiche innovative che rispondano alle esigenze delle piccole e medie imprese italiane, con l'obiettivo di migliorare la loro efficienza operativa e competitività sul mercato globale. Fondata nel 2023 da un team di professionisti con esperienza pluriennale nel settore IT e nello sviluppo di software personalizzato, la nostra missione è quella di offrire strumenti digitali all'avanguardia, facilmente accessibili e altamente scalabili, in grado di supportare le aziende nel loro percorso di digital transformation.  La nostra visione è quella di diventare un punto di riferimento nel panorama delle soluzioni software per le PMI italiane, contribuendo alla crescita economica e all'innovazione del tessuto imprenditoriale nazionale. Crediamo fermamente che la tecnologia possa essere un motore di sviluppo sostenibile e inclusivo, e ci impegniamo a sviluppare prodotti che siano non solo funzionali, ma anche intuitivi e personalizzabili, per adattarsi alle specifiche esigenze di ogni cliente.  L'idea di fondare l'azienda è nata dall'osservazione delle sfide che molte PMI affrontano nel gestire dati complessi e nel automatizzare processi ripetitivi, spesso a causa di strumenti poco integrati o troppo costosi. La nostra prima soluzione, InsightFlow, rappresenta il risultato di questa visione: un software di analisi dei dati e automazione dei report, progettato per semplificare il lavoro degli utenti, migliorare la qualità delle decisioni e ridurre i tempi di risposta alle dinamiche di mercato.  L'azienda ha sede a Milano, una delle principali piazze economiche e tecnologiche del Paese, strategicamente posizionata per facilitare l'accesso a clienti di diverse regioni italiane e per attrarre talenti qualificati nel settore digitale. La scelta di Milano riflette anche il nostro impegno a inserirci in un ecosistema innovativo, ricco di opportunità di networking, collaborazioni e sviluppo di progetti con partner locali e internazionali.  Il team dietro a questa iniziativa è motivato da una forte passione per l'innovazione e da un desiderio di contribuire concretamente alla crescita delle imprese italiane. La nostra squadra è composta da sviluppatori, analisti di dati, esperti di business e consulenti di settore, tutti uniti dalla volontà di creare soluzioni che facciano la differenza. La cultura aziendale si basa su valori di integrità, eccellenza, collaborazione e sostenibilità, con l'obiettivo di costruire un'impresa responsabile e orientata al cliente.  Nel breve termine, ci proponiamo di consolidare la nostra presenza sul mercato italiano, ampliando la gamma di prodotti e servizi offerti e rafforzando le relazioni con i clienti esistenti. A medio termine, intendiamo espanderci in altri mercati europei, adattando le nostre soluzioni alle specificità locali e creando partnership strategiche. La nostra ambizione è di diventare un partner affidabile per le PMI che desiderano innovare e crescere attraverso l'uso intelligente della tecnologia.  In conclusione, la nostra azienda si distingue per la capacità di coniugare competenze tecniche avanzate con una profonda comprensione delle esigenze delle PMI italiane. La nostra missione è di accompagnare le imprese in un percorso di innovazione sostenibile, offrendo strumenti digitali di alta qualità, supportati da un servizio clienti dedicato e personalizzato. La passione del nostro team, unita a una strategia di crescita ben definita, ci permette di guardare al futuro con ottimismo e determinazione, pronti a contribuire allo sviluppo economico e sociale del nostro Paese.",
+        "marketAnalysis": "Il mercato delle soluzioni software basate sull'intelligenza artificiale (IA) per le piccole e medie imprese (PMI) in Italia rappresenta un segmento in rapida espansione, caratterizzato da un potenziale di crescita significativo e da un elevato livello di innovazione tecnologica. La domanda di strumenti digitali avanzati, in particolare di soluzioni personalizzate che migliorino l'efficienza operativa, l'analisi dei dati e la generazione di report automatizzati, è in costante aumento, trainata dalla crescente digitalizzazione delle imprese italiane e dalla necessità di rimanere competitive in un mercato globale sempre più orientato all'innovazione digitale.  Per comprendere appieno il potenziale di mercato di TechInnovate Solutions, è fondamentale analizzare i tre principali segmenti di mercato: il Total Addressable Market (TAM), il Serviceable Available Market (SAM) e l'Obtainable Market (SOM). Il TAM rappresenta l'intera domanda potenziale di soluzioni di intelligenza artificiale e software personalizzato per le PMI italiane, stimata in circa 1,2 milioni di aziende attive nel settore dei servizi, commercio, manifatturiero e agricoltura, con un'adozione ancora limitata ma in crescita. Considerando che circa il 20-25% di queste aziende ha già avviato processi di digitalizzazione e che la domanda di soluzioni IA è in aumento, il TAM si aggira intorno a 300.000 aziende.  Il SAM, ovvero il segmento di mercato che TechInnovate può effettivamente servire con le proprie risorse e capacità, si concentra sulle PMI con un livello di maturità digitale sufficiente e con esigenze specifiche di automazione e analisi dei dati. In Italia, si stima che circa il 40% delle PMI abbia già avviato progetti di digitalizzazione e che siano interessate a soluzioni di intelligenza artificiale personalizzate, portando il SAM a circa 120.000 aziende. Queste aziende sono distribuite principalmente nei settori del commercio, dei servizi professionali, della produzione e dell'agricoltura, e sono caratterizzate da una dimensione aziendale compresa tra 10 e 250 dipendenti.  L'SOM, ovvero la quota di mercato che TechInnovate può realisticamente conquistare nel breve e medio termine, dipende dalla strategia commerciale, dalla capacità di differenziazione del prodotto e dalla presenza di concorrenti. Considerando un approccio di penetrazione graduale, si stima che l'azienda possa acquisire circa il 2-3% del SAM entro i primi 3-5 anni, pari a circa 2.400-3.600 clienti. Questa quota di mercato è raggiungibile attraverso una strategia di marketing mirata, partnership con associazioni di categoria, partecipazione a fiere di settore e un forte investimento in customer support e personalizzazione del servizio.  Per quanto riguarda la concorrenza, il panorama italiano include sia grandi aziende multinazionali che startup innovative. Tra i principali concorrenti si annoverano aziende come SAP, Oracle e Microsoft, che offrono soluzioni di analisi dati e automazione, ma spesso con un focus su clienti enterprise e con costi elevati. Sul fronte delle startup, emergono realtà come DataRobot Italia e altre realtà locali che sviluppano soluzioni di IA su misura per le PMI. Tuttavia, molte di queste aziende si concentrano su settori specifici o su soluzioni di nicchia, lasciando spazio a TechInnovate per differenziarsi attraverso un'offerta più user-friendly, scalabile e personalizzata.  I segmenti di clientela principali sono le PMI che desiderano ottimizzare i processi interni, migliorare la qualità dei dati e automatizzare la reportistica. Questi clienti sono spesso imprenditori e manager con competenze digitali di base, che necessitano di soluzioni intuitive e di facile integrazione. La crescente consapevolezza dell'importanza dell'analisi dei dati e dell'intelligenza artificiale, unita alla disponibilità di incentivi fiscali e finanziamenti pubblici per l'innovazione, crea un momento favorevole per l'ingresso di TechInnovate nel mercato.  Le tendenze di mercato indicano un'accelerazione nell'adozione di tecnologie di intelligenza artificiale, sostenuta anche dal Piano Nazionale di Ripresa e Resilienza (PNRR) e dai fondi europei dedicati all'innovazione digitale. La domanda di soluzioni di analisi predittiva, automazione dei processi e reportistica intelligente è destinata a crescere, con un incremento stimato del 15-20% annuo nei prossimi cinque anni. Inoltre, la crescente attenzione alla sostenibilità e alla responsabilità sociale delle imprese spinge le aziende a investire in strumenti che migliorino la trasparenza e l'efficienza.  Il timing per l'introduzione di TechInnovate Solutions appare quindi estremamente favorevole. La combinazione di un mercato in espansione, un quadro normativo favorevole e la crescente domanda di soluzioni digitali personalizzate creano le condizioni ideali per il successo. La capacità di offrire un prodotto innovativo, user-friendly e scalabile, come InsightFlow, posiziona l'azienda in modo competitivo per catturare quote di mercato significative e consolidare la propria presenza nel settore delle soluzioni IA per le PMI italiane. La strategia di ingresso dovrà focalizzarsi sulla creazione di relazioni di fiducia con i clienti, sulla personalizzazione dell'offerta e sulla capacità di adattarsi rapidamente alle evoluzioni del mercato e alle esigenze dei clienti.",
+        "businessModel": "Il modello di business di TechInnovate Solutions si basa sulla creazione e vendita di software personalizzati e innovativi, con un focus particolare su soluzioni basate sull'intelligenza artificiale per le piccole e medie imprese (PMI). La principale fonte di ricavo deriva dalla vendita diretta di licenze software e servizi di abbonamento, che garantiscono un flusso di entrate ricorrente e stabile nel tempo. La strategia di acquisizione clienti si concentra su un approccio diretto, attraverso attività di marketing digitale, partecipazione a fiere di settore, e collaborazioni con partner tecnologici e consulenti di business, al fine di raggiungere un segmento di clientela altamente targettizzato e interessato a soluzioni innovative e scalabili. La proposta di valore di TechInnovate si distingue per l'offerta di prodotti user-friendly, altamente personalizzabili e facilmente integrabili con i sistemi esistenti delle PMI, garantendo così un'adozione rapida e un ritorno sull'investimento evidente. La struttura dei prezzi si basa su modelli di abbonamento mensile o annuale, con tariffe differenziate in funzione delle funzionalità richieste, del numero di utenti e del livello di supporto personalizzato fornito. Questo approccio permette di adattare l'offerta alle diverse esigenze di clientela, favorendo la fidelizzazione e la crescita del portafoglio clienti nel tempo. La componente dei costi di TechInnovate comprende principalmente lo sviluppo e l'aggiornamento continuo del software, il personale specializzato in ricerca e sviluppo, il team di supporto clienti, le attività di marketing e vendita, e le spese amministrative e di gestione. La marginalità del modello è elevata grazie alla natura scalabile del software, che permette di replicare facilmente le soluzioni senza incrementare proporzionalmente i costi variabili. La scalabilità del modello di business è garantita dall'architettura modulare delle soluzioni, che consente di ampliare le funzionalità e il numero di clienti senza dover sostenere costi significativi aggiuntivi. Inoltre, l'adozione di tecnologie cloud permette di gestire un numero crescente di utenti con costi marginali contenuti, favorendo l'espansione geografica e il raggiungimento di nuovi mercati. La strategia di crescita prevede anche l'integrazione di servizi complementari, come consulenze personalizzate, formazione e supporto tecnico avanzato, che rappresentano ulteriori fonti di ricavo e rafforzano la relazione con i clienti. La gestione dei costi è ottimizzata attraverso l'automazione dei processi di sviluppo e supporto, e l'adozione di metodologie agili che permettono di ridurre i tempi di rilascio delle nuove funzionalità e di rispondere rapidamente alle esigenze di mercato. La sostenibilità del modello di business si basa sulla capacità di mantenere un equilibrio tra investimenti in innovazione e controllo dei costi operativi, assicurando margini elevati e una crescita sostenibile nel medio e lungo termine. La previsione di scalabilità include l'espansione in nuovi mercati geografici, l'ampliamento della gamma di prodotti e servizi, e l'adozione di strategie di partnership con altri attori del settore tecnologico e consulenziale, per amplificare la penetrazione commerciale e rafforzare la presenza del brand. In conclusione, il modello di business di TechInnovate Solutions si configura come un ecosistema di soluzioni tecnologiche innovative, con un forte focus sulla personalizzazione, scalabilità e sostenibilità economica, che permette di generare ricavi ricorrenti, mantenere elevati margini di profitto e sostenere una crescita dinamica nel mercato delle PMI italiane ed estere.",
+        "marketingSalesStrategy": "La strategia di marketing e vendita di TechInnovate Solutions si basa su un posizionamento chiaro come fornitore di soluzioni software personalizzate e innovative, rivolte principalmente a piccole e medie imprese (PMI) che desiderano integrare l'intelligenza artificiale e l'automazione nei loro processi aziendali. La nostra proposta di valore si distingue per l'interfaccia user-friendly, la scalabilità delle soluzioni, il supporto clienti dedicato e un impegno costante nell'innovazione tecnologica, elementi che ci permettono di differenziarci nel mercato competitivo delle tecnologie digitali.  Il target di riferimento comprende PMI operanti in settori come il retail, la manifattura, i servizi e il settore finanziario, che cercano di ottimizzare le proprie operazioni, migliorare l'analisi dei dati e automatizzare report e processi decisionali. Per raggiungere efficacemente questo segmento, adotteremo una strategia multicanale, integrando canali online e offline.  Per quanto riguarda i canali online, utilizzeremo un sito web ottimizzato SEO, con contenuti di valore come case study, white paper e webinar, per attrarre e coinvolgere potenziali clienti. La presenza attiva sui social media professionali, in particolare LinkedIn, sarà fondamentale per costruire brand awareness, condividere success stories e generare lead qualificati. Implementeremo campagne di marketing digitale mirate, tra cui Google Ads e LinkedIn Ads, per aumentare la visibilità e acquisire contatti qualificati a costi contenuti.  Sul fronte offline, parteciperemo a fiere di settore, conferenze e eventi di networking, per stabilire relazioni dirette con potenziali clienti e partner strategici. Organizzeremo workshop e seminari presso le aziende clienti o in location dedicate, per dimostrare dal vivo le funzionalità e i benefici delle nostre soluzioni, rafforzando così la nostra credibilità e autorevolezza nel settore.  Per quanto concerne le strategie di acquisizione clienti, ci concentreremo sulla creazione di un funnel di vendita strutturato. La prima fase prevede attività di lead generation attraverso campagne di inbound marketing e networking diretto. Seguirà una fase di nurturing, con invio di contenuti personalizzati e incontri di approfondimento, per qualificare i lead e prepararli all'acquisto.  Il processo di vendita sarà supportato da un team dedicato di sales account, altamente specializzato nelle soluzioni AI e nelle esigenze delle PMI, che utilizzerà tecniche di consultative selling per comprendere le specifiche esigenze del cliente e proporre soluzioni su misura. La fase finale prevede la presentazione di offerte personalizzate, demo e trial gratuiti, per facilitare la decisione di acquisto.  Per contenere il Customer Acquisition Cost (CAC), adotteremo strategie di marketing automation e CRM integrato, che ci permetteranno di ottimizzare le attività di follow-up e di mantenere un rapporto costante con i potenziali clienti, riducendo i tempi e i costi di conversione.  Il tasso di conversione sarà migliorato attraverso un funnel di vendita ben strutturato, con punti di contatto personalizzati e un processo di onboarding efficace, che favorisca la fidelizzazione e il passaparola positivo.  Per quanto riguarda la crescita operativa, implementeremo un modello di vendita scalabile, con formazione continua del team di vendita e marketing, e l’adozione di strumenti di analisi dei dati per monitorare le performance delle campagne e delle attività di vendita. La crescita sarà anche sostenuta da partnership strategiche con consulenti, integratori di sistemi e associazioni di settore, che ci aiuteranno ad ampliare la nostra rete di contatti e a penetrare nuovi segmenti di mercato.  Infine, la comunicazione interna e la formazione del personale saranno elementi chiave per garantire un allineamento costante tra le attività di marketing e vendita, assicurando un approccio coerente e orientato al cliente, in linea con le normative OIC e il D.Lgs. 127/91, per una gestione trasparente e responsabile delle risorse e delle relazioni commerciali.",
+        "fundingSources": {
+            "initialInvestment": "existing business",
+            "fromHome": 3452354
+        },
+        "managementTeam": "",
+        "financialHighlightsAnalysis": "Analisi dei punti salienti finanziari: L'anno 0 rappresenta la situazione attuale. La crescita dei ricavi mostra un trend positivo con un CAGR del circa 43% nei successivi 5 anni. Il reddito netto si incrementa costantemente, indicando un miglioramento dell'efficienza operativa e una solida strategia di crescita. La gestione degli investimenti in capitale e il piano di rimborso del debito sono coerenti con la crescita prevista, sostenendo un equilibrio tra espansione e sostenibilità finanziaria.",
+        "cashFlowAnalysis": "Analisi del flusso di cassa: L'anno 0 riflette la posizione corrente. Le attività operative mostrano una crescita robusta, evidenziando una gestione efficiente del capitale circolante.",
+        "profitLossProjectionAnalysis": "Financial analysis covering 6-year projection (Years 0-5). Year 0 represents current data, Years 1-5 are projections based on realistic growth assumptions.",
+        "balanceSheetAnalysis": "Financial analysis covering 6-year projection (Years 0-5). Year 0 represents current data, Years 1-5 are projections based on realistic growth assumptions.",
+        "netFinancialPositionAnalysis": "La posizione finanziaria netta mostra un progressivo miglioramento, riducendo l'indebitamento e avvicinandosi a una situazione di maggiore liquidità. Questa tendenza indica una gestione finanziaria attenta e una possibile capacità di sostenere investimenti futuri o di affrontare eventuali imprevisti, rafforzando la stabilità finanziaria complessiva dell'azienda.",
+        "debtStructureAnalysis": "Il piano di ammortamento evidenzia una strategia di riduzione progressiva del debito con costi di interesse decrescenti nel tempo, favorendo una gestione sostenibile del capitale di debito e migliorando la leva finanziaria complessiva. La pianificazione di rimborsi costanti e la riduzione degli interessi contribuiscono a ottimizzare il costo del capitale nel medio termine.",
+        "keyRatiosAnalysis": "L'analisi dei principali indicatori finanziari mostra un trend di crescita costante: ROI e ROE in aumento, con una riduzione progressiva della leva finanziaria, che indica una maggiore solidità patrimoniale. La marginalità e la rotazione degli attivi migliorano nel tempo, riflettendo una gestione più efficiente e una strategia di crescita sostenibile rispetto alla media del settore italiano. La liquidità si mantiene stabile e in linea con le esigenze operative, rafforzando la posizione finanziaria complessiva.",
+        "ratiosAnalysisAnalysis": "Gli indicatori finanziari evidenziano una buona stabilità e solidità patrimoniale: ROI e ROE sono in linea con il settore, con una leva finanziaria moderata e una buona liquidità. La posizione di liquidità e la solvibilità sono rassicuranti, supportando la sostenibilità del progetto nel medio termine.",
+        "financialAnalysisAnalysis": "L'anno 0 evidenzia una buona capacità di generazione di cassa operativa, con un margine operativo lordo di 108.000 euro e un EBIT di 15.000 euro. La posizione finanziaria netta è negativa, pari a -55.000 euro, principalmente a causa di un indebitamento a breve e lungo termine. La struttura patrimoniale mostra un buon livello di assets tangibili e intangibili, con un patrimonio netto di 100.000 euro. La gestione del capitale circolante si presenta efficace, anche se la variazione negativa di 5.000 euro nel capitale circolante indica una possibile riduzione delle risorse liquide a breve termine. La distribuzione di dividendi di 2.000 euro suggerisce un ritorno agli azionisti, mentre la presenza di debiti ipotecari e altri debiti finanziari richiede attenzione per mantenere un equilibrio finanziario sostenibile. Le proiezioni future dovranno concentrarsi sul miglioramento della posizione finanziaria netta e sull'ottimizzazione della gestione del capitale circolante per sostenere la crescita e la sostenibilità dell'impresa.",
+        "productionSalesForecastAnalysis": "Financial analysis covering 6-year projection (Years 0-5). Year 0 represents current data, Years 1-5 are projections based on realistic growth assumptions.",
+        "financialHighlights": [
+            {
+                "year": 0,
+                "revenue": 180000,
+                "net_income": 15000,
+                "capex": 30000,
+                "debt_repayment": 5000
+            },
+            {
+                "year": 1,
+                "revenue": 250000,
+                "net_income": 30000,
+                "capex": 50000,
+                "debt_repayment": 10000
+            },
+            {
+                "year": 2,
+                "revenue": 400000,
+                "net_income": 60000,
+                "capex": 70000,
+                "debt_repayment": 15000
+            },
+            {
+                "year": 3,
+                "revenue": 650000,
+                "net_income": 100000,
+                "capex": 90000,
+                "debt_repayment": 20000
+            },
+            {
+                "year": 4,
+                "revenue": 850000,
+                "net_income": 130000,
+                "capex": 110000,
+                "debt_repayment": 25000
+            },
+            {
+                "year": 5,
+                "revenue": 1100000,
+                "net_income": 170000,
+                "capex": 130000,
+                "debt_repayment": 30000
+            }
+        ],
+        "cashFlowAnalysisData": [
+            {
+                "year": 0,
+                "operating": 60000,
+                "investing": -30000,
+                "financing": 5000,
+                "net_cash": 35000
+            },
+            {
+                "year": 1,
+                "operating": 80000,
+                "investing": -50000,
+                "financing": 10000,
+                "net_cash": 40000
+            },
+            {
+                "year": 2,
+                "operating": 120000,
+                "investing": -70000,
+                "financing": 15000,
+                "net_cash": 50000
+            },
+            {
+                "year": 3,
+                "operating": 200000,
+                "investing": -90000,
+                "financing": 20000,
+                "net_cash": 110000
+            },
+            {
+                "year": 4,
+                "operating": 280000,
+                "investing": -110000,
+                "financing": 25000,
+                "net_cash": 145000
+            },
+            {
+                "year": 5,
+                "operating": 380000,
+                "investing": -130000,
+                "financing": 30000,
+                "net_cash": 200000
+            }
+        ],
+        "profitLossProjection": [
+            {
+                "year": 0,
+                "revenue": 4290,
+                "cogs": 2000,
+                "gross_profit": 2290,
+                "operating_expenses": 1500,
+                "ebitda": 790,
+                "depreciation_amortization": 300,
+                "ebit": 490,
+                "interest": 50,
+                "taxes": 100,
+                "net_income": 340
+            },
+            {
+                "year": 1,
+                "revenue": 5000,
+                "cogs": 2200,
+                "gross_profit": 2800,
+                "operating_expenses": 1700,
+                "ebitda": 1100,
+                "depreciation_amortization": 350,
+                "ebit": 750,
+                "interest": 60,
+                "taxes": 150,
+                "net_income": 540
+            },
+            {
+                "year": 2,
+                "revenue": 5800,
+                "cogs": 2400,
+                "gross_profit": 3400,
+                "operating_expenses": 1900,
+                "ebitda": 1500,
+                "depreciation_amortization": 400,
+                "ebit": 1100,
+                "interest": 70,
+                "taxes": 200,
+                "net_income": 830
+            },
+            {
+                "year": 3,
+                "revenue": 6700,
+                "cogs": 2600,
+                "gross_profit": 4100,
+                "operating_expenses": 2100,
+                "ebitda": 2000,
+                "depreciation_amortization": 450,
+                "ebit": 1550,
+                "interest": 80,
+                "taxes": 250,
+                "net_income": 1220
+            },
+            {
+                "year": 4,
+                "revenue": 7700,
+                "cogs": 2800,
+                "gross_profit": 4900,
+                "operating_expenses": 2300,
+                "ebitda": 2600,
+                "depreciation_amortization": 500,
+                "ebit": 2100,
+                "interest": 90,
+                "taxes": 300,
+                "net_income": 1710
+            },
+            {
+                "year": 5,
+                "revenue": 8800,
+                "cogs": 3000,
+                "gross_profit": 5800,
+                "operating_expenses": 2500,
+                "ebitda": 3300,
+                "depreciation_amortization": 550,
+                "ebit": 2750,
+                "interest": 100,
+                "taxes": 350,
+                "net_income": 2300
+            }
+        ],
+        "balanceSheet": [
+            {
+                "year": 0,
+                "intangible_assets": 713,
+                "tangible_assets": 6895,
+                "financial_assets": 0,
+                "net_fixed_assets": 7608,
+                "inventories": 0,
+                "net_receivables_from_customers": 357747,
+                "other_operating_receivables": 0,
+                "accrued_expenses_and_prepaid_income": 0,
+                "payables_to_suppliers": 0,
+                "payables_to_subsidiaries": 0,
+                "other_operating_payables": 16883,
+                "accrued_expenses_and_prepaid_income_passive": 0,
+                "net_operating_working_capital": 104193,
+                "invested_capital": 111801,
+                "short_term_bank_debts": 0,
+                "other_short_term_financial_debts": 0,
+                "long_term_bank_debts": 0,
+                "other_long_term_financial_debts": 0,
+                "shareholder_loans": 0,
+                "leasing_debts": 0,
+                "financial_receivables": 0,
+                "cash_and_banks": 814,
+                "net_financial_debt": 35686,
+                "share_capital": 10000,
+                "reserves": 10413,
+                "profit_loss": 55702,
+                "net_equity": 76115,
+                "sources_of_financing": 111801,
+                "percentages": {
+                    "intangible_assets": 0.64,
+                    "tangible_assets": 6.17,
+                    "net_fixed_assets": 6.81,
+                    "net_receivables_from_customers": 319.66,
+                    "other_operating_payables": 15.09,
+                    "net_operating_working_capital": 93.07,
+                    "invested_capital": 100,
+                    "cash_and_banks": 0.73,
+                    "net_financial_debt": 29.94,
+                    "share_capital": 8.97,
+                    "reserves": 9.07,
+                    "profit_loss": 61.41,
+                    "net_equity": 68.07,
+                    "sources_of_financing": 100
+                }
+            },
+            {
+                "year": 1,
+                "intangible_assets": 750,
+                "tangible_assets": 7200,
+                "financial_assets": 0,
+                "net_fixed_assets": 7950,
+                "inventories": 0,
+                "net_receivables_from_customers": 370000,
+                "other_operating_receivables": 0,
+                "accrued_expenses_and_prepaid_income": 0,
+                "payables_to_suppliers": 0,
+                "payables_to_subsidiaries": 0,
+                "other_operating_payables": 17000,
+                "accrued_expenses_and_prepaid_income_passive": 0,
+                "net_operating_working_capital": 107000,
+                "invested_capital": 114750,
+                "short_term_bank_debts": 0,
+                "other_short_term_financial_debts": 0,
+                "long_term_bank_debts": 0,
+                "other_long_term_financial_debts": 0,
+                "shareholder_loans": 0,
+                "leasing_debts": 0,
+                "financial_receivables": 0,
+                "cash_and_banks": 900,
+                "net_financial_debt": 37000,
+                "share_capital": 10200,
+                "reserves": 11000,
+                "profit_loss": 60000,
+                "net_equity": 82200,
+                "sources_of_financing": 114750,
+                "percentages": {
+                    "intangible_assets": 0.65,
+                    "tangible_assets": 6.28,
+                    "net_fixed_assets": 7,
+                    "net_receivables_from_customers": 322.55,
+                    "other_operating_payables": 14.84,
+                    "net_operating_working_capital": 93.33,
+                    "invested_capital": 100,
+                    "cash_and_banks": 0.78,
+                    "net_financial_debt": 45.2,
+                    "share_capital": 8.89,
+                    "reserves": 8.89,
+                    "profit_loss": 73.02,
+                    "net_equity": 75.55,
+                    "sources_of_financing": 100
+                }
+            },
+            {
+                "year": 2,
+                "intangible_assets": 790,
+                "tangible_assets": 7500,
+                "financial_assets": 0,
+                "net_fixed_assets": 8290,
+                "inventories": 0,
+                "net_receivables_from_customers": 382000,
+                "other_operating_receivables": 0,
+                "accrued_expenses_and_prepaid_income": 0,
+                "payables_to_suppliers": 0,
+                "payables_to_subsidiaries": 0,
+                "other_operating_payables": 17200,
+                "accrued_expenses_and_prepaid_income_passive": 0,
+                "net_operating_working_capital": 109800,
+                "invested_capital": 117990,
+                "short_term_bank_debts": 0,
+                "other_short_term_financial_debts": 0,
+                "long_term_bank_debts": 0,
+                "other_long_term_financial_debts": 0,
+                "shareholder_loans": 0,
+                "leasing_debts": 0,
+                "financial_receivables": 0,
+                "cash_and_banks": 950,
+                "net_financial_debt": 38300,
+                "share_capital": 10400,
+                "reserves": 11600,
+                "profit_loss": 65000,
+                "net_equity": 83700,
+                "sources_of_financing": 117990,
+                "percentages": {
+                    "intangible_assets": 0.67,
+                    "tangible_assets": 6.36,
+                    "net_fixed_assets": 7.03,
+                    "net_receivables_from_customers": 324.09,
+                    "other_operating_payables": 14.61,
+                    "net_operating_working_capital": 93.07,
+                    "invested_capital": 100,
+                    "cash_and_banks": 0.81,
+                    "net_financial_debt": 45.87,
+                    "share_capital": 8.83,
+                    "reserves": 8.83,
+                    "profit_loss": 77.66,
+                    "net_equity": 71.02,
+                    "sources_of_financing": 100
+                }
+            },
+            {
+                "year": 3,
+                "intangible_assets": 830,
+                "tangible_assets": 7800,
+                "financial_assets": 0,
+                "net_fixed_assets": 8630,
+                "inventories": 0,
+                "net_receivables_from_customers": 393000,
+                "other_operating_receivables": 0,
+                "accrued_expenses_and_prepaid_income": 0,
+                "payables_to_suppliers": 0,
+                "payables_to_subsidiaries": 0,
+                "other_operating_payables": 17400,
+                "accrued_expenses_and_prepaid_income_passive": 0,
+                "net_operating_working_capital": 112600,
+                "invested_capital": 120230,
+                "short_term_bank_debts": 0,
+                "other_short_term_financial_debts": 0,
+                "long_term_bank_debts": 0,
+                "other_long_term_financial_debts": 0,
+                "shareholder_loans": 0,
+                "leasing_debts": 0,
+                "financial_receivables": 0,
+                "cash_and_banks": 1000,
+                "net_financial_debt": 39700,
+                "share_capital": 10600,
+                "reserves": 11800,
+                "profit_loss": 66000,
+                "net_equity": 84200,
+                "sources_of_financing": 120230,
+                "percentages": {
+                    "intangible_assets": 0.69,
+                    "tangible_assets": 6.45,
+                    "net_fixed_assets": 7.14,
+                    "net_receivables_from_customers": 327,
+                    "other_operating_payables": 14.48,
+                    "net_operating_working_capital": 93.66,
+                    "invested_capital": 100,
+                    "cash_and_banks": 0.83,
+                    "net_financial_debt": 47.17,
+                    "share_capital": 8.84,
+                    "reserves": 8.84,
+                    "profit_loss": 78.33,
+                    "net_equity": 70.55,
+                    "sources_of_financing": 100
+                }
+            },
+            {
+                "year": 4,
+                "intangible_assets": 870,
+                "tangible_assets": 8100,
+                "financial_assets": 0,
+                "net_fixed_assets": 8970,
+                "inventories": 0,
+                "net_receivables_from_customers": 404000,
+                "other_operating_receivables": 0,
+                "accrued_expenses_and_prepaid_income": 0,
+                "payables_to_suppliers": 0,
+                "payables_to_subsidiaries": 0,
+                "other_operating_payables": 17600,
+                "accrued_expenses_and_prepaid_income_passive": 0,
+                "net_operating_working_capital": 115400,
+                "invested_capital": 123170,
+                "short_term_bank_debts": 0,
+                "other_short_term_financial_debts": 0,
+                "long_term_bank_debts": 0,
+                "other_long_term_financial_debts": 0,
+                "shareholder_loans": 0,
+                "leasing_debts": 0,
+                "financial_receivables": 0,
+                "cash_and_banks": 1050,
+                "net_financial_debt": 41000,
+                "share_capital": 10800,
+                "reserves": 12000,
+                "profit_loss": 67000,
+                "net_equity": 84700,
+                "sources_of_financing": 123170,
+                "percentages": {
+                    "intangible_assets": 0.71,
+                    "tangible_assets": 6.58,
+                    "net_fixed_assets": 7.29,
+                    "net_receivables_from_customers": 328,
+                    "other_operating_payables": 14.31,
+                    "net_operating_working_capital": 93.86,
+                    "invested_capital": 100,
+                    "cash_and_banks": 0.85,
+                    "net_financial_debt": 48.36,
+                    "share_capital": 8.78,
+                    "reserves": 8.78,
+                    "profit_loss": 79.07,
+                    "net_equity": 70.55,
+                    "sources_of_financing": 100
+                }
+            },
+            {
+                "year": 5,
+                "intangible_assets": 910,
+                "tangible_assets": 8400,
+                "financial_assets": 0,
+                "net_fixed_assets": 9250,
+                "inventories": 0,
+                "net_receivables_from_customers": 415000,
+                "other_operating_receivables": 0,
+                "accrued_expenses_and_prepaid_income": 0,
+                "payables_to_suppliers": 0,
+                "payables_to_subsidiaries": 0,
+                "other_operating_payables": 17800,
+                "accrued_expenses_and_prepaid_income_passive": 0,
+                "net_operating_working_capital": 118200,
+                "invested_capital": 125210,
+                "short_term_bank_debts": 0,
+                "other_short_term_financial_debts": 0,
+                "long_term_bank_debts": 0,
+                "other_long_term_financial_debts": 0,
+                "shareholder_loans": 0,
+                "leasing_debts": 0,
+                "financial_receivables": 0,
+                "cash_and_banks": 1100,
+                "net_financial_debt": 41800,
+                "share_capital": 11000,
+                "reserves": 12200,
+                "profit_loss": 68000,
+                "net_equity": 85200,
+                "sources_of_financing": 125210,
+                "percentages": {
+                    "intangible_assets": 0.73,
+                    "tangible_assets": 6.69,
+                    "net_fixed_assets": 7.42,
+                    "net_receivables_from_customers": 331,
+                    "other_operating_payables": 14.23,
+                    "net_operating_working_capital": 94.55,
+                    "invested_capital": 100,
+                    "cash_and_banks": 0.88,
+                    "net_financial_debt": 49.24,
+                    "share_capital": 8.78,
+                    "reserves": 8.78,
+                    "profit_loss": 79.84,
+                    "net_equity": 66.94,
+                    "sources_of_financing": 100
+                }
+            }
+        ],
+        "netFinancialPosition": [
+            {
+                "year": 0,
+                "net_position": -150000
+            },
+            {
+                "year": 1,
+                "net_position": -130000
+            },
+            {
+                "year": 2,
+                "net_position": -110000
+            },
+            {
+                "year": 3,
+                "net_position": -90000
+            },
+            {
+                "year": 4,
+                "net_position": -70000
+            },
+            {
+                "year": 5,
+                "net_position": -50000
+            }
+        ],
+        "debtStructure": [
+            {
+                "year": 0,
+                "repayment": 200000,
+                "interest_rate": 3.5,
+                "outstanding_debt": 200000
+            },
+            {
+                "year": 1,
+                "repayment": 25000,
+                "interest_rate": 3.4,
+                "outstanding_debt": 175000
+            },
+            {
+                "year": 2,
+                "repayment": 30000,
+                "interest_rate": 3.3,
+                "outstanding_debt": 145000
+            },
+            {
+                "year": 3,
+                "repayment": 35000,
+                "interest_rate": 3.2,
+                "outstanding_debt": 110000
+            },
+            {
+                "year": 4,
+                "repayment": 40000,
+                "interest_rate": 3.1,
+                "outstanding_debt": 70000
+            },
+            {
+                "year": 5,
+                "repayment": 45000,
+                "interest_rate": 3,
+                "outstanding_debt": 25000
+            }
+        ],
+        "keyRatios": [
+            {
+                "year": 0,
+                "roi": 10.2,
+                "roe": 13.5,
+                "debt_to_equity": 2.5,
+                "gross_margin": 55,
+                "ebitda_margin": 10,
+                "net_margin": 8,
+                "current_ratio": 1.4,
+                "quick_ratio": 1.1,
+                "asset_turnover": 0.75
+            },
+            {
+                "year": 1,
+                "roi": 12.5,
+                "roe": 15.2,
+                "debt_to_equity": 2,
+                "gross_margin": 60,
+                "ebitda_margin": 12,
+                "net_margin": 12,
+                "current_ratio": 1.5,
+                "quick_ratio": 1.2,
+                "asset_turnover": 0.83
+            },
+            {
+                "year": 2,
+                "roi": 15.8,
+                "roe": 18.5,
+                "debt_to_equity": 1.65,
+                "gross_margin": 60,
+                "ebitda_margin": 20,
+                "net_margin": 15,
+                "current_ratio": 1.54,
+                "quick_ratio": 1.25,
+                "asset_turnover": 0.89
+            },
+            {
+                "year": 3,
+                "roi": 17,
+                "roe": 20,
+                "debt_to_equity": 1.4,
+                "gross_margin": 62,
+                "ebitda_margin": 22,
+                "net_margin": 17,
+                "current_ratio": 1.6,
+                "quick_ratio": 1.3,
+                "asset_turnover": 0.92
+            },
+            {
+                "year": 4,
+                "roi": 18.2,
+                "roe": 21.8,
+                "debt_to_equity": 1.2,
+                "gross_margin": 63,
+                "ebitda_margin": 23,
+                "net_margin": 18,
+                "current_ratio": 1.65,
+                "quick_ratio": 1.35,
+                "asset_turnover": 0.95
+            },
+            {
+                "year": 5,
+                "roi": 19,
+                "roe": 23,
+                "debt_to_equity": 1,
+                "gross_margin": 65,
+                "ebitda_margin": 25,
+                "net_margin": 20,
+                "current_ratio": 1.7,
+                "quick_ratio": 1.4,
+                "asset_turnover": 1
+            }
+        ],
+        "financialAnalysis": [
+            {
+                "year": 0,
+                "gross_operating_cash_flow": 60000,
+                "working_capital_change": -5000,
+                "current_management_cash_flow": 55000,
+                "operating_cash_flow": 60000,
+                "debt_service_cash_flow": 5000,
+                "shareholders_cash_flow": 10000,
+                "net_cash_flow": 45000,
+                "sales_revenue": 180000,
+                "production_value": 150000,
+                "gross_operating_margin": 108000,
+                "ebit": 15000,
+                "ebt": 14000,
+                "net_income": 15000,
+                "dividends": 2000,
+                "net_tangible_assets": 90000,
+                "net_intangible_assets": 30000,
+                "financial_assets": 5000,
+                "trade_assets": 40000,
+                "inventory": 20000,
+                "deferred_liquidity": 10000,
+                "immediate_liquidity": 15000,
+                "equity": 100000,
+                "long_term_debt": 50000,
+                "short_term_debt": 20000,
+                "net_financial_position": -55000,
+                "mortgage_loans": 25000,
+                "other_financial_debts": 15000,
+                "cash_and_banks": 15000
+            },
+            {
+                "year": 1,
+                "gross_operating_cash_flow": 69000,
+                "working_capital_change": -5750,
+                "current_management_cash_flow": 63250,
+                "operating_cash_flow": 69000,
+                "debt_service_cash_flow": 5750,
+                "shareholders_cash_flow": 11500,
+                "net_cash_flow": 51750,
+                "sales_revenue": 207000,
+                "production_value": 172500,
+                "gross_operating_margin": 113400,
+                "ebit": 17250,
+                "ebt": 16100,
+                "net_income": 17250,
+                "dividends": 2300,
+                "net_tangible_assets": 103500,
+                "net_intangible_assets": 34500,
+                "financial_assets": 5750,
+                "trade_assets": 46000,
+                "inventory": 23000,
+                "deferred_liquidity": 11500,
+                "immediate_liquidity": 17250,
+                "equity": 115000,
+                "long_term_debt": 57500,
+                "short_term_debt": 23000,
+                "net_financial_position": -63250,
+                "mortgage_loans": 28750,
+                "other_financial_debts": 17250,
+                "cash_and_banks": 17250
+            },
+            {
+                "year": 2,
+                "gross_operating_cash_flow": 79350,
+                "working_capital_change": -6612.5,
+                "current_management_cash_flow": 72737.5,
+                "operating_cash_flow": 79350,
+                "debt_service_cash_flow": 6612.5,
+                "shareholders_cash_flow": 13225,
+                "net_cash_flow": 59512.5,
+                "sales_revenue": 238050,
+                "production_value": 198375,
+                "gross_operating_margin": 119070,
+                "ebit": 19837.5,
+                "ebt": 18515,
+                "net_income": 19837.5,
+                "dividends": 2645,
+                "net_tangible_assets": 119025,
+                "net_intangible_assets": 39675,
+                "financial_assets": 6612.5,
+                "trade_assets": 52900,
+                "inventory": 26450,
+                "deferred_liquidity": 13225,
+                "immediate_liquidity": 19837.5,
+                "equity": 132250,
+                "long_term_debt": 66125,
+                "short_term_debt": 26450,
+                "net_financial_position": -72737.5,
+                "mortgage_loans": 33062.5,
+                "other_financial_debts": 19837.5,
+                "cash_and_banks": 19837.5
+            },
+            {
+                "year": 3,
+                "gross_operating_cash_flow": 91252.5,
+                "working_capital_change": -7604.37,
+                "current_management_cash_flow": 83648.12,
+                "operating_cash_flow": 91252.5,
+                "debt_service_cash_flow": 7604.37,
+                "shareholders_cash_flow": 15208.75,
+                "net_cash_flow": 68439.38,
+                "sales_revenue": 273757.5,
+                "production_value": 228131.25,
+                "gross_operating_margin": 125023.5,
+                "ebit": 22813.12,
+                "ebt": 21292.25,
+                "net_income": 22813.12,
+                "dividends": 3041.75,
+                "net_tangible_assets": 136878.75,
+                "net_intangible_assets": 45626.25,
+                "financial_assets": 7604.37,
+                "trade_assets": 60835,
+                "inventory": 30417.5,
+                "deferred_liquidity": 15208.75,
+                "immediate_liquidity": 22813.12,
+                "equity": 152087.5,
+                "long_term_debt": 76043.75,
+                "short_term_debt": 30417.5,
+                "net_financial_position": -83648.12,
+                "mortgage_loans": 38021.88,
+                "other_financial_debts": 22813.12,
+                "cash_and_banks": 22813.12
+            },
+            {
+                "year": 4,
+                "gross_operating_cash_flow": 104940.37,
+                "working_capital_change": -8745.03,
+                "current_management_cash_flow": 96195.34,
+                "operating_cash_flow": 104940.37,
+                "debt_service_cash_flow": 8745.03,
+                "shareholders_cash_flow": 17490.06,
+                "net_cash_flow": 78705.29,
+                "sales_revenue": 314821.12,
+                "production_value": 262350.94,
+                "gross_operating_margin": 131274.68,
+                "ebit": 26235.09,
+                "ebt": 24486.09,
+                "net_income": 26235.09,
+                "dividends": 3498.01,
+                "net_tangible_assets": 157410.56,
+                "net_intangible_assets": 52470.19,
+                "financial_assets": 8745.03,
+                "trade_assets": 69960.25,
+                "inventory": 34980.12,
+                "deferred_liquidity": 17490.06,
+                "immediate_liquidity": 26235.09,
+                "equity": 174900.62,
+                "long_term_debt": 87450.31,
+                "short_term_debt": 34980.12,
+                "net_financial_position": -96195.34,
+                "mortgage_loans": 43725.16,
+                "other_financial_debts": 26235.09,
+                "cash_and_banks": 26235.09
+            },
+            {
+                "year": 5,
+                "gross_operating_cash_flow": 120681.43,
+                "working_capital_change": -10056.78,
+                "current_management_cash_flow": 110624.64,
+                "operating_cash_flow": 120681.43,
+                "debt_service_cash_flow": 10056.78,
+                "shareholders_cash_flow": 20113.57,
+                "net_cash_flow": 90511.08,
+                "sales_revenue": 362044.29,
+                "production_value": 301703.58,
+                "gross_operating_margin": 137838.41,
+                "ebit": 30170.35,
+                "ebt": 28159,
+                "net_income": 30170.35,
+                "dividends": 4022.71,
+                "net_tangible_assets": 181022.14,
+                "net_intangible_assets": 60340.72,
+                "financial_assets": 10056.78,
+                "trade_assets": 80454.29,
+                "inventory": 40227.14,
+                "deferred_liquidity": 20113.57,
+                "immediate_liquidity": 30170.35,
+                "equity": 201135.71,
+                "long_term_debt": 100567.86,
+                "short_term_debt": 40227.14,
+                "net_financial_position": -110624.64,
+                "mortgage_loans": 50283.93,
+                "other_financial_debts": 30170.35,
+                "cash_and_banks": 30170.35
+            }
+        ],
+        "ratiosAnalysis": [
+            {
+                "year": 0,
+                "roi": 8,
+                "roe": 12,
+                "ros": 6,
+                "ebit_margin": 9,
+                "net_debt_to_ebitda": 2.8,
+                "net_debt_to_equity": 0.45,
+                "net_debt_to_revenue": 0.25,
+                "current_ratio": 1.8,
+                "quick_ratio": 1.4,
+                "debt_to_equity": 0.45,
+                "treasury_margin": 0.2,
+                "structural_margin": 0.4,
+                "net_working_capital": 15000,
+                "altman_z_score": 3
+            },
+            {
+                "year": 1,
+                "roi": 9.2,
+                "roe": 13.8,
+                "ros": 6.9,
+                "ebit_margin": 9.45,
+                "net_debt_to_ebitda": 3.22,
+                "net_debt_to_equity": 0.52,
+                "net_debt_to_revenue": 0.29,
+                "current_ratio": 1.84,
+                "quick_ratio": 1.43,
+                "debt_to_equity": 0.52,
+                "treasury_margin": 0.21,
+                "structural_margin": 0.42,
+                "net_working_capital": 17250,
+                "altman_z_score": 3.45
+            },
+            {
+                "year": 2,
+                "roi": 10.58,
+                "roe": 15.87,
+                "ros": 7.93,
+                "ebit_margin": 9.92,
+                "net_debt_to_ebitda": 3.7,
+                "net_debt_to_equity": 0.6,
+                "net_debt_to_revenue": 0.33,
+                "current_ratio": 1.88,
+                "quick_ratio": 1.46,
+                "debt_to_equity": 0.6,
+                "treasury_margin": 0.22,
+                "structural_margin": 0.44,
+                "net_working_capital": 19837.5,
+                "altman_z_score": 3.97
+            },
+            {
+                "year": 3,
+                "roi": 12.17,
+                "roe": 18.25,
+                "ros": 9.12,
+                "ebit_margin": 10.42,
+                "net_debt_to_ebitda": 4.25,
+                "net_debt_to_equity": 0.69,
+                "net_debt_to_revenue": 0.38,
+                "current_ratio": 1.92,
+                "quick_ratio": 1.49,
+                "debt_to_equity": 0.69,
+                "treasury_margin": 0.23,
+                "structural_margin": 0.46,
+                "net_working_capital": 22813.12,
+                "altman_z_score": 4.57
+            },
+            {
+                "year": 4,
+                "roi": 14,
+                "roe": 20.99,
+                "ros": 10.49,
+                "ebit_margin": 10.94,
+                "net_debt_to_ebitda": 4.89,
+                "net_debt_to_equity": 0.79,
+                "net_debt_to_revenue": 0.44,
+                "current_ratio": 1.96,
+                "quick_ratio": 1.52,
+                "debt_to_equity": 0.79,
+                "treasury_margin": 0.24,
+                "structural_margin": 0.48,
+                "net_working_capital": 26235.09,
+                "altman_z_score": 5.26
+            },
+            {
+                "year": 5,
+                "roi": 16.1,
+                "roe": 24.14,
+                "ros": 12.06,
+                "ebit_margin": 11.49,
+                "net_debt_to_ebitda": 5.62,
+                "net_debt_to_equity": 0.91,
+                "net_debt_to_revenue": 0.51,
+                "current_ratio": 2,
+                "quick_ratio": 1.55,
+                "debt_to_equity": 0.91,
+                "treasury_margin": 0.25,
+                "structural_margin": 0.5,
+                "net_working_capital": 30170.35,
+                "altman_z_score": 6.05
+            }
+        ],
+        "productionSalesForecast": [
+            {
+                "year": 0,
+                "sales_revenue": 180000,
+                "revenue_growth": 0,
+                "units_sold": 10000,
+                "average_price": 18,
+                "unit_production_cost": 10,
+                "unit_margin": 8
+            },
+            {
+                "year": 1,
+                "sales_revenue": 250000,
+                "revenue_growth": 38.9,
+                "units_sold": 12000,
+                "average_price": 20,
+                "unit_production_cost": 11,
+                "unit_margin": 9
+            },
+            {
+                "year": 2,
+                "sales_revenue": 330000,
+                "revenue_growth": 32,
+                "units_sold": 14000,
+                "average_price": 23,
+                "unit_production_cost": 12,
+                "unit_margin": 11
+            },
+            {
+                "year": 3,
+                "sales_revenue": 410000,
+                "revenue_growth": 24.2,
+                "units_sold": 16000,
+                "average_price": 25.6,
+                "unit_production_cost": 13,
+                "unit_margin": 12.6
+            },
+            {
+                "year": 4,
+                "sales_revenue": 490000,
+                "revenue_growth": 19.5,
+                "units_sold": 18000,
+                "average_price": 27.2,
+                "unit_production_cost": 14,
+                "unit_margin": 13.2
+            },
+            {
+                "year": 5,
+                "sales_revenue": 570000,
+                "revenue_growth": 16.3,
+                "units_sold": 20000,
+                "average_price": 28.5,
+                "unit_production_cost": 15,
+                "unit_margin": 13.5
+            }
+        ],
+        "operatingCostBreakdown": null,
+        "user_input": {
+            "uploaded_file": [
+                {
+                    "text_content": "Community Garden Project Plan  \n1. Project Overview  \nProject Name: Green Roots Community Garden  \nLocation: [Insert proposed location – e.g., vacant lot, schoolyard, park edge]  \nDuration: 12 months (planning to first harvest, then ongoing maintenance)  \nPurpose: To create a shared green space for growing vegetables, fruits, herbs, and flowers \nthat fosters community engagement, promotes sustainability, and improves local food \nsecurity.  \n2. Goals & Objectives  \nPrimary Goals:  \n- Transform underutilized land into a produ ctive garden.  \n- Provide access to fresh, healthy produce for community members.  \n- Strengthen social connections between residents.  \n- Promote environmental awareness and sustainable gardening practices.  \nSpecific Objectives:  \n- Engage at least 30 community me mbers in the planning and planting stages.  \n- Produce at least 300 lbs of vegetables in the first harvest season.  \n- Host monthly workshops on gardening, composting, and healthy eating.  \n- Create a sustainable maintenance and governance structure for the gard en. \n3. Stakeholders & Roles  \n- Project Sponsor: Local council or nonprofit (provides funding and oversight)  \n- Project Manager: [Name] – Oversees planning, budget, and coordination  \n- Garden Committee: Volunteers responsible for decision -making  \n- Local Busine sses: Potential donors of tools, seeds, or materials  \n- Volunteers: Assist with site preparation, planting, and maintenance  \n- Experts: Master gardeners or agricultural extension services for technical advice  \n4. Timeline & Milestones  \nPhase  Duration  Key Activ ities  Deliverables  \nPlanning & \nApproval  Month 1–2 Identify site, secure \npermissions, recruit \nvolunteers, form \ncommittee  Site agreement, \nstakeholder sign -off \nDesign & \nPreparation  Month 3–4 Soil testing, garden \ndesign, plot layout, Garden blueprint, \nsoil improvement \nsource \nfunding/materials  plan  \nConstruction & \nSetup  Month 5–6 Install raised beds, \nirrigation, compost \narea, fencing, \nsignage  Functional garden \ninfrastructure  \nPlanting Season 1  Month 7–8 Plant crops, \nschedule \nwatering/weeding \nrotations  Healthy, growing \nplants  \nCommunity \nEngagement  Month 7–12 Workshops, harvest \nfestivals, school \npartnerships  Event attendance \nrecords  \nEvaluation & \nOngoing Care  Month 9–12 Track yields, assess \ncommunity \nsatisfaction, adjust \nplans  End -of-year report, \nrevised plan  \n5. Budget Estimate  \nItem  Cost (USD)  Notes  \nLand preparation (tilling, \nleveling)  $500  May vary if land is already \ncleared  \nSoil testing & amendments  $200  Includes compost, organic \nmatter  \nRaised beds & edging  $1,200  Wood or recycled materials  \nSeeds & seedlings  $300  Seasonal vegetables & herbs  \nIrrigation system  $500  Drip or soaker hoses  \nTools (shared)  $400  Shovels, hoes, \nwheelbarrows  \nFencing & signage  $600  To protect from pests  \nWorkshop materials  $200  For community events  \nContingency (10%)  $390  Unexpected costs  \nTotal Estimated Budget: $4,290  \n6. Resource Plan  \nHuman Resources:  \n- Core team of 6 –8 volunteers for leadership  \n- 20–30 rotating volunteers for planting and maintenance  \n- Skilled gardeners for training sessions  \n \nMaterial Resources:  \n- Tools and storage  shed  \n- Soil, compost, seeds  \n- Water access (tap or rainwater collection system)  \n- Benches or shaded seating areas  \n7. Risk Management  \nRisk  Likelihood  Impact  Mitigation  \nLack of volunteer \nparticipation  Medium  High  Early recruitment, \nflexible schedules, \nregular social events  \nVandalism or theft  Low  Medium  Fencing, signage, \ncommunity watch  \nPoor soil quality  Medium  High  Soil testing, raised \nbeds with imported \nsoil \nFunding shortfalls  Medium  High  Multiple funding \nsources, phased \nimplementation  \nWeather -rela ted \ncrop loss  Medium  Medium  Choose resilient \ncrops, stagger \nplanting  \n8. Sustainability Plan  \n- Implement composting for garden waste.  \n- Rotate crops seasonally to maintain soil health.  \n- Maintain a membership fee or donation system to cover ongoing costs.  \n- Train new volunteers annually to ensure continuity.  \n- Partner with schools and local groups for long -term engagement.  \n9. Monitoring & Evaluation  \n- Keep monthly logs of volunteer hours, crop yields, and expenses.  \n- Conduct seasonal surveys with participants for feedback.  \n- Compare harvest weights year -over -year.  \n- Adjust planting strategies based on results.  \n10. Communication Plan  \n- Monthly email updates to members.  \n- Social media posts with progress photos and events.  \n- Noticeboard at garden ent rance with schedules and contact info.  \n- Quarterly community meetings.  ",
+                    "page_count": 4,
+                    "metadata": {
+                        "/Author": "python-docx",
+                        "/Creator": "Microsoft® Word 2016",
+                        "/CreationDate": "D:20250814100824+00'00'",
+                        "/Producer": "www.ilovepdf.com",
+                        "/ModDate": "D:20250814100824Z"
+                    },
+                    "financial_data": null,
+                    "document_type": "company_extract"
+                }
+            ],
+            "user_input": [
+                {
+                    "question": "What is TechInnovate Solutions' primary focus?",
+                    "answer": "TechInnovate Solutions primarily focuses on developing bespoke AI-driven software for small to medium-sized enterprises (SMEs)."
+                },
+                {
+                    "question": "What is \"InsightFlow\" and what does it do?",
+                    "answer": "\"InsightFlow\" is TechInnovate's flagship product. It's designed to streamline data analytics and automate report generation."
+                },
+                {
+                    "question": "What are TechInnovate's key selling points?",
+                    "answer": "Their key selling points include user-friendly interfaces, scalable solutions, personalized customer support, and a commitment to continuous innovation."
+                }
+            ],
+            "language": "Italian",
+            "currency": "Euro",
+            "fundingSources": {
+                "initialInvestment": "existing business",
+                "fromHome": 3452354
+            }
+        },
+        "status": "INCOMPLETED",
+        "subscriptionType": "TEAM_OWNER",
+        "createdAt": "2025-09-23T14:22:41.191Z",
+        "updatedAt": "2025-09-23T14:22:41.191Z"
+    }
+}
+
+{
+    "success": true,
+    "statusCode": 200,
+    "message": "Your Business plan has generated and send to authority for review!",
+    "data": {
+        "success": true,
+        "message": "Your Business plan generated and under the review!",
+        "data": {
+            "id": "689c084a9244d79cad130729",
+            "planId": "689c084ac4dcad8e3d8265e6",
+            "userId": "68947a350c73f0a943d982b6",
+            "executiveSummary": "PRIMAGEST SERVIZI SRL is positioned to become a leader in the service industry by offering innovative solutions that meet the growing market demand for efficiency and quality. The core service focuses on providing tailored management and operational support to businesses looking to optimize their processes. The current market need is driven by businesses seeking to enhance productivity while minimizing costs, a trend that has accelerated in the wake of recent economic challenges. The key strengths of our team lie in their extensive experience in operational management and strategic planning, which allows us to effectively address client needs. PRIMAGEST has already gained traction with several pilot projects that have demonstrated significant improvements for our clients. Our long-term vision is to expand our service offerings and geographical reach, ultimately establishing PRIMAGEST as a household name in the service sector. This business matters now more than ever as companies strive to adapt to a rapidly changing business landscape, and we are well-equipped to help them navigate these challenges.",
+            "businessOverview": "PRIMAGEST SERVIZI SRL was founded in 2024 with the mission to empower businesses by providing exceptional operational support and management solutions. The vision of the company is to become the preferred partner for organizations aiming to enhance their operational efficiency and drive sustainable growth. The founding team identified a gap in the market for personalized service offerings that cater to the unique needs of each client. Based in Italy, PRIMAGEST was established to leverage the local market's potential while also aiming for international expansion. The motivation behind the team is rooted in a passion for helping businesses thrive; we believe that by optimizing operations, we can contribute to the overall economic growth of the region. Our goals include building long-term relationships with clients, continuously innovating our service offerings, and expanding our market presence both domestically and internationally. The journey of PRIMAGEST has just begun, and we are excited about the future.",
+            "marketAnalysis": "The total addressable market (TAM) for PRIMAGEST SERVIZI SRL spans the entire service industry, which is valued at approximately 500 billion euros in Europe alone. Within this, our serviceable available market (SAM) focuses on small to medium-sized enterprises (SMEs), representing around 150 billion euros. Our obtainable market (SOM) is projected to be 1 billion euros over the next three years, as we establish our brand and gain market share. Key competitors include established consulting firms and niche service providers, but PRIMAGEST differentiates itself through personalized service and a deep understanding of client needs. Customer segments include SMEs across various sectors, particularly those undergoing digital transformation. Current market trends show an increasing demand for operational efficiency, driven by technological advancements and economic pressures. The timing for PRIMAGEST is ideal, as businesses are actively seeking partners to help navigate these complexities and improve their operations.",
+            "businessModel": "PRIMAGEST SERVIZI SRL generates revenue through multiple streams, primarily by charging clients for consulting services on a project basis and through retainer agreements for ongoing support. Secondary revenue streams include workshops and training programs designed to enhance client capabilities. Our customer acquisition strategy focuses on building relationships through networking, referrals, and targeted marketing campaigns. The pricing model is competitive, with tiered pricing based on project complexity and client size, ensuring accessibility for SMEs. The cost structure includes personnel costs, marketing expenses, and operational overheads, with margins improving as we scale. As we grow, we plan to expand our service offerings and enter new markets, which will further enhance our revenue potential. The business model is designed to be scalable, allowing us to adapt to changing market conditions while maximizing profitability.",
+            "marketingSalesStrategy": "Our go-to-market strategy for PRIMAGEST SERVIZI SRL involves a multi-faceted approach. We position ourselves as a partner for SMEs looking to optimize their operations. Target customers include businesses in various sectors such as manufacturing, retail, and services, particularly those undergoing digital transformation. Our sales channels will include online platforms for lead generation and traditional networking events for direct engagement. Customer acquisition cost (CAC) strategies will focus on content marketing, social media engagement, and strategic partnerships. The conversion funnel is designed to nurture leads through informative content and personalized consultations, ultimately leading to project engagements. Growth will be driven operationally by continuously refining our service offerings, leveraging client feedback, and exploring new market opportunities. We will also implement a referral program to incentivize satisfied clients to recommend our services.",
+            "sectorStrategy": "PRIMAGEST SERVIZI SRL will operate within the service industry, focusing on providing management and operational support to SMEs. The current sector trends indicate a growing demand for efficiency, digital transformation, and personalized services. Competitive landscape analysis reveals that while there are several established players, many lack the personalized approach that we offer. We will position ourselves as a partner for SMEs, leveraging our expertise to help them navigate the complexities of operational efficiency. Key success factors include understanding client needs, delivering tailored solutions, and maintaining flexibility to adapt to changing market conditions. The regulatory environment is also favorable, with increasing government support for SMEs. Over time, PRIMAGEST will differentiate itself through innovation, quality service delivery, and building strong relationships with clients, ultimately gaining a competitive advantage in the market.",
+            "fundingSources": "PRIMAGEST SERVIZI SRL plans to secure funding through a combination of equity investment, bank loans, and internal cash flow. In the initial phase, we aim to raise 200000 euros in equity from angel investors who share our vision. This funding will be used to cover initial operational costs and marketing expenses. Additionally, we will seek a bank loan of 50000 euros to support our working capital needs. As we grow, we anticipate generating positive cash flow, which will be reinvested into the business for expansion. Future funding rounds may include venture capital as we scale our operations. We will allocate funds primarily towards hiring skilled personnel, enhancing our service offerings, and marketing efforts to increase brand visibility. Our approach to funding is conservative, focusing on maintaining a healthy balance between debt and equity, ensuring long-term sustainability.",
+            "operationsPlan": "The operations plan for PRIMAGEST SERVIZI SRL is designed to ensure efficient service delivery and continuous improvement. Initially, we will focus on establishing a strong operational framework, including hiring experienced consultants and support staff. Strategic partnerships with technology providers will be key to enhancing our service offerings, allowing us to incorporate innovative solutions for our clients. We will implement a robust project management system to streamline operations and ensure timely delivery of services. Risk management will be a priority, with regular assessments of market conditions and client needs to adapt our strategies accordingly. Additionally, we will foster a culture of continuous learning and development within the team to keep pace with industry trends. As we grow, we may explore acquisitions of smaller firms to expand our capabilities and market presence. Overall, our operations plan is centered on agility, client focus, and operational excellence.",
+            "financialHighlights": [
+                {
+                    "year": 2024,
+                    "revenue": 500000,
+                    "net_income": 75000,
+                    "capex": 20000,
+                    "debt_repayment": 5000
+                },
+                {
+                    "year": 2025,
+                    "revenue": 750000,
+                    "net_income": 120000,
+                    "capex": 30000,
+                    "debt_repayment": 10000
+                },
+                {
+                    "year": 2026,
+                    "revenue": 1000000,
+                    "net_income": 200000,
+                    "capex": 40000,
+                    "debt_repayment": 15000
+                }
+            ],
+            "cashFlowAnalysis": [
+                {
+                    "year": 2024,
+                    "operating": 80000,
+                    "investing": -20000,
+                    "financing": -5000,
+                    "net_cash": 55000
+                },
+                {
+                    "year": 2025,
+                    "operating": 120000,
+                    "investing": -30000,
+                    "financing": -10000,
+                    "net_cash": 80000
+                },
+                {
+                    "year": 2026,
+                    "operating": 200000,
+                    "investing": -40000,
+                    "financing": -15000,
+                    "net_cash": 145000
+                }
+            ],
+            "profitLossProjection": [
+                {
+                    "year": 2024,
+                    "revenue": 500000,
+                    "cogs": 150000,
+                    "gross_profit": 350000,
+                    "operating_expenses": 275000,
+                    "ebitda": 75000,
+                    "depreciation_amortization": 10000,
+                    "ebit": 65000,
+                    "interest": 5000,
+                    "taxes": 10000,
+                    "net_income": 75000
+                },
+                {
+                    "year": 2025,
+                    "revenue": 750000,
+                    "cogs": 200000,
+                    "gross_profit": 550000,
+                    "operating_expenses": 430000,
+                    "ebitda": 120000,
+                    "depreciation_amortization": 15000,
+                    "ebit": 105000,
+                    "interest": 10000,
+                    "taxes": 15000,
+                    "net_income": 120000
+                },
+                {
+                    "year": 2026,
+                    "revenue": 1000000,
+                    "cogs": 250000,
+                    "gross_profit": 750000,
+                    "operating_expenses": 550000,
+                    "ebitda": 200000,
+                    "depreciation_amortization": 20000,
+                    "ebit": 180000,
+                    "interest": 15000,
+                    "taxes": 30000,
+                    "net_income": 200000
+                }
+            ],
+            "balanceSheet": [
+                {
+                    "year": 2024,
+                    "assets": 300000,
+                    "current_assets": 150000,
+                    "non_current_assets": 150000,
+                    "liabilities": 100000,
+                    "current_liabilities": 50000,
+                    "non_current_liabilities": 50000,
+                    "equity": 200000
+                },
+                {
+                    "year": 2025,
+                    "assets": 400000,
+                    "current_assets": 200000,
+                    "non_current_assets": 200000,
+                    "liabilities": 150000,
+                    "current_liabilities": 75000,
+                    "non_current_liabilities": 75000,
+                    "equity": 250000
+                },
+                {
+                    "year": 2026,
+                    "assets": 600000,
+                    "current_assets": 300000,
+                    "non_current_assets": 300000,
+                    "liabilities": 200000,
+                    "current_liabilities": 100000,
+                    "non_current_liabilities": 100000,
+                    "equity": 400000
+                }
+            ],
+            "netFinancialPosition": [
+                {
+                    "year": 2024,
+                    "net_position": 200000
+                },
+                {
+                    "year": 2025,
+                    "net_position": 250000
+                },
+                {
+                    "year": 2026,
+                    "net_position": 400000
+                }
+            ],
+            "debtStructure": [
+                {
+                    "year": 2024,
+                    "repayment": 5000,
+                    "interest_rate": 5,
+                    "outstanding_debt": 50000
+                },
+                {
+                    "year": 2025,
+                    "repayment": 10000,
+                    "interest_rate": 5,
+                    "outstanding_debt": 40000
+                },
+                {
+                    "year": 2026,
+                    "repayment": 15000,
+                    "interest_rate": 5,
+                    "outstanding_debt": 25000
+                }
+            ],
+            "keyRatios": [
+                {
+                    "year": 2024,
+                    "roi": 0.375,
+                    "roe": 0.375,
+                    "debt_to_equity": 0.25,
+                    "gross_margin": 0.7,
+                    "ebitda_margin": 0.15,
+                    "net_margin": 0.15,
+                    "current_ratio": 3,
+                    "quick_ratio": 3,
+                    "asset_turnover": 1.67
+                },
+                {
+                    "year": 2025,
+                    "roi": 0.4,
+                    "roe": 0.48,
+                    "debt_to_equity": 0.6,
+                    "gross_margin": 0.733,
+                    "ebitda_margin": 0.16,
+                    "net_margin": 0.16,
+                    "current_ratio": 2.67,
+                    "quick_ratio": 2.67,
+                    "asset_turnover": 1.88
+                },
+                {
+                    "year": 2026,
+                    "roi": 0.333,
+                    "roe": 0.5,
+                    "debt_to_equity": 0.625,
+                    "gross_margin": 0.75,
+                    "ebitda_margin": 0.2,
+                    "net_margin": 0.2,
+                    "current_ratio": 3,
+                    "quick_ratio": 3,
+                    "asset_turnover": 1.67
+                }
+            ],
+            "operatingCostBreakdown": [
+                {
+                    "year": 2024,
+                    "revenue": 500000,
+                    "cogs": 150000,
+                    "employee_costs": 100000,
+                    "marketing": 20000,
+                    "rent": 30000,
+                    "administration": 25000,
+                    "amortization": 10000,
+                    "other_expenses": 15000,
+                    "interest_expenses": 5000,
+                    "tax": 10000
+                },
+                {
+                    "year": 2025,
+                    "revenue": 750000,
+                    "cogs": 200000,
+                    "employee_costs": 120000,
+                    "marketing": 30000,
+                    "rent": 35000,
+                    "administration": 40000,
+                    "amortization": 15000,
+                    "other_expenses": 20000,
+                    "interest_expenses": 10000,
+                    "tax": 15000
+                },
+                {
+                    "year": 2026,
+                    "revenue": 1000000,
+                    "cogs": 250000,
+                    "employee_costs": 150000,
+                    "marketing": 40000,
+                    "rent": 40000,
+                    "administration": 50000,
+                    "amortization": 20000,
+                    "other_expenses": 25000,
+                    "interest_expenses": 15000,
+                    "tax": 30000
+                }
+            ],
+            "user_input": {
+                "uploaded_file": [
+                    {
+                        "text_content": " \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n  \n \n \nBUSINESS PLAN  \n \n PRIMAGEST SERVIZI SRL  \n \n 2024  - 2031  \n \n \n \n \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n Sommario  \nDisclaimer  ................................ ................................ ............  1 \nFinancial Highlights  ................................ ..............................  2 \nCash Flow  ................................ ................................ ................................ .........  2 \nDati economici  ................................ ................................ ................................ . 4 \nDati patrimoniali  ................................ ................................ ..............................  6 \nPosizione finanziaria netta  ................................ ................................ ...............  7 \nStruttura del debito  ................................ ................................ .........................  8 \nRatios ................................ ................................ ................................ ..............  10 \nI soci e la società proponente  ................................ .............  11 \nManagement Team  ................................ ............................  12 \nStrategie di Ottimizzazione basate sul Settore  ...................  13 \nProgetto e fonti di finanziamento  ................................ ...... 14 \nStato Patrimoniale Riclassificato  ................................ ........  15 \nStato Patrimoniale liquidità esigibilità  ................................ ...........................  15 \nStato Patrimoniale gestionale  ................................ ................................ ........  18 \nStato Patrimoniale liquidità esigibilità  ................................ ...........................  20 \nConto Economico Riclassificato  ................................ ..........  23 \nConto Economico a valore aggiunto  ................................ ..............................  23 \nAnalisi principali dati economici  ................................ ................................ .... 25 \nAnni  ................................ ................................ ................................ ................  26 Rendiconto Finanziario ................................ .......................  28 \nAnalisi Cash flow  ................................ ................................ ............................  30 \nAndamento Cash flow  ................................ ................................ ....................  31 \nPosizione Finanziaria Netta  ................................ ................  33 \nPosizione finanziaria netta  ................................ ................................ .............  33 \nScomposizione debiti finanziari e piani di rimborso  ................................ ...... 34 \nPosizione finanziaria netta*  ................................ ................................ ...........  35 \nIndicatori di Bilancio  ................................ ..........................  37 \nIndici di Redditività  ................................ ................................ ........................  37 \nIndici di Liquidità  ................................ ................................ ............................  42 \nIndici di Copertura finanziaria  ................................ ............  50 \nNote Metodologiche  ................................ ..........................  56 \nIndici  ................................ ................................ ................................ ...............  56 \nStato Patrimoniale Liquidità  ................................ ................................ ..........  57 \nStato Patrimoniale Gestionale  ................................ ................................ .......  59 \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n1 \nDisclaimer  \n \nLa presente relazione contiene dichiarazioni previsionali (“forward -looking statements”). Queste dichiarazioni sono basate sulle attuali \naspettative e proiezioni della Società relativamente ad eventi futuri e, per loro natura, sono soggette ad una componente int rinseca di \nrischiosità ed incertezza. Sono dichiarazioni che si riferiscono ad eventi e dip endono da circostanze che possono, o non possono, accadere o \nverificarsi in futuro e, come tali, non si deve fare un indebito affidamento su di esse. I risultati effettivi potrebbero dif ferire significativamente \nda quelli contenuti in dette dichiarazioni a  causa di una molteplicità di fattori, incluse la volatilità e il deterioramento dei mercati del capitale \ne finanziari, variazioni nei prezzi di materie prime, cambi nelle condizioni macroeconomiche e nella crescita economica ed al tre variazioni delle \ncond izioni di business, mutamenti della normativa e del contesto istituzionale (sia in Italia che all’estero), e molti altri fatt ori, la maggioranza \ndei quali è al di fuori del controllo della Società.   \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n2 \nFinancial Highlights  \nCash Flow  \nAnni  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nDati in migliaia di euro          \nFlusso di cassa operativo lordo  25 40 51 55 58 61 63 66 \nVariazione CCN  17 31 23 21 11 (21) (22) (23) \nFlusso di cassa della gestione \ncorrente  43 70 74 76 69 39 41 43 \nFlusso di Cassa Operativo  (157)  70 74 76 69 39 41 43 \nFlusso di Cassa al servizio del \ndebito  (159)  58 62 67 61 34 38 42 \nFlusso di cassa per azionisti  34 57 31 39 29 (1) 0 5 \nFlusso di cassa netto  34 57 31 39 29 (1) 0 5 \n \nIl rendiconto finanziario utilizzato per l'analisi è quello dei flussi di liquidità che determina, nella fattispecie, il Flus so di cassa disponibile per gli azionisti e i finanziatori \n(detto anche Unlevered Free Cash Flow o Free Cash Flow to the Firm). Tal e flusso corrisponde al Flusso di cassa operativo, ovvero quello che scaturisce dalla gestione \ncaratteristica dell'impresa al lordo degli oneri finanziari e della restituzione delle risorse impiegate da tutti i finanziat ori dell'impresa (capitale di rischi o e di terzi). Per \ncalcolare tale flusso occorre utilizzare il concetto del NOPAT, ovvero considerare le c.d. imposte figurative che rappresenta no la parte di imposta imputabile al solo \nrisultato operativo che la società pagherebbe se non ci fossero gli on eri finanziari o proventi/oneri straordinari che in Italia sono in parte deducibili. Iniziamo la nostra \nanalisi con il primo flusso di cassa detto operativo lordo dato dalla somma del NOPAT con i costi non monetari per eccellenza  ovvero gli ammortamenti e gli \naccantonamenti. Nell'ultimo bilancio approvato, relativo all'esercizio 2023, il flusso di cassa operativo lordo è positivo ed  è cresciuto, rispetto all'esercizio precedente, \nattestandosi a € 5.286 . \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n3 \nContinuiamo la nostra analisi con il flusso di cassa della gestione corrente che, dopo quello operativo lordo, è l'indicatore più importante della performance finanziaria \ndi un'azienda. Esso comprende tutte le operazioni che costituiscono le attività tipiche dell'azienda che presentano il caratt ere di continua ripetitività nel tempo. \nNell'esercizio previsionale 2024E il flusso di cassa operativo lordo è positivo ed è cresciuto rispetto all'esercizio precede nte, attestandosi a € 25.085. Continuando la \nnostra analisi dei flussi nell'anno previsionale si e videnzia che il flusso di cassa della gestione corrente è positivo ovvero le entrate monetarie risultano maggiori delle \nuscite monetarie ed  è cresciuto, rispetto all'esercizio precedente, attestandosi a € 42.553. Questa differenza rappresenta r isorse che possono essere impiegate per il \nfabbisogno generato dall'altro flusso che attiene l'area degli investimenti in immobilizzazioni necessarie per un eventuale s viluppo aziendale. Nell'esercizio 2024E il \nflusso di cassa operativo è negativo ed è diminuito risp etto all'esercizio precedente, attestandosi a € -157.447 . Questo risultato deriva dall’impatto dell’investimento \nsulla cassa stessa. Infatti, di conseguenza  il flusso di cassa al servizio del debito è negativo ma il flusso di cassa degli azionisti è comunque positivo grazie alle risorse \nottenute dall'accensione di un mutuo  dedicato proprio all’investimento previsto nell’anno 2024.  \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n4 \nDati economici  \n \nAnni  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nDati in migliaia di euro           \nRicavi delle vendite  541 557 835 1.085  1.194  1.254  1.316  1.382  1.451  \nVdP 557 568 852 1.107  1.218  1.279  1.343  1.410  1.481  \nMol 4 33 49 63 70 73 77 81 85 \nEbit 4 30 38 52 59 62 66 70 74 \nEbt 4 27 21 37 46 52 58 65 72 \nUtile netto  4 20 14 26 33 37 42 47 52 \nDividendi           \nVendite change (%)  - 2,9%  50,0%  30,0%  10,0%  5,0%  5,0%  5,0%  5,0%  \nMol change (%)  - 627,0%  50,0%  30,0%  10,0%  5,0%  5,0%  5,0%  5,0%  \nEbit change (%)  - 639,1%  26,5%  38,9%  12,1%  6,0%  5,9%  5,9%  5,8%  \nMol margin (%)  0,8%  5,8%  5,8%  5,8%  5,8%  5,8%  5,8%  5,8%  5,8%  \nEbit margin (%)  0,7%  5,3%  4,5%  4,8%  4,9%  5,0%  5,0%  5,0%  5,1%  \n \n \nCome si evince dalla tabella di confronto tra l'utile e il flusso di cassa a servizio degli azionisti relativi all'ultimo bil ancio approvato 2023 la gestione aziendale ha comportato \nsia un utile economico che un surplus finanziario. Questo dà la possibilit à di poter distribuire dividendi utilizzando le risorse proprie dell'azienda oppure utilizzare tale \nsurplus sia per  investimenti futuri sia come tesoretto per eventuali future esigenze finanziarie impreviste evitando così il  ricorso a ulteriori mezzi di t erzi ed al conseguente \npagamento di oneri finanziari. Analizzando il bilancio previsionale relativo all'esercizio previsionale 2024E, notiamo che il  fatturato è cresciuto, rispetto all'esercizio \nprecedente, del 2,90% attestandosi a € 556.558, il MOL è aume ntato del 627,00% attestandosi a € 32.526 con un'incidenza sui ricavi del 5,84% mentre l'EBIT è aumentato \ndel 639,09% risultando pari a € 29.726 con un'incidenza sui ricavi del 5,34%.  \n \nGli indicatori di redditività vedono per il ROI un incremento del 3,19% attestandosi al 7,71%, per il ROE un incremento del 22,33% attestandosi al 31,55% e per quanto \nconcerne la redditività delle vendite ROS un incremento del 4,60% attestandosi al 5,34%. Il rapporto Ebit/Of, pari ad un valo re di 12,68, de nota una situazione di equilibrio \nfinanziario, il reddito generato dalla gestione caratteristica è sufficiente a remunerare il capitale acquisito per produrlo.  L'incidenza degli acquisti sul fatturato registra una \ndiminuzione del -6,25% rispetto all'eserci zio precedente. L'incidenza del costo per servizi sul fatturato fa segnare un incremento del 1,20% rispetto all'esercizio pre cedente. \nInfine, l'incidenza del costo del godimento dei beni di terzi sul fatturato risulta stabile rispetto all'esercizio precede nte, mentre l'incidenza del costo del lavoro sui ricavi, \npari al 3,90%, risulta stabile rispetto all'esercizio precedente. Gli oneri finanziari sono cresciuti, rispetto all'esercizio  precedente, del 2475,72% attestandosi a € 2.344 con \nun'incidenza sui rica vi del 0,42%. L'utile netto è cresciuto, rispetto all'esercizio precedente, del 399,90% attestandosi a € 19.651.  \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n5 \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n6 \nDati patrimoniali  \n \nAnni  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nDati in migliaia di euro           \nImmobilizzi materiali netti  0 0 0 0 0 0 0 0 0 \nImmobilizzi immateriali netti  0 197 186 175 164 152 141 130 119 \nImmobilizzi finanziari  0 0 0 0 0 0 0 0 0 \nImmobilizzi commerciali  0 0 0 0 0 0 0 0 0 \nTOTALE ATTIVO A LUNGO  0 197 186 175 164 152 141 130 119 \nRimanenze  17 28 45 67 91 117 144 172 202 \nLiquidità differite  72 126 123 129 129 135 141 148 155 \nLiquidità immediate  0 34 91 122 161 191 190 190 195 \nTOTALE ATTIVO A BREVE  89 189 259 318 382 443 475 510 552 \nTOTALE ATTIVO  89 386 445 493 545 595 616 640 670 \nPatrimonio netto  43 62 77 102 135 172 214 260 312 \nFondi per rischi e oneri  0 0 0 0 0 0 0 0 0 \nTrattamento di fine rapporto  0 1 2 4 6 8 10 12 14 \nTOTALE DEBITI A LUNGO  17 203 173 145 115 82 47 12 14 \nTOTALE DEBITI A LUNGO + PN  59 265 249 247 250 254 260 272 326 \nTOTALE DEBITI A BREVE  30 121 196 245 296 341 356 368 344 \nTOTALE PASSIVO  89 386 445 493 545 595 616 640 670 \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n7 \nPosizione finanziaria netta  \n \nAnni  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nDati in migliaia di euro          \nDebiti v/banche a breve termine  0 8 8 10 10 10 10 10 \nMutui passivi  210 202 171 141 109 75 37 0 \nFinanziamento soci  0 0 0 0 0 0 0 0 \nAltri debiti finanziari  0 0 0 0 0 0 0 0 \nDebiti Leasing  0 0 0 0 0 0 0 0 \n(Crediti finanziari)  0 0 0 0 0 0 0 0 \n(Cassa e banche c/c)  (34) (91) (122)  (161)  (191)  (190)  (190)  (195)  \nPOSIZIONE FINANZIARIA NETTA  176 118 56 (10) (72) (105)  (143)  (185)           \nPfn Change %   -33%  -53%  -118%  -593%  -47%  -36%  -29%  \n \nLa Posizione finanziaria netta dell'azienda è calcolata come \nsomma dei debiti verso banche e dei finanziamenti a breve e \nmedio lungo termine, al netto della cassa attiva e delle attività \nfinanziarie prontamente liquidabili.  \n \nNell'esercizio 2024E dal punto di vista patrimoniale si registra \nuna variazione del rapporto Debt to Equity che si attesta al \n2,82, risultato di un Patrimonio netto di € 62.287 e una \nPosizione finanziaria netta di € 175.931 la quale registra un \nincremento del 953,35% rispetto all'esercizio precedente. Il \nvalore dell'indebitamento risu lta equilibrato, per quanto \nconcerne il rapporto tra fonti finanziarie onerose esterne e \nfonti proprie.  \n \nLa Posizione finanziaria lorda è cresciuta, rispetto all'esercizio \nprecedente, del 1158,91% attestandosi a € 210.401.  \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n8 \nStruttura del debito  \n \nAnni  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \n % % % % % % % % \nMutui passivi  100,0%  96,3%  95,7%  93,4%  91,6%  88,2%  78,8%  0,0%  \nBanche a breve  0,0%  3,7%  4,3%  6,6%  8,4%  11,8%  21,2%  100,0%  \nFinanziamento soci  0,0%  0,0%  0,0%  0,0%  0,0%  0,0%  0,0%  0,0%  \nAltri debiti finanziari  0,0%  0,0%  0,0%  0,0%  0,0%  0,0%  0,0%  0,0%  \nDebiti leasing  0,0%  0,0%  0,0%  0,0%  0,0%  0,0%  0,0%  0,0%  \n \nIn particolare, nell'esercizio 2023, scomponendo la Pfn notiamo che: l'azienda non ha fatto ricorso a debiti a breve per fina nziare il proprio fabbisogno di circolante; i Mutui passivi sono \ncresciuti, rispetto all'esercizio precedente, del 100,00%; non son o presenti debiti v/soci per finanziamenti; l'azienda non ha altri debiti finanziari; l'azienda non ha contratto leasing \noppure li ha contabilizzati con il metodo patrimoniale e quindi non definibili come debito in senso stretto.  \nPer quanto concerne l'esercizio previsionale 2024E, scomponendo la Pfn notiamo che: l'azienda non ha fatto ricorso a debiti a  breve per finanziare il proprio fabbisogno di circolante; i \nMutui passivi sono cresciuti, rispetto all'esercizio precedente, del 1 158,91% con un valore degli oneri finanziari pari a € 2.344; non sono presenti Debiti v/soci per finanziamenti; l'azienda \nnon ha Altri debiti finanziari; l'azienda non ha contratto leasing oppure li ha contabilizzati con il metodo patrimoniale e q uindi non  definibili come debito in senso stretto.  \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n9 \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n10 \nRatios  \n \nAnni  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nROE  9,2%  31,5%  18,7%  25,2%  24,2%  21,5%  19,5%  17,9%  16,6%  \nROI 4,5%  7,7%  8,4%  10,6%  10,7%  10,4%  10,7%  10,9%  11,0%  \nOf/Mol  2,0%  7,2%  34,5%  24,7%  18,0%  13,8%  9,7%  5,7%  1,8%  \nEbit/Of  4419,8%  1268,2%  223,4%  334,0%  465,5%  612,4%  878,5%  1509,2%  4909,0%  \nPfn/Mol  373,3%  540,9%  242,5%  88,6%  NO DEBT  NO DEBT  NO DEBT  NO DEBT  NO DEBT  \nPfn/Pn  39,2%  282,5%  154,5%  54,9%  NO DEBT  NO DEBT  NO DEBT  NO DEBT  NO DEBT  \nPfn/Ricavi  3,1%  31,6%  14,2%  5,2%  -0,9%  -5,7%  -8,0%  -10,3%  -12,7%  \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n11 \nI soci e la società proponente  \n \nLa storia della società  \n \nPrimagest  Servizi Srl, con sede in Colleferro (RM), è attualmente attiva nell'ambito dell'erogazione servizi al l'utenza ferroviaria de lla stazione FS di Colleferro. \nL'azienda, attiva dal 2017 nel settore delle edicole e dei servizi, gestisce un punto vendita all'i nterno della suddetta stazione, una delle principali lungo la tratta \nferroviaria Roma -Cassino (FL6), che è altresì luogo di grande passaggio, con ampio bacino di utenza in termini di afflusso di clientela.  \nNel corso degli anni, la nostra attività ha registrato una crescita costante, grazie all'impegno profuso nel fornire un servi zio di qualità alla clientela e all'ampliamento \ndell'offerta merceologica. Alcuni dei servizi offerti alla clientela sono di import anza vitale, avuto riguardo specialmente al posizionamento della nostra azienda.  \n \nOffriamo, infatti:  \n- Vendita titoli di viaggio ferroviari e trasporto locale/regionale;  \n- Abbonamenti \"metrebus\" integrati mensili, fondamentali all’utenza pendolare;  \n- Ricariche telefoniche;  \n- Pagamento utenze, bollettini, tributi;  \n- Gratta & Vinci;  \n- Superenalotto     \n \nTra  i principali punti di forza vantiamo sicuramente l’esperienza e la competenza nel settore dei servizi all'utenza ferrovi aria e di operatività consolidata in svariati \nanni. In secondo luogo, la posizione strategica: la nostra presenza all'interno della  stazione ferroviaria i garantisce un flusso costante di clienti. In ultimo, le relazioni \nconsolidate: abbiamo costruito nel tempo solide relazioni con i nostri fornitori e con la clientela, con i quali intratteniam o già rapporti fruttuosi e competitivi.  \n \n \n \n \n \n \n \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n12 \nManagement Team  \n \nAmministrazione e Management  \nIl capitale sociale dell’impresa, di euro 10.000,00 sottoscritti e versati, è detenuto congiuntamente dai due soci Colaiacomo  Alessio (99%) e Colaiacomo Federico (1%).  \n \nL’amministrazione della società è demandata al sig. Colaiacomo Alessio , il quale agisce come amministratore unico e rappresentante legale di fronte agli enti pubblici \ne privati, banche, clienti e fornitori.  \n \n \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n13 \nStrategie di Ottimizzazione basate sul Settore  \n \nLe strategie da implementare  \nA. Sviluppo della presenza online  \n• Per competere nel settore del commercio di libri, l'azienda  investirà  fortemente in:  \n• E-commerce: Creare o migliorare la piattaforma online, utilizzando strategie di marketing digitale per raggiungere un pubblico più ampio. Questo è essenziale, \ndato il calo delle vendite nei punti fisici e la crescente tendenza degli utenti a comprare libri  online.  Logistica e spedizioni: Implementare una logistica efficiente \nche permetta spedizioni rapide.  \nB. Diversificazione dei prodotti  \n• Aggiungere nuovi prodotti complementari: Vogliamo v endere prodotti come materiali scolastici, accessori per la lettura, gadget, o sviluppare una sezione di \nlibri usati. Questo attrarre una clientela più ampia e offrire margini di profitto più elevati.  \n• Espandere l’offerta di servizi: Offrire servizi specializzati, come eventi letterari, club di lettura o promozioni di autori locali  \nC. Contenimento dei costi attraverso strategie locali  \n• Collaborazioni con fornitori locali: Ridurre i costi operativi e di approvvigionamento stringendo accordi con fornitori locali di materiali o prodotti.  \n• Efficienza nella gestione delle risorse: Sfruttare le opportunità di incentivi regionali o locali per le piccole imprese, com e contributi per la digitalizzazione o \nl'adozione di pratiche ecologiche.  \nD. Marketing locale e digitale  \n• Partnership locali: Collaborare con scuole, biblioteche e istituzioni locali per promuovere i libri e i servizi, partecipando  ad eventi culturali o organizzando \nlaboratori.  \n• Ottimizzare la presenza sui social media: È essenziale che l'utilizz o di piattaforme come Facebook, Instagram e Google My Business per raggiungere clienti \nlocali e attirare pubblico da aree più ampie.  \n \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n14 \nProgetto e fonti di finanziamento  \nL’idea imprenditoriale  \nPer poter cogliere appieno le opportunità offerte dal mercato e soddisfare al meglio le esigenze dei nostri clienti, riteniamo  necessario ampliare l'attuale punto vendita, \nacquisendo la gestione del l'attività adiacente di Bar con annessa licenza tabacchi.  Questo investimento ci consentirà di raddoppiare la capacità produttiva ed ampliare \nil raggio di vendita.  \nQuesto ampliamento ci consentirà di:  \n• Incrementare il fatturato e la redditività dell'azienda ; \n• Offrire un servizio ancora più completo e competitivo alla clientela ; \n• Creare nuovi posti di lavoro.  \n \nSiamo convinti che questo progetto rappresenti un'opportunità unica per la crescita della nostra azienda e per il miglioramen to del servizio offerto all'utenza.  \n \nCapitali necessari e fonti di finanziamento  \nPer supportare adeguatamente l’operazione sopra descritta si rende necessario stipulare un finanziamento bancario dedicato di  200.000 ,00 euro e della durata di 84 \nmesi di cui 12 di preammortamento . \n \n \n \n \n \n \n \n \n \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n15 \n \n \n \nStato Patrimoniale Riclassificato  \nStato Patrimoniale liquidità esigibilità  \n \nAnni     2023                   2024E                  2025E                    2026E  2027E  \n  €' % €' % €' % €' % €' % \nImmobilizzi materiali netti  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nImmobilizzi immateriali netti  0 0,0%  197.200  51,1%  186.000  41,8%  174.800  35,5%  163.600  30,0%  \nImmobilizzi finanziari  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nImmobilizzi commerciali  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nTOTALE ATTIVO A LUNGO  0 0,0%  197.200  51,1%  186.000  41,8%  174.800  35,5%  163.600  30,0%  \nRimanenze  16.583  18,6%  27.941  7,2%  44.979  10,1%  67.128  13,6%  91.491  16,8%  \nCrediti commerciali a breve  64.937  72,9%  75.469  19,6%  84.912  19,1%  110.386  22,4%  121.425  22,3%  \n- Fondo svalutazione crediti  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nCrediti comm. a breve v/imprese del gruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nCrediti finanziari a breve v/imprese del \ngruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nAltri crediti a breve  7.500  8,4%  50.714  13,2%  38.251  8,6%  18.169  3,7%  7.500  1,4%  \nRatei e risconti  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nLiquidità differite  72.437  81,4%  126.182  32,7%  123.164  27,7%  128.556  26,1%  128.925  23,6%  \nAttività finanziarie a breve termine  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nCassa, Banche e c/c postali  11 0,0%  34.470  8,9%  91.292  20,5%  122.080  24,8%  161.449  29,6%  \nLiquidità immediate  11 0,0%  34.470  8,9%  91.292  20,5%  122.080  24,8%  161.449  29,6%  \nTOTALE ATTIVO A BREVE  89.031  100,0%  188.594  48,9%  259.434  58,2%  317.763  64,5%  381.865  70,0%  \nTOTALE ATTIVO  89.031  100,0%  385.794  100,0%  445.434  100,0%  492.563  100,0%  545.465  100,0%  \nPatrimonio netto  42.636  47,9%  62.287  16,2%  76.600  17,2%  102.371  20,8%  135.038  24,8%  \nFondi per rischi e oneri  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nTrattamento di fine rapporto  0 0,0%  852 0,2%  2.130  0,5%  3.791  0,8%  5.619  1,0%  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n16 \nObbligazioni  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nObbligazioni convertibili  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti verso banche oltre i 12 mesi  16.713  18,8%  201.916  52,3%  170.589  38,3%  141.090  28,6%  109.143  20,0%  \nDebiti verso altri finanziatori a lunga \nscadenza  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti commerciali a lungo termine  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti commerciali a lungo v/imprese del \ngruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti finanziari a lungo v/imprese del \ngruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nAltri debiti finanziari a lungo termine  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nAltri debiti a lungo termine  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nTOTALE DEBITI A LUNGO  16.713  18,8%  202.768  52,6%  172.719  38,8%  144.881  29,4%  114.762  21,0%  \nTOTALE DEBITI A LUNGO + PN  59.349  66,7%  265.055  68,7%  249.319  56,0%  247.253  50,2%  249.799  45,8%  \nObbligazioni  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nObbligazioni convertibili  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti verso banche entro i 12 mesi  0 0,0%  8.485  2,2%  39.025  8,8%  37.197  7,6%  41.947  7,7%  \nDebiti verso altri finanziatori a breve \nscadenza  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti commerciali a breve termine  29.682  33,3%  104.469  27,1%  156.704  35,2%  203.715  41,4%  249.546  45,8%  \nDebiti commerciali a breve v/imprese del \ngruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti finanziari a breve v/imprese del \ngruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nAltri debiti finanziari a breve termine  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nAltri debiti a breve termine  0 0,0%  7.784  2,0%  387 0,1%  4.399  0,9%  4.173  0,8%  \nTOTALE DEBITI A BREVE  29.682  33,3%  120.739  31,3%  196.115  44,0%  245.310  49,8%  295.666  54,2%  \nTOTALE PASSIVO  89.031  100,0%  385.794  100,0%  445.434  100,0%  492.563  100,0%  545.465  100,0%  \n \nAnni  2028E                         2029E                        2030E                                 2031E  \n  €' % €' % €' % €' % \nImmobilizzi materiali netti  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nImmobilizzi immateriali netti  152.400  25,6%  141.200  22,9%  130.000  20,3%  118.800  17,7%  \nImmobilizzi finanziari  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nImmobilizzi commerciali  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nTOTALE ATTIVO A LUNGO  152.400  25,6%  141.200  22,9%  130.000  20,3%  118.800  17,7%  \nRimanenze  117.073  19,7%  143.934  23,4%  172.138  26,9%  201.752  30,1%  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n17 \nCrediti commerciali a breve  127.496  21,4%  133.871  21,7%  140.564  22,0%  147.593  22,0%  \n- Fondo svalutazione crediti  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nCrediti comm. a breve v/imprese del gruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nCrediti finanziari a breve v/imprese del gruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nAltri crediti a breve  7.500  1,3%  7.500  1,2%  7.500  1,2%  7.500  1,1%  \nRatei e risconti  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nLiquidità differite  134.996  22,7%  141.371  22,9%  148.064  23,1%  155.093  23,1%  \nAttività finanziarie a breve termine  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nCassa, Banche e c/c postali  190.909  32,1%  189.923  30,8%  190.058  29,7%  194.854  29,1%  \nLiquidità immediate  190.909  32,1%  189.923  30,8%  190.058  29,7%  194.854  29,1%  \nTOTALE ATTIVO A BREVE  442.978  74,4%  475.228  77,1%  510.260  79,7%  551.698  82,3%  \nTOTALE ATTIVO  595.378  100,0%  616.428  100,0%  640.260  100,0%  670.498  100,0%  \nPatrimonio netto  172.080  28,9%  213.779  34,7%  260.432  40,7%  312.362  46,6%  \nFondi per rischi e oneri  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nTrattamento di fine rapporto  7.538  1,3%  9.553  1,6%  11.668  1,8%  13.889  2,1%  \nObbligazioni  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nObbligazioni convertibili  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti verso banche oltre i 12 mesi  74.544  12,5%  37.074  6,0%  0 0,0%  0 0,0%  \nDebiti verso altri finanziatori a lunga scadenza  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti commerciali a lungo termine  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti commerciali a lungo v/imprese del \ngruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti finanziari a lungo v/imprese del gruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nAltri debiti finanziari a lungo termine  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nAltri debiti a lungo termine  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nTOTALE DEBITI A LUNGO  82.082  13,8%  46.626  7,6%  11.668  1,8%  13.889  2,1%  \nTOTALE DEBITI A LUNGO + PN  254.162  42,7%  260.405  42,2%  272.101  42,5%  326.251  48,7%  \nObbligazioni  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nObbligazioni convertibili  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti verso banche entro i 12 mesi  44.599  7,5%  47.470  7,7%  47.074  7,4%  10.000  1,5%  \nDebiti verso altri finanziatori a breve scadenza  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti commerciali a breve termine  293.331  49,3%  305.095  49,5%  317.448  49,6%  330.418  49,3%  \nDebiti commerciali a breve v/imprese del \ngruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti finanziari a breve v/imprese del gruppo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nAltri debiti finanziari a breve termine  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nAltri debiti a breve termine  3.287  0,6%  3.457  0,6%  3.638  0,6%  3.829  0,6%  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n18 \nTOTALE DEBITI A BREVE  341.216  57,3%  356.023  57,8%  368.160  57,5%  344.247  51,3%  \nTOTALE PASSIVO  595.378  100,0%  616.428  100,0%  640.260  100,0%  670.498  100,0%  \n \n \nStato Patrimoniale gestionale  \nAnni           2023       2024E          2025E          2026E         2027E   \n€' % €' % €' % €' % €' % \nImmobilizzazioni immateriali  0 0,0%  197.200  82,8%  186.000  95,4%  174.800  110,2%  163.600  131,2%  \nImmobilizzazioni materiali  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nImmobilizzazioni finanziarie  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nATTIVO FISSO NETTO  0 0,0%  197.200  82,8%  186.000  95,4%  174.800  110,2%  163.600  131,2%  \nRimanenze  16.583  27,9%  27.941  11,7%  44.979  23,1%  67.128  42,3%  91.491  73,4%  \nCrediti netti v/clienti  64.937  109,4%  75.469  31,7%  84.912  43,6%  110.386  69,6%  121.425  97,4%  \nAltri crediti operativi  7.500  12,6%  50.714  21,3%  38.251  19,6%  18.169  11,5%  7.500  6,0%  \nRatei e risconti attivi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(Debiti v/fornitori)  (29.682)  -50,0%  (104.469)  -43,9%  (156.704)  -80,4%  (203.715)  -128,5%  (249.546)  -200,2%  \n(Debiti v/collegate -control -controll)  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(Altri debiti operativi)  0 0,0%  (7.784)  -3,3%  (387)  -0,2%  (4.399)  -2,8%  (4.173)  -3,3%  \n(Ratei e risconti passivi)  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nATTIVO CIRCOLANTE OPERATIVO NETTO  59.338  100,0%  41.870  17,6%  11.052  5,7%  -12.430  -7,8%  -33.303  -26,7%  \nCAPITALE INVESTITO  59.338  100,0%  239.070  100,4%  197.052  101,1%  162.370  102,4%  130.297  104,5%  \n(Fondo tfr)  0 0,0%  (852)  -0,4%  (2.130)  -1,1%  (3.791)  -2,4%  (5.619)  -4,5%  \n(Altri fondi)  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(Passività operative non correnti)  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nCAPITALE INVESTITO NETTO  59.338  100,0%  238.218  100,0%  194.922  100,0%  158.578  100,0%  124.678  100,0%  \nDebiti v/banche a breve termine  0 0,0%  8.485  3,6%  39.025  20,0%  37.197  23,5%  41.947  33,6%  \nAltri debiti finanziari a breve  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti v/banche a lungo termine  16.713  28,2%  201.916  84,8%  170.589  87,5%  141.090  89,0%  109.143  87,5%  \nAltri debiti finanziari a lungo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nFinanziamento soci  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti Leasing  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(Crediti finanziari)  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(Cassa e banche c/c)  (11) 0,0%  (34.470)  -14,5%  (91.292)  -46,8%  (122.080)  -77,0%  (161.449)  -129,5%  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n19 \nINDEBITAMENTO FINANZIARIO NETTO  16.702  28,1%  175.931  73,9%  118.322  60,7%  56.207  35,4%  (10.359)  -8,3%  \nCapitale sociale  10.000  16,9%  10.000  4,2%  10.000  5,1%  10.000  6,3%  10.000  8,0%  \nRiserve  1 0,0%  1 0,0%  1 0,0%  1 0,0%  1 0,0%  \nUtile/(perdita)  32.635  55,0%  52.286  21,9%  66.599  34,2%  92.370  58,2%  125.037  100,3%  \nPATRIMONIO NETTO  42.636  71,9%  62.287  26,1%  76.600  39,3%  102.371  64,6%  135.038  108,3%  \nFONTI DI FINANZIAMENTO  59.338  100,0%  238.218  100,0%  194.922  100,0%  158.578  100,0%  124.678  100,0%  \nAnni              2028E       2029E                    2030E                     2031E  \n €' % €' % €' % €' % \nImmobilizzazioni immateriali  152.400  151,9%  141.200  130,3%  130.000  110,7%  118.800  93,2%  \nImmobilizzazioni materiali  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nImmobilizzazioni finanziarie  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nATTIVO FISSO NETTO  152.400  151,9%  141.200  130,3%  130.000  110,7%  118.800  93,2%  \nRimanenze  117.073  116,7%  143.934  132,8%  172.138  146,6%  201.752  158,2%  \nCrediti netti v/clienti  127.496  127,1%  133.871  123,5%  140.564  119,7%  147.593  115,8%  \nAltri crediti operativi  7.500  7,5%  7.500  6,9%  7.500  6,4%  7.500  5,9%  \nRatei e risconti attivi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(Debiti v/fornitori)  (293.331)  -292,4%  (305.095)  -281,5%  (317.448)  -270,3%  (330.418)  -259,1%  \n(Debiti v/collegate -control -controll)  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(Altri debiti operativi)  (3.287)  -3,3%  (3.457)  -3,2%  (3.638)  -3,1%  (3.829)  -3,0%  \n(Ratei e risconti passivi)  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nATTIVO CIRCOLANTE OPERATIVO NETTO  -44.548  -44,4%  -23.248  -21,4%  -884 -0,8%  22.597  17,7%  \nCAPITALE INVESTITO  107.852  107,5%  117.952  108,8%  129.116  109,9%  141.397  110,9%  \n(Fondo tfr)  (7.538)  -7,5%  (9.553)  -8,8%  (11.668)  -9,9%  (13.889)  -10,9%  \n(Altri fondi)  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(Passività operative non correnti)  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nCAPITALE INVESTITO NETTO  100.314  100,0%  108.400  100,0%  117.448  100,0%  127.508  100,0%  \nDebiti v/banche a breve termine  44.599  44,5%  47.470  43,8%  47.074  40,1%  10.000  7,8%  \nAltri debiti finanziari a breve  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti v/banche a lungo termine  74.544  74,3%  37.074  34,2%  0 0,0%  0 0,0%  \nAltri debiti finanziari a lungo  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nFinanziamento soci  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nDebiti Leasing  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(Crediti finanziari)  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(Cassa e banche c/c)  (190.909)  -190,3%  (189.923)  -175,2%  (190.058)  -161,8%  (194.854)  -152,8%  \nINDEBITAMENTO FINANZIARIO NETTO  (71.766)  -71,5%  (105.379)  -97,2%  (142.984)  -121,7%  (184.854)  -145,0%  \nCapitale sociale  10.000  10,0%  10.000  9,2%  10.000  8,5%  10.000  7,8%  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n20 \nRiserve  1 0,0%  1 0,0%  1 0,0%  1 0,0%  \nUtile/(perdita)  162.079  161,6%  203.778  188,0%  250.431  213,2%  302.361  237,1%  \nPATRIMONIO NETTO  172.080  171,5%  213.779  197,2%  260.432  221,7%  312.362  245,0%  \nFONTI DI FINANZIAMENTO  100.314  100,0%  108.400  100,0%  117.448  100,0%  127.508  100,0%  \n \n \nStato Patrimoniale liquidità esigibilità  \n \nAnni  2023  2024E  2025E  2026E  2027E  \n €' % €' % €' % €' % €' % \nImmobilizzi materiali netti  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nImmobilizzi immateriali netti  0 0,0%  197.200  51,1%  186.000  41,8%  174.800  35,5%  163.600  30,0%  \nImmobilizzi finanziari  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nImmobilizzi commerciali  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nTOTALE ATTIVO A LUNGO  0 0,0%  197.200  51,1%  186.000  41,8%  174.800  35,5%  163.600  30,0%  \nMagazzino  16.583  18,6%  27.941  7,2%  44.979  10,1%  67.128  13,6%  91.491  16,8%  \nLiquidità differite  72.437  81,4%  126.182  32,7%  123.164  27,7%  128.556  26,1%  128.925  23,6%  \nLiquidità immediate  11 0,0%  34.470  8,9%  91.292  20,5%  122.080  24,8%  161.449  29,6%  \nTOTALE ATTIVO A BREVE  89.031  100,0%  188.594  48,9%  259.434  58,2%  317.763  64,5%  381.865  70,0%  \nTOTALE ATTIVO  89.031  100,0%  385.794  100,0%  445.434  100,0%  492.563  100,0%  545.465  100,0%  \nPatrimonio netto  42.636  47,9%  62.287  16,1%  76.600  17,2%  102.371  20,8%  135.038  24,8%  \nFondi per rischi e oneri  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nTrattamento di fine rapporto  0 0,0%  852 0,2%  2.130  0,5%  3.791  0,8%  5.619  1,0%  \nTOTALE DEBITI A LUNGO  16.713  18,8%  202.768  52,6%  172.719  38,8%  144.881  29,4%  114.762  21,0%  \nTOTALE DEBITI A LUNGO + PN  59.349  66,7%  265.055  68,7%  249.319  56,0%  247.253  50,2%  249.799  45,8%  \nTOTALE DEBITI A BREVE  29.682  33,3%  120.739  31,3%  196.115  44,0%  245.310  49,8%  295.666  54,2%  \nTOTALE PASSIVO  89.031  100,0%  385.794  100,0%  445.434  100,0%  492.563  100,0%  545.465  100,0%  \n \nAnni  2028E                                 2029E                              2030E                         2031E  \n €' % €' % €' % €' % \nImmobilizzi materiali netti  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nImmobilizzi immateriali netti  152.400  25,6%  141.200  22,9%  130.000  20,3%  118.800  17,7%  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n21 \nImmobilizzi finanziari  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nImmobilizzi commerciali  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nTOTALE ATTIVO A LUNGO  152.400  25,6%  141.200  22,9%  130.000  20,3%  118.800  17,7%  \nMagazzino  117.073  19,7%  143.934  23,3%  172.138  26,9%  201.752  30,1%  \nLiquidità differite  134.996  22,7%  141.371  22,9%  148.064  23,1%  155.093  23,1%  \nLiquidità immediate  190.909  32,1%  189.923  30,8%  190.058  29,7%  194.854  29,1%  \nTOTALE ATTIVO A BREVE  442.978  74,4%  475.228  77,1%  510.260  79,7%  551.698  82,3%  \nTOTALE ATTIVO  595.378  100,0%  616.428  100,0%  640.260  100,0%  670.498  100,0%  \nPatrimonio netto  172.080  28,9%  213.779  34,7%  260.432  40,7%  312.362  46,6%  \nFondi per rischi e oneri  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nTrattamento di fine rapporto  7.538  1,3%  9.553  1,5%  11.668  1,8%  13.889  2,1%  \nTOTALE DEBITI A LUNGO  82.082  13,8%  46.626  7,6%  11.668  1,8%  13.889  2,1%  \nTOTALE DEBITI A LUNGO + PN  254.162  42,7%  260.405  42,2%  272.101  42,5%  326.251  48,7%  \nTOTALE DEBITI A BREVE  341.216  57,3%  356.023  57,8%  368.160  57,5%  344.247  51,3%  \nTOTALE PASSIVO  595.378  100,0%  616.428  100,0%  640.260  100,0%  670.498  100,0%  \n \n \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n22 \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n23 \nConto Economico Riclassificato  \nConto Economico a valore aggiunto  \n \nAnni         2023                2024E                 2025E               2026E                  2027E  \n €' % ricavi  €' % ricavi  €' % ricavi  €' % ricavi  €' % ricavi  \n(+) Ricavi dalle vendite e prestazioni  540.873  100,0%  556.558  100,0%  834.837  100,0%  1.085.289  100,0%  1.193.818  100,0%  \n(+/-) Var. rimanenze prodotti finiti e lavori \nin corso  16.583  3,1%  11.358  2,0%  17.037  2,0%  22.149  2,0%  24.364  2,0%  \n(+) Altri ricavi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(+) Costi capitalizzati  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nValore della produzione operativa  557.456  103,1%  567.917  102,0%  851.875  102,0%  1.107.437  102,0%  1.218.181  102,0%  \n(-) Acquisti di merci  (529.853)  -98,0%  (511.125)  -91,8%  (766.687)  -91,8%  (996.694)  -91,8%  (1.096.363)  -91,8%  \n(-) Acquisti di servizi  (2.127)  -0,4%  (2.215)  -0,4%  (3.322)  -0,4%  (4.319)  -0,4%  (4.751)  -0,4%  \n(-) Godimento beni di terzi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(-) Oneri diversi di gestione  (311)  -0,1%  (341)  -0,1%  (511)  -0,1%  (664)  -0,1%  (731)  -0,1%  \n(+/-) Variazione rimanenze materie prime  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nCosti della produzione  (532.291)  -98,4%  (513.681)  -92,3%  (770.521)  -92,3%  (1.001.677)  -92,3%  (1.101.845)  -92,3%  \nVALORE AGGIUNTO  25.165  4,7%  54.236  9,7%  81.354  9,7%  105.760  9,7%  116.336  9,7%  \n(-) Costi del personale  (20.691)  -3,8%  (21.710)  -3,9%  (32.565)  -3,9%  (42.334)  -3,9%  (46.568)  -3,9%  \nMARGINE OPERATIVO LORDO (MOL)  4.474  0,8%  32.526  5,8%  48.789  5,8%  63.426  5,8%  69.769  5,8%  \n(-) Ammortamenti  (452)  -0,1%  (2.800)  -0,5%  (11.200)  -1,3%  (11.200)  -1,0%  (11.200)  -0,9%  \n(-) Accanton. e sval. attivo corrente  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nRISULTATO OPERATIVO (EBIT)  4.022  0,7%  29.726  5,3%  37.589  4,5%  52.226  4,8%  58.569  4,9%  \n(-) Oneri finanziari  (91) 0,0%  (2.344)  -0,4%  (16.827)  -2,0%  (15.637)  -1,4%  (12.581)  -1,1%  \n(+) Proventi finanziari  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nSaldo gestione finanziaria  (91) 0,0%  (2.344)  -0,4%  (16.827)  -2,0%  (15.637)  -1,4%  (12.581)  -1,1%  \n(-) Altri costi non operativi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(+) Altri ricavi e proventi non operativi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nSaldo altri ricavi e costi non operativi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nRISULTATO PRIMA IMPOSTE  3.931  0,7%  27.382  4,9%  20.762  2,5%  36.589  3,4%  45.988  3,9%  \n(-) Imposte sul reddito  0 0,0%  (7.731)  -1,4%  (6.449)  -0,8%  (10.818)  -1,0%  (13.321)  -1,1%  \nRISULTATO NETTO  3.931  0,7%  19.651  3,5%  14.313  1,7%  25.771  2,4%  32.666  2,7%  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n24 \n \n \nAnni      2028E                             2029E                           2030E                               2031E  \n €' % ricavi  €' % ricavi  €' % ricavi  €' % ricavi  \n(+) Ricavi dalle vendite e prestazioni  1.253.508  100,0%  1.316.184  100,0%  1.381.993  100,0%  1.451.093  100,0%  \n(+/-) Var. rimanenze prodotti finiti e lavori in \ncorso  25.582  2,0%  26.861  2,0%  28.204  2,0%  29.614  2,0%  \n(+) Altri ricavi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(+) Costi capitalizzati  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nValore della produzione operativa  1.279.090  102,0%  1.343.045  102,0%  1.410.197  102,0%  1.480.707  102,0%  \n(-) Acquisti di merci  (1.151.181)  -91,8%  (1.208.740)  -91,8%  (1.269.177)  -91,8%  (1.332.636)  -91,8%  \n(-) Acquisti di servizi  (4.988)  -0,4%  (5.238)  -0,4%  (5.500)  -0,4%  (5.775)  -0,4%  \n(-) Godimento beni di terzi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(-) Oneri diversi di gestione  (767)  -0,1%  (806)  -0,1%  (846)  -0,1%  (888)  -0,1%  \n(+/-) Variazione rimanenze materie prime  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nCosti della produzione  (1.156.937)  -92,3%  (1.214.784)  -92,3%  (1.275.523)  -92,3%  (1.339.299)  -92,3%  \nVALORE AGGIUNTO  122.153  9,7%  128.261  9,7%  134.674  9,7%  141.408  9,7%  \n(-) Costi del personale  (48.896)  -3,9%  (51.341)  -3,9%  (53.908)  -3,9%  (56.603)  -3,9%  \nMARGINE OPERATIVO LORDO (MOL)  73.257  5,8%  76.920  5,8%  80.766  5,8%  84.804  5,8%  \n(-) Ammortamenti  (11.200)  -0,9%  (11.200)  -0,9%  (11.200)  -0,8%  (11.200)  -0,8%  \n(-) Accanton. e sval. attivo corrente  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nRISULTATO OPERATIVO (EBIT)  62.057  5,0%  65.720  5,0%  69.566  5,0%  73.604  5,1%  \n(-) Oneri finanziari  (10.133)  -0,8%  (7.481)  -0,6%  (4.609)  -0,3%  (1.499)  -0,1%  \n(+) Proventi finanziari  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nSaldo gestione finanziaria  (10.133)  -0,8%  (7.481)  -0,6%  (4.609)  -0,3%  (1.499)  -0,1%  \n(-) Altri costi non operativi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \n(+) Altri ricavi e proventi non operativi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nSaldo altri ricavi e costi non operativi  0 0,0%  0 0,0%  0 0,0%  0 0,0%  \nRISULTATO PRIMA IMPOSTE  51.924  4,1%  58.239  4,4%  64.957  4,7%  72.105  5,0%  \n(-) Imposte sul reddito  (14.882)  -1,2%  (16.540)  -1,3%  (18.303)  -1,3%  (20.176)  -1,4%  \nRISULTATO NETTO  37.042  3,0%  41.698  3,2%  46.654  3,4%  51.929  3,6%  \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n25 \nAnalisi principali dati economici  \n \nAnni               2023                 2024E               2025E              2026E          2027E  \n €' change %  €' change %  €' change %  €' change %  €' change %  \nRicavi delle vendite  540.873  - 556.558  2,9%  834.837  50,0%  1.085.289  30,0%  1.193.818  10,0%  \nVdP 557.456  - 567.917  1,9%  851.875  50,0%  1.107.437  30,0%  1.218.181  10,0%  \nMol 4.474  - 32.526  627,0%  48.789  50,0%  63.426  30,0%  69.769  10,0%  \nEbit 4.022  - 29.726  639,1%  37.589  26,5%  52.226  38,9%  58.569  12,1%  \nEbt 3.931  - 27.382  596,6%  20.762  -24,2%  36.589  76,2%  45.988  25,7%  \nUtile netto  3.931  - 19.651  399,9%  14.313  -27,2%  25.771  80,1%  32.666  26,8%  \n \nAnni    2028E                             2029E                             2030E                               2031E  \n €' change %  €' change %  €' change %  €' change %  \nRicavi delle vendite  1.253.508  5,0%  1.316.184  5,0%  1.381.993  5,0%  1.451.093  5,0%  \nVdP 1.279.090  5,0%  1.343.045  5,0%  1.410.197  5,0%  1.480.707  5,0%  \nMol 73.257  5,0%  76.920  5,0%  80.766  5,0%  84.804  5,0%  \nEbit 62.057  6,0%  65.720  5,9%  69.566  5,9%  73.604  5,8%  \nEbt 51.924  12,9%  58.239  12,2%  64.957  11,5%  72.105  11,0%  \nUtile netto  37.042  13,4%  41.698  12,6%  46.654  11,9%  51.929  11,3%  \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n26 \nAnni  \n \nAnni  2024E  2025E  2026E  2027E  2028E  \nConfronto tra risultato economico (utile \nnetto) e risultato finanziario (flusso di \ncassa per azionisti)  Utile economico e surplus \nfinanziario  Utile economico e surplus \nfinanziario  Utile economico e surplus \nfinanziario  Utile economico e surplus \nfinanziario  Utile economico e surplus \nfinanziario  \n \nAnni  2029E  2030E  2030E  \nConfronto tra risultato economico \n(utile netto) e risultato finanziario \n(flusso di cassa per azionisti)  Utile economico ma deficit finanziario  Utile economico e surplus finanziario  Utile economico e surplus finanziario  \n \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n27 \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n28 \nRendiconto Finanziario  \nAnni  2024E  2025E  2026E  2027E  2028E  \n €' €' €' €' €' \n+/- Ebit 29.726  37.589  52.226  58.569  62.057  \n- Imposte figurative  (8.294)  (10.487)  (14.571)  (16.341)  (17.314)  \n+/- Nopat  21.433  27.102  37.655  42.228  44.743  \n+ Ammortamento Accantonamenti e Tfr  3.652  12.478  12.861  13.028  13.119  \nFlusso di cassa operativo lordo  25.085  39.580  50.516  55.256  57.862  \n+/- Clienti  (10.532)  (9.444)  (25.474)  (11.039)  (6.071)  \n+/- Rimanenze  (11.358)  (17.037)  (22.149)  (24.364)  (25.582)  \n+/- Fornitori  74.787  52.235  47.011  45.831  43.784  \n+/- Altre attività  (43.214)  12.462  20.082  10.669  0 \n+/- Altre passività  7.784  (7.398)  4.012  (226)  (886)  \n+/- Variazione fondi  0 0 0 0 0 \nVariazione CCN  17.468  30.818  23.483  20.873  11.245  \n      \nFlusso di cassa della gestione corrente  42.553  70.398  73.999  76.128  69.107  \n      \n+/- Investimenti / Disinvestimenti  (200.000)  0 0 0 0 \n            \nFlusso di Cassa Operativo  (157.447)  70.398  73.999  76.128  69.107  \n+ Scudo fiscale del debito  563 4.039  3.753  3.019  2.432  \n+/- Proventi/Oneri straordinari  0 0 0 0 0 \n+/- Proventi/Oneri finanziari  (2.344)  (16.827)  (15.637)  (12.581)  (10.133)  \n+/- Partecipazioni e titoli  0 0 0 0 0 \nFlusso di Cassa al servizio del debito  (159.229)  57.609  62.115  66.566  61.407  \n+/- Utilizzo banche a breve  0 7.698  0 2.302  0 \n+ Accensione Mutuo  200.000  0 0 0 0 \n- Restituzione Mutuo  (6.312)  (8.485)  (31.327)  (29.499)  (31.947)  \n+/- Finanziamento soci  0 0 0 0 0 \n+/- Equity  0 0 0 0 0 \n- Canoni Leasing  0 0 0 0 0 \n+/- Altri crediti/debiti finanziari  0 0 0 0 0 \nFlusso di cassa per azionisti  34.459  56.821  30.788  39.370  29.460  \n- Dividendo distribuito  0 0 0 0 0 \nFlusso di cassa netto  34.459  56.821  30.788  39.370  29.460  \nDisponibilità liquide finali  34.470  91.292  122.080  161.449  190.909  \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n29 \nAnni  2029E  2030E  2031E  \n €' €' €' \n+/- Ebit 65.720  69.566  73.604  \n- Imposte figurative  (18.336)  (19.409)  (20.536)  \n+/- Nopat  47.384  50.157  53.069  \n+ Ammortamento Accantonamenti e Tfr  13.215  13.316  13.421  \nFlusso di cassa operativo lordo  60.599  63.473  66.490  \n+/- Clienti  (6.375)  (6.694)  (7.028)  \n+/- Rimanenze  (26.861)  (28.204)  (29.614)  \n+/- Fornitori  11.765  12.353  12.970  \n+/- Altre attività  0 0 0 \n+/- Altre passività  171 180 191 \n+/- Variazione fondi  0 0 0 \nVariazione CCN  (21.301)  (22.364)  (23.481)  \n    \nFlusso di cassa della gestione corrente  39.298  41.108  43.009  \n    \n+/- Investimenti / Disinvestimenti  0 0 0 \n        \nFlusso di Cassa Operativo  39.298  41.108  43.009  \n+ Scudo fiscale del debito  1.795  1.106  360 \n+/- Proventi/Oneri straordinari  0 0 0 \n+/- Proventi/Oneri finanziari  (7.481)  (4.609)  (1.499)  \n+/- Partecipazioni e titoli  0 0 0 \nFlusso di Cassa al servizio del debito  33.613  37.605  41.869  \n+/- Utilizzo banche a breve  0 0 0 \n+ Accensione Mutuo  0 0 0 \n- Restituzione Mutuo  (34.599)  (37.470)  (37.074)  \n+/- Finanziamento soci  0 0 0 \n+/- Equity  0 0 0 \n- Canoni Leasing  0 0 0 \n+/- Altri crediti/debiti finanziari  0 0 0 \nFlusso di cassa per azionisti  (986)  135 4.796  \n- Dividendo distribuito  0 0 0 \nFlusso di cassa netto  (986)  135 4.796  \nDisponibilità liquide finali  189.923  190.058  194.854  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n30 \nAnalisi Cash flow  \n \nAnni  2024E  2025E  2026E  2027E  2028E  \n €' €' €' €' €' \nFlusso di cassa operativo lordo  25.085  39.580  50.516  55.256  57.862  \nVariazione CCN  17.468  30.818  23.483  20.873  11.245  \nFlusso di cassa della gestione corrente  42.553  70.398  73.999  76.128  69.107  \nFlusso di Cassa Operativo  (157.447)  70.398  73.999  76.128  69.107  \nFlusso di Cassa al servizio del debito  (159.229)  57.609  62.115  66.566  61.407  \nFlusso di cassa per azionisti  34.459  56.821  30.788  39.370  29.460  \nFlusso di cassa netto  34.459  56.821  30.788  39.370  29.460  \n \nAnni  2029E  2030E  2031E  \n €' €' €' \nFlusso di cassa operativo lordo  60.599  63.473  66.490  \nVariazione CCN  (21.301)  (22.364)  (23.481)  \nFlusso di cassa della gestione corrente  39.298  41.108  43.009  \nFlusso di Cassa Operativo  39.298  41.108  43.009  \nFlusso di Cassa al servizio del debito  33.613  37.605  41.869  \nFlusso di cassa per azionisti  -986 135 4.796  \nFlusso di cassa netto  (986)  135 4.796  \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n31 \nAndamento Cash flow  \n \n \nAnni  2024E  2025E  2026E  2027E  2028E  \n % % % % % \nFlusso di cassa operativo lordo  - 57,8%  27,6%  9,4%  4,7%  \nVariazione CCN  - 76,4%  -23,8%  -11,1%  -46,1%  \nFlusso di cassa della gestione corrente  - 65,4%  5,1%  2,9%  -9,2%  \nFlusso di Cassa Operativo  - 144,7%  5,1%  2,9%  -9,2%  \nFlusso di Cassa al servizio del debito  - 136,2%  7,8%  7,2%  -7,8%  \nFlusso di cassa per azionisti  - 64,9%  -45,8%  27,9%  -25,2%  \nFlusso di cassa netto  - 64,9%  -45,8%  27,9%  -25,2%  \n \n \nAnni  2029E  2030E  2031E  \n % % % \nFlusso di cassa operativo lordo  4,7%  4,7%  4,8%  \nVariazione CCN  -289,4%  -5,0%  -5,0%  \nFlusso di cassa della gestione corrente  -43,1%  4,6%  4,6%  \nFlusso di Cassa Operativo  -43,1%  4,6%  4,6%  \nFlusso di Cassa al servizio del debito  -45,3%  11,9%  11,3%  \nFlusso di cassa per azionisti  -103,3%  113,7%  3456,1%  \nFlusso di cassa netto  -103,3%  113,7%  3456,1%  \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n32 \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n33 \nPosizione Finanziaria Netta  \nPosizione finanziaria netta  \n \nAnni  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \n €' €' €' €' €' €' €' €' \nDebiti v/banche a breve termine  0 7.698  7.698  10.000  10.000  10.000  10.000  10.000  \nMutui passivi  210.401  201.916  170.589  141.090  109.143  74.544  37.074  0 \nBanca 1  200.000  197.827  170.589  141.090  109.143  74.544  37.074  0 \n- 0 0 0 0 0 0 0 0 \n- 0 0 0 0 0 0 0 0 \n- 0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \nMutui precedenti  10.401  4.089  0 0 0 0 0 0 \nFinanziamento soci  0 0 0 0 0 0 0 0 \nAltri debiti finanziari  0 0 0 0 0 0 0 0 \nDebiti Leasing  0 0 0 0 0 0 0 0 \n(Crediti finanziari)  0 0 0 0 0 0 0 0 \n(Cassa e banche c/c)  -34.470  -91.292  -122.080  -161.449  -190.909  -189.923  -190.058  -194.854  \nPOSIZIONE FINANZIARIA NETTA  175.931  118.322  56.207  -10.359  -71.766  -105.379  -142.984  -184.854  \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n34 \nScomposizione debiti finanziari e piani di rimborso  \n \nAnni  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \n €' €' €' €' €' €' €' €' \nDebiti inizio esercizio  16.713  210.401  209.614  178.287  151.090  119.143  84.544  47.074  \nBanca 1  0 -2.173  -27.238  -29.499  -31.947  -34.599  -37.470  -37.074  \n- 0 0 0 0 0 0 0 0 \n- 0 0 0 0 0 0 0 0 \n- 0 0 0 0 0 0 0 0 \nRimborso mutui precedenti  -6.312  -6.312  -4.089  0 0 0 0 0 \nRimborso leasing  0 0 0 0 0 0 0 0 \nAccensione (rimborso) finanziamento soci  0 0 0 0 0 0 0 0 \nAccensione finanziamento agevolato  0 0 0 0 0 0 0 0 \nRimborso finanziamento agevolato  0 0 0 0 0 0 0 0 \nUtilizzo (rimborso) debiti a breve  0 7.698  0 2.302  0 0 0 0 \nAccensione (rimborso) altri deb finanziari  0 0 0 0 0 0 0 0 \nAccensione Deb. a m/l  200.000  0 0 0 0 0 0 0 \nAccensione deb. Leasing  0 0 0 0 0 0 0 0 \nDEBITO FINE ESERCIZIO  210.401  209.614  178.287  151.090  119.143  84.544  47.074  10.000  \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n35 \nPosizione finanziaria netta*  \n \nAnni  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \n €' €' €' €' €' €' €' €' \nLiquidità  34.470  91.292  122.080  161.449  190.909  189.923  190.058  194.854  \nCrediti finanziari verso terzi a breve termine  0 0 0 0 0 0 0 0 \nAttività finanziarie correnti  0 0 0 0 0 0 0 0 \nCrediti finanziari verso controllate a breve  0 0 0 0 0 0 0 0 \nCrediti finanziari verso collegate a breve  0 0 0 0 0 0 0 0 \nCrediti finanziari correnti  0 0 0 0 0 0 0 0 \nScoperti di conto corrente  0 (7.698)  (7.698)  (10.000)  (10.000)  (10.000)  (10.000)  (10.000)  \nDebiti di conto corrente  0 0 0 0 0 0 0 0 \nObbligazioni  0 0 0 0 0 0 0 0 \nQuota corrente di finanziamenti bancari  (8.485)  (31.327)  (29.499)  (31.947)  (34.599)  (37.470)  (37.074)  0 \nDebiti verso società di factoring  0 0 0 0 0 0 0 0 \nDebiti per leasing  0 0 0 0 0 0 0 0 \nQuota corrente di debiti verso altri finanziatori  0 0 0 0 0 0 0 0 \nDebiti finanziari verso controllate  0 0 0 0 0 0 0 0 \nDebiti finanziari verso collegate  0 0 0 0 0 0 0 0 \nIndebitamento finanziario corrente  (8.485)  (39.025)  (37.197)  (41.947)  (44.599)  (47.470)  (47.074)  (10.000)  \nIndebitamento finanziario corrente netto  25.985  52.267  84.883  119.502  146.310  142.453  142.984  184.854  \nDebiti verso banche  (201.916)  (170.589)  (141.090)  (109.143)  (74.544)  (37.074)  0 0 \nPrestito obbligazionario  0 0 0 0 0 0 0 0 \nDebiti per leasing  0 0 0 0 0 0 0 0 \nDebiti verso altri finanziatori  0 0 0 0 0 0 0 0 \nDebiti finanziari verso controllate  0 0 0 0 0 0 0 0 \nDebiti finanziari verso collegate  0 0 0 0 0 0 0 0 \nFornitori scaduti (oltre 24 mesi)  0 0 0 0 0 0 0 0 \nRateizzazioni fiscali (oltre 24 mesi)  0 0 0 0 0 0 0 0 \nIndebitamento finanziario non corrente  -201.916  -170.589  -141.090  -109.143  -74.544  -37.074  0 0 \nPosizione finanziaria netta  -175.931  -118.322  -56.207  10.359  71.766  105.379  142.984  184.854  \n \n* Ai sensi della Comunicazione Consob del 28 luglio 2006 ed in conformità con la raccomandazione del CESR del 10 febbraio 200 5 “Raccomandazione per l’attuazione uniforme del \nregolamento della Commissione Europea sui prospetti informativi”. L’indicatore non  comprende eventuali attività e passività finanziarie originate dalla valutazione al fair value di \nstrumenti finanziari derivati designati di copertura, e l’adeguamento al fair value delle relative eventuali  poste coperte.  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n36 \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n37 \nIndicatori di Bilancio  \n \nIndici di Redditività  \n \nROE  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nRisultato netto / Patrimonio netto  9,2%  31,5%  18,7%  25,2%  24,2%  21,5%  19,5%  17,9%  16,6%  \nEsprime la redditività complessiva dei mezzi propri investiti nell'azienda e fornisce un indicatore di confronto con investimenti alternativi  \nChiave di lettura  Significato    \nRoe < 2%  Risultato non soddisfacente   \n2% < Roe < 6%  Risultato non esaltante   \nRoe > 6%  Risultato soddisfacente   \n \nIl rendimento complessivo della gestione aziendale nell'esercizio 2024 è soddisfacente ed è migliorato, rispetto all'esercizio precedente, di 22,33% attestandosi ad un valore pari a 31,55%  \n \n \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n38 \n \nROI 2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nRisultato operativo / Totale Attivo  4,5%  7,7%  8,4%  10,6%  10,7%  10,4%  10,7%  10,9%  11,0%  \nEsprime il rendimento della gestione tipica dell'azienda, in base alle risorse finanziarie raccolte a titolo di debito o di c apitale di rischio   \nChiave di lettura  Significato   \nRoi < 7%  Risultato non soddisfacente   \n7% < Roi < 15%  Risultato nella norma   \nRoi > 15%  Risultato soddisfacente   \n \nIl rendimento della gestione caratteristica dell'azienda nell'esercizio 2024 è nella norma ed è migliorato, rispetto all'esercizio precedente, di 3,19% attestandosi ad un valore pari a 7,71%   \n \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n39 \nROS  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nRisultato operativo / Vendite  0,7%  5,3%  4,5%  4,8%  4,9%  5,0%  5,0%  5,0%  5,1%  \nIndice della capacità commerciale dell'azienda ed esprime il reddito medio generato a fronte di ogni unità di ricavo realizzata (redditività delle vendite)   \nChiave di lettura  Significato   \nRos < 0%  Redditività dell'azienda fallimentare   \n0% < Ros < 2%  Redditività dell'azienda critica   \n2% < Ros < 13%  Redditività dell'azienda soddisfacente   \nRos > 13%  Redditività dell'azienda molto soddisfacente   \n \nLa gestione caratteristica nell'esercizio 2024 è in grado di generare risorse in grado di coprire i costi dei fattori produtt ivi utilizzati in modo sufficiente da garantire un margine di reddito da destinare \neventualmente alla copertura delle altre aree ge stionali e alla remunerazione del capitale proprio sotto forma di dividendi ma in maniera non soddisfacente ed è migliorato, rispetto all'esercizio \nprecedente, di 4,60% attestandosi ad un valore pari a 5,34%   \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n40 \nROT  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nVendite / Capitale investito netto  9,1 2,3 4,3 6,8 9,6 12,5  12,1  11,8  11,4  \nIndicatore che esprime il ricavo netto medio generato da ogni unità di capitale operativo investito nell'attività dell'azienda e quindi è mo lto importante per valutare la capacità produttiva   \nChiave di lettura  Significato   \nRot < 0,5  Efficienza produttiva non soddisfacente   \n0,50 < Rot < 1  Efficienza produttiva poco soddisfacente   \n1 < Rot < 2  Efficienza produttiva soddisfacente   \nRot > 2  Efficienza produttiva molto soddisfacente   \n \nIl grado di efficienza produttiva dell'azienda nell'esercizio 2024 è molto soddisfacente ma risulta peggiorato, rispetto all'esercizio precedente, di 677,88% attestandosi ad un valore pari a 2,34   \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n41 \nMargini Economici  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nRicavi delle vendite  540.873  556.558  834.837  1.085.289  1.193.818  1.253.508  1.316.184  1.381.993  1.451.093  \nValore aggiunto  25.165  54.236  81.354  105.760  116.336  122.153  128.261  134.674  141.408  \nMol 4.474  32.526  48.789  63.426  69.769  73.257  76.920  80.766  84.804  \nEbit 4.022  29.726  37.589  52.226  58.569  62.057  65.720  69.566  73.604  \nEBT 3.931  27.382  20.762  36.589  45.988  51.924  58.239  64.957  72.105  \nUtile  3.931  19.651  14.313  25.771  32.666  37.042  41.698  46.654  51.929  \nCash Flow operativo  -55.316  -157.447  70.398  73.999  76.128  69.107  39.298  41.108  43.009  \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n42 \nIndici di Liquidità  \n \nMargine di Tesoreria  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \n(Attività correnti - Magazzino netto) - \nPassività correnti  42.766  39.914  18.340  5.325  -5.292  -15.311  -24.729  -30.037  5.699  \nIl margine di tesoreria esprime la capacità dell'azienda a far fronte alle passività correnti con l'utilizzo delle disponibilità liquide e dei crediti a breve e rappresenta un indicatore della liquidità netta   \nChiave di lettura  Significato   \nMargine di tesoreria > 0  Situazione di equilibrio finanziario   \nMargine di tesoreria < 0  Situazione di crisi di liquidità   \n \nAnalizzando il Margine di tesoreria relativo all'esercizio 2024E l'azienda si trova in una situazione di equilibrio finanziar io, ovvero ha le capacità di far fronte alle passività correnti con l'utilizzo delle \ndisponibilità liquide e dei crediti a breve. Rispetto all'anno precedente il margine è peggiorato di € 2.852.   \n \nMargine di Struttura  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \n(Patrimonio netto - Immobilizzazioni \nnette)  42.636  -134.913  -109.400  -72.429  -28.562  19.680  72.579  130.432  193.562  \nIl Margine di Struttura permette di verificare le modalità di finanziamento delle immobilizzazioni e valutare il grado di capitalizzazione rispetto alla dimensione aziendale   \nChiave di lettura  Significato   \nMargine di Struttura > 0  Le attività immobilizzate sono state finanziate con fonti di capitale proprio.   \nMargine di Struttura < 0  Il Patrimonio netto finanzia solo in parte le attività immobilizzate per cui la differenza è coperta anche da passività correnti   \n \nAnalizzando il Margine di struttura relativo all'esercizio 2024E il Capitale fisso finanzia solo in parte le attività immobil izzate per cui la differenza è coperta anche da passività correnti. Rispetto all'anno \nprecedente il margine è peggiorato di € 177.5 49.   \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n43 \nQuick Ratio  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \n(Attività a breve  - Disponibilità)/Passività a \nbreve  244,1%  133,1%  109,4%  102,2%  98,2%  95,5%  93,1%  91,8%  101,7%  \nEvidenzia la capacità dell'azienda di far fronte agli impegni scadenti nel breve periodo utilizzando le risorse disponibili i n forma liquida nello stesso periodo di tempo   \nChiave di lettura  Significato   \nQuick Ratio > 100%  Situazione di ottimo equilibrio finanziario   \n50% < Quick Ratio < 100%  Situazione di soddisfacente equilibrio   \n30% < Quick Ratio < 50%  Situazione di insoddisfacente equilibrio   \nQuick Ratio < 30%  Situazione di squilibrio finanziario   \nAnalizzando il Quick ratio relativo all'esercizio 2024E l'azienda si trova in una soddisfacente situazione di tranquillità fi nanziaria dato che le liquidità immediate e quelle differite riescono a coprire le \npassività correnti. Rispetto all'anno precedente  l'indice è peggiorato del 111,02%.   \n \nCurrent Ratio  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nAttività a breve / Passività a breve  3,0 1,6 1,3 1,3 1,3 1,3 1,3 1,4 1,6 \nVerifica se l'ammontare delle attività che ritorneranno in forma liquida entro un anno è superiore ai debiti che diventeranno esigibili nello stesso periodo di tempo   \nChiave di lettura  Significato   \nCurrent Ratio > 1,5  Situazione di soddisfacente tranquillità finanziaria   \n1,2 < Current  Ratio < 1,5  Situazione di tranquillità finanziaria   \n1,2 < Current Ratio < 1  Situazione di tranquillità finanziaria ma da tenere sotto controllo   \nCurrent Ratio < 1  Situazione di squilibrio finanziario   \nAnalizzando il Current ratio relativo all'esercizio 2024E l'azienda si trova in una soddisfacente situazione di tranquillità finanziaria dato che le attività correnti riescono a coprire le passività correnti. \nRispetto all'anno precedente l'indice è peggior ato del 1,44.   \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n44 \nCapitale Circolante Netto  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nCapitale circolante netto  59.349  67.855  63.319  72.453  86.199  101.762  119.205  142.101  207.451  \nIl Capitale Circolante Netto indica il saldo tra le attività correnti e le passività correnti e quindi espressione della liquidità aziendale   \nChiave di lettura  Significato   \nCCN > 0  Situazione di equilibrio   \nCCN < 0  Situazione finanziaria -patrimoniale da riequilibrare   \nSituazione di equilibrio in quanto esso indica quanto in più delle risorse si trasformerà in denaro nel breve periodo rispetto agli impegni in scadenza nello stesso periodo   \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n45 \nAltri Indici di liquidità  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nLiquidità corrente  299,9%  156,2%  132,3%  129,5%  129,2%  129,8%  133,5%  138,6%  160,3%  \nGiorni di credito ai clienti CERVED  43 49 37 37 37 37 37 37 37 \nGiorni di credito ai clienti effettivi  n.d. 40 30 30 30 30 30 30 30 \nGiorni di credito dai fornitori CERVED  20 73 73 73 82 91 90 90 89 \nGiorni di credito dai fornitori effettivi  n.d. 60 60 60 67 75 74 73 73 \n \nIndici di Produttività  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nCosto del lavoro su Fatturato  3,8%  3,9%  3,9%  3,9%  3,9%  3,9%  3,9%  3,9%  3,9%  \nValore Aggiunto su Fatturato  4,7%  9,7%  9,7%  9,7%  9,7%  9,7%  9,7%  9,7%  9,7%  \nValore Aggiunto/Valore della Produzione  4,5%  9,6%  9,6%  9,5%  9,6%  9,5%  9,5%  9,6%  9,5%  \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n46 \n \n \nCopertura Immobilizzazioni  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nPatrimonio netto + Passività fisse / Attivo \nimmobilizzato  0,00  1,34  1,34  1,41  1,53  1,67  1,84  2,09  2,75  \nL'indice esprime la capacità dei capitali apportati dai soci o dai terzi creditori di coprire le necessità di investimenti in  immobilizzazioni   \nChiave di lettura  Significato   \nIndice < 1  Risultato non soddisfacente   \nIndice > 1  Risultato soddisfacente   \nSituazione soddisfacente dal punto di vista della solidità patrimoniale in quanto l’indice nell'esercizio 2024 evidenzia una struttura efficiente dato che le attività fisse risultano finanziate interamente da \nfonti durevoli ed è migliorato, rispetto all'esercizio precedente, di 1,34 attestandosi ad un valore pari a 1,34   \n \nIndipendenza Finanziaria  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nPatrimonio netto / Totale attivo  0,48  0,16  0,17  0,21  0,25  0,29  0,35  0,41  0,47  \nIndicatore che evidenzia in quale entità l'attivo patrimoniale dell'azienda è stato finanziato con mezzi propri   \nChiave di lettura  Significato   \nIndice < 0,07  Situazione critica   \n0,07 < Indice < 0,10  Situazione soddisfacente   \nIndice > 0,10  Situazione buona   \nIl grado di indipendenza finanziaria dell'azienda in termini di rapporto tra il Capitale Proprio ed il Capitale investito è n ell'esercizio 2024 in una situazione buona e l'azienda risulta essere capitalizzata \nsufficientemente ma risulta peggiorato, rispett o all'esercizio precedente, di 0,32 attestandosi ad un valore pari a 0,16   \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n47 \nLeverage  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nCapitale investito / Patrimonio netto  1,4 3,8 2,5 1,5 0,9 0,6 0,5 0,5 0,4 \nL'indice esprime la proporzione tra risorse proprie e di terzi utilizzare per finanziarie gli impieghi aziendali   \nChiave di lettura  Significato   \nLeverage > 5  Situazione molta rischiosa   \n3 < Leverage < 5  Situazione rischiosa  \n1 < Leverage < 3  Situazione nella norma   \nLeverage < 1  Situazione Ottima   \n \nL'azienda risulta possedere nell'esercizio 2024 una struttura finanziaria non equilibrata e un insoddisfacente grado di indip endenza finanziaria per quanto concerne il rapporto tra risorse proprie e di terzi \nutilizzate per finanziare gli impieghi e risulta peggiorato, rispetto all'esercizio precedente, di 2,43 attestandosi ad un va lore pari a 3,82   \n \n \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n48 \nDebt/Equity  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nPosizione finanziaria netta / \nPatrimonio netto  0,4 2,8 1,5 0,5 NO DEBT  NO DEBT  NO DEBT  NO DEBT  NO DEBT  \nIndicatore di equilibrio tra mezzi di terzi e mezzi propri. Molto utilizzato come monitoraggio del rischio finanziario dell'impresa   \nChiave di lettura  Significato   \nDebt/Equity < 3  Situazione di equilibrio   \n3 < Debt/Equity < 5  Situazione di rischio   \nDebt/Equity > 5  Situazione di grave rischio   \n \nIl valore dell'indebitamento nell'esercizio 2024 risulta equilibrato per quanto concerne il rapporto tra fonti finanziarie onerose esterne e fonti proprie ma risulta peggiorato, risp etto all'esercizio \nprecedente, di 2,43 attestandosi ad un valore pari a 2,82   \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n49 \nAltri indici di solidità  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nBanche su Circolante  16.713,0  201.915,7  170.588,8  141.090,1  109.143,0  74.544,2  37.073,9  0,1 0,0 \nBanche a breve su Circolante  0,0 0,0 0,2 0,1 0,1 0,1 0,1 0,1 0,0 \nRapporto di indebitamento  52,1%  83,9%  82,8%  79,2%  75,2%  71,1%  65,3%  59,3%  53,4%  \nRotazione circolante  6,1 3,0 3,2 3,4 3,1 2,8 2,8 2,7 2,6 \nRotazione magazzino  32,6  19,9  18,6  16,2  13,0  10,7  9,1 8,0 7,2 \nIndice di Capitalizzazione Pn/Pfn  255,3%  35,4%  64,7%  182,1%  NO DEBT  NO DEBT  NO DEBT  NO DEBT  NO DEBT  \nTasso di intensità Attivo Circolante  16,5%  33,9%  31,1%  29,3%  32,0%  35,3%  36,1%  36,9%  38,0%  \n \n \n  \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n50 \nIndici di Copertura finanziaria  \n \nEbit/Of  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nRisultato operativo / Oneri finanziari  44,2  12,7  2,2 3,3 4,7 6,1 8,8 15,1  49,1  \nL'indice indica il grado di copertura che il risultato operativo riesce a fornire al costo degli oneri finanziari   \nChiave di lettura  Significato   \nEbit/Of < 1  Grave tensione finanziaria  \n1 < Ebit/Of < 1,7  Tensione finanziaria  \n1,7 < Ebit/Of < 3  Situazione buona ma da monitorare  \nEbit/Of > 3  Situazione buona  \n \nL'indice denota nell'esercizio 2024 una situazione di equilibrio finanziario, il reddito generato dalla gestione caratteristi ca è sufficiente a remunerare il capitale acquisito per produrlo ma risulta \npeggiorato, rispetto all'esercizio precedente, di 31,52 attestandosi ad un valore pari a 12,68  \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n51 \nMol/Pfn  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nMargine operativo lordo / Posizione \nfinanziaria netta  26,8%  18,5%  41,2%  112,8%  NO DEBT  NO DEBT  NO DEBT  NO DEBT  NO DEBT  \nL'indice indica la quota dei debiti finanziari rimborsabile con le risorse prodotte dalla gestione caratteristica misurata da l Margine operativo lordo   \nChiave di lettura  Significato   \nMol/Pfn < 20%  Situazione rischiosa   \n20% < Mol/Pfn < 33%  Situazione nella norma ma migliorabile   \nMol/Pfn > 33%  Situazione ottima   \n \nL'indice denota nell'esercizio 2024 una situazione finanziaria molto squilibrata in quanto le risorse prodotte dalla gestione caratteristica rappresentata dal Margine operativo lordo non risultano \nsufficienti a coprire la quota dei debiti finanziari da rimborsare ma risulta peggiorato, rispetto all'esercizio precedente, di 8,30% attestand osi ad un valore pari a 18,49%   \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n52 \nFcgc/Of  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nFlusso di cassa della gestione corrente \n/  Oneri finanziari  -602,90  18,15  4,18  4,73  6,05  6,82  5,25  8,92  28,68  \nL'indice indica la capacità dell'impresa di generare risorse finanziarie, rappresentate dal Flusso di cassa della gestione corrente, necessarie per rimbo rsare la spesa per gli oneri finanziari   \nChiave di lettura  Significato   \nFcgc/Of < 2  Situazione rischiosa   \n2 < Fcgc/Of < 3  Situazione nella norma ma migliorabile   \nFcgc/Of > 3  Situazione ottima   \n  \nL'impresa nell'esercizio 2024 è in grado di generare risorse liquide più che soddisfacenti, rappresentate dal Flusso di cassa  della gestione corrente, necessarie a rimborsare gli oneri finanziari sul capitale \npreso a prestito ed è migliorato, rispetto all'esercizio precedente, di 621,06 attestandosi ad un valore pari a 18,15   \n \n \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n53 \nPfn/Mol  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nPosizione finanziaria netta / Margine \noperativo lordo  3,7 5,4 2,4 0,9 NO DEBT  NO DEBT  NO DEBT  NO DEBT  NO DEBT  \nL'indice è molto utilizzato per valutare il grado di rischio finanziario dell'azienda   \nChiave di lettura  Significato   \nPfn/Mol > 5  Situazione molto rischiosa   \n3 < Pfn/Mol < 5  Situazione rischiosa e da migliorare   \nPfn/Mol < 3  Situazione ottima   \n \nIl rapporto Pfn/Mol nell'esercizio 2024 risulta squilibrato determinando un rischio finanziario elevato e per tale motivo nec essita di interventi immediati e risulta peggiorato, rispetto all'esercizio \nprecedente, di 1,68 attestandosi ad un valore pari a 5,41   \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n54 \nPfn/Ricavi  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nPosizione finanziaria netta / Ricavi  3,1%  31,6%  14,2%  5,2%  -0,9%  -5,7%  -8,0%  -10,3%  -12,7%  \nL'indice è molto utilizzato per valutare il grado di rischio finanziario dell'azienda in base al rapporto tra il debito finan ziario e la capacità di generare ricavi   \nChiave di lettura  Significato   \nPfn/Ricavi > 50%  Situazione molto rischiosa   \n30 % < Pfn/Ricavi < 50%  Situazione rischiosa e da migliorare   \nPfn/Ricavi < 30%  Situazione ottima   \n \nIl rapporto Pfn/Ricavi nell'esercizio 2024 risulta squilibrato e può determinare un rischio finanziario e risulta peggiorato, rispetto all'esercizio precedente, di 28,52% attestandosi ad un valore pari a \n31,61%   \n \n \n \n \n \n  \n\n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n55 \nAltri indici di Copertura \nfinanziaria  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nOneri finanziari su Fatturato  0,0%  0,4%  2,0%  1,4%  1,1%  0,8%  0,6%  0,3%  0,1%  \nOneri finanziari su Ebitda  2,0%  7,2%  34,5%  24,7%  18,0%  13,8%  9,7%  5,7%  1,8%  \nEbit/Fatturato  0,7%  5,3%  4,5%  4,8%  4,9%  5,0%  5,0%  5,0%  5,1%  \nMol/Of  49,2  13,9  2,9 4,1 5,5 7,2 10,3  17,5  56,6  \nMol su Fatturato  0,01  0,06  0,06  0,06  0,06  0,06  0,06  0,06  0,06  \n \nAltri Indici di Redditività  2023  2024E  2025E  2026E  2027E  2028E  2029E  2030E  2031E  \nNopat  4.022  21.433  27.102  37.655  42.228  44.743  47.384  50.157  53.069  \nROA  4,5%  7,7%  8,4%  10,6%  10,7%  10,4%  10,7%  10,9%  11,0%  \nROIC  0,09  0,34  0,35  0,37  0,31  0,26  0,22  0,19  0,17  \n \n  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n56 \nNote Metodologiche  \nIndici  \nROE  Utile esercizio/Patrimonio netto  \nROI Ebit/Fonti di finanziamento (SP gestionale)  \nLEVERAGE  Capitale investito netto/Patrimonio netto  \nNOPAT  Ebit - Imposte figurative  \nROA  Ebit/ Totale attivo  \nROIC  Nopat/Patrimonio netto  \nROS  Ebit/Ricavi delle vendite e delle prestazioni  \nROT  Ricavi delle vendite e delle prestazioni/Capitale investito netto (SP gestionale)  \nMARGINE DI STRUTTURA  Patrimonio netto – Totale attivo a lungo  \nMARGINE DI TESORERIA  Totale attivo a breve – Disponibilità – Totale debiti a breve  \nQUICK RATIO  (Attività a breve  - Disponibilità)/Passività a breve  \nCURRENT RATIO  Attività a breve / Passività a breve  \nCAPITALE CIRCOLANTE NETTO  Totale attivo a breve – Totale debiti a breve  \nPFN/MOL  Posizione finanziaria netta/Margine operativo lordo  \nDEBT/EQUITY  Posizione finanziaria netta/Patrimonio netto  \nINDIPENDENZA FINANZIARIA  Patrimonio netto/Totale attivo  \nEBIT/OF  Ebit/Oneri finanziari lordi  \nMOL/PFN  Margine operativo lordo/Posizione finanziaria netta  \nFCGC/OF  Flusso di cassa della gestione corrente/Oneri finanziari lordi  \nPFN/RICAVI  Posizione finanziaria netta/ Ricavi delle vendite e delle prestazioni  \nGG CREDITO AI CLIENTI  (Crediti commerciali)/(Ricavi delle vendite *(1+Aliquota Iva)/360)  \nGG CREDITO DAI FORNITORI  (Debiti commerciali)/(Acquisti di merci + Acquisti di servizi + Godimento beni di terzi + Oneri diversi \ndi gestione *(1+Aliquota Iva)/360)  \nGIORNI DI SCORTA  Magazzino/ Ricavi delle vendite e delle prestazioni  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n57 \nDURATA SCORTA  Magazzino/ Acquisti di merci  \n \n \nNota  \nSegnaliamo, qui di seguito, le differenze con alcuni indici utilizzati dal CERVED.  \nROI  risultato operativo caratteristico / totale attivo  \nGiorni di Credito ai Clienti  360 * CREDITI VS CLIENTI / RICAVI  \nGiorni di Credito dai Fornitori   360 * [ FORNITORI / ( ACQUISTI + SERVIZI + SPESE PER GODIMENTO BENI DI TERZI ) ]  \nPer tale motivo possono verificarsi delle differenze nel calcolo di tali indici.  \n \nStato Patrimoniale Liquidità  \nImmobilizzi commerciali  \nII) Crediti:  \n   1) verso clienti  \n                - oltre 12 mesi  \n   2) verso imprese controllate  \n                - oltre 12 mesi commerciali  \n   3) verso imprese collegate  \n                - oltre 12 mesi commerciali  \n   4) verso controllanti  \n               - oltre 12 mesi commerciali  \n   4-bis) crediti tributari  \n              - oltre 12 mesi  \n   4-ter) imposte anticipate  \n              - oltre 12 mesi  \n   5) verso altri  \n              - oltre 12 mesi  \n \nAltri crediti a breve  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n58 \n \n   4-bis) crediti tributari  \n        - entro 12 mesi  \n   4-ter) imposte anticipate  \n        - entro 12 mesi  \n   5) verso altri  \n        - entro 12 mesi  \nA) CRED. VERSO SOCI PER VERS. ANCORA DOVUTI  \n \nAttività finanziarie a breve termine  \n \nIII) Attività finanziarie non immobilizzate:  \n   1) partecipazioni in imprese controllate  \n   2) partecipazioni in imprese collegate  \n   3) partecipazioni in imprese controllanti  \n   4) altre partecipazioni  \n   5) azioni proprie  \n   6) altri titoli  \n \nAltri debiti a lungo termine  \n \n12) Debiti tributari  \n        - oltre 12 mesi  \n13) Debiti verso istituti di previdenza e di sicurezza sociale  \n        - entro 12 mesi  \n        - oltre 12 mesi  \n14) Altri debiti  \n        - entro 12 mesi  \n        - oltre 12 mesi  \n \nAltri debiti a breve termine  \n12) Debiti tributari  \n        - entro 12 mesi  \n13) Debiti verso istituti di previdenza e di sicurezza sociale  \n        - entro 12 mesi  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n59 \n14) Altri debiti  \n        - entro 12 mesi  \nE) RATEI E RISCONTI  \n \nStato Patrimoniale Gestionale  \nImmobilizzazioni materiali  \nII) Immobilizzazioni materiali:  \n   1) Terreni e fabbricati  \n   2) Impianti e macchinario  \n   3) Attrezzature industriali e commerciali  \n   4) Altri beni  \n   5) Immobilizzazioni in corso e acconti  \nII) Crediti:  \n   1) verso clienti  \n         - oltre 12 mesi  \n   2) verso imprese controllate  \n        - oltre 12 mesi commerciali  \n   3) verso imprese collegate  \n        - oltre 12 mesi commerciali  \n   4) verso controllanti  \n        - oltre 12 mesi commerciali  \n   4-bis) crediti tributari  \n        - oltre 12 mesi  \n   4-ter) imposte anticipate  \n         - oltre 12 mesi  \n   5) verso altri  \n         - oltre 12 mesi  \n \nCrediti netti v/clienti  \n \nII) Crediti:  \n   1) verso clienti  \n        - entro 12 mesi  \n   2) verso imprese controllate  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n60 \n        - entro 12 mesi commerciali  \n   3) verso imprese collegate  \n        - entro 12 mesi commerciali  \n   4) verso controllanti  \n        - entro 12 mesi commerciali  \n \nAltri crediti operativi  \n \n   4-bis) crediti tributari  \n        - entro 12 mesi  \n   4-ter) imposte anticipate  \n        - entro 12 mesi  \n   5) verso altri  \n        - entro 12 mesi  \nA) CRED. VERSO SOCI PER VERS. ANCORA DOVUTI  \n \nDebiti v/fornitori  \n7)  Debiti verso fornitori  \n        - entro 12 mesi  \n \nAltri debiti operativi  \n \n6)  Acconti  \n        - entro 12 mesi  \n12) Debiti tributari  \n        - entro 12 mesi  \n13) Debiti verso istituti di previdenza e di sicurezza sociale  \n        - entro 12 mesi  \n14) Altri debiti  \n        - entro 12 mesi  \n \nPassività operative non correnti  \n \n6)  Acconti  \n        - oltre 12 mesi  \n \n \nPRIMAGEST SERVIZI  \nSOCIETA’ A RESPONABILITA’ LIMITATA  \n61 \n7)  Debiti verso fornitori  \n        - oltre 12 mesi  \n9)  Debiti verso imprese controllate  \n        - oltre 12 mesi commerciali  \n10)  Debiti verso imprese collegate  \n         - oltre 12 mesi commerciali  \n11) Debiti verso controllanti  \n         - oltre 12 mesi commerciali  \n12) Debiti tributari  \n         - oltre 12 mesi  \n13) Debiti verso istituti di previdenza e di sicurezza sociale  \n         - oltre 12 mesi  \n14) Altri debiti  \n         - oltre 12 mesi  \n \nIl business plan tiene conto:  \nModifiche al regime fiscale delle perdite d’impresa in ambito IRES  \nD.l. n. 98/2011 - convertito in legge n. 111/2011 che sostituisce integralmente i commi 1 e 2 dell’art. 84 TUIR  \nModifiche alla deducibilità degli interessi passivi soggetti IRES  \nLegge finanziaria 2008 art. 1 comma 33 che modifica l’art. 96 del TUIR  \nNuovo regime Iva per cassa (c.d. “cash accounting”)  \nIntrodotto dall‘articolo 32 -bis del Dl 83/2012  \n ",
+                        "page_count": 63,
+                        "metadata": {
+                            "/Author": "Antonio Barone",
+                            "/Creator": "Microsoft® Word LTSC",
+                            "/CreationDate": "D:20241004154601+02'00'",
+                            "/ModDate": "D:20241004154601+02'00'",
+                            "/Producer": "Microsoft® Word LTSC"
+                        },
+                        "financial_data": {
+                            "total_assets": 89000,
+                            "total_revenue": 541000,
+                            "net_income": 4000,
+                            "total_liabilities": 89000,
+                            "equity": 43000,
+                            "year": 2023,
+                            "currency": "EUR"
+                        },
+                        "document_type": "balance_sheet"
+                    }
+                ],
+                "user_input": [
+                    {
+                        "question": "What is TechInnovate Solutions' primary focus?",
+                        "answer": "TechInnovate Solutions primarily focuses on developing bespoke AI-driven software for small to medium-sized enterprises (SMEs)."
+                    },
+                    {
+                        "question": "What is \"InsightFlow\" and what does it do?",
+                        "answer": "\"InsightFlow\" is TechInnovate's flagship product. It's designed to streamline data analytics and automate report generation."
+                    },
+                    {
+                        "question": "What are TechInnovate's key selling points?",
+                        "answer": "Their key selling points include user-friendly interfaces, scalable solutions, personalized customer support, and a commitment to continuous innovation."
+                    }
+                ],
+                "user_id": "desk"
+            },
+            "status": "INCOMPLETED",
+            "createdAt": "2025-08-13T03:36:42.785Z",
+            "updatedAt": "2025-08-13T03:36:42.785Z"
+        }
+    }
+}

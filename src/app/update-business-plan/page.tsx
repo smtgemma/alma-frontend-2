@@ -19,6 +19,7 @@ const UpdateBusinessPlanPage = () => {
   } = useAdminGetSingleBusinessPlanQuery(planId || "", {
     skip: !planId,
   });
+  console.log("Business Plan", businessPlan);
 
   const [updateBusinessPlan, { isLoading: isUpdating }] =
     useAdminUpdateBusinessPlanMutation();
@@ -31,11 +32,12 @@ const UpdateBusinessPlanPage = () => {
     businessModel: "",
     marketingSalesStrategy: "",
     sectorStrategy: "",
-    fundingSources: "",
+    fundingSources: {} as any,
     operationsPlan: "",
     managementTeam: "",
     financialHighlights: [] as any[],
-    cashFlowAnalysis: [] as any[],
+    // cashFlowAnalysis: [] as any[],
+    cashFlowAnalysis: "",
     profitLossProjection: [] as any[],
     balanceSheet: [] as any[],
     netFinancialPosition: [] as any[],
@@ -45,6 +47,18 @@ const UpdateBusinessPlanPage = () => {
     financialAnalysis: [] as any[],
     ratiosAnalysis: [] as any[],
     productionSalesForecast: [] as any[],
+    // Analysis fields
+    financialHighlightsAnalysis: "",
+    cashFlowAnalysisAnalysis: [] as any[],
+    profitLossProjectionAnalysis: "",
+    balanceSheetAnalysis: "",
+    netFinancialPositionAnalysis: "",
+    debtStructureAnalysis: "",
+    keyRatiosAnalysis: "",
+    ratiosAnalysisAnalysis: "",
+    financialAnalysisAnalysis: "",
+    productionSalesForecastAnalysis: "",
+    kpiAnalysis: {} as any,
     user_input: {
       uploaded_file: [] as any[],
       user_input: [] as any[],
@@ -54,6 +68,9 @@ const UpdateBusinessPlanPage = () => {
   // Initialize form data when business plan data is loaded
   useEffect(() => {
     if (businessPlan?.data) {
+      console.log("Business plan data received:", businessPlan.data);
+      console.log("Business plan data keys:", Object.keys(businessPlan.data));
+
       setFormData({
         executiveSummary: businessPlan.data.executiveSummary || "",
         businessOverview: businessPlan.data.businessOverview || "",
@@ -61,11 +78,11 @@ const UpdateBusinessPlanPage = () => {
         businessModel: businessPlan.data.businessModel || "",
         marketingSalesStrategy: businessPlan.data.marketingSalesStrategy || "",
         sectorStrategy: businessPlan.data.sectorStrategy || "",
-        fundingSources: businessPlan.data.fundingSources || "",
+        fundingSources: businessPlan.data.fundingSources || {},
         operationsPlan: businessPlan.data.operationsPlan || "",
         managementTeam: businessPlan.data.managementTeam || "",
         financialHighlights: businessPlan.data.financialHighlights || [],
-        cashFlowAnalysis: businessPlan.data.cashFlowAnalysis || [],
+        cashFlowAnalysis: businessPlan.data.cashFlowAnalysis || "",
         profitLossProjection: businessPlan.data.profitLossProjection || [],
         balanceSheet: businessPlan.data.balanceSheet || [],
         netFinancialPosition: businessPlan.data.netFinancialPosition || [],
@@ -74,7 +91,25 @@ const UpdateBusinessPlanPage = () => {
         operatingCostBreakdown: businessPlan.data.operatingCostBreakdown || [],
         financialAnalysis: businessPlan.data.financialAnalysis || [],
         ratiosAnalysis: businessPlan.data.ratiosAnalysis || [],
-        productionSalesForecast: businessPlan.data.productionSalesForecast || [],
+        productionSalesForecast:
+          businessPlan.data.productionSalesForecast || [],
+        // Analysis fields
+        financialHighlightsAnalysis:
+          businessPlan.data.financialHighlightsAnalysis || "",
+        cashFlowAnalysisAnalysis: businessPlan.data.cashFlowAnalysisData || [],
+        profitLossProjectionAnalysis:
+          businessPlan.data.profitLossProjectionAnalysis || "",
+        balanceSheetAnalysis: businessPlan.data.balanceSheetAnalysis || "",
+        netFinancialPositionAnalysis:
+          businessPlan.data.netFinancialPositionAnalysis || "",
+        debtStructureAnalysis: businessPlan.data.debtStructureAnalysis || "",
+        keyRatiosAnalysis: businessPlan.data.keyRatiosAnalysis || "",
+        ratiosAnalysisAnalysis: businessPlan.data.ratiosAnalysisAnalysis || "",
+        financialAnalysisAnalysis:
+          businessPlan.data.financialAnalysisAnalysis || "",
+        productionSalesForecastAnalysis:
+          businessPlan.data.productionSalesForecastAnalysis || "",
+        kpiAnalysis: businessPlan.data.kpiAnalysis || {},
         user_input: {
           uploaded_file: businessPlan.data.user_input?.uploaded_file || [],
           user_input: businessPlan.data.user_input?.user_input || [],
@@ -147,44 +182,85 @@ const UpdateBusinessPlanPage = () => {
     if (!planId) return;
 
     try {
+      // Log the form data before sending
+      console.log("Form data to be sent:", formData);
+      console.log("Plan ID:", planId);
+
       // Send all fields that backend supports for update
       // Based on backend code: text fields, financial arrays, and other fields
       const updateData = {
         // Text fields
-        executiveSummary: formData.executiveSummary,
-        businessOverview: formData.businessOverview,
-        marketAnalysis: formData.marketAnalysis,
-        businessModel: formData.businessModel,
-        marketingSalesStrategy: formData.marketingSalesStrategy,
-        sectorStrategy: formData.sectorStrategy,
-        fundingSources: formData.fundingSources,
-        operationsPlan: formData.operationsPlan,
-        managementTeam: formData.managementTeam,
+        executiveSummary: formData.executiveSummary || "",
+        businessOverview: formData.businessOverview || "",
+        marketAnalysis: formData.marketAnalysis || "",
+        businessModel: formData.businessModel || "",
+        marketingSalesStrategy: formData.marketingSalesStrategy || "",
+        sectorStrategy: formData.sectorStrategy || "",
+        fundingSources: JSON.stringify(formData.fundingSources || {}),
+        operationsPlan: formData.operationsPlan || "",
+        managementTeam: formData.managementTeam || "",
 
         // Financial arrays (JSON fields)
-        financialHighlights: formData.financialHighlights,
-        cashFlowAnalysis: formData.cashFlowAnalysis,
-        profitLossProjection: formData.profitLossProjection,
-        balanceSheet: formData.balanceSheet,
-        netFinancialPosition: formData.netFinancialPosition,
-        debtStructure: formData.debtStructure,
-        keyRatios: formData.keyRatios,
-        operatingCostBreakdown: formData.operatingCostBreakdown,
-        financialAnalysis: formData.financialAnalysis,
-        ratiosAnalysis: formData.ratiosAnalysis,
-        productionSalesForecast: formData.productionSalesForecast,
+        financialHighlights: JSON.stringify(formData.financialHighlights || []),
+        cashFlowAnalysis: JSON.stringify(formData.cashFlowAnalysis || []),
+        // cashFlowAnalysis: formData.cashFlowAnalysis,
+        profitLossProjection: JSON.stringify(
+          formData.profitLossProjection || []
+        ),
+        balanceSheet: JSON.stringify(formData.balanceSheet || []),
+        netFinancialPosition: JSON.stringify(
+          formData.netFinancialPosition || []
+        ),
+        debtStructure: JSON.stringify(formData.debtStructure || []),
+        keyRatios: JSON.stringify(formData.keyRatios || []),
+        operatingCostBreakdown: JSON.stringify(
+          formData.operatingCostBreakdown || []
+        ),
+        financialAnalysis: JSON.stringify(formData.financialAnalysis || []),
+        ratiosAnalysis: JSON.stringify(formData.ratiosAnalysis || []),
+        productionSalesForecast: JSON.stringify(
+          formData.productionSalesForecast || []
+        ),
+
+        // Analysis fields
+        financialHighlightsAnalysis: formData.financialHighlightsAnalysis || "",
+        cashFlowAnalysisAnalysis: JSON.stringify(
+          formData.cashFlowAnalysisAnalysis || []
+        ),
+        profitLossProjectionAnalysis:
+          formData.profitLossProjectionAnalysis || "",
+        balanceSheetAnalysis: formData.balanceSheetAnalysis || "",
+        netFinancialPositionAnalysis:
+          formData.netFinancialPositionAnalysis || "",
+        debtStructureAnalysis: formData.debtStructureAnalysis || "",
+        keyRatiosAnalysis: formData.keyRatiosAnalysis || "",
+        ratiosAnalysisAnalysis: formData.ratiosAnalysisAnalysis || "",
+        financialAnalysisAnalysis: formData.financialAnalysisAnalysis || "",
+        productionSalesForecastAnalysis:
+          formData.productionSalesForecastAnalysis || "",
+        kpiAnalysis: JSON.stringify(formData.kpiAnalysis || {}),
 
         // Other fields
-        user_input: formData.user_input,
+        user_input: JSON.stringify(
+          formData.user_input || {
+            uploaded_file: [],
+            user_input: [],
+          }
+        ),
         // Note: status and subscriptionType are not included in formData
         // as they are not displayed in the form
       };
 
-      await updateBusinessPlan({
+      console.log("Update data being sent:", updateData);
+
+      console.log("Full update data:", updateData);
+
+      const result = await updateBusinessPlan({
         id: planId,
         data: updateData,
       }).unwrap();
 
+      console.log("Update successful:", result);
       showToast("Business plan updated successfully!", "success");
 
       // Navigate back to the previous page after a short delay
@@ -193,7 +269,28 @@ const UpdateBusinessPlanPage = () => {
       }, 1500);
     } catch (error) {
       console.error("Update failed:", error);
-      showToast("Failed to update business plan. Please try again.", "error");
+      console.error("Error details:", JSON.stringify(error, null, 2));
+
+      // Extract more detailed error information
+      let errorMessage = "Failed to update business plan. Please try again.";
+      if (error && typeof error === "object") {
+        if ("data" in error && error.data) {
+          console.error("Error data:", error.data);
+          if (
+            typeof error.data === "object" &&
+            error.data &&
+            "message" in error.data
+          ) {
+            errorMessage = String((error.data as any).message);
+          } else if (typeof error.data === "string") {
+            errorMessage = error.data;
+          }
+        } else if ("message" in error) {
+          errorMessage = String((error as any).message);
+        }
+      }
+
+      showToast(errorMessage, "error");
     }
   };
 
@@ -446,7 +543,7 @@ const UpdateBusinessPlanPage = () => {
               </div>
 
               {/* Sector Strategy */}
-              <div>
+              {/* <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3">
                   Sector Strategy
                 </label>
@@ -459,26 +556,36 @@ const UpdateBusinessPlanPage = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter sector strategy"
                 />
-              </div>
+              </div> */}
 
               {/* Funding Sources */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3">
                   Funding Sources
                 </label>
-                <textarea
-                  value={formData.fundingSources}
-                  onChange={(e) =>
-                    handleInputChange("fundingSources", e.target.value)
-                  }
-                  rows={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter funding sources"
-                />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      From Home (Amount)
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.fundingSources?.fromHome || ""}
+                      onChange={(e) =>
+                        handleInputChange("fundingSources", {
+                          ...formData.fundingSources,
+                          fromHome: parseFloat(e.target.value) || 0,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter funding amount from home"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Operations Plan */}
-              <div>
+              {/* <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3">
                   Operations Plan
                 </label>
@@ -491,7 +598,7 @@ const UpdateBusinessPlanPage = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter operations plan"
                 />
-              </div>
+              </div> */}
 
               {/* Management Team */}
               <div>
@@ -508,6 +615,273 @@ const UpdateBusinessPlanPage = () => {
                   placeholder="Enter management team information"
                 />
               </div>
+
+              {/* Financial Highlights Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Financial Highlights Analysis
+                </label>
+                <textarea
+                  value={formData.financialHighlightsAnalysis}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "financialHighlightsAnalysis",
+                      e.target.value
+                    )
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter financial highlights analysis"
+                />
+              </div>
+
+              {/* Cash Flow Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Cash Flow Analysis
+                </label>
+                <textarea
+                  value={formData.cashFlowAnalysis}
+                  onChange={(e) =>
+                    handleInputChange("cashFlowAnalysis", e.target.value)
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter cash flow analysis"
+                />
+              </div>
+
+              {/* Profit Loss Projection Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Profit Loss Projection Analysis
+                </label>
+                <textarea
+                  value={formData.profitLossProjectionAnalysis}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "profitLossProjectionAnalysis",
+                      e.target.value
+                    )
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter profit loss projection analysis"
+                />
+              </div>
+
+              {/* Balance Sheet Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Balance Sheet Analysis
+                </label>
+                <textarea
+                  value={formData.balanceSheetAnalysis}
+                  onChange={(e) =>
+                    handleInputChange("balanceSheetAnalysis", e.target.value)
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter balance sheet analysis"
+                />
+              </div>
+
+              {/* Net Financial Position Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Net Financial Position Analysis
+                </label>
+                <textarea
+                  value={formData.netFinancialPositionAnalysis}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "netFinancialPositionAnalysis",
+                      e.target.value
+                    )
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter net financial position analysis"
+                />
+              </div>
+
+              {/* Debt Structure Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Debt Structure Analysis
+                </label>
+                <textarea
+                  value={formData.debtStructureAnalysis}
+                  onChange={(e) =>
+                    handleInputChange("debtStructureAnalysis", e.target.value)
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter debt structure analysis"
+                />
+              </div>
+
+              {/* Key Ratios Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Key Ratios Analysis
+                </label>
+                <textarea
+                  value={formData.keyRatiosAnalysis}
+                  onChange={(e) =>
+                    handleInputChange("keyRatiosAnalysis", e.target.value)
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter key ratios analysis"
+                />
+              </div>
+
+              {/* Ratios Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Ratios Analysis
+                </label>
+                <textarea
+                  value={formData.ratiosAnalysisAnalysis}
+                  onChange={(e) =>
+                    handleInputChange("ratiosAnalysisAnalysis", e.target.value)
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter ratios analysis"
+                />
+              </div>
+
+              {/* Financial Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Financial Analysis
+                </label>
+                <textarea
+                  value={formData.financialAnalysisAnalysis}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "financialAnalysisAnalysis",
+                      e.target.value
+                    )
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter financial analysis"
+                />
+              </div>
+
+              {/* Production Sales Forecast Analysis */}
+              <div>
+                <label className="block text-xl font-semibold text-gray-800 mb-3">
+                  Production Sales Forecast Analysis
+                </label>
+                <textarea
+                  value={formData.productionSalesForecastAnalysis}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "productionSalesForecastAnalysis",
+                      e.target.value
+                    )
+                  }
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter production sales forecast analysis"
+                />
+              </div>
+
+              {/* KPI Analysis */}
+              {formData.kpiAnalysis &&
+                Object.keys(formData.kpiAnalysis).length > 0 && (
+                  <div>
+                    <label className="block text-xl font-semibold text-gray-800 mb-3">
+                      KPI Analysis
+                    </label>
+                    <div className="space-y-4">
+                      {Object.entries(formData.kpiAnalysis).map(
+                        ([year, data]: [string, any]) => (
+                          <div
+                            key={year}
+                            className="border border-gray-200 rounded-lg p-4 bg-white"
+                          >
+                            <h4 className="font-semibold text-gray-700 mb-3">
+                              Year {year}
+                            </h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                  Overall Score
+                                </label>
+                                <input
+                                  type="number"
+                                  value={data.overallScore || ""}
+                                  onChange={(e) =>
+                                    handleInputChange("kpiAnalysis", {
+                                      ...formData.kpiAnalysis,
+                                      [year]: {
+                                        ...data,
+                                        overallScore:
+                                          parseFloat(e.target.value) || 0,
+                                      },
+                                    })
+                                  }
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                  Warnings (comma separated)
+                                </label>
+                                <input
+                                  type="text"
+                                  value={data.warnings?.join(", ") || ""}
+                                  onChange={(e) =>
+                                    handleInputChange("kpiAnalysis", {
+                                      ...formData.kpiAnalysis,
+                                      [year]: {
+                                        ...data,
+                                        warnings: e.target.value
+                                          .split(",")
+                                          .map((w) => w.trim())
+                                          .filter((w) => w),
+                                      },
+                                    })
+                                  }
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="Enter warnings separated by commas"
+                                />
+                              </div>
+                              <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                  Recommendations (comma separated)
+                                </label>
+                                <input
+                                  type="text"
+                                  value={data.recommendations?.join(", ") || ""}
+                                  onChange={(e) =>
+                                    handleInputChange("kpiAnalysis", {
+                                      ...formData.kpiAnalysis,
+                                      [year]: {
+                                        ...data,
+                                        recommendations: e.target.value
+                                          .split(",")
+                                          .map((r) => r.trim())
+                                          .filter((r) => r),
+                                      },
+                                    })
+                                  }
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="Enter recommendations separated by commas"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
 
               {/* Financial Highlights */}
               {formData.financialHighlights &&
@@ -620,15 +994,15 @@ const UpdateBusinessPlanPage = () => {
                   </div>
                 )}
 
-              {/* Cash Flow Analysis */}
-              {formData.cashFlowAnalysis &&
-                formData.cashFlowAnalysis.length > 0 && (
+              {/* Cash Flow Analysis Data*/}
+              {formData.cashFlowAnalysisAnalysis &&
+                formData.cashFlowAnalysisAnalysis.length > 0 && (
                   <div>
                     <label className="block text-xl font-semibold text-gray-800 mb-3">
-                      Cash Flow Analysis
+                      Cash Flow Analysis Data
                     </label>
                     <div className="space-y-4">
-                      {formData.cashFlowAnalysis.map(
+                      {formData.cashFlowAnalysisAnalysis.map(
                         (item: any, index: number) => (
                           <div
                             key={index}
@@ -643,7 +1017,7 @@ const UpdateBusinessPlanPage = () => {
                                 value={item.year || ""}
                                 onChange={(e) =>
                                   handleArrayItemChange(
-                                    "cashFlowAnalysis",
+                                    "cashFlowAnalysisAnalysis",
                                     index,
                                     "year",
                                     parseFloat(e.target.value) || 0
@@ -661,7 +1035,7 @@ const UpdateBusinessPlanPage = () => {
                                 value={item.operating || ""}
                                 onChange={(e) =>
                                   handleArrayItemChange(
-                                    "cashFlowAnalysis",
+                                    "cashFlowAnalysisAnalysis",
                                     index,
                                     "operating",
                                     parseFloat(e.target.value) || 0
@@ -679,7 +1053,7 @@ const UpdateBusinessPlanPage = () => {
                                 value={item.investing || ""}
                                 onChange={(e) =>
                                   handleArrayItemChange(
-                                    "cashFlowAnalysis",
+                                    "cashFlowAnalysisAnalysis",
                                     index,
                                     "investing",
                                     parseFloat(e.target.value) || 0
@@ -697,7 +1071,7 @@ const UpdateBusinessPlanPage = () => {
                                 value={item.financing || ""}
                                 onChange={(e) =>
                                   handleArrayItemChange(
-                                    "cashFlowAnalysis",
+                                    "cashFlowAnalysisAnalysis",
                                     index,
                                     "financing",
                                     parseFloat(e.target.value) || 0
@@ -715,7 +1089,7 @@ const UpdateBusinessPlanPage = () => {
                                 value={item.net_cash || ""}
                                 onChange={(e) =>
                                   handleArrayItemChange(
-                                    "cashFlowAnalysis",
+                                    "cashFlowAnalysisAnalysis",
                                     index,
                                     "net_cash",
                                     parseFloat(e.target.value) || 0

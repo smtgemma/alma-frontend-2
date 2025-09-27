@@ -43,21 +43,21 @@ const ExpertReview = () => {
 
   const summaryData = [
     {
-      title: "Total Requested Review",
+      title: "Totale Revisioni Richieste",
       value: reviewStats?.data?.totalReviews || 0,
       icon: <HiOutlineUserGroup className="w-8 h-8 text-primary" />,
       bgColor: "bg-white",
       textColor: "text-blue-600",
     },
     {
-      title: "Solo Plan Requested Expert Review",
+      title: "Revisioni Esperto Piano Solo Richieste",
       value: reviewStats?.data?.soloReviews || 0,
       icon: <CgProfile className="w-8 h-8 text-primary" />,
       bgColor: "bg-white",
       textColor: "text-green-600",
     },
     {
-      title: "Team Plan Requested Expert Review",
+      title: "Revisioni Esperto Piano Team Richieste",
       value: reviewStats?.data?.teamReviews || 0,
       icon: <MdOutlineGroupAdd className="w-8 h-8 text-primary" />,
       bgColor: "bg-white",
@@ -91,7 +91,9 @@ const ExpertReview = () => {
   return (
     <div className="space-y-6 px-4 lg:px-6 py-6">
       <div className="flex flex-col space-y-2">
-        <h1 className="text-2xl font-semibold text-gray-900">Expert Review</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">
+          Revisione Esperto
+        </h1>
       </div>
 
       {/* Metrics Cards */}
@@ -116,7 +118,7 @@ const ExpertReview = () => {
       <div className="flex items-center justify-between mb-4">
         <div className="">
           <h2 className="text-xl md:text-2xl font-medium text-accent">
-            Expert Review Requests
+            Richieste di Revisione Esperto
           </h2>
         </div>
 
@@ -126,7 +128,7 @@ const ExpertReview = () => {
             <BsSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search plans..."
+              placeholder="Cerca piani..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-[41px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -141,25 +143,25 @@ const ExpertReview = () => {
             <thead className="bg-[#475466]">
               <tr>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Date & Time
+                  Data e Ora
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Plan Name
+                  Nome Piano
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  User name
+                  Nome Utente
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Profile
+                  Profilo
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Status
+                  Stato
                 </th>
                 {/* <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
                   Send Email
                 </th> */}
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  View
+                  Visualizza
                 </th>
               </tr>
             </thead>
@@ -182,7 +184,7 @@ const ExpertReview = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <Link href={`/admin/user-profile/${review.user?.id}`}>
                       <button className="px-3 cursor-pointer py-1 text-sm border border-gray-300 rounded-[41px] bg-gray-100 hover:bg-gray-200 text-gray-700">
-                        View
+                        Visualizza
                       </button>
                     </Link>
                   </td>
@@ -226,7 +228,7 @@ Best regards,
                       href={`/generated-planfor-admin/${review.plan?.id}?from=expert-review`}
                       className="text-primary underline info"
                     >
-                      View Plan
+                      Visualizza Piano
                     </Link>
                   </td>
                 </tr>
@@ -240,8 +242,8 @@ Best regards,
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-700">
-              Showing page {meta?.page} of {meta?.totalPage}, total{" "}
-              {meta?.total} reviews
+              Mostrando pagina {meta?.page} di {meta?.totalPage}, totale{" "}
+              {meta?.total} revisioni
             </span>
 
             <select
@@ -262,7 +264,7 @@ Best regards,
               disabled={currentPage === 1}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              &lt; Previous
+              &lt; Precedente
             </button>
             {Array.from({ length: totalPages }, (_, i) => {
               const pageNum = i + 1;
@@ -300,7 +302,7 @@ Best regards,
               disabled={currentPage === totalPages}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next &gt;
+              Successivo &gt;
             </button>
           </div>
         </div>

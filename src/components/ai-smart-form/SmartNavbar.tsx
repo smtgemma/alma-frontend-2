@@ -23,9 +23,7 @@ const SmartNavbar: React.FC<SmartNavbarProps> = ({ rightButtons }) => {
                 e.currentTarget.style.display = "none";
               }}
             />
-            <h3 className="text-black font-medium text-2xl">
-              Business AI Plan
-            </h3>
+            <h3 className="text-black font-medium text-2xl">Pianifico Suite</h3>
           </div>
         </Link>
 

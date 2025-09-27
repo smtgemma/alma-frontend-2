@@ -21,7 +21,11 @@ const SoloUsers = () => {
   } | null>(null);
 
   // 🔹 Call API with pagination + search params
-  const { data: soloAnalyticsData, isLoading, error } = useSoloAnalyticsQuery({
+  const {
+    data: soloAnalyticsData,
+    isLoading,
+    error,
+  } = useSoloAnalyticsQuery({
     page: currentPage,
     limit: itemsPerPage,
     search: searchTerm,
@@ -31,12 +35,12 @@ const SoloUsers = () => {
     return (
       <div className="space-y-6">
         <div className="flex flex-col space-y-2">
-          <h1 className="text-2xl font-semibold text-gray-900">Solo Users</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Utenti Solo</h1>
         </div>
         <DashboardLoading
           type="table"
-          title="Loading Solo Users"
-          message="Fetching user analytics and plan data..."
+          title="Caricamento Utenti Solo"
+          message="Recupero analisi utenti e dati dei piani..."
         />
       </div>
     );
@@ -46,12 +50,12 @@ const SoloUsers = () => {
     return (
       <div className="space-y-6">
         <div className="flex flex-col space-y-2">
-          <h1 className="text-2xl font-semibold text-gray-900">Solo Users</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Utenti Solo</h1>
         </div>
         <DashboardLoading
           type="table"
-          title="Error Loading Solo Users"
-          message="Failed to load solo users data. Please try again."
+          title="Errore nel Caricamento degli Utenti Solo"
+          message="Impossibile caricare i dati degli utenti solo. Si prega di riprovare."
         />
       </div>
     );
@@ -61,21 +65,21 @@ const SoloUsers = () => {
 
   const summaryData = [
     {
-      title: "Total Solo Plan Users",
+      title: "Totale Utenti Piano Solo",
       value: stats?.totalUsers || 0,
       icon: <HiOutlineUserGroup className="w-8 h-8 text-primary" />,
       bgColor: "bg-white",
       textColor: "text-blue-600",
     },
     {
-      title: "Total Solo Plan Generated",
+      title: "Totale Piani Solo Generati",
       value: stats?.totalPlansGenerated || 0,
       icon: <CgProfile className="w-8 h-8 text-primary" />,
       bgColor: "bg-white",
       textColor: "text-green-600",
     },
     {
-      title: "Solo Plan Total Revenue",
+      title: "Ricavi Totali Piano Solo",
       value: stats?.totalRevenue || 0,
       icon: <MdOutlineGroupAdd className="w-8 h-8 text-primary" />,
       bgColor: "bg-white",
@@ -109,7 +113,7 @@ const SoloUsers = () => {
   return (
     <div className="space-y-6 px-4 lg:px-6 py-6">
       <div className="flex flex-col space-y-2">
-        <h1 className="text-2xl font-semibold text-gray-900">Solo Users</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Utenti Solo</h1>
       </div>
 
       {/* Metrics Cards */}
@@ -134,7 +138,7 @@ const SoloUsers = () => {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-xl md:text-2xl font-medium text-accent">
-            Generated Plans
+            Piani Generati
           </h2>
         </div>
 
@@ -143,7 +147,7 @@ const SoloUsers = () => {
           <BsSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder="Search plans..."
+            placeholder="Cerca piani..."
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
@@ -160,22 +164,22 @@ const SoloUsers = () => {
             <thead className="bg-[#475466]">
               <tr>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Date & Time
+                  Data e Ora
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Plan Name
+                  Nome Piano
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  User Name
+                  Nome Utente
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Profile
+                  Profilo
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Status
+                  Stato
                 </th>
                 <th className="px-6 py-3 text-left text-sm sm:text-md md:text-[20px] font-medium text-white uppercase tracking-wider">
-                  Action
+                  Azione
                 </th>
               </tr>
             </thead>
@@ -184,7 +188,6 @@ const SoloUsers = () => {
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-base text-accent font-normal">
                     {format(new Date(user.updatedAt), "hh:mm a - MMM dd, yyyy")}
-
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-base text-accent font-normal">
                     {user.name?.slice(0, 40) + "..."}
@@ -195,18 +198,19 @@ const SoloUsers = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     <Link href={`/admin/user-profile/${user.user.id}`}>
                       <button className="px-3 cursor-pointer py-1 text-sm border border-gray-300 rounded-[41px] bg-gray-100 hover:bg-gray-200 text-gray-700">
-                        View
+                        Visualizza
                       </button>
                     </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <span
-                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${user.status == "INCOMPLETED"
-                        ? "bg-red-100 text-red-800 border-red-200"
-                        : user.status === "COMPLETED"
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${
+                        user.status == "INCOMPLETED"
+                          ? "bg-red-100 text-red-800 border-red-200"
+                          : user.status === "COMPLETED"
                           ? "bg-green-100 text-green-800 border-green-200"
                           : "bg-green-100 text-green-800 border-green-200"
-                        }`}
+                      }`}
                     >
                       {user.status}
                     </span>
@@ -216,7 +220,7 @@ const SoloUsers = () => {
                       href={`/generated-planfor-admin/${user.id}`}
                       className="text-primary underline info"
                     >
-                      View Plan
+                      Visualizza Piano
                     </Link>
                   </td>
                 </tr>
@@ -228,22 +232,20 @@ const SoloUsers = () => {
                     colSpan={6}
                     className="px-6 py-4 text-center text-gray-500"
                   >
-                    No plans found
+                    Nessun piano trovato
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
-
-
       </div>
       {/* Pagination */}
       <div className="pb-8">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-700">
-              Showing {plans.length} of {pagination?.total || 0}
+              Mostrando {plans.length} di {pagination?.total || 0}
             </span>
             <select
               value={itemsPerPage}
@@ -266,7 +268,7 @@ const SoloUsers = () => {
               disabled={currentPage === 1}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              &lt; Previous
+              &lt; Precedente
             </button>
 
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -275,10 +277,11 @@ const SoloUsers = () => {
                 <button
                   key={pageNum}
                   onClick={() => setCurrentPage(pageNum)}
-                  className={`px-3 py-1 text-sm rounded ${currentPage === pageNum
-                    ? "bg-primary text-white"
-                    : "border border-gray-300 hover:bg-gray-50"
-                    }`}
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === pageNum
+                      ? "bg-primary text-white"
+                      : "border border-gray-300 hover:bg-gray-50"
+                  }`}
                 >
                   {pageNum}
                 </button>
@@ -304,7 +307,7 @@ const SoloUsers = () => {
               disabled={currentPage === totalPages}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next &gt;
+              Successivo &gt;
             </button>
           </div>
         </div>

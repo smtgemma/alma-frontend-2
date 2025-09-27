@@ -1,4 +1,4 @@
-// src/features/api/baseApi.js
+// src/redux/api/baseApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type {
   BaseQueryFn,

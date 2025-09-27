@@ -102,7 +102,8 @@ const GeneratedPlanForAdminPage = () => {
     balanceSheet = [],
     businessModel = "",
     businessOverview = "",
-    cashFlowAnalysis = [],
+    cashFlowAnalysisData = [],
+    cashFlowAnalysis = "",
     createdAt = "",
     debtStructure = [],
     executiveSummary = "",
@@ -127,6 +128,9 @@ const GeneratedPlanForAdminPage = () => {
     userId = "",
   } = planInfo?.data || {}; // default to empty object if `data` is undefined
 
+  // Map cashFlowAnalysisData to cashFlowAnalysis for compatibility
+  const cashFlowAnalysisArray = cashFlowAnalysisData || [];
+
   // Render loading state
   if (isLoading) {
     return (
@@ -136,7 +140,7 @@ const GeneratedPlanForAdminPage = () => {
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading business plan...</p>
+              <p className="text-gray-600">Caricamento piano aziendale...</p>
             </div>
           </div>
         </div>
@@ -153,16 +157,16 @@ const GeneratedPlanForAdminPage = () => {
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <h2 className="text-xl font-semibold text-red-600 mb-2">
-                Error Loading Plan
+                Errore nel Caricamento del Piano
               </h2>
               <p className="text-gray-600 mb-4">
-                Failed to load business plan data. Please try again.
+                Impossibile caricare i dati del piano aziendale. Riprova.
               </p>
               <button
                 onClick={() => window.history.back()}
                 className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
               >
-                Go Back
+                Torna Indietro
               </button>
             </div>
           </div>
@@ -185,10 +189,12 @@ const GeneratedPlanForAdminPage = () => {
               {/* Subtitle and Note */}
               <div className="mt-4 sm:mt-6">
                 <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2">
-                  Generated web version only for admin to view
+                  Versione web generata solo per la visualizzazione
+                  dell'amministratore
                 </h2>
                 <p className="text-red-600 text-sm font-medium">
-                  *The users will only be able to view it after your approval*
+                  *Gli utenti potranno visualizzarlo solo dopo la tua
+                  approvazione*
                 </p>
               </div>
 
@@ -196,7 +202,7 @@ const GeneratedPlanForAdminPage = () => {
               <div className="flex flex-col items-start space-x-4 space-y-2 mt-4 ">
                 <div>
                   <span className="text-xl font-medium text-primary-text">
-                    Time Left
+                    Tempo Rimanente
                   </span>
                 </div>
                 <div className="flex space-x-2">
@@ -207,7 +213,7 @@ const GeneratedPlanForAdminPage = () => {
                       </span>
                     </div>
                     <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
-                      Days
+                      Giorni
                     </span>
                   </div>
                   <div className="flex items-center">
@@ -217,7 +223,7 @@ const GeneratedPlanForAdminPage = () => {
                       </span>
                     </div>
                     <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
-                      Hours
+                      Ore
                     </span>
                   </div>
                   <div className="flex items-center">
@@ -227,7 +233,7 @@ const GeneratedPlanForAdminPage = () => {
                       </span>
                     </div>
                     <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
-                      Minutes
+                      Minuti
                     </span>
                   </div>
                   <div className="flex items-center">
@@ -237,7 +243,7 @@ const GeneratedPlanForAdminPage = () => {
                       </span>
                     </div>
                     <span className="text-xs md:text-sm font-medium text-gray-600 ml-2">
-                      Seconds
+                      Secondi
                     </span>
                     {/* Will delete this later */}
                   </div>
@@ -255,13 +261,15 @@ const GeneratedPlanForAdminPage = () => {
           sectorStrategy={sectorStrategy}
           fundingSources={fundingSources}
           operationsPlan={operationsPlan}
+          managementTeam={managementTeam}
           planId={planId}
           onPlanUpdate={(updatedData) => {
             // Handle plan update if needed
             console.log("Plan updated:", updatedData);
           }}
           financialHighlights={financialHighlights}
-          cashFlowAnalysis={cashFlowAnalysis}
+          cashFlowAnalysis={cashFlowAnalysisArray}
+          cashFlowAnalysisText={cashFlowAnalysis}
           profitLossProjection={profitLossProjection}
           balanceSheet={balanceSheet}
           netFinancialPosition={netFinancialPosition}
@@ -269,10 +277,13 @@ const GeneratedPlanForAdminPage = () => {
           keyRatios={keyRatios}
           operatingCostBreakdown={operatingCostBreakdown}
         />
-        <FinancialDashboard
-          financialHighlights={financialHighlights}
-          businessModel={businessModel}
-          cashFlowAnalysis={cashFlowAnalysis}
+        <ProductionSalesForecast
+          productionSalesForecast={productionSalesForecast}
+        />
+        <OperationsDashboard
+          operationsPlan={operationsPlan}
+          keyRatios={keyRatios}
+          operatingCostBreakdown={operatingCostBreakdown}
         />
         <MarketingDashboard
           marketingSalesStrategy={marketingSalesStrategy}
@@ -283,29 +294,19 @@ const GeneratedPlanForAdminPage = () => {
           balanceSheet={balanceSheet}
           netFinancialPosition={netFinancialPosition}
         />
-        <DebtDashboard
-          debtStructure={debtStructure}
-          fundingSources={fundingSources}
+        <DebtDashboard debtStructure={debtStructure} />
+        <FinancialAnalysis financialAnalysis={financialAnalysis} />
+        <FinancialDashboard
+          financialHighlights={financialHighlights}
+          cashFlowAnalysis={cashFlowAnalysisArray}
+          cashFlowAnalysisText={cashFlowAnalysis}
         />
-        <OperationsDashboard
-          operationsPlan={operationsPlan}
-          keyRatios={keyRatios}
-          operatingCostBreakdown={operatingCostBreakdown}
-        />
-        <FinancialAnalysis
-          financialAnalysis={financialAnalysis}
-        />
-        <RatiosAnalysis
-          ratiosAnalysis={ratiosAnalysis}
-        />
-        <ProductionSalesForecast
-          productionSalesForecast={productionSalesForecast}
-          managementTeam={managementTeam}
-        />
+        <RatiosAnalysis ratiosAnalysis={ratiosAnalysis} />
+
         <p className="text-base font-normal text-[#B6BEC8] text-center py-10">
-          This plan document is generated and secured by [BusinessplanAI].{" "}
+          Questo documento di piano è generato e protetto da [BusinessplanAI].{" "}
           <br />
-          Unauthorized sharing or reproduction is strictly prohibited.
+          La condivisione o riproduzione non autorizzata è severamente vietata.
         </p>
       </div>
     </div>

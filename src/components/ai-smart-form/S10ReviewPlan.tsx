@@ -14,7 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import Loading from "../Others/Loading";
 import { useGetUserProfileQuery } from "@/redux/api/auth/authApi";
-
+//
 export default function S10ReviewPlan() {
   const {
     prevStep,
@@ -161,11 +161,13 @@ export default function S10ReviewPlan() {
         <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
-            Step 10 out of 10
+            Passo 10 di 10
           </p>
 
           <div className="text-center mb-8">
-            <h2 className="text-[2rem] text-accent font-medium">Review Plan</h2>
+            <h2 className="text-[2rem] text-accent font-medium">
+              Rivedi Piano
+            </h2>
           </div>
 
           {/* Form */}
@@ -190,9 +192,9 @@ export default function S10ReviewPlan() {
                 {/* Review Message */}
                 <div className="text-center">
                   <p className="text-[1rem] font-normal text-accent leading-relaxed">
-                    Note: Please review all your inputs carefully. After
-                    clicking "Generate Plan," changes will be <br /> no longer
-                    be possible.
+                    Nota: Rivedi attentamente tutti i tuoi input. Dopo aver
+                    cliccato "Genera Piano," le modifiche <br /> non saranno più
+                    possibili.
                   </p>
                 </div>
 
@@ -203,7 +205,7 @@ export default function S10ReviewPlan() {
                     onClick={prevStep}
                     className="w-full  px-8 py-3 cursor-pointer bg-white border border-[#888888] text-accent text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Back
+                    Indietro
                   </button>
                   {(() => {
                     console.log("=== BUTTON RENDER DEBUG ===");
@@ -234,7 +236,7 @@ export default function S10ReviewPlan() {
                           disabled
                           className="w-full px-8 py-3 cursor-not-allowed bg-gray-300 text-gray-500 text-[1rem] font-semibold rounded-lg"
                         >
-                          Loading...
+                          Caricamento...
                         </button>
                       );
                     }
@@ -247,8 +249,8 @@ export default function S10ReviewPlan() {
                         className="w-full px-8 py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {isGeneratingPlan || isBusinessGenerating
-                          ? "Generating Plan..."
-                          : "Generate Plan"}
+                          ? "Generazione Piano..."
+                          : "Genera Piano"}
                       </button>
                     ) : (
                       <button
@@ -256,7 +258,7 @@ export default function S10ReviewPlan() {
                         onClick={handleSubscriptionPlan}
                         className="w-full px-8 py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Generate Plan
+                        Genera Piano
                       </button>
                     );
                   })()}

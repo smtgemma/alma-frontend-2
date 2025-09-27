@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
-
+//
 interface BusinessGoalVisionForm {
   businessGoals: string;
   businessGoalsDescription: string;
@@ -405,12 +405,12 @@ export default function S4BusinessGoalVision() {
         <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
-            Step 04 out of 10
+            Passo 04 di 10
           </p>
 
           <div className="text-center mb-8">
             <h2 className="text-[2rem] text-accent font-medium">
-              Business Goals & Vision
+              Obiettivi e Visione Aziendale
             </h2>
           </div>
 
@@ -436,7 +436,7 @@ export default function S4BusinessGoalVision() {
                 {/* Question 1: What is your business aiming to achieve? */}
                 <div>
                   <label className="question-text">
-                    What is your business aiming to achieve?
+                    Cosa vuole raggiungere la tua azienda?
                   </label>
                   <div className="mt-4">
                     <input
@@ -462,7 +462,7 @@ export default function S4BusinessGoalVision() {
                       onClick={() =>
                         handleTextareaClick("showBusinessGoalsOptions")
                       }
-                      placeholder="E.g. We aim to become a leader in sustainable technology..."
+                      placeholder="Es. Miriamo a diventare leader nella tecnologia sostenibile..."
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
@@ -470,7 +470,7 @@ export default function S4BusinessGoalVision() {
                     {form.selectedBusinessGoalsOptions.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedBusinessGoalsOptions.map(
@@ -505,7 +505,7 @@ export default function S4BusinessGoalVision() {
                         <div className="flex items-center p-2  rounded-lg ">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                           <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                            Loading AI suggestions...
+                            Caricamento suggerimenti AI...
                           </span>
                         </div>
                       ) : (
@@ -605,7 +605,7 @@ export default function S4BusinessGoalVision() {
                 {/* Question 2: What's your long-term vision? */}
                 <div>
                   <label className="question-text">
-                    What's your long-term vision?
+                    Qual è la tua visione a lungo termine?
                   </label>
                   <div className="mt-4">
                     <input
@@ -631,7 +631,7 @@ export default function S4BusinessGoalVision() {
                       onClick={() =>
                         handleTextareaClick("showLongTermVisionOptions")
                       }
-                      placeholder="E.g. To revolutionize the industry through innovation..."
+                      placeholder="Es. Rivoluzionare l'industria attraverso l'innovazione..."
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
@@ -639,7 +639,7 @@ export default function S4BusinessGoalVision() {
                     {form.selectedLongTermVisionOptions.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedLongTermVisionOptions.map(
@@ -674,7 +674,7 @@ export default function S4BusinessGoalVision() {
                         <div className="flex items-center p-2  rounded-lg ">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                           <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                            Loading AI suggestions...
+                            Caricamento suggerimenti AI...
                           </span>
                         </div>
                       ) : (
@@ -770,7 +770,7 @@ export default function S4BusinessGoalVision() {
                 {/* Question 3: How would you describe your mission in one line? */}
                 <div>
                   <label className="question-text">
-                    How would you describe your mission in one line?
+                    Come descriveresti la tua missione in una riga?
                   </label>
                   <div className="mt-4">
                     <input
@@ -790,7 +790,7 @@ export default function S4BusinessGoalVision() {
                         handleKeyPress(e, "customMission", "missionDescription")
                       }
                       onClick={() => handleTextareaClick("showMissionOptions")}
-                      placeholder="E.g. Empowering businesses through cutting-edge solutions..."
+                      placeholder="Es. Potenziare le aziende attraverso soluzioni all'avanguardia..."
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
@@ -798,7 +798,7 @@ export default function S4BusinessGoalVision() {
                     {form.selectedMissionOptions.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm text-gray-600 mb-2">
-                          Selected options:
+                          Opzioni selezionate:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {form.selectedMissionOptions.map((option, index) => (
@@ -831,7 +831,7 @@ export default function S4BusinessGoalVision() {
                         <div className="flex items-center p-2  rounded-lg ">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                           <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                            Loading AI suggestions...
+                            Caricamento suggerimenti AI...
                           </span>
                         </div>
                       ) : (
@@ -927,10 +927,10 @@ export default function S4BusinessGoalVision() {
                 {/* Question 4: What will be the primary operational area for this business? */}
                 <div>
                   <label className="question-text">
-                    What will be the primary operational area for this business?
+                    Quale sarà l'area operativa primaria per questa azienda?
                   </label>
                   <div className="mt-4 space-y-4">
-                    {["Local", "National", "International"].map((option) => (
+                    {["Locale", "Nazionale", "Internazionale"].map((option) => (
                       <div
                         key={option}
                         className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
@@ -957,7 +957,7 @@ export default function S4BusinessGoalVision() {
                     <div className="mt-4">
                       <input
                         type="text"
-                        placeholder="E.g, Regional – South Asia or Online-based global operations"
+                        placeholder="Es. Regionale – Asia del Sud o operazioni globali basate online"
                         className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                       />
                     </div>
@@ -971,13 +971,13 @@ export default function S4BusinessGoalVision() {
                     onClick={prevStep}
                     className="w-full py-3 cursor-pointer bg-white border border-[#888888] text-accent text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Back
+                    Indietro
                   </button>
                   <button
                     type="submit"
                     className="w-full py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Next
+                    Avanti
                   </button>
                 </div>
               </form>

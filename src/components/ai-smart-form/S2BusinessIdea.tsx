@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
-
+//
 interface BusinessIdeaForm {
   businessStage: string;
   productService: string;
@@ -270,12 +270,12 @@ export default function S2BusinessIdea() {
         <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8 ">
           {/* Step Info */}
           <p className="text-center text-[1rem] text- font-medium mb-2">
-            Step 02 out of 10
+            Passo 02 di 10
           </p>
 
           <div className="text-center mb-8">
             <h2 className="text-[2rem] text-accent font-medium ">
-              Your Business Idea
+              La Tua Idea di Business
             </h2>
           </div>
 
@@ -301,7 +301,8 @@ export default function S2BusinessIdea() {
                 {/* Question 1: Business Stage */}
                 <div>
                   <label className="question-text">
-                    What stage is your business currently in? (required)
+                    In che fase si trova attualmente la tua azienda?
+                    (obbligatorio)
                   </label>
                   {errors.businessStage && (
                     <p className="text-red-500 text-sm mt-1">
@@ -310,9 +311,9 @@ export default function S2BusinessIdea() {
                   )}
                   <div className="mt-4 space-y-4">
                     {[
-                      "Idea/Planning (Still developing the idea or preparing to launch)",
-                      "Growing (Generating revenue and expanding)",
-                      "Established (stable business with steady operations)",
+                      "Idea/Pianificazione (Stai ancora sviluppando l'idea o preparando il lancio)",
+                      "In Crescita (Generando ricavi e espandendosi)",
+                      "Stabilita (azienda stabile con operazioni costanti)",
                     ].map((option) => (
                       <div
                         key={option}
@@ -343,7 +344,7 @@ export default function S2BusinessIdea() {
                 {/* Question 2: Product or Service */}
                 <div>
                   <label className="question-text">
-                    Do you offer a product or a service? (required)
+                    Offri un prodotto o un servizio? (obbligatorio)
                   </label>
                   {errors.productService && (
                     <p className="text-red-500 text-sm mt-1">
@@ -371,7 +372,7 @@ export default function S2BusinessIdea() {
                           }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent">
-                          Product
+                          Prodotto
                         </span>
                       </div>
 
@@ -386,7 +387,7 @@ export default function S2BusinessIdea() {
                             <div className="mb-4">
                               <input
                                 type="text"
-                                placeholder="E.g. Food & Beverages, Toys & Games"
+                                placeholder="Es. Cibo e Bevande, Giocattoli e Giochi"
                                 value={form.selectedProductCategory}
                                 onChange={handleProductInputChange}
                                 onClick={() => setShowProductDropdown(true)}
@@ -413,7 +414,7 @@ export default function S2BusinessIdea() {
                                 0 && (
                                 <div className="mt-3">
                                   <div className="text-sm text-gray-600 mb-2">
-                                    Selected options:
+                                    Opzioni selezionate:
                                   </div>
                                   <div className="flex flex-wrap gap-2">
                                     {form.selectedProductCategoriesOptions.map(
@@ -459,7 +460,7 @@ export default function S2BusinessIdea() {
                                     <div className="flex items-center p-2 bg-gray-50 rounded-lg">
                                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                                       <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                                        Loading AI suggestions...
+                                        Caricamento suggerimenti AI...
                                       </span>
                                     </div>
                                   )}
@@ -576,7 +577,7 @@ export default function S2BusinessIdea() {
                           }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent">
-                          Service
+                          Servizio
                         </span>
                       </div>
 
@@ -591,7 +592,7 @@ export default function S2BusinessIdea() {
                             <div className="mb-4">
                               <input
                                 type="text"
-                                placeholder="E.g. Automotive Services, IT & Software Support"
+                                placeholder="Es. Servizi Automobilistici, Supporto IT e Software"
                                 value={form.selectedServiceCategory}
                                 onChange={handleServiceInputChange}
                                 onClick={() => setShowServiceDropdown(true)}
@@ -618,7 +619,7 @@ export default function S2BusinessIdea() {
                                 0 && (
                                 <div className="mt-3">
                                   <div className="text-sm text-gray-600 mb-2">
-                                    Selected options:
+                                    Opzioni selezionate:
                                   </div>
                                   <div className="flex flex-wrap gap-2">
                                     {form.selectedServiceCategoriesOptions.map(
@@ -664,7 +665,7 @@ export default function S2BusinessIdea() {
                                     <div className="flex items-center p-2 bg-gray-50 rounded-lg">
                                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                                       <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                                        Loading AI suggestions...
+                                        Caricamento suggerimenti AI...
                                       </span>
                                     </div>
                                   )}
@@ -841,7 +842,7 @@ export default function S2BusinessIdea() {
                 {/* Question 3: Delivery Method */}
                 <div>
                   <label className="question-text">
-                    How do you deliver your product? (required)
+                    Come consegni il tuo prodotto? (obbligatorio)
                   </label>
                   {errors.deliveryMethod && (
                     <p className="text-red-500 text-sm mt-1">
@@ -851,8 +852,8 @@ export default function S2BusinessIdea() {
                   <div className="mt-4 space-y-4">
                     {[
                       "Online",
-                      "Physical location",
-                      "Both online and at a physical location",
+                      "Posizione fisica",
+                      "Sia online che in una posizione fisica",
                     ].map((option) => (
                       <div
                         key={option}
@@ -883,11 +884,11 @@ export default function S2BusinessIdea() {
                 {/* Question 4: Company Ownership */}
                 <div>
                   <label className="question-text">
-                    Will the company own any inventions, digital assets,
-                    trademarks, trade secrets or similar?
+                    L'azienda possiederà invenzioni, asset digitali, marchi,
+                    segreti commerciali o simili?
                   </label>
                   <div className="mt-4 space-y-4">
-                    {["Yes", "No"].map((option) => (
+                    {["Sì", "No"].map((option) => (
                       <div
                         key={option}
                         className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
@@ -917,13 +918,13 @@ export default function S2BusinessIdea() {
                 {/* Question 5: Business Goals */}
                 <div>
                   <label className="question-text">
-                    What goals do you pursue with this business plan?
+                    Quali obiettivi persegui con questo piano aziendale?
                   </label>
                   <div className="mt-4 space-y-4">
                     {[
-                      "Launch a new Product or Service",
-                      "Secure Investor Funding or Grant",
-                      "Boost Sales & Revenue",
+                      "Lanciare un nuovo Prodotto o Servizio",
+                      "Ottenere Finanziamenti da Investitori o Sovvenzioni",
+                      "Aumentare Vendite e Ricavi",
                     ].map((option) => (
                       <div
                         key={option}
@@ -956,13 +957,13 @@ export default function S2BusinessIdea() {
                     onClick={prevStep}
                     className="w-full py-3 cursor-pointer bg-white border border-[#888888] text-accent text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Back
+                    Indietro
                   </button>
                   <button
                     type="submit"
                     className="w-full py-3 bg-primary cursor-pointer text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                   >
-                    Next
+                    Avanti
                   </button>
                 </div>
               </form>

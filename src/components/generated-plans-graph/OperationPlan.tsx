@@ -88,11 +88,11 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-        <p className="text-sm font-medium text-gray-900">{`${label} Year`}</p>
+        <p className="text-sm font-medium text-gray-900">{`${label} Anno`}</p>
         {payload.map((entry: any, index: number) => (
           <p key={index} className="text-sm" style={{ color: entry.color }}>
             {`${
-              entry.dataKey === "revenue" ? "Revenue" : "Costs"
+              entry.dataKey === "revenue" ? "Ricavi" : "Costi"
             }: $${formatCurrency(entry.value)}`}
           </p>
         ))}
@@ -108,52 +108,56 @@ export default function OperationsDashboard({
   operatingCostBreakdown,
 }: IOperationsPlan) {
   // Ensure we have valid data or provide fallback
-  const validOperatingCostBreakdown = operatingCostBreakdown && operatingCostBreakdown.length > 0 
-    ? operatingCostBreakdown 
-    : [
-        {
-          year: 1,
-          revenue: 250000,
-          cogs: 75000,
-          employee_costs: 60000,
-          marketing: 15000,
-          rent: 13000,
-          administration: 8000,
-          amortization: 4000,
-          other_expenses: 4000,
-          interest_expenses: 2000,
-          tax: 5000
-        },
-        {
-          year: 2,
-          revenue: 275000,
-          cogs: 82000,
-          employee_costs: 66000,
-          marketing: 17000,
-          rent: 13000,
-          administration: 8000,
-          amortization: 4000,
-          other_expenses: 4000,
-          interest_expenses: 2000,
-          tax: 5000
-        },
-        {
-          year: 3,
-          revenue: 300000,
-          cogs: 90000,
-          employee_costs: 72000,
-          marketing: 18000,
-          rent: 13000,
-          administration: 9000,
-          amortization: 4000,
-          other_expenses: 4000,
-          interest_expenses: 2000,
-          tax: 5000
-        }
-      ];
+  const validOperatingCostBreakdown =
+    operatingCostBreakdown && operatingCostBreakdown.length > 0
+      ? operatingCostBreakdown
+      : [
+          {
+            year: 1,
+            revenue: 250000,
+            cogs: 75000,
+            employee_costs: 60000,
+            marketing: 15000,
+            rent: 13000,
+            administration: 8000,
+            amortization: 4000,
+            other_expenses: 4000,
+            interest_expenses: 2000,
+            tax: 5000,
+          },
+          {
+            year: 2,
+            revenue: 275000,
+            cogs: 82000,
+            employee_costs: 66000,
+            marketing: 17000,
+            rent: 13000,
+            administration: 8000,
+            amortization: 4000,
+            other_expenses: 4000,
+            interest_expenses: 2000,
+            tax: 5000,
+          },
+          {
+            year: 3,
+            revenue: 300000,
+            cogs: 90000,
+            employee_costs: 72000,
+            marketing: 18000,
+            rent: 13000,
+            administration: 9000,
+            amortization: 4000,
+            other_expenses: 4000,
+            interest_expenses: 2000,
+            tax: 5000,
+          },
+        ];
   // Generate dynamic pie chart data from validOperatingCostBreakdown
   const generatePieChartData = () => {
-    if (!validOperatingCostBreakdown || validOperatingCostBreakdown.length === 0) {
+    if (
+      !validOperatingCostBreakdown ||
+      validOperatingCostBreakdown.length === 0
+    ) {
       return defaultPieChartData.map((item, index) => ({
         ...item,
         actualValue: 0,
@@ -167,14 +171,14 @@ export default function OperationsDashboard({
     // Calculate individual cost components
     const costComponents = [
       { name: "COGS", value: item.cogs || 0 },
-      { name: "Employee Costs", value: item.employee_costs || 0 },
+      { name: "Costi del personale", value: item.employee_costs || 0 },
       { name: "Marketing", value: item.marketing || 0 },
-      { name: "Rent", value: item.rent || 0 },
-      { name: "Administration", value: item.administration || 0 },
-      { name: "Amortization", value: item.amortization || 0 },
-      { name: "Other Expenses", value: item.other_expenses || 0 },
-      { name: "Interest Expenses", value: item.interest_expenses || 0 },
-      { name: "Tax", value: item.tax || 0 },
+      { name: "Affitto", value: item.rent || 0 },
+      { name: "Amministrazione", value: item.administration || 0 },
+      { name: "Ammortamento", value: item.amortization || 0 },
+      { name: "Altre spese", value: item.other_expenses || 0 },
+      { name: "Spese per interessi", value: item.interest_expenses || 0 },
+      { name: "Tasse", value: item.tax || 0 },
     ];
 
     // Calculate total cost
@@ -216,7 +220,7 @@ export default function OperationsDashboard({
   };
 
   const pieChartData = generatePieChartData();
-  const operatingCostData = operatingCostBreakdown.map((item) => {
+  const operatingCostData = validOperatingCostBreakdown.map((item) => {
     const totalCosts =
       item.cogs +
       item.employee_costs +
@@ -238,21 +242,20 @@ export default function OperationsDashboard({
   // console.log("Oparatinon cose ", operatingCostBreakdown);
   return (
     <div className="mt-10 mx-auto space-y-8">
-      <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
+      {/* <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
         Operations Plan
-      </h2>
+      </h2> */}
       {/* Operations Plan Section */}
-      <div className="">
+      {/* <div className="">
         <p className="text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed text-justify">
           {operationsPlan}
         </p>
-      </div>
+      </div> */}
 
       {/* Key Ratios Table */}
-      <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
-        Operating Cost Breakdown
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+        7.1 Ripartizione dei costi operativi
       </h2>
-      
 
       {/* Year-wise Cost Analysis Cards */}
       <div className="">
@@ -268,7 +271,7 @@ export default function OperationsDashboard({
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-semibold text-gray-900">
-                  Year {item.year}
+                  Anno {item.year}
                 </h3>
                 <div className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
                   ${formatCurrency(item.revenue)}
@@ -278,58 +281,72 @@ export default function OperationsDashboard({
               {/* Basic Financials */}
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-800 mb-3">
-                  Financial Overview
+                  {/* Financial Overview */}
+                  Panoramica finanziaria
                 </h4>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Revenue</span>
+                    <span className="text-sm text-gray-600">
+                      {/* Revenue */}Ricavi
+                    </span>
                     <span className="text-sm font-bold text-green-600">
                       ${formatCurrency(item.revenue)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">COGS</span>
+                    <span className="text-sm text-gray-600">
+                      {/* COGS */}COGS
+                    </span>
                     <span className="text-sm font-medium">
                       ${formatCurrency(item.cogs)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">
-                      Employee Costs
+                      {/* Employee Costs */}
+                      Costi del personale
                     </span>
                     <span className="text-sm font-medium">
                       ${formatCurrency(item.employee_costs)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Marketing</span>
+                    <span className="text-sm text-gray-600">
+                      {/* Marketing */}Marketing
+                    </span>
                     <span className="text-sm font-medium">
                       ${formatCurrency(item.marketing)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Rent</span>
+                    <span className="text-sm text-gray-600">
+                      {/* Rent */}Affitto
+                    </span>
                     <span className="text-sm font-medium">
                       ${formatCurrency(item.rent)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">
-                      Administration
+                      {/* Administration */}
+                      Amministrazione
                     </span>
                     <span className="text-sm font-medium">
                       ${formatCurrency(item.administration)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Amortization</span>
+                    <span className="text-sm text-gray-600">
+                      {/* Amortization */}Ammortamento
+                    </span>
                     <span className="text-sm font-medium">
                       ${formatCurrency(item.amortization)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">
-                      Other Expenses
+                      {/* Other Expenses */}
+                      Altre spese
                     </span>
                     <span className="text-sm font-medium">
                       ${formatCurrency(item.other_expenses)}
@@ -337,14 +354,17 @@ export default function OperationsDashboard({
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">
-                      Interest Expenses
+                      {/* Interest Expenses */}
+                      Spese per interessi
                     </span>
                     <span className="text-sm font-medium">
                       ${formatCurrency(item.interest_expenses)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Tax</span>
+                    <span className="text-sm text-gray-600">
+                      {/* Tax */}Tasse
+                    </span>
                     <span className="text-sm font-medium">
                       ${formatCurrency(item.tax)}
                     </span>
@@ -355,11 +375,14 @@ export default function OperationsDashboard({
               {/* Quarterly Breakdown */}
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-800 mb-3">
-                  Quarterly Breakdown
+                  {/* Quarterly Breakdown */}
+                  Ripartizione trimestrale
                 </h4>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Q1 Revenue</span>
+                    <span className="text-gray-600">
+                      {/* Q1 Revenue */}Q1 Ricavi
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -368,7 +391,9 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Q2 Revenue</span>
+                    <span className="text-gray-600">
+                      {/* Q2 Revenue */}Q2 Ricavi
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -377,7 +402,9 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Q3 Revenue</span>
+                    <span className="text-gray-600">
+                      {/* Q3 Revenue */}Q3 Ricavi
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -386,7 +413,9 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Q4 Revenue</span>
+                    <span className="text-gray-600">
+                      {/* Q4 Revenue */}Q4 Ricavi
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -395,7 +424,9 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Q1 Costs</span>
+                    <span className="text-gray-600">
+                      {/* Q1 Costs */}Q1 Costi
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -404,7 +435,9 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Q2 Costs</span>
+                    <span className="text-gray-600">
+                      {/* Q2 Costs */}Q2 Costi
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -413,7 +446,9 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Q3 Costs</span>
+                    <span className="text-gray-600">
+                      {/* Q3 Costs */}Q3 Costi
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -422,7 +457,9 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Q4 Costs</span>
+                    <span className="text-gray-600">
+                      {/* Q4 Costs */}Q4 Costi
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -436,11 +473,15 @@ export default function OperationsDashboard({
               {/* Employee Analytics */}
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-800 mb-3">
-                  Employee Analytics
+                  {/* Employee Analytics */}
+                  Analisi del personale
                 </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Management Costs</span>
+                    <span className="text-gray-600">
+                      {/* Management Costs */}
+                      Costi di gestione
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -449,7 +490,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Operations Staff</span>
+                    <span className="text-gray-600">
+                      {/* Operations Staff */}
+                      Personale operativo
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -458,7 +502,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Sales Team</span>
+                    <span className="text-gray-600">
+                      {/* Sales Team */}
+                      Team vendite
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -475,14 +522,20 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Total Headcount</span>
+                    <span className="text-gray-600">
+                      {/* Total Headcount */}
+                      Totale dipendenti
+                    </span>
                     <span className="font-medium">
                       {(item as any).employee_analytics?.total_headcount ||
                         "N/A"}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Cost/Employee</span>
+                    <span className="text-gray-600">
+                      {/* Cost/Employee */}
+                      Costo/dipendente
+                    </span>
                     <span className="font-medium">
                       $
                       {(item as any).employee_analytics?.cost_per_employee ||
@@ -490,14 +543,20 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Productivity Ratio</span>
+                    <span className="text-gray-600">
+                      {/* Productivity Ratio */}
+                      Rapporto produttività
+                    </span>
                     <span className="font-medium">
                       {(item as any).employee_analytics?.productivity_ratio ||
                         "N/A"}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Overtime Costs</span>
+                    <span className="text-gray-600">
+                      {/* Overtime Costs */}
+                      Costi straordinari
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -506,7 +565,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Benefits %</span>
+                    <span className="text-gray-600">
+                      {/* Benefits %} */}
+                      Benefici %
+                    </span>
                     <span className="font-medium">
                       {(item as any).employee_analytics?.benefits_percentage ||
                         "N/A"}
@@ -519,11 +581,15 @@ export default function OperationsDashboard({
               {/* Marketing Analytics */}
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-800 mb-3">
-                  Marketing Analytics
+                  {/* Marketing Analytics */}
+                  Analisi marketing
                 </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Digital Marketing</span>
+                    <span className="text-gray-600">
+                      {/* Digital Marketing */}
+                      Marketing digitale
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -533,7 +599,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Traditional Marketing</span>
+                    <span className="text-gray-600">
+                      {/* Traditional Marketing */}
+                      Marketing tradizionale
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -543,7 +612,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Events & Conferences</span>
+                    <span className="text-gray-600">
+                      {/* Events & Conferences */}
+                      Eventi e conferenze
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -553,7 +625,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Content Creation</span>
+                    <span className="text-gray-600">
+                      {/* Content Creation */}
+                      Creazione contenuti
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -562,7 +637,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Paid Advertising</span>
+                    <span className="text-gray-600">
+                      {/* Paid Advertising */}
+                      Pubblicità a pagamento
+                    </span>
                     <span className="font-medium">
                       $
                       {formatCurrency(
@@ -571,7 +649,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Cost/Acquisition</span>
+                    <span className="text-gray-600">
+                      {/* Cost/Acquisition */}
+                      Costo/acquisizione
+                    </span>
                     <span className="font-medium">
                       $
                       {(item as any).marketing_analytics
@@ -579,7 +660,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Marketing ROI</span>
+                    <span className="text-gray-600">
+                      {/* Marketing ROI */}
+                      ROI marketing
+                    </span>
                     <span className="font-medium">
                       {(item as any).marketing_analytics?.marketing_roi ||
                         "N/A"}
@@ -587,7 +671,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Lead Generation Cost</span>
+                    <span className="text-gray-600">
+                      {/* Lead Generation Cost */}
+                      Costo generazione lead
+                    </span>
                     <span className="font-medium">
                       $
                       {(item as any).marketing_analytics
@@ -595,7 +682,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Conversion Cost</span>
+                    <span className="text-gray-600">
+                      {/* Conversion Cost */}
+                      Costo conversione
+                    </span>
                     <span className="font-medium">
                       $
                       {(item as any).marketing_analytics?.conversion_cost ||
@@ -608,11 +698,15 @@ export default function OperationsDashboard({
               {/* Operational Metrics */}
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-800 mb-3">
-                  Operational Metrics
+                  {/* Operational Metrics */}
+                  Metriche operative
                 </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Cost/Unit Sold</span>
+                    <span className="text-gray-600">
+                      {/* Cost/Unit Sold */}
+                      Costo/unità venduta
+                    </span>
                     <span className="font-medium">
                       $
                       {(item as any).operational_metrics?.cost_per_unit_sold ||
@@ -620,42 +714,60 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Variable Cost Ratio</span>
+                    <span className="text-gray-600">
+                      {/* Variable Cost Ratio */}
+                      Rapporto costi variabili
+                    </span>
                     <span className="font-medium">
                       {(item as any).operational_metrics?.variable_cost_ratio ||
                         "N/A"}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Fixed Cost Coverage</span>
+                    <span className="text-gray-600">
+                      {/* Fixed Cost Coverage */}
+                      Copertura costi fissi
+                    </span>
                     <span className="font-medium">
                       {(item as any).operational_metrics?.fixed_cost_coverage ||
                         "N/A"}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Operational Leverage</span>
+                    <span className="text-gray-600">
+                      {/* Operational Leverage */}
+                      Leva operativa
+                    </span>
                     <span className="font-medium">
                       {(item as any).operational_metrics
                         ?.operational_leverage || "N/A"}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Cost Efficiency Index</span>
+                    <span className="text-gray-600">
+                      {/* Cost Efficiency Index */}
+                      Indice efficienza costi
+                    </span>
                     <span className="font-medium">
                       {(item as any).operational_metrics
                         ?.cost_efficiency_index || "N/A"}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Break Even Units</span>
+                    <span className="text-gray-600">
+                      {/* Break Even Units */}
+                      Unità pareggio
+                    </span>
                     <span className="font-medium">
                       {(item as any).operational_metrics?.break_even_units ||
                         "N/A"}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Capacity Utilization</span>
+                    <span className="text-gray-600">
+                      {/* Capacity Utilization */}
+                      Utilizzo capacità
+                    </span>
                     <span className="font-medium">
                       {(
                         (item as any).operational_metrics
@@ -670,17 +782,24 @@ export default function OperationsDashboard({
               {/* Cost Percentages */}
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-800 mb-3">
-                  Cost Percentages
+                  {/* Cost Percentages */}
+                  Percentuali costi
                 </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">COGS %</span>
+                    <span className="text-gray-600">
+                      {/* COGS %} */}
+                      COGS %
+                    </span>
                     <span className="font-medium">
                       {(item as any).cost_percentages?.cogs_percent || "N/A"}%
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Employee %</span>
+                    <span className="text-gray-600">
+                      {/* Employee %} */}
+                      Dipendenti %
+                    </span>
                     <span className="font-medium">
                       {(item as any).cost_percentages?.employee_percent ||
                         "N/A"}
@@ -688,7 +807,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Marketing %</span>
+                    <span className="text-gray-600">
+                      {/* Marketing %} */}
+                      Marketing %
+                    </span>
                     <span className="font-medium">
                       {(item as any).cost_percentages?.marketing_percent ||
                         "N/A"}
@@ -696,19 +818,28 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Rent %</span>
+                    <span className="text-gray-600">
+                      {/* Rent %} */}
+                      Affitto %
+                    </span>
                     <span className="font-medium">
                       {(item as any).cost_percentages?.rent_percent || "N/A"}%
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Admin %</span>
+                    <span className="text-gray-600">
+                      {/* Admin %} */}
+                      Amministrazione %
+                    </span>
                     <span className="font-medium">
                       {(item as any).cost_percentages?.admin_percent || "N/A"}%
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Other %</span>
+                    <span className="text-gray-600">
+                      {/* Other %} */}
+                      Altri %
+                    </span>
                     <span className="font-medium">
                       {(item as any).cost_percentages?.other_percent || "N/A"}%
                     </span>
@@ -719,11 +850,15 @@ export default function OperationsDashboard({
               {/* Variance Analysis */}
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-800 mb-3">
-                  Variance Analysis
+                  {/* Variance Analysis */}
+                  Analisi varianze
                 </h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Budget vs Actual</span>
+                    <span className="text-gray-600">
+                      {/* Budget vs Actual */}
+                      Budget vs Effettivo
+                    </span>
                     <span className="font-medium">
                       {(item as any).variance_analysis
                         ?.budget_vs_actual_variance || "N/A"}
@@ -731,7 +866,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">YoY Cost Growth</span>
+                    <span className="text-gray-600">
+                      {/* YoY Cost Growth */}
+                      Crescita costi YoY
+                    </span>
                     <span className="font-medium">
                       {(
                         (item as any).variance_analysis?.yoy_cost_growth_rate *
@@ -741,7 +879,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Cost Inflation Impact</span>
+                    <span className="text-gray-600">
+                      {/* Cost Inflation Impact */}
+                      Impatto inflazione costi
+                    </span>
                     <span className="font-medium">
                       {(item as any).variance_analysis?.cost_inflation_impact ||
                         "N/A"}
@@ -750,7 +891,8 @@ export default function OperationsDashboard({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">
-                      Efficiency Improvement
+                      {/* Efficiency Improvement */}
+                      Miglioramento efficienza
                     </span>
                     <span className="font-medium">
                       {(item as any).variance_analysis
@@ -803,7 +945,10 @@ export default function OperationsDashboard({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Admin Cost Benchmark</span>
+                    <span className="text-gray-600">
+                      {/* Admin Cost Benchmark */}
+                      Benchmark costi amministrativi
+                    </span>
                     <span className="font-medium">
                       {(item as any).benchmarking_ratios
                         ?.admin_cost_benchmark || "N/A"}
@@ -819,8 +964,8 @@ export default function OperationsDashboard({
 
       {/* Operating Cost Breakdown Pie Chart */}
       <div className="">
-        <h2 className="text-2xl sm:text-4xl font-medium text-gray-800 mb-6">
-          Operating Cost Breakdown
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+          7.2 Ripartizione dei costi operativi
         </h2>
         <div className="flex justify-center items-start gap-8">
           <div className="relative w-96 h-96">
@@ -864,11 +1009,16 @@ export default function OperationsDashboard({
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
                 <div className="text-lg font-semibold text-gray-900">
-                  Operating
+                  {/* Operating */}
+                  Costi
                 </div>
-                <div className="text-lg font-semibold text-gray-900">Cost</div>
                 <div className="text-lg font-semibold text-gray-900">
-                  Breakdown
+                  {/* Cost */}
+                  Operativi
+                </div>
+                <div className="text-lg font-semibold text-gray-900">
+                  {/* Breakdown */}
+                  Ripartizione
                 </div>
               </div>
             </div>
@@ -877,7 +1027,8 @@ export default function OperationsDashboard({
           {/* Enhanced Legend with actual values */}
           <div className="flex flex-col gap-4 mt-8">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              Cost Breakdown
+              {/* Cost Breakdown */}
+              Ripartizione costi
             </h3>
             {pieChartData.map((item, index) => (
               <div

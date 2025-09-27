@@ -1002,20 +1002,7 @@ export const generateWordDocument = async ({
           : ""
       }
 
-      ${
-        sectorStrategy
-          ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>Sector Strategy</h2>
-        </div>
-        <div class="section-content">
-          <p>${sectorStrategy.replace(/\n/g, "</p><p>")}</p>
-        </div>
-      </div>
-      `
-          : ""
-      }
+      
 
     ${
       balanceSheet.length > 0

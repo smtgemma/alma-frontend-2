@@ -80,13 +80,13 @@ const AdminGrowthChart = ({ growth }: { growth?: GrowthData }) => {
 
       <div className="flex-1 flex flex-col justify-between">
         <h3 className="text-lg font-semibold text-gray-900 mb-6 mt-4 text-center">
-          Average <br /> Customer Growth
+          Crescita Media <br /> Clienti
         </h3>
         {/* Growth details */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-[15px] font-medium text-gray-700">
-              Solo Users
+              Utenti Singoli
             </span>
             <div className="flex items-center gap-1">
               {soloValue >= 0 ? (
@@ -105,7 +105,7 @@ const AdminGrowthChart = ({ growth }: { growth?: GrowthData }) => {
 
           <div className="flex items-center justify-between">
             <span className="text-[15px] font-medium text-gray-700">
-              Team Users
+              Utenti Team
             </span>
             <div className="flex items-center gap-1">
               {teamValue >= 0 ? (
