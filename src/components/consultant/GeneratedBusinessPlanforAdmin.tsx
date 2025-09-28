@@ -133,7 +133,7 @@ const GeneratedBusinessPlanforAdmin = ({
 
           {/* Management Team */}
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-            3. Management Team
+            3. Gruppo dirigente
           </h2>
           <div className="">
             <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-justify">
@@ -300,7 +300,7 @@ const GeneratedBusinessPlanforAdmin = ({
                             Investment Amount:
                           </h3>
                           <p className="text-gray-700 text-base">
-                            ${cleanData.fromHome.toLocaleString()}
+                          €{cleanData.fromHome.toLocaleString()}
                           </p>
                         </div>
                       )}

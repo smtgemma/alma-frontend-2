@@ -24,9 +24,9 @@ export default function ResetSuccessful() {
           <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-[#A78BFA]">
             <LuCheck className="h-20 w-20 text-white" />
           </div>
-          <h1 className="text-2xl font-semibold text-accent">Password Reset Successful </h1>
+          <h1 className="text-2xl font-semibold text-accent">Reimpostazione della password riuscita</h1>
           <p className="text-sm text-gray-600">
-            Your password has been updated
+          La tua password è stata aggiornata
           </p>
 
         </div>
@@ -36,7 +36,7 @@ export default function ResetSuccessful() {
 
           
       <Link href="/">
-        <PrimaryButton type="submit" loading={isLoading} text="Continue" />
+        <PrimaryButton type="submit" loading={isLoading} text="Continua" />
       </Link>
 
 

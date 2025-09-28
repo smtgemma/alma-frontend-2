@@ -15,7 +15,7 @@ export default function LoginSuccessful() {
 
 
   const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
-  
+
 
   return (
     <div className="">
@@ -24,25 +24,25 @@ export default function LoginSuccessful() {
           <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-[#A78BFA]">
             <LuCheck className="h-20 w-20 text-white" />
           </div>
-          <h1 className="text-2xl font-semibold text-accent">Log in Successful  </h1>
+          <h1 className="text-2xl font-semibold text-accent">Accesso riuscito</h1>
           <p className="text-sm text-gray-600">
-            Your password has been updated
+            La tua password è stata aggiornata
           </p>
 
         </div>
 
 
-        
 
 
-          
-      <Link href="/ai-smart-form">
-        <PrimaryButton type="submit" loading={isLoading} text="Generate a Plan" />
-      </Link>
 
-      <Link href="/">
-        <button className="px-3 py-2 w-full text-center rounded-lg bg-white border border-accent transition-all duration-300 text-accent shadow cursor-pointer mt-4">Skip</button>
-      </Link>
+
+        <Link href="/ai-smart-form">
+          <PrimaryButton type="submit" loading={isLoading} text="Genera un piano" />
+        </Link>
+
+        <Link href="/">
+          <button className="px-3 py-2 w-full text-center rounded-lg bg-white border border-accent transition-all duration-300 text-accent shadow cursor-pointer mt-4">Salta</button>
+        </Link>
 
 
       </div>

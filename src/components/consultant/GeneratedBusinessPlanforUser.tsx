@@ -118,7 +118,7 @@ const GeneratedBusinessPlanforUser = ({
 
           {/* Management Team */}
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-            3. Management Team
+            3. Gruppo dirigente
           </h2>
           <div className="">
             <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-justify">

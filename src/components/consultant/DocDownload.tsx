@@ -114,13 +114,13 @@ const generateChartImage = async (
               ticks: {
                 color: "#2c3e50",
                 callback: function (value: any) {
-                  if (!value || isNaN(value)) return "$0";
+                  if (!value || isNaN(value)) return "€0";
                   if (value >= 1000000) {
-                    return `$${(value / 1000000).toFixed(1)}M`;
+                    return `€${(value / 1000000).toFixed(1)}M`;
                   } else if (value >= 1000) {
-                    return `$${(value / 1000).toFixed(0)}K`;
+                    return `€${(value / 1000).toFixed(0)}K`;
                   }
-                  return `$${value.toLocaleString()}`;
+                  return `€${value.toLocaleString()}`;
                 },
               },
             },
@@ -193,12 +193,12 @@ const generateChartImage = async (
                         originalData[i]?.value || originalData[i]?.amount || 0;
                       const formattedValue =
                         !originalValue || isNaN(originalValue)
-                          ? "$0"
+                          ? "€0"
                           : originalValue >= 1000000
-                            ? `$${(originalValue / 1000000).toFixed(1)}M`
+                            ? `€${(originalValue / 1000000).toFixed(1)}M`
                             : originalValue >= 1000
-                              ? `$${(originalValue / 1000).toFixed(0)}K`
-                              : `$${originalValue.toLocaleString()}`;
+                              ? `€${(originalValue / 1000).toFixed(0)}K`
+                              : `€${originalValue.toLocaleString()}`;
 
                       return {
                         text: `${label}: ${percentage}% (${formattedValue})`,
@@ -244,12 +244,12 @@ const generateChartImage = async (
                     total > 0 ? ((value / total) * 100).toFixed(0) : "0";
                   const formattedValue =
                     !value || isNaN(value)
-                      ? "$0"
+                      ? "€0"
                       : value >= 1000000
-                        ? `$${(value / 1000000).toFixed(1)}M`
+                        ? `€${(value / 1000000).toFixed(1)}M`
                         : value >= 1000
-                          ? `$${(value / 1000).toFixed(0)}K`
-                          : `$${value.toLocaleString()}`;
+                          ? `€${(value / 1000).toFixed(0)}K`
+                          : `€${value.toLocaleString()}`;
 
                   return `${context.label}: ${percentage}% (${formattedValue})`;
                 },
@@ -307,12 +307,12 @@ const generateChartImage = async (
                   const value = context.parsed.y;
                   const formattedValue =
                     !value || isNaN(value)
-                      ? "$0"
+                      ? "€0"
                       : value >= 1000000
-                        ? `$${(value / 1000000).toFixed(1)}M`
+                        ? `€${(value / 1000000).toFixed(1)}M`
                         : value >= 1000
-                          ? `$${(value / 1000).toFixed(0)}K`
-                          : `$${value.toLocaleString()}`;
+                          ? `€${(value / 1000).toFixed(0)}K`
+                          : `€${value.toLocaleString()}`;
                   return `${context.dataset.label}: ${formattedValue}`;
                 },
               },
@@ -328,11 +328,11 @@ const generateChartImage = async (
                 callback: function (value: any) {
                   if (!value || isNaN(value)) return "$0";
                   if (value >= 1000000) {
-                    return `$${(value / 1000000).toFixed(1)}M`;
+                    return `€${(value / 1000000).toFixed(1)}M`;
                   } else if (value >= 1000) {
-                    return `$${(value / 1000).toFixed(0)}K`;
+                    return `€${(value / 1000).toFixed(0)}K`;
                   }
-                  return `$${value.toLocaleString()}`;
+                  return `€${value.toLocaleString()}`;
                 },
               },
             },
@@ -587,11 +587,11 @@ export const generateWordDocument = async ({
     }
 
     if (num >= 1000000) {
-      return `$${(num / 1000000).toFixed(1)}M`;
+      return `€${(num / 1000000).toFixed(1)}M`;
     } else if (num >= 1000) {
-      return `$${(num / 1000).toFixed(0)}K`;
+      return `€${(num / 1000).toFixed(0)}K`;
     }
-    return `$${num.toLocaleString()}`;
+    return `€${num.toLocaleString()}`;
   };
 
   // Helper function to generate transposed table HTML (columns become rows, rows become columns)
@@ -1142,9 +1142,9 @@ export const generateWordDocument = async ({
             .map(
               ([key, value]) =>
                 `${key
-                  .replace(/([A-Z])/g, " $1")
+                  .replace(/([A-Z])/g, " €1")
                   .replace(/^./, (str) => str.toUpperCase())}: ${typeof value === "number"
-                    ? `$${value.toLocaleString()}`
+                    ? `€${value.toLocaleString()}`
                     : value
                 }`
             )
@@ -1293,12 +1293,12 @@ export const generateWordDocument = async ({
 
             // Format currency
             const formatCurrency = (value: any) => {
-              if (!value || isNaN(value)) return "$0";
+              if (!value || isNaN(value)) return "€0";
               if (value >= 1000000)
-                return `$${(value / 1000000).toFixed(1)}M`;
+                return `€${(value / 1000000).toFixed(1)}M`;
               if (value >= 1000)
-                return `$${(value / 1000).toFixed(0)}K`;
-              return `$${value.toLocaleString()}`;
+                return `€${(value / 1000).toFixed(0)}K`;
+              return `€${value.toLocaleString()}`;
             };
 
             return `

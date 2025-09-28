@@ -60,9 +60,9 @@ export default function ForgetPassPage() {
   return (
     <div className="w-full lg:min-w-[500px] ">
       <div className="flex flex-col items-center mb-8">
-        <h1 className="text-2xl font-bold mb-2">Forget Password!</h1>
+        <h1 className="text-2xl font-bold mb-2">Hai dimenticato la password</h1>
         <p className="text-gray-500 text-sm">
-           Enter email associated to your account
+        Inserisci l’email associata al tuo account
         </p>
       </div>
 

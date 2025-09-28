@@ -102,7 +102,7 @@ export default function ResetPasswordPage() {
       console.log("Reset password response:", response);
       if (response?.success) {
         console.log("Password reset successfully");
-        toast.success("Password reset successfully! Please login with your new password.");
+        toast.success("Password reimpostata con successo! Effettua il login con la tua nuova password.");
         
         // Clear any stored data and redirect immediately
         localStorage.removeItem("token");
@@ -125,7 +125,7 @@ export default function ResetPasswordPage() {
       console.error("Error message:", error?.data?.message);
       
       if (error?.data?.message === "jwt expired") {
-        toast.error("Session expired. Please try the forgot password process again.");
+        toast.error("La sessione è scaduta. Per favore, riprova il processo di recupero password.");
         // Clear expired token and redirect to forgot password
         localStorage.removeItem("token");
         localStorage.removeItem("user");
@@ -146,9 +146,9 @@ export default function ResetPasswordPage() {
   return (
     <div className="w-full lg:min-w-[500px]">
       <div className="flex flex-col items-center mb-8">
-        <h1 className="text-2xl font-bold mb-2">Reset Password</h1>
+        <h1 className="text-2xl font-bold mb-2">Reimposta password</h1>
         <p className="text-gray-500 text-sm text-center">
-          Set a strong password
+        Imposta una password sicura
         </p>
       </div>
 
@@ -213,7 +213,7 @@ export default function ResetPasswordPage() {
             }
           }}
         >
-          Reset Password
+          Reimposta password
         </PrimaryButton>
       </form>
     </div>

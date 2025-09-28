@@ -26,13 +26,13 @@ const defaultPieChartData = [
 
 // Format currency for display
 const formatCurrency = (value: number) => {
-  if (!value || isNaN(value)) return "$0";
+  if (!value || isNaN(value)) return "€0";
   if (value >= 1000000) {
-    return `$${(value / 1000000).toFixed(1)}M`;
+    return `€${(value / 1000000).toFixed(1)}M`;
   } else if (value >= 1000) {
-    return `$${(value / 1000).toFixed(0)}K`;
+    return `€${(value / 1000).toFixed(0)}K`;
   }
-  return `$${value.toLocaleString()}`;
+  return `€${value.toLocaleString()}`;
 };
 
 // Custom label component for pie chart - values inside segments with names
@@ -159,21 +159,21 @@ export default function BalanceSheet({
     // Create segments for all three components
     const segments = [
       {
-        name: "Assets",
+        name: "Attività",
         value: Math.round(assetsPercentage),
         fill: "#8B5CF6",
         actualValue: assets,
         formattedValue: formatCurrency(assets),
       },
       {
-        name: "Liabilities",
+        name: "Passività",
         value: Math.round(liabilitiesPercentage),
         fill: "#1E1B4B",
         actualValue: liabilities,
         formattedValue: formatCurrency(liabilities),
       },
       {
-        name: "Equity",
+        name: "Patrimonio netto",
         value: Math.round(equityPercentage),
         fill: "#EF4444",
         actualValue: equity,

@@ -86,13 +86,13 @@ export default function SignUpPage() {
   return (
     <div className="w-full lg:min-w-[500px]">
 
-      <h2 className="text-accent text-[2rem] font-medium text-center mb-8">Create Your Account</h2>
+      <h2 className="text-accent text-[2rem] font-medium text-center mb-8">CCrea il tuo account</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
         <div className="flex items-center gap-4">
           {/* First Name Input */}
           <CustomInput
             id="firstName"
-            label="First Name"
+            label="Nome"
             placeholder="John"
             error={errors.firstName?.message}
             {...register("firstName")}
@@ -101,7 +101,7 @@ export default function SignUpPage() {
           {/* Last Name Input */}
           <CustomInput
             id="lastName"
-            label="Last Name"
+            label="Cognome"
             placeholder="Doe"
             error={errors.lastName?.message}
             {...register("lastName")}
@@ -112,7 +112,7 @@ export default function SignUpPage() {
         <CustomInput
           id="email"
           type="email"
-          label="Email Address"
+          label="Indirizzo email"
           placeholder="example@company.com"
           error={errors.email?.message}
           {...register("email")}
@@ -133,7 +133,7 @@ export default function SignUpPage() {
         <CustomInput
           id="confirmPassword"
           type="password"
-          label="Confirm Password"
+          label="Conferma Password"
           placeholder="••••••••••"
           showPasswordToggle={true}
           error={errors.confirmPassword?.message}
@@ -141,14 +141,14 @@ export default function SignUpPage() {
         />
 
         {/* Sign Up Button */}
-        <PrimaryButton type="submit" loading={isLoading} text="Sign Up" />
+        <PrimaryButton type="submit" loading={isLoading} text="Registrati" />
       </form>
 
       {/* Login Link */}
       <div className="text-center mb-3 mt-3 text-sm text-gray-600">
-        If you already have an account please?{" "}
+        Se hai già un account, accedi?{" "}
         <Link href="/signIn" className="text-primary hover:underline">
-          Log In!
+          Accedi!
         </Link>
       </div>
     </div>

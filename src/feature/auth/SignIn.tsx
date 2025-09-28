@@ -77,12 +77,12 @@ export default function SignInPage() {
           })
         );
 
-        toast.success("Login successful!");
+        toast.success("Accesso riuscito!");
         router.push("/login-successful");
       }
     } catch (error: any) {
       console.log("Error during sign-in:", error);
-      toast.error(error?.data?.message || "Login failed");
+      toast.error(error?.data?.message || "Accesso non riuscito");
     }
   };
 
@@ -90,7 +90,7 @@ export default function SignInPage() {
     <Container>
       <div className="w-full lg:min-w-[500px] ">
         <h2 className="text-accent text-[2rem] font-medium text-center mb-8">
-          Log In to Your Account
+          Accedi al tuo account
         </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
           {/* Email Input */}
@@ -126,25 +126,25 @@ export default function SignInPage() {
                 htmlFor="rememberMe"
                 className="ml-2 text-sm text-gray-600"
               >
-                Remember Me
+                Ricordami
               </label>
             </div>
             <Link
               href="/forget-password"
               className="text-sm text-red-500 hover:underline"
             >
-              Forgot Password?
+              Hai dimenticato la password?
             </Link>
           </div>
           {/* Login Button */}
-          <PrimaryButton type="submit" loading={isLoading} text="Sign In" />
+          <PrimaryButton type="submit" loading={isLoading} text="Accedi" />
         </form>
 
         {/* SignUp Link */}
         <div className="text-center mb-3 mt-3 text-sm text-gray-600">
-          Don’t have an account?{" "}
+          Non hai un account?{" "}
           <Link href="/signUp" className="text-primary hover:underline">
-            Sign Up!
+          Registrati!
           </Link>
         </div>
       </div>

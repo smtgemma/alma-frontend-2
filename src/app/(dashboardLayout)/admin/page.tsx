@@ -230,7 +230,7 @@ export default function AdminDashboardPage() {
                 plansData?.data?.map((plan: any) => ({
                   id: plan.id,
                   publicName: plan.publicName,
-                  currency: "€",
+                  currency: "$",
                   price: plan.price,
                 })) || [],
             }}

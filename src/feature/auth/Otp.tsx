@@ -263,10 +263,10 @@ export default function OtpVerification() {
           {/* <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-blue-500">
             <LuCheck className="h-20 w-20 text-white" />
           </div> */}
-          <h1 className="text-2xl font-semibold text-accent">Enter 6-Digit verification code</h1>
+          <h1 className="text-2xl font-semibold text-accent">Inserisci il codice di verifica a 6 cifre</h1>
           <p className="text-sm text-gray-600">
-            Enter the 6-digit verification code sent to your email. <br />
-            This code will expired in
+          Inserisci il codice di verifica a 6 cifre inviato alla tua email. <br />
+          Questo codice scadrà tra
           </p>
 
           {/* Resend OTP Section */}
@@ -283,7 +283,7 @@ export default function OtpVerification() {
                 onClick={handleResendOTP}
                 className="text-sm text-primary hover:underline"
               >
-                Resend OTP
+                Reinvia OTP
               </button>
             )}
           </div>
@@ -317,7 +317,7 @@ export default function OtpVerification() {
           </div>
 
 
-          <PrimaryButton type="submit" loading={isLoading} text="Verify OTP" />
+          <PrimaryButton type="submit" loading={isLoading} text="Verifica OTP" />
           
           {/* Send New OTP to Email Button */}
           {/* <button

@@ -706,7 +706,7 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
           <p><strong>Disclaimer</strong> (Insert this section to be standard for all generated plans)</p>
           <p>1. Sintesi</p>
           <p>2. Panoramica aziendale</p>
-          <p>3. Management Team</p>
+          <p>3. Gruppo dirigente</p>
           <p>4. Modello di business</p>
           <p>5. Analisi di mercato</p>
           <p>6. Fonti di finanziamento</p>

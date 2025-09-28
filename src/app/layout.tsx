@@ -38,7 +38,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning={true}
-        className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} antialiased`}
+        className={`${geistSans.variable} {geistMono.variable} {manrope.variable} antialiased`}
       >
         <ReduxProvider>
           <Toaster position="top-center" expand={true} richColors />

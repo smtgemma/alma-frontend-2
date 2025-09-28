@@ -20,13 +20,13 @@ export default function FinancialDashboard({
   // console.log("Tis is ",financialHighlights)
 
   const formatCurrency = (value: number) => {
-    if (!value || isNaN(value)) return "$0";
+    if (!value || isNaN(value)) return "€0";
     if (value >= 1000000) {
-      return `$${(value / 1000000).toFixed(1)}M`;
+      return `€${(value / 1000000).toFixed(1)}M`;
     } else if (value >= 1000) {
-      return `$${(value / 1000).toFixed(0)}K`;
+      return `€${(value / 1000).toFixed(0)}K`;
     }
-    return `$${value.toLocaleString()}`;
+    return `€${value.toLocaleString()}`;
   };
 
   // Prepare chart data
@@ -47,23 +47,23 @@ export default function FinancialDashboard({
           <table className="w-full">
             <thead>
               <tr className="bg-[#E6D8FF] ">
-                <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                <th className="px-4 py-3 text-left text-sm $ font-medium text-[#374151] ">
                   {/* Year */}
                   Anno
                 </th>
-                <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                <th className="px-4 py-3 text-left text-sm $ font-medium text-[#374151] ">
                   {/* Revenue */}
                   Ricavi
                 </th>
-                <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                <th className="px-4 py-3 text-left text-sm $ font-medium text-[#374151] ">
                   {/* Net Income */}
                   Reddito netto
                 </th>
-                <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                <th className="px-4 py-3 text-left text-sm $ font-medium text-[#374151] ">
                   {/* CAPEX */}
                   CAPEX
                 </th>
-                <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                <th className="px-4 py-3 text-left text-sm $ font-medium text-[#374151] ">
                   {/* Debt Repayment */}
                   Rimborso del debito
                 </th>
@@ -77,19 +77,19 @@ export default function FinancialDashboard({
                     index % 2 === 0 ? "bg-gray-50" : "bg-gray-50"
                   } border-b border-b-gray-200`}
                 >
-                  <td className="px-4 py-3 text-base md:text-lg lg:text-xl font-medium text-[#374151]">
+                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
                     Year {item.year}
                   </td>
-                  <td className="px-4 py-3 text-base md:text-lg lg:text-xl font-medium text-[#374151]">
+                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
                     {formatCurrency(item.revenue)}
                   </td>
-                  <td className="px-4 py-3 text-base md:text-lg lg:text-xl font-medium text-[#374151]">
+                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
                     {formatCurrency(item.net_income)}
                   </td>
-                  <td className="px-4 py-3 text-base md:text-lg lg:text-xl font-medium text-[#374151]">
+                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
                     {formatCurrency(item.capex)}
                   </td>
-                  <td className="px-4 py-3 text-base md:text-lg lg:text-xl font-medium text-[#374151]">
+                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
                     {formatCurrency(item.debt_repayment)}
                   </td>
                 </tr>
@@ -202,23 +202,23 @@ export default function FinancialDashboard({
           <table className="w-full border border-gray-200 rounded">
             <thead>
               <tr className="bg-purple-100 ">
-                <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                <th className="px-4 py-3 text-left text-sm  font-medium text-[#374151] ">
                   {/* Year */}
                   Anno
                 </th>
-                <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                <th className="px-4 py-3 text-left text-sm font-medium text-[#374151] ">
                   {/* Operating */}
                   Operativo
                 </th>
-                <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                <th className="px-4 py-3 text-left text-sm font-medium text-[#374151] ">
                   {/* Investing */}
                   Investimenti
                 </th>
-                <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                <th className="px-4 py-3 text-left text-sm font-medium text-[#374151] ">
                   {/* Financing */}
                   Finanziamento
                 </th>
-                <th className="px-4 py-3 text-left text-sm md:text-base lg:text-lg font-medium text-[#374151] ">
+                <th className="px-4 py-3 text-left text-sm font-medium text-[#374151] ">
                   {/* Net Cash */}
                   Cassa netta
                 </th>
@@ -232,19 +232,19 @@ export default function FinancialDashboard({
                     index % 2 === 0 ? "bg-gray-50" : "bg-gray-0"
                   } border-b border-gray-200`}
                 >
-                  <td className="px-4 py-3 text-base md:text-lg lg:text-xl font-medium text-[#374151]">
+                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
                     Year {item.year}
                   </td>
-                  <td className="px-4 py-3 text-base md:text-lg lg:text-xl font-medium text-[#374151]">
+                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
                     {formatCurrency(item.operating)}
                   </td>
-                  <td className="px-4 py-3 text-base md:text-lg lg:text-xl font-medium text-[#374151]">
+                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
                     {formatCurrency(item.investing)}
                   </td>
-                  <td className="px-4 py-3 text-base md:text-lg lg:text-xl font-medium text-[#374151]">
+                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
                     {formatCurrency(item.financing)}
                   </td>
-                  <td className="px-4 py-3 text-base md:text-lg lg:text-xl font-medium text-[#374151]">
+                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
                     {formatCurrency(item.net_cash)}
                   </td>
                 </tr>

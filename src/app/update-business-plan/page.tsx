@@ -527,7 +527,7 @@ const UpdateBusinessPlanPage = () => {
                {/* Management Team */}
                <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                 Management Team
+                Gruppo dirigente
                 </label>
                 <textarea
                   value={formData.managementTeam}
@@ -1607,7 +1607,7 @@ const UpdateBusinessPlanPage = () => {
                                         type="text"
                                         value={
                                           file.financial_data.total_assets
-                                            ? `€${file.financial_data.total_assets.toLocaleString()}`
+                                            ? `${file.financial_data.total_assets.toLocaleString()}`
                                             : ""
                                         }
                                         readOnly
@@ -1622,7 +1622,7 @@ const UpdateBusinessPlanPage = () => {
                                         type="text"
                                         value={
                                           file.financial_data.total_revenue
-                                            ? `€${file.financial_data.total_revenue.toLocaleString()}`
+                                            ? `${file.financial_data.total_revenue.toLocaleString()}`
                                             : ""
                                         }
                                         readOnly
@@ -1637,7 +1637,7 @@ const UpdateBusinessPlanPage = () => {
                                         type="text"
                                         value={
                                           file.financial_data.net_income
-                                            ? `€${file.financial_data.net_income.toLocaleString()}`
+                                            ? `${file.financial_data.net_income.toLocaleString()}`
                                             : ""
                                         }
                                         readOnly
@@ -1969,7 +1969,7 @@ const UpdateBusinessPlanPage = () => {
       {toast.show && (
         <div className="fixed top-4 right-4 z-50">
           <div
-            className={`px-6 py-3 rounded-lg shadow-lg text-white font-medium ${
+            className={`px-6 py-3 rounded-lg shadow-lg text-white font-medium {
               toast.type === "success" ? "bg-green-500" : "bg-red-500"
             }`}
           >
