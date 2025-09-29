@@ -59,11 +59,10 @@ export function middleware(request: NextRequest) {
   }
 
   // 3. AI Smart Form routes: only authenticated users can access
+  // Note: We already validated the token presence and expiry above.
+  // Do NOT require a role claim here, because some tokens may not include role but are still valid.
   if (currentPath.startsWith("/ai-smart-form")) {
-    // Ensure user has a valid token and role (any authenticated user can access)
-    if (!userInfo?.role) {
-      return NextResponse.redirect(signInUrl);
-    }
+    // Nothing extra to check here; allow if token is present and valid.
   }
 
   // 4. Subscription/Billing/Payment routes: only authenticated users can access
