@@ -188,10 +188,10 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
       });
     }
     // Slide 6: Cash Flow Analysis
-    if (plan.cashFlowAnalysis && plan.cashFlowAnalysis.length > 0) {
+    if (plan.cashFlowAnalysisData && plan.cashFlowAnalysisData.length > 0) {
       slides.push({
         title: "Analisi del Flusso di Cassa",
-        content: plan.cashFlowAnalysis,
+        content: plan.cashFlowAnalysisData,
         icon: TrendingUp,
         isFinancial: true,
       });
@@ -259,6 +259,7 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
         title: "Fonti di Finanziamento",
         content: plan.fundingSources,
         icon: DollarSign,
+        isFinancial: true,
       });
     }
 
@@ -873,135 +874,89 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                     )}
 
                   {/* Cash Flow Chart */}
-                  {currentSlideData.title === "Cash Flow Analysis" && (
+                  {currentSlideData.title === "Analisi del Flusso di Cassa" && (
                     <div className="space-y-6">
-                      {/* Cash Flow Bar Chart */}
-                      {/* <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-200">
+                      {/* Cash Flow Data Display */}
+                      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-200">
                         <h4 className="text-lg font-semibold text-gray-800 mb-6 flex items-center gap-2">
-                          <Activity className="w-5 h-5 text-blue-600" />
-                          Tendenze del Flusso di Cassa
+                          <TrendingUp className="w-5 h-5 text-blue-600" />
+                          Analisi del Flusso di Cassa
                         </h4>
-                        <div className="flex items-end justify-between h-40 gap-3">
-                          {Array.isArray(currentSlideData.content) && currentSlideData.content.map((item: any, index: number) => {
-                            const maxValue = Math.max(
-                                  ...(Array.isArray(currentSlideData.content) ? currentSlideData.content.map((i: any) =>
-                                Math.max(Math.abs(i.operating || 0), Math.abs(i.investing || 0), Math.abs(i.financing || 0))
-                              )
-                            );
-                            const operatingHeight = ((Math.abs(item.operating || 0)) / maxValue) * 100;
-                            const investingHeight = ((Math.abs(item.investing || 0)) / maxValue) * 100;
-                            const financingHeight = ((Math.abs(item.financing || 0)) / maxValue) * 100;
-                            return (
-                              <div key={index} className="flex flex-col items-center flex-1 group">
-                                <div className="flex items-end gap-1 w-full">
-                                  <div className="flex flex-col items-center flex-1">
-                                    <div
-                                      className="bg-gradient-to-t from-green-500 to-green-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg"
-                                      style={{ height: `${Math.max(operatingHeight, 10)}%` }}
-                                    ></div>
-                                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                      <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded">
-                                        €{item.operating?.toLocaleString() || "0"}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="flex flex-col items-center flex-1">
-                                    <div
-                                      className="bg-gradient-to-t from-red-500 to-red-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg"
-                                      style={{ height: `${Math.max(investingHeight, 10)}%` }}
-                                    ></div>
-                                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                      <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded">
-                                        €{item.investing?.toLocaleString() || "0"}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="flex flex-col items-center flex-1">
-                                    <div
-                                      className="bg-gradient-to-t from-purple-500 to-purple-400 rounded-t w-full min-h-[20px] transition-all duration-500 shadow-lg"
-                                      style={{ height: `${Math.max(financingHeight, 10)}%` }}
-                                    ></div>
-                                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                      <div className="bg-gray-800 text-white text-xs px-2 py-1 rounded">
-                                        €{item.financing?.toLocaleString() || "0"}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="mt-3 text-center">
-                                  <p className="text-sm font-medium text-gray-600">Anno {item.year}</p>
-                                  <div className="space-y-1">
-                                    <p className="text-xs font-bold text-green-600">
-                                      €{(item.operating / 1000)?.toFixed(0)}K
-                                    </p>
-                                    <p className="text-xs font-bold text-red-600">
-                                      €{(item.investing / 1000)?.toFixed(0)}K
-                                    </p>
-                                    <p className="text-xs font-bold text-purple-600">
-                                      €{(item.financing / 1000)?.toFixed(0)}K
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                        <div className="mt-6 flex justify-center gap-8">
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 bg-green-500 rounded"></div>
-                            <span className="text-sm font-medium text-gray-600">Operativo</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 bg-red-500 rounded"></div>
-                            <span className="text-sm font-medium text-gray-600">Investimenti</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 bg-purple-500 rounded"></div>
-                            <span className="text-sm font-medium text-gray-600">Finanziamenti</span>
-                          </div>
-                        </div>
-                      </div> */}
 
-                      {/* Cash Flow Table */}
-                      {/* <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                        <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                          <h4 className="text-lg font-semibold text-gray-800">Cash Flow Analysis Table</h4>
-                        </div>
-                        <div className="overflow-x-auto">
-                          <table className="w-full">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anno</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Operativo</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Investimenti</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Finanziamenti</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liquidità Netta</th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                              {Array.isArray(currentSlideData.content) && currentSlideData.content.map((item: any, index: number) => (
-                                <tr key={index} className="hover:bg-gray-50">
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {item.year}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-semibold">
-                                    €{item.operating?.toLocaleString() || "N/A"}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-semibold">
-                                    €{item.investing?.toLocaleString() || "N/A"}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-purple-600 font-semibold">
-                                    €{item.financing?.toLocaleString() || "N/A"}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-semibold">
-                                    €{item.net_cash?.toLocaleString() || "N/A"}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div> */}
+                        {Array.isArray(currentSlideData.content) &&
+                        currentSlideData.content.length > 0 ? (
+                          <div className="space-y-4">
+                            {currentSlideData.content.map(
+                              (item: any, index: number) => (
+                                <div
+                                  key={index}
+                                  className="bg-white rounded-lg p-6 shadow-sm"
+                                >
+                                  <h5 className="text-lg font-semibold text-gray-800 mb-4">
+                                    Anno {item.year}
+                                  </h5>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    {item.operating !== undefined && (
+                                      <div className="flex flex-col">
+                                        <p className="text-sm text-gray-600 mb-2">
+                                          Flusso Operativo
+                                        </p>
+                                        <p className="font-bold text-green-600 text-lg">
+                                          €
+                                          {item.operating?.toLocaleString() ||
+                                            "N/A"}
+                                        </p>
+                                      </div>
+                                    )}
+                                    {item.investing !== undefined && (
+                                      <div className="flex flex-col">
+                                        <p className="text-sm text-gray-600 mb-2">
+                                          Flusso di Investimenti
+                                        </p>
+                                        <p className="font-bold text-red-600 text-lg">
+                                          €
+                                          {item.investing?.toLocaleString() ||
+                                            "N/A"}
+                                        </p>
+                                      </div>
+                                    )}
+                                    {item.financing !== undefined && (
+                                      <div className="flex flex-col">
+                                        <p className="text-sm text-gray-600 mb-2">
+                                          Flusso di Finanziamento
+                                        </p>
+                                        <p className="font-bold text-purple-600 text-lg">
+                                          €
+                                          {item.financing?.toLocaleString() ||
+                                            "N/A"}
+                                        </p>
+                                      </div>
+                                    )}
+                                    {item.net_cash !== undefined && (
+                                      <div className="flex flex-col">
+                                        <p className="text-sm text-gray-600 mb-2">
+                                          Liquidità Netta
+                                        </p>
+                                        <p className="font-bold text-blue-600 text-lg">
+                                          €
+                                          {item.net_cash?.toLocaleString() ||
+                                            "N/A"}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        ) : (
+                          <div className="text-center py-8">
+                            <p className="text-gray-500">
+                              Nessun dato di flusso di cassa disponibile
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
 
@@ -1832,7 +1787,9 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                               )}
                               {item.rent !== undefined && (
                                 <div>
-                                  <p className="text-sm text-gray-600">Affitto</p>
+                                  <p className="text-sm text-gray-600">
+                                    Affitto
+                                  </p>
                                   <p className="font-bold text-purple-600">
                                     €{item.rent?.toLocaleString() || "N/A"}
                                   </p>
@@ -1911,16 +1868,61 @@ const PlanSlideModal: React.FC<PlanSlideModalProps> = ({
                         )
                       )}
                   </div>
+
+                  {/* Funding Sources */}
+                  {currentSlideData.title === "Fonti di Finanziamento" && (
+                    <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 border border-green-200">
+                      <h4 className="text-lg font-semibold text-gray-800 mb-6 flex items-center gap-2">
+                        <DollarSign className="w-5 h-5 text-green-600" />
+                        Fonti di Finanziamento
+                      </h4>
+                      <div className="space-y-4">
+                        {currentSlideData.content &&
+                          typeof currentSlideData.content === "object" && (
+                            <div className="bg-white rounded-lg p-6 shadow-sm">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {currentSlideData.content.initialInvestment && (
+                                  <div className="flex flex-col">
+                                    <p className="text-sm text-gray-600 mb-2">
+                                      Initial Investment Source:
+                                    </p>
+                                    <p className="font-bold text-green-600 text-lg">
+                                      {
+                                        currentSlideData.content
+                                          .initialInvestment
+                                      }
+                                    </p>
+                                  </div>
+                                )}
+                                {currentSlideData.content.fromHome !==
+                                  undefined && (
+                                  <div className="flex flex-col">
+                                    <p className="text-sm text-gray-600 mb-2">
+                                      Investment Amount:
+                                    </p>
+                                    <p className="font-bold text-blue-600 text-lg">
+                                      $
+                                      {currentSlideData.content.fromHome?.toLocaleString() ||
+                                        "N/A"}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="prose max-w-none">
                   <p className="text-gray-700 leading-relaxed text-lg">
-                    {typeof currentSlideData.content === 'string' 
-                      ? currentSlideData.content 
-                      : typeof currentSlideData.content === 'object' && currentSlideData.content !== null
-                        ? JSON.stringify(currentSlideData.content, null, 2)
-                        : String(currentSlideData.content || '')
-                    }
+                    {typeof currentSlideData.content === "string"
+                      ? currentSlideData.content
+                      : typeof currentSlideData.content === "object" &&
+                        currentSlideData.content !== null
+                      ? JSON.stringify(currentSlideData.content, null, 2)
+                      : String(currentSlideData.content || "")}
                   </p>
                 </div>
               )}
