@@ -11,6 +11,7 @@ import {
   clearAuthData,
   setAccessToken,
 } from "@/utils/cookieManager";
+import Cookies from "js-cookie";
 
 interface DecodedToken {
   id: string;
@@ -96,7 +97,8 @@ const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
             const userData = storedUser;
 
             // Ensure cookies have the token with persistence (for middleware)
-            if (!getAccessToken()) {
+            // Check cookie directly; getAccessToken() may return from localStorage and prevent cookie creation
+            if (!Cookies.get("token")) {
               setAccessToken(tokenToUse);
             }
 

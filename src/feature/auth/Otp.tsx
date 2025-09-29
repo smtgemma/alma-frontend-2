@@ -12,6 +12,7 @@ import {
 } from "@/redux/api/auth/authApi";
 import { toast } from "sonner";
 import PrimaryButton from "@/components/shared/primaryButton/PrimaryButton";
+import { setAccessToken, setRefreshToken, setUserData } from "@/utils/cookieManager";
 
 interface OtpFormValues {
   otp: string[]; // 6-digit OTP
@@ -137,18 +138,19 @@ export default function OtpVerification() {
       }
       
       if (response?.success) {
-        // Store tokens if provided
+        // Store tokens and user in persistent storage (cookie + localStorage)
         if (response.data.accessToken) {
-          localStorage.setItem("token", response.data.accessToken);
+          setAccessToken(response.data.accessToken);
         }
         if (response.data.refreshToken) {
-          localStorage.setItem("refreshToken", response.data.refreshToken);
+          setRefreshToken(response.data.refreshToken);
         }
+        setUserData(response.data);
         
         toast.success("Verification successful!");
         localStorage.removeItem("otpTimer"); // Clear timer on success
         
-        // Clear localStorage
+        // Clear temporary localStorage values
         localStorage.removeItem("userId");
         localStorage.removeItem("email");
         localStorage.removeItem("forgotPassword");
@@ -167,18 +169,21 @@ export default function OtpVerification() {
       if (error?.status === 308 && error?.data?.success === true) {
         console.log("308 Success detected, handling as success");
         
-        // Store tokens if provided
+        // Store tokens and user if provided
         if (error.data.data?.accessToken) {
-          localStorage.setItem("token", error.data.data.accessToken);
+          setAccessToken(error.data.data.accessToken);
         }
         if (error.data.data?.refreshToken) {
-          localStorage.setItem("refreshToken", error.data.data.refreshToken);
+          setRefreshToken(error.data.data.refreshToken);
+        }
+        if (error.data.data) {
+          setUserData(error.data.data);
         }
         
         toast.success("Verification successful!");
         localStorage.removeItem("otpTimer"); // Clear timer on success
         
-        // Clear localStorage
+        // Clear temporary values
         localStorage.removeItem("userId");
         localStorage.removeItem("email");
         localStorage.removeItem("forgotPassword");
