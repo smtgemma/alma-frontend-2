@@ -11,6 +11,7 @@ import {
   clearAuthData,
   setAccessToken,
 } from "@/utils/cookieManager";
+import { syncAuthToken } from "@/utils/authUtils";
 import Cookies from "js-cookie";
 
 interface DecodedToken {
@@ -115,6 +116,9 @@ const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
             );
 
             console.log("✅ initializeAuth dispatched successfully!");
+            
+            // Ensure token is synced for immediate middleware access
+            syncAuthToken();
           } catch (error) {
             // Invalid token, clean up
             console.error("Invalid token during initialization:", error);
@@ -153,6 +157,8 @@ const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
                 user: parsedUser,
               })
             );
+            // Sync token after force initialization
+            syncAuthToken();
           }
         } catch (error) {
           console.error("Error in force initialization:", error);

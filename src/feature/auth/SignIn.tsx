@@ -7,6 +7,7 @@ import { setUser } from "@/redux/features/user/userSlice";
 import CustomInput from "@/ui/CustomeInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { setAccessToken, setRefreshToken, setUserData } from "@/utils/cookieManager";
+import { syncAuthToken } from "@/utils/authUtils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -76,6 +77,9 @@ export default function SignInPage() {
             user: response.data,
           })
         );
+
+        // Ensure token is immediately synced for middleware
+        syncAuthToken();
 
         toast.success("Accesso riuscito!");
         router.push("/login-successful");

@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { LuMoveUpRight } from "react-icons/lu";
 import Link from "next/link";
+import ProtectedLink from "@/components/ProtectedLink";
 
 export default function HeroSection() {
   return (
@@ -55,12 +56,12 @@ export default function HeroSection() {
               potente. Veloce. Zero stress. Tutta strategia.
             </p>
 
-            <Link href="/ai-smart-form">
+            <ProtectedLink href="/ai-smart-form">
               <button className="flex items-center gap-2 mt-6 px-6 py-3 cursor-pointer bg-primary text-white text-[1rem] md:text-[1.3rem] font-medium rounded-[52px] shadow-lg">
                 Crea il Tuo Piano Ora{" "}
                 <LuMoveUpRight className="text-accent text-2xl bg-white p-1 rounded-full" />
               </button>
-            </Link>
+            </ProtectedLink>
           </div>
 
           {/* <div className='relative w-fit'>

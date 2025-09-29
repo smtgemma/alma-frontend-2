@@ -8,14 +8,23 @@ import {
 import { LuCheck } from "react-icons/lu";
 import PrimaryButton from "@/components/shared/primaryButton/PrimaryButton";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
+import { useProtectedNavigation } from "@/hooks/useProtectedNavigation";
 
 
 export default function LoginSuccessful() {
-
-
+  const router = useRouter();
+  const { token } = useSelector((state: RootState) => state.user);
+  const { navigateToProtected } = useProtectedNavigation();
 
   const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
 
+  const handleGeneratePlan = () => {
+    // Use the improved navigation utility that handles token synchronization
+    navigateToProtected("/ai-smart-form");
+  };
 
   return (
     <div className="">
@@ -36,11 +45,9 @@ export default function LoginSuccessful() {
 
 
 
-        <Link href="/ai-smart-form">
-          <PrimaryButton type="submit" loading={isLoading} text="Genera un piano" />
-        </Link>
+        <PrimaryButton onClick={handleGeneratePlan} loading={isLoading} text="Genera un piano" />
 
-        <Link href="/">
+        <Link href="/" prefetch={false}>
           <button className="px-3 py-2 w-full text-center rounded-lg bg-white border border-accent transition-all duration-300 text-accent shadow cursor-pointer mt-4">Salta</button>
         </Link>
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { LuMoveUpRight } from "react-icons/lu";
+import ProtectedLink from "@/components/ProtectedLink";
 
 const BuildYourPlan = () => {
   return (
@@ -15,12 +16,12 @@ const BuildYourPlan = () => {
           ottieni il tuo piano.
         </p>
         <div className="flex items-center justify-center">
-          <Link href="/ai-smart-form">
+          <ProtectedLink href="/ai-smart-form">
             <button className="flex items-center gap-2 mt-6 px-6 py-3 cursor-pointer bg-white text-accent text-[1rem] md:text-[1.3rem] font-medium rounded-[52px] shadow-lg">
               Crea il Tuo Piano Ora{" "}
               <LuMoveUpRight className="text-accent text-2xl bg-white p-1 rounded-full" />
             </button>
-          </Link>
+          </ProtectedLink>
         </div>
       </div>
     </section>

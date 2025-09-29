@@ -17,9 +17,14 @@ export function middleware(request: NextRequest) {
 
   // If no token is present, redirect unauthenticated users to sign-in page
   if (!token) {
+    console.log("⚠️ Middleware: No token found in cookies, redirecting to sign-in");
+    console.log("Current path:", currentPath);
+    console.log("Available cookies:", request.cookies.getAll().map(c => ({ name: c.name, value: c.value?.slice(0, 20) + '...' })));
     return NextResponse.redirect(signInUrl);
   }
 
+  console.log("✅ Middleware: Token found, proceeding with authentication check for path:", currentPath);
+  
   // Decode token to get user info
   let userInfo: { role?: UserRole; exp: number };
   try {
