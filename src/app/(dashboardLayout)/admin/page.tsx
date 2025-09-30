@@ -193,11 +193,7 @@ export default function AdminDashboardPage() {
     },
   };
 
-  // Debug: Log the API response to understand data structure
-  console.log("Admin Summary API Response:", adminSummary);
-  console.log("Revenue Data:", adminSummary?.data?.revenue);
-  console.log("Growth Data:", adminSummary?.data?.growth);
-  console.log("Using Data:", safeDashboardData);
+
 
   return (
     <div className="space-y-6">

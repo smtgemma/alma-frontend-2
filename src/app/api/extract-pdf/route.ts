@@ -31,7 +31,6 @@ export async function POST(request: NextRequest) {
 
     for (const endpoint of possibleEndpoints) {
       try {
-        console.log(`Trying endpoint: ${endpoint}`);
 
         // Add timeout to each request
         const controller = new AbortController();
@@ -48,16 +47,12 @@ export async function POST(request: NextRequest) {
         clearTimeout(timeoutId);
 
         if (aiResponse.ok) {
-          console.log(`Success with endpoint: ${endpoint}`);
           break;
         } else {
-          console.log(
-            `Failed with endpoint: ${endpoint}, status: ${aiResponse.status}`
-          );
+       
           lastError = `Status: ${aiResponse.status}`;
         }
       } catch (error) {
-        console.log(`Error with endpoint: ${endpoint}`, error);
         if (error instanceof Error && error.name === "AbortError") {
           lastError = "Request timeout";
         } else {

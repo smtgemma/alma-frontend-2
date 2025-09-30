@@ -86,13 +86,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
       setPaymentStatus("processing");
       setStatusMessage("Processing your payment...");
 
-      console.log("🔍 DEBUG: Payment form submitted:", {
-        planId: planId,
-        planName: planName,
-        planPrice: planPrice,
-        planCurrency: planCurrency,
-        formData: data,
-      });
+    
 
       // Convert form data to the required format
       const billingInfo: BillingInfo = {
@@ -214,7 +208,6 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
                 "✅ Payment status updated successfully in backend:",
                 responseData
               );
-              toast.success("Payment status updated successfully!");
             } else {
               const errorData = await updateResponse.json();
               console.error("❌ Failed to update payment status:", {

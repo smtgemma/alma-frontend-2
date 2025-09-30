@@ -4,13 +4,11 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
-    console.log('=== CREATE ACCOUNT API ROUTE (PROXY) ===');
-    console.log('Request body:', body);
+
 
     // Proxy the request to the actual auth API
-    const authApiUrl = 'http://172.252.13.69:2002/api/v1/auth/create-account';
+    const authApiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/create-account`;
     
-    console.log('Proxying request to:', authApiUrl);
 
     const response = await fetch(authApiUrl, {
       method: 'POST',
@@ -20,7 +18,6 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body)
     });
 
-    console.log('Auth API response status:', response.status);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

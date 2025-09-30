@@ -5,7 +5,6 @@ import React from "react";
 
 const BillingPage = async ({ params }: any) => {
   const { id } = await params;
-  console.log("Deprecated /billing page accessed for plan:", id);
 
   return (
     <div className="min-h-[50vh] flex items-center justify-center">

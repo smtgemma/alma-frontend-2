@@ -50,7 +50,6 @@ export default function EditBusinessPlanPage() {
   const handleUpdate = async (updatedData: any) => {
     // API call is now handled in EditBusinessPlan component
     // This function is called after successful update
-    console.log("Business plan updated successfully:", updatedData);
 
     // Redirect to dashboard after successful update
     router.push("/dashboard");

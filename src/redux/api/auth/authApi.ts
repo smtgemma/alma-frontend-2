@@ -27,7 +27,7 @@ import {
 
 // Custom base query for image upload that doesn't set Content-Type
 const imageUploadBaseQuery = fetchBaseQuery({
-  baseUrl: "http://172.252.13.71:1002/api/v1",
+  baseUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1`,
   credentials: "omit",
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("token") || Cookies?.get("token");
@@ -177,7 +177,7 @@ export const authApi = baseApi.injectEndpoints({
           }
 
           const response = await fetch(
-            "http://206.162.244.131:1002/api/v1/users/me/uploads-profile-photo",
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/me/uploads-profile-photo`,
             {
               method: "POST",
               headers,
