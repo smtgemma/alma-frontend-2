@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaLongArrowAltDown, FaLongArrowAltUp } from "react-icons/fa";
-
+import { useAdminSummaryQuery } from "@/redux/api/admin/adminAPI";
+// src/components/dashboard/adminDashboard/AdminGrowthChart.tsx
 interface GrowthData {
   overallPct?: number | string;
   soloUsersPct?: number | string;
@@ -9,6 +10,13 @@ interface GrowthData {
 }
 
 const AdminGrowthChart = ({ growth }: { growth?: GrowthData }) => {
+  const { data: adminSummary } = useAdminSummaryQuery({});
+  const [calculatedGrowth, setCalculatedGrowth] = useState({
+    overallPct: "0%",
+    soloUsersPct: "0%",
+    teamUsersPct: "0%",
+  });
+
   // Default values if growth data is not available
   const defaultGrowth = {
     overallPct: "0%",
@@ -16,8 +24,32 @@ const AdminGrowthChart = ({ growth }: { growth?: GrowthData }) => {
     teamUsersPct: "0%",
   };
 
-  // Use growth data if available, otherwise use defaults
-  const growthData = growth || defaultGrowth;
+  // Calculate average growth based on API data
+  useEffect(() => {
+    if (adminSummary?.data) {
+      const soloUsers = adminSummary.data.cards?.soloPlanUsers || 0;
+      const teamUsers = adminSummary.data.cards?.teamPlanUsers || 0;
+      const totalUsers = adminSummary.data.cards?.totalRegisteredUsers || 0;
+      
+      // Calculate growth percentages (this is a placeholder calculation - adjust as needed)
+      const soloGrowthPct = soloUsers > 0 ? `+${Math.round((soloUsers / totalUsers) * 100)}%` : "0%";
+      const teamGrowthPct = teamUsers > 0 ? `+${Math.round((teamUsers / totalUsers) * 100)}%` : "0%";
+      
+      // Calculate overall growth (average of solo and team)
+      const overallGrowthValue = 
+        (parsePct(soloGrowthPct) + parsePct(teamGrowthPct)) / 2;
+      const overallGrowthPct = `${overallGrowthValue > 0 ? '+' : ''}${Math.round(overallGrowthValue)}%`;
+      
+      setCalculatedGrowth({
+        overallPct: overallGrowthPct,
+        soloUsersPct: soloGrowthPct,
+        teamUsersPct: teamGrowthPct,
+      });
+    }
+  }, [adminSummary]);
+
+  // Use calculated growth data if available, otherwise use provided growth or defaults
+  const growthData = calculatedGrowth || growth || defaultGrowth;
 
   // Helper: detect number from percentage string
   const parsePct = (pct: number | string | undefined) => {
@@ -120,6 +152,11 @@ const AdminGrowthChart = ({ growth }: { growth?: GrowthData }) => {
                 </span>
               )}
             </div>
+          </div>
+          
+          {/* Add explanation text in Italian */}
+          <div className="mt-2 text-xs text-gray-500 italic text-center">
+            Calcolato in base al numero di utenti attivi
           </div>
         </div>
       </div>
