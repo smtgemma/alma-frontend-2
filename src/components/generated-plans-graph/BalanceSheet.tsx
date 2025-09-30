@@ -16,7 +16,7 @@ import {
   Line,
   Label,
 } from "recharts";
-
+// src/components/generated-plans-graph/BalanceSheet.tsx
 // Default pie chart data (fallback)
 const defaultPieChartData = [
   { name: "Attività", value: 40, fill: "#8B5CF6" },
@@ -26,20 +26,20 @@ const defaultPieChartData = [
 
 // Format currency for display
 const formatCurrency = (value: number) => {
-  if (!value || isNaN(value)) return "€0";
+  if (!value || isNaN(value)) return "$0";
   if (value >= 1000000) {
-    return `€${(value / 1000000).toFixed(1)}M`;
+    return `$${(value / 1000000).toFixed(1)}M`;
   } else if (value >= 1000) {
-    return `€${(value / 1000).toFixed(0)}K`;
+    return `$${(value / 1000).toFixed(0)}K`;
   }
-  return `€${value.toLocaleString()}`;
+  return `$${value.toLocaleString()}`;
 };
 
 // Custom label component for pie chart - values inside segments with names
 const CustomLabel = (props: any) => {
   const { cx, cy, midAngle, innerRadius, outerRadius, percent, name } = props;
 
-  if (!percent || percent < 0.01) return null; // Don't show labels for very small segments
+  if (!percent || percent < 0.01) return null;
 
   const RADIAN = Math.PI / 180;
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -86,6 +86,100 @@ export default function BalanceSheet({
   balanceSheet,
   netFinancialPosition,
 }: IBalanceSheet) {
+  // Helper: safely extract possible fields from API item (supports legacy and new backend keys)
+  const getFieldValue = (item: any, key: string) => {
+    // direct
+    if (typeof item?.[key] === "number") return item[key] as number;
+    return 0;
+  };
+
+  // Compute derived buckets compatible with pie-chart: Assets, Liabilities, Equity
+  const computeBuckets = (raw: any) => {
+    const equity =
+      (typeof raw?.equity === "number" ? raw.equity : 0) ||
+      (typeof raw?.net_equity === "number" ? raw.net_equity : 0);
+
+    // Sum potential liability components if aggregate not provided
+    const liabilitiesAggregate =
+      (typeof raw?.liabilities === "number" ? raw.liabilities : 0) +
+      getFieldValue(raw, "current_liabilities") +
+      getFieldValue(raw, "non_current_liabilities") +
+      getFieldValue(raw, "short_term_bank_debts") +
+      getFieldValue(raw, "other_short_term_financial_debts") +
+      getFieldValue(raw, "long_term_bank_debts") +
+      getFieldValue(raw, "other_long_term_financial_debts") +
+      getFieldValue(raw, "shareholder_loans") +
+      getFieldValue(raw, "leasing_debts") +
+      getFieldValue(raw, "payables_to_suppliers") +
+      getFieldValue(raw, "payables_to_subsidiaries") +
+      getFieldValue(raw, "other_operating_payables") +
+      getFieldValue(raw, "accrued_expenses_and_prepaid_income_passive");
+
+    const liabilities = liabilitiesAggregate;
+
+    // Assets either provided, or derived as Liabilities + Equity (basic accounting identity)
+    const providedAssets =
+      (typeof raw?.assets === "number" ? raw.assets : 0) ||
+      getFieldValue(raw, "current_assets") +
+        getFieldValue(raw, "non_current_assets");
+
+    const assets = providedAssets || equity + liabilities;
+
+    return { assets, liabilities, equity };
+  };
+
+  // Determine which columns to show in the table: pick two fields that actually have values
+  const italianLabels: Record<string, string> = {
+    assets: "Attività",
+    liabilities: "Passività",
+    equity: "Patrimonio netto",
+    net_equity: "Patrimonio netto",
+    share_capital: "Capitale sociale",
+    net_financial_debt: "Indebitamento finanziario netto",
+    current_assets: "Attività correnti",
+    non_current_assets: "Attività non correnti",
+    current_liabilities: "Passività correnti",
+    non_current_liabilities: "Passività non correnti",
+  };
+
+  const priorityKeys = [
+    "assets",
+    "liabilities",
+    "equity",
+    "net_equity",
+    "share_capital",
+    "net_financial_debt",
+  ];
+
+  const activeKeys = priorityKeys.filter((k) => {
+    return balanceSheet?.some((row: any) => {
+      if (k === "assets" || k === "liabilities" || k === "equity") {
+        const buckets = computeBuckets(row);
+        return (buckets as any)[k] !== 0;
+      }
+      return getFieldValue(row, k) !== 0;
+    });
+  });
+
+  const tableKeys = (
+    activeKeys.length > 0 ? activeKeys : ["equity", "assets"]
+  ).slice(0, 2);
+
+  // Always show the original columns; append the two dynamic ones if different
+  const baseKeys = [
+    "assets",
+    "current_assets",
+    "non_current_assets",
+    "liabilities",
+    "current_liabilities",
+    "non_current_liabilities",
+    "equity",
+  ];
+
+  const combinedKeys = [
+    ...baseKeys,
+    ...tableKeys.filter((k) => !baseKeys.includes(k)),
+  ];
   // Generate dynamic pie chart data from balanceSheet - Balance Sheet Components
   const generatePieChartData = () => {
     if (!balanceSheet || balanceSheet.length === 0) {
@@ -115,10 +209,11 @@ export default function BalanceSheet({
     }
 
     // Use the first item from balanceSheet for pie chart data
-    const item = balanceSheet[0];
-    const assets = item.assets || 0;
-    const liabilities = item.liabilities || 0;
-    const equity = item.equity || 0;
+    const item = balanceSheet[0] as any;
+    const buckets = computeBuckets(item);
+    const assets = buckets.assets || 0;
+    const liabilities = buckets.liabilities || 0;
+    const equity = buckets.equity || 0;
 
     // Calculate total for percentage calculation using absolute values
     const absAssets = Math.abs(assets);
@@ -201,66 +296,47 @@ export default function BalanceSheet({
                   {/* Year */}
                   Anno
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  {/* Assets */}
-                  Attività
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  {/* Current Assets */}
-                  Attività correnti
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  {/* Non Current Assets */}
-                  Attività non correnti
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  {/* Liabilities */}
-                  Passività
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  {/* Current Liabilities */}
-                  Passività correnti
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  {/* Non Current Liabilities */}
-                  Passività non correnti
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  {/* Equity */}
-                  Patrimonio netto
-                </th>
+                {combinedKeys.map((key) => (
+                  <th
+                    key={key}
+                    className="px-4 py-3 text-left text-sm font-medium text-[#121417]"
+                  >
+                    {italianLabels[key] || key}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {balanceSheet.map((item, index) => (
+              {balanceSheet.map((item: any, index) => (
                 <tr
                   key={item.year}
                   className={index % 2 === 0 ? "bg-gray-50" : "bg-gray-50"}
                 >
                   <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    Year {item.year}
+                    Anno {item.year}
                   </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(item.assets)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(item.current_assets)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(item.non_current_assets)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(item.liabilities)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(item.current_liabilities)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(item.non_current_liabilities)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(item.equity)}
-                  </td>
+                  {combinedKeys.map((key) => {
+                    // compute value per selected key
+                    let value = 0;
+                    if (
+                      key === "assets" ||
+                      key === "liabilities" ||
+                      key === "equity"
+                    ) {
+                      const buckets = computeBuckets(item);
+                      value = (buckets as any)[key] || 0;
+                    } else {
+                      value = getFieldValue(item, key);
+                    }
+                    return (
+                      <td
+                        key={key}
+                        className="px-4 py-3 text-sm font-normal text-[#61758A]"
+                      >
+                        {formatCurrency(value)}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
