@@ -8,8 +8,8 @@ interface LoadingSpinnerProps {
 }
 
 const Loading: React.FC<LoadingSpinnerProps> = ({
-  title = "Loading Projects",
-  message = "Fetching your latest data and updates...",
+  title = "Creazione del Business Plan",
+  message = "Sto recuperando i tuoi ultimi dati e aggiornamenti. Potrebbe richiedere qualche istante, ti prego di pazientare…",
   showProgressDots = true,
   spinnerSize = "md",
 }) => {
