@@ -1142,7 +1142,7 @@ export const generateWordDocument = async ({
             .map(
               ([key, value]) =>
                 `${key
-                  .replace(/([A-Z])/g, " €1")
+                  .replace(/\n/g, " ")
                   .replace(/^./, (str) => str.toUpperCase())}: ${typeof value === "number"
                     ? `€${value.toLocaleString()}`
                     : value
