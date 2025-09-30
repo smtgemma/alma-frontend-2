@@ -19,7 +19,7 @@ export interface GeneratePlanResponse {
 export const generatePlanApi = createApi({
   reducerPath: "generatePlanApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://172.252.13.71:1002/api/v1", // Direct backend URL like login API
+    baseUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1`, // Direct backend URL like login API
     credentials: "omit",
     prepareHeaders: (headers, { getState }) => {
       headers.set("Content-Type", "application/json");

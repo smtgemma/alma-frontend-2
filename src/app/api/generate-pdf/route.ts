@@ -172,7 +172,6 @@ export async function POST(request: NextRequest) {
       );
     }, { timeout: 5000 }).catch(() => {
       // Continue if charts don't load within timeout
-      console.log('Chart loading timeout - continuing with PDF generation');
     });
 
     // Generate PDF with optimized settings

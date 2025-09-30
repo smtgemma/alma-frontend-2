@@ -26,23 +26,15 @@ const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
     (state: RootState) => state.user
   );
 
-  console.log(
-    "🚀 AuthInitializer mounted - isInitialized:",
-    isInitialized,
-    "token:",
-    token
-  );
+
 
   useEffect(() => {
-    console.log("🔄 AuthInitializer useEffect triggered");
 
     // Only run initialization once
     if (isInitialized) {
-      console.log("✅ Already initialized, skipping...");
       return;
     }
 
-    console.log("🔄 Starting authentication initialization...");
 
     const initializeAuthentication = async () => {
       try {

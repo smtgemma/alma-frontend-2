@@ -45,26 +45,16 @@ const StepContent = () => {
       const stepNumber = parseInt(stepParam, 10);
       // Convert to 0-based index (URL uses 1-based, internal uses 0-based)
       if (!isNaN(stepNumber) && stepNumber >= 1 && stepNumber <= steps.length) {
-        console.log(`📋 Navigating to step ${stepNumber} from URL parameter`);
         goToStep(stepNumber - 1);
       }
     }
   }, [searchParams, goToStep]);
   
-  console.log('=== STEP CONTENT RENDERED ===');
-  console.log('Current step:', currentStep);
-  console.log('Generated plan:', generatedPlan);
-  console.log('Generated plan content:', generatedPlan?.content);
-  console.log('Generated plan content length:', generatedPlan?.content?.length);
-  console.log('Generated plan content type:', typeof generatedPlan?.content);
-  console.log('Generated plan content is empty?', !generatedPlan?.content || generatedPlan?.content.trim() === '');
-  console.log('Generated plan exists?', !!generatedPlan);
+  
   
   // If we have a generated plan, show the output component
   if (generatedPlan) {
-    console.log('Rendering GeneratedPlanOutput component');
-    console.log('Passing planContent to GeneratedPlanOutput:', generatedPlan.content);
-    console.log('PlanContent length being passed:', generatedPlan.content?.length);
+    
     
     return (
       <GeneratedPlanOutput

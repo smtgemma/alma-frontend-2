@@ -20,7 +20,7 @@ import { toast } from "sonner";
 const ApprovedAiPlanPage = () => {
   const { id } = useParams();
   const { data: planInfo } = useGetSingleBusinessPlanQuery(id);
-  console.log("planInfo", planInfo);
+ 
   const [submitExpertReview, { isLoading: isSubmitting }] =
     useSubmitExpertReviewMutation();
   const [isRequestSubmitted, setIsRequestSubmitted] = useState(false);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -12,8 +12,11 @@ export default function PayPalReturnPage() {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
+  const hasRunRef = useRef(false);
 
   useEffect(() => {
+    if (hasRunRef.current) return;
+    hasRunRef.current = true;
     const confirmPayment = async () => {
       try {
         const token =
@@ -57,10 +60,16 @@ export default function PayPalReturnPage() {
 
         const data = await res.json();
         if (!res.ok || !data?.success) {
-          const msg = data?.message || `Server error: ${res.status}`;
-          toast.error(msg);
-          setStatus("error");
-          return;
+          // Check if this is an already processed subscription or retry scenario
+          if (data?.data?.alreadyProcessed) {
+            // Subscription was already activated, treat as success
+            setStatus("success");
+          } else {
+            const msg = data?.message || `Server error: ${res.status}`;
+            toast.error(msg);
+            setStatus("error");
+            return;
+          }
         }
 
         // Clear stored ID after successful confirmation
@@ -76,7 +85,12 @@ export default function PayPalReturnPage() {
           }
         } catch {}
 
-        toast.success("Subscription activated successfully!");
+        // Handle both new activations and already processed subscriptions
+        if (data?.data?.alreadyProcessed) {
+          toast.success("Subscription is already active!");
+        } else {
+          toast.success("Subscription activated successfully!");
+        }
         setStatus("success");
 
         // Redirect based on origin (default to dashboard)
