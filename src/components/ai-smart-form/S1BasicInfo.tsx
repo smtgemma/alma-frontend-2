@@ -1146,7 +1146,7 @@ export default function S1BasicInfo() {
                 {/* Website */}
                 <div>
                   <label className="question-text">
-                    Hai un sito web o presenza online? (Obbligatorio)
+                    Hai un sito web o presenza online?
                   </label>
                   <input
                     type="text"
@@ -1157,7 +1157,6 @@ export default function S1BasicInfo() {
                       errors.website ? "border-red-500" : "border-[#888888]/50"
                     }`}
                     placeholder=""
-                    required
                   />
                   {errors.website && (
                     <p className="text-red-500 text-sm mt-1">

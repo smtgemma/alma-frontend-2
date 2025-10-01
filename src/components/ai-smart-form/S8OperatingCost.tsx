@@ -48,12 +48,18 @@ export default function S8OperatingCost() {
     }
 
     // Calculate initial total investment for default values
+    // const initialInvestment = step6Data?.investmentItems
+    //   ? step6Data.investmentItems.reduce((total: number, item: any) => {
+    //       const amount = parseFloat(item.amount) || 0;
+    //       return total + amount;
+    //     }, 0)
+    //   : 100000; 
     const initialInvestment = step6Data?.investmentItems
       ? step6Data.investmentItems.reduce((total: number, item: any) => {
           const amount = parseFloat(item.amount) || 0;
           return total + amount;
         }, 0)
-      : 100000; // Default fallback
+      : 100000; 
 
     console.log(initialInvestment);
 

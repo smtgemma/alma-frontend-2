@@ -261,9 +261,6 @@ const validationRules = {
     if (!data.totalEmployees?.trim()) {
       errors.totalEmployees = "Il totale dei dipendenti è obbligatorio";
     }
-    if (!data.website?.trim()) {
-      errors.website = "Il sito web è obbligatorio";
-    }
     return errors;
   },
   step2: (data: BusinessIdeaForm): ValidationErrors => {
