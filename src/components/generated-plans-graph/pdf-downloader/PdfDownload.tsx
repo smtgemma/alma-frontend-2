@@ -1,4 +1,3 @@
-
 // Removed html2canvas and jsPDF imports - now using Puppeteer API
 
 // Show loading indicator
@@ -123,7 +122,7 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
     const allElements = Array.from(clonedElement.querySelectorAll("*"));
     allElements.forEach((element) => {
       const textContent = element.textContent || "";
-      
+
       // Check if this element contains Expert's Review content (multiple variations)
       if (
         textContent.includes("Expert's Review") ||
@@ -139,9 +138,13 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
 
       // Remove congratulations message from main content (multiple variations)
       if (
-        (textContent.includes("Congratulations! Your Business Plan Is Ready!") ||
-         textContent.includes("Congratulazioni! Il Tuo Piano Aziendale È Pronto!") ||
-         textContent.includes("Il Tuo Piano Aziendale È Pronto")) &&
+        (textContent.includes(
+          "Congratulations! Your Business Plan Is Ready!"
+        ) ||
+          textContent.includes(
+            "Congratulazioni! Il Tuo Piano Aziendale È Pronto!"
+          ) ||
+          textContent.includes("Il Tuo Piano Aziendale È Pronto")) &&
         !element.closest(".section-title")
       ) {
         // This is likely the congratulations message in main content
@@ -150,8 +153,11 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
 
       // Remove any section that contains both congratulations and expert review content
       if (
-        (textContent.includes("Congratulazioni") || textContent.includes("Congratulations")) &&
-        (textContent.includes("Revisione") || textContent.includes("Review") || textContent.includes("Richiesta"))
+        (textContent.includes("Congratulazioni") ||
+          textContent.includes("Congratulations")) &&
+        (textContent.includes("Revisione") ||
+          textContent.includes("Review") ||
+          textContent.includes("Richiesta"))
       ) {
         element.remove();
       }
@@ -739,50 +745,157 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
       ${htmlContent}
     `;
 
-    // Send request to our Puppeteer API
-    const response = await fetch("/api/generate-pdf", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        html: completeHTML,
-        options: {
-          format: "A4",
-          printBackground: true,
-          margin: {
-            top: "5mm",
-            right: "2mm",
-            bottom: "5mm",
-            left: "2mm",
-          },
+    try {
+      // Try server-side PDF generation first
+      const response = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
+        body: JSON.stringify({
+          html: completeHTML,
+          options: {
+            format: "A4",
+            printBackground: true,
+            margin: {
+              top: "5mm",
+              right: "2mm",
+              bottom: "5mm",
+              left: "2mm",
+            },
+          },
+        }),
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Failed to generate PDF");
+      if (!response.ok) {
+        throw new Error("Server-side PDF generation failed");
+      }
+
+      // Get the PDF blob
+      const pdfBlob = await response.blob();
+
+      // Create download link
+      const url = window.URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "business-plan.pdf";
+
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Clean up
+      window.URL.revokeObjectURL(url);
+
+      hideLoadingIndicator();
+    } catch (serverError) {
+      console.warn(
+        "Server-side PDF generation failed, trying client-side fallback:",
+        serverError
+      );
+
+      // Fallback to client-side PDF generation using browser's print functionality
+      try {
+        // Create a new window with the content
+        const printWindow = window.open("", "_blank");
+        if (!printWindow) {
+          throw new Error("Could not open print window");
+        }
+
+        // Write the complete HTML to the new window
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Business Plan PDF</title>
+            <style>
+              @media print {
+                * {
+                  -webkit-print-color-adjust: exact !important;
+                  color-adjust: exact !important;
+                  print-color-adjust: exact !important;
+                }
+                
+                body {
+                  margin: 0;
+                  padding: 20px;
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                  line-height: 1.6;
+                  color: #333;
+                  background: white !important;
+                }
+                
+                @page {
+                  size: A4;
+                  margin: 20mm;
+                }
+                
+                .page-break {
+                  page-break-before: always;
+                }
+                
+                .no-page-break {
+                  page-break-inside: avoid;
+                }
+                
+                img, canvas, svg {
+                  page-break-inside: avoid;
+                  max-width: 100%;
+                  height: auto;
+                }
+                
+                table {
+                  page-break-inside: avoid;
+                  border-collapse: collapse;
+                  width: 100%;
+                }
+                
+                h1, h2, h3, h4, h5, h6 {
+                  page-break-after: avoid;
+                  margin-top: 1.5em;
+                  margin-bottom: 0.5em;
+                }
+              }
+              
+              @media screen {
+                body {
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                  line-height: 1.6;
+                  color: #333;
+                  max-width: 800px;
+                  margin: 0 auto;
+                  padding: 20px;
+                }
+              }
+            </style>
+          </head>
+          <body>
+            ${completeHTML}
+            <script>
+              window.onload = function() {
+                setTimeout(function() {
+                  window.print();
+                  setTimeout(function() {
+                    window.close();
+                  }, 1000);
+                }, 500);
+              };
+            </script>
+          </body>
+          </html>
+        `);
+
+        printWindow.document.close();
+        hideLoadingIndicator();
+      } catch (clientError) {
+        console.error("Client-side PDF generation also failed:", clientError);
+        hideLoadingIndicator();
+        alert(
+          "PDF generation failed. Please try again or use your browser's print function (Ctrl+P) to save as PDF."
+        );
+      }
     }
-
-    // Get the PDF blob
-    const pdfBlob = await response.blob();
-
-    // Create download link
-    const url = window.URL.createObjectURL(pdfBlob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "print.pdf";
-
-    // Trigger download
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    // Clean up
-    window.URL.revokeObjectURL(url);
-
-    hideLoadingIndicator();
   } catch (error) {
     console.error("PDF generation failed:", error);
     hideLoadingIndicator();

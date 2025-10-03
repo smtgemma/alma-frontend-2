@@ -1,30 +1,70 @@
-import { NextRequest, NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
+import { NextRequest, NextResponse } from "next/server";
+import puppeteer from "puppeteer";
 
 export async function POST(request: NextRequest) {
+  let browser = null;
+
   try {
     const { html, options } = await request.json();
 
     if (!html) {
       return NextResponse.json(
-        { error: 'HTML content is required' },
+        { error: "HTML content is required" },
         { status: 400 }
       );
     }
 
-    // Launch puppeteer with optimized settings
-    const browser = await puppeteer.launch({
+    // Environment-specific configuration
+    const isProduction = process.env.NODE_ENV === "production";
+
+    // Enhanced puppeteer launch configuration for production
+    const launchOptions = {
       headless: true,
       args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--no-zygote',
-        '--disable-gpu'
-      ]
-    });
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu",
+        ...(isProduction
+          ? [
+              "--disable-web-security",
+              "--disable-features=VizDisplayCompositor",
+              "--disable-background-timer-throttling",
+              "--disable-backgrounding-occluded-windows",
+              "--disable-renderer-backgrounding",
+              "--disable-ipc-flooding-protection",
+              "--single-process",
+              "--memory-pressure-off",
+              "--max-old-space-size=512",
+              "--disable-extensions",
+              "--disable-plugins",
+              "--disable-default-apps",
+            ]
+          : []),
+      ],
+      timeout: isProduction ? 45000 : 30000,
+      protocolTimeout: isProduction ? 45000 : 30000,
+      ...(isProduction && {
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+      }),
+    };
+
+    // Try to launch puppeteer with error handling
+    try {
+      browser = await puppeteer.launch(launchOptions);
+    } catch (launchError) {
+      console.error("Puppeteer launch failed:", launchError);
+
+      // Try with minimal configuration as fallback
+      browser = await puppeteer.launch({
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        timeout: 15000,
+      });
+    }
 
     const page = await browser.newPage();
 
@@ -32,7 +72,7 @@ export async function POST(request: NextRequest) {
     await page.setViewport({
       width: 1200,
       height: 800,
-      deviceScaleFactor: 2
+      deviceScaleFactor: 2,
     });
 
     // Enhanced CSS for better PDF formatting
@@ -156,57 +196,90 @@ export async function POST(request: NextRequest) {
       </html>
     `;
 
-    // Set content and wait for everything to load
-    await page.setContent(fullHTML, {
-      waitUntil: ['networkidle0', 'domcontentloaded']
-    });
+    // Set content and wait for everything to load with better error handling
+    try {
+      await page.setContent(fullHTML, {
+        waitUntil: isProduction
+          ? ["domcontentloaded"]
+          : ["networkidle0", "domcontentloaded"],
+        timeout: isProduction ? 20000 : 30000,
+      });
+    } catch (contentError) {
+      console.warn("Content loading timeout, proceeding anyway:", contentError);
+    }
 
     // Wait for any dynamic content or charts to render
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    // Additional wait for charts to fully render
-    await page.waitForFunction(() => {
-      const charts = document.querySelectorAll('.recharts-wrapper, .recharts-responsive-container');
-      return charts.length === 0 || Array.from(charts).every(chart => 
-        chart.querySelector('svg') !== null
+    const renderWaitTime = isProduction ? 2000 : 3000;
+    await new Promise((resolve) => setTimeout(resolve, renderWaitTime));
+
+    // Additional wait for charts to fully render with production-optimized timeout
+    try {
+      await page.waitForFunction(
+        () => {
+          const charts = document.querySelectorAll(
+            ".recharts-wrapper, .recharts-responsive-container"
+          );
+          return (
+            charts.length === 0 ||
+            Array.from(charts).every(
+              (chart) => chart.querySelector("svg") !== null
+            )
+          );
+        },
+        { timeout: isProduction ? 3000 : 5000 }
       );
-    }, { timeout: 5000 }).catch(() => {
-      // Continue if charts don't load within timeout
-    });
+    } catch (chartError) {
+      console.warn("Chart rendering timeout, proceeding anyway:", chartError);
+    }
 
     // Generate PDF with optimized settings
     const pdfOptions = {
-      format: 'A4' as const,
+      format: "A4" as const,
       printBackground: true,
       margin: {
-        top: '20mm',
-        right: '15mm',
-        bottom: '20mm',
-        left: '15mm'
+        top: "20mm",
+        right: "15mm",
+        bottom: "20mm",
+        left: "15mm",
       },
       displayHeaderFooter: false,
       preferCSSPageSize: true,
-      ...options
+      ...options,
     };
 
     const pdf = await page.pdf(pdfOptions);
 
-    await browser.close();
+    // Close browser safely
+    if (browser) {
+      await browser.close();
+    }
 
     // Return PDF as response
     return new NextResponse(Buffer.from(pdf), {
       status: 200,
       headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="generated-report.pdf"',
-        'Cache-Control': 'no-cache'
-      }
+        "Content-Type": "application/pdf",
+        "Content-Disposition": 'attachment; filename="generated-report.pdf"',
+        "Cache-Control": "no-cache",
+      },
     });
-
   } catch (error) {
-    console.error('PDF generation error:', error);
+    console.error("PDF generation error:", error);
+
+    // Ensure browser is closed even on error
+    if (browser) {
+      try {
+        await browser.close();
+      } catch (closeError) {
+        console.error("Error closing browser:", closeError);
+      }
+    }
+
     return NextResponse.json(
-      { error: 'Failed to generate PDF', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        error: "Failed to generate PDF",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
