@@ -768,6 +768,53 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
       });
 
       if (!response.ok) {
+        // Check if it's a 503 with fallback information
+        if (response.status === 503) {
+          const fallbackData = await response.json();
+          if (fallbackData.fallback === "client-side") {
+            console.log("Server returned fallback instruction:", fallbackData.message);
+            
+            // Show user-friendly message with options
+            const userChoice = confirm(
+              "PDF generation is temporarily unavailable on the server.\n\n" +
+              "Would you like to:\n" +
+              "• Click 'OK' to open print dialog (recommended)\n" +
+              "• Click 'Cancel' to try again later\n\n" +
+              "Note: You can save as PDF from the print dialog."
+            );
+            
+            if (userChoice) {
+              // Create a new window with the content for better printing
+              const printWindow = window.open('', '_blank');
+              if (printWindow) {
+                printWindow.document.write(`
+                  <!DOCTYPE html>
+                  <html>
+                  <head>
+                    <title>Business Plan - PDF</title>
+                    <style>
+                      body { font-family: Arial, sans-serif; margin: 20px; }
+                      @media print { body { margin: 0; } }
+                    </style>
+                  </head>
+                  <body>
+                    ${completeHTML}
+                  </body>
+                  </html>
+                `);
+                printWindow.document.close();
+                printWindow.focus();
+                printWindow.print();
+              } else {
+                // Fallback to current window print
+                window.print();
+              }
+            }
+            
+            hideLoadingIndicator();
+            return;
+          }
+        }
         throw new Error("Server-side PDF generation failed");
       }
 
