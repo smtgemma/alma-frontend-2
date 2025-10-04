@@ -386,6 +386,18 @@ export const generateWordDocument = async ({
   keyRatios = [],
   operatingCostBreakdown = [],
 }: DocDownloadProps) => {
+  // Ensure all array parameters are properly initialized to prevent null reference errors
+  const safeFinancialAnalysis = Array.isArray(financialAnalysis) ? financialAnalysis : [];
+  const safeRatiosAnalysis = Array.isArray(ratiosAnalysis) ? ratiosAnalysis : [];
+  const safeProductionSalesForecast = Array.isArray(productionSalesForecast) ? productionSalesForecast : [];
+  const safeFinancialHighlights = Array.isArray(financialHighlights) ? financialHighlights : [];
+  const safeCashFlowAnalysis = Array.isArray(cashFlowAnalysis) ? cashFlowAnalysis : [];
+  const safeProfitLossProjection = Array.isArray(profitLossProjection) ? profitLossProjection : [];
+  const safeBalanceSheet = Array.isArray(balanceSheet) ? balanceSheet : [];
+  const safeNetFinancialPosition = Array.isArray(netFinancialPosition) ? netFinancialPosition : [];
+  const safeDebtStructure = Array.isArray(debtStructure) ? debtStructure : [];
+  const safeKeyRatios = Array.isArray(keyRatios) ? keyRatios : [];
+  const safeOperatingCostBreakdown = Array.isArray(operatingCostBreakdown) ? operatingCostBreakdown : [];
   // Helper function to convert data for charts
   const convertDataForChart = (data: any[], chartType: string = "bar") => {
     if (!data || data.length === 0) return [];
@@ -515,54 +527,54 @@ export const generateWordDocument = async ({
   // Generate chart images with proper data conversion
 
   const financialChart =
-    financialHighlights.length > 0
+    safeFinancialHighlights.length > 0
       ? await generateChartImage(
         "bar",
-        convertDataForChart(financialHighlights, "financial"),
+        convertDataForChart(safeFinancialHighlights, "financial"),
         "Grafico a barre punti salienti finanziari"
       )
       : "";
 
   const profitLossChart =
-    profitLossProjection.length > 0
+    safeProfitLossProjection.length > 0
       ? await generateChartImage(
         "line",
-        convertDataForChart(profitLossProjection, "financial"),
+        convertDataForChart(safeProfitLossProjection, "financial"),
         "Grafico tendenza profitti e perdite"
       )
       : "";
   const netFinancialPositionChart =
-    netFinancialPosition.length > 0
+    safeNetFinancialPosition.length > 0
       ? await generateChartImage(
         "line",
-        convertDataForChart(netFinancialPosition, "net_financial"),
+        convertDataForChart(safeNetFinancialPosition, "net_financial"),
         "Grafico posizione finanziaria netta"
       )
       : "";
 
   const balanceSheetChart =
-    balanceSheet.length > 0
+    safeBalanceSheet.length > 0
       ? await generateChartImage(
         "pie",
-        convertDataForChart(balanceSheet, "balance_sheet"),
+        convertDataForChart(safeBalanceSheet, "balance_sheet"),
         "Grafico distribuzione stato patrimoniale"
       )
       : "";
 
   const keyRatiosChart =
-    keyRatios.length > 0
+    safeKeyRatios.length > 0
       ? await generateChartImage(
         "bar",
-        convertDataForChart(keyRatios),
+        convertDataForChart(safeKeyRatios),
         "Grafico a barre rapporti chiave"
       )
       : "";
 
   const operatingCostChart =
-    operatingCostBreakdown.length > 0
+    safeOperatingCostBreakdown.length > 0
       ? await generateChartImage(
         "pie",
-        convertDataForChart(operatingCostBreakdown, "operating_cost"),
+        convertDataForChart(safeOperatingCostBreakdown, "operating_cost"),
         "Grafico distribuzione costi operativi"
       )
       : "";
@@ -749,7 +761,7 @@ export const generateWordDocument = async ({
 
   // Helper function to generate table HTML with better column management
   const generateTableHTML = (data: any[], title: string) => {
-    if (!data || data.length === 0) return "";
+    if (!data || !Array.isArray(data) || data.length === 0) return "";
 
     const headers = Object.keys(data[0] || {});
     const numColumns = headers.length;
@@ -1157,7 +1169,7 @@ export const generateWordDocument = async ({
       : ""
     }
 
-      ${productionSalesForecast.length > 0
+      ${safeProductionSalesForecast.length > 0
       ? `
       <div class="section">
         <div class="section-title">
@@ -1165,7 +1177,7 @@ export const generateWordDocument = async ({
         </div>
         <div class="section-content">
           ${generateTableHTML(
-        productionSalesForecast,
+        safeProductionSalesForecast,
         "Tabella previsione vendite produzione"
       )}
         </div>
@@ -1174,7 +1186,7 @@ export const generateWordDocument = async ({
       : ""
     }
 
-       ${operatingCostBreakdown.length > 0
+       ${safeOperatingCostBreakdown.length > 0
       ? `
       <div class="section">
         <div class="section-title">
@@ -1182,7 +1194,7 @@ export const generateWordDocument = async ({
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-        operatingCostBreakdown,
+        safeOperatingCostBreakdown,
         "Tabella ripartizione costi operativi 7.2"
       )}
           ${operatingCostChart
@@ -1216,15 +1228,15 @@ export const generateWordDocument = async ({
       : ""
     }
 
-        ${profitLossProjection.length > 0
+        ${safeProfitLossProjection.length > 0
       ? `
       <div class="section">
         <div class="section-title">
-          <h2>8.1 Proiezione profitti e perdite</h2>
+          <h2>8. Proiezione profitti e perdite</h2>
         </div>
         <div class="section-content">
-          ${generateTransposedTableHTML(
-        profitLossProjection,
+          ${generateTableHTML(
+        safeProfitLossProjection,
         "Tabella proiezione profitti e perdite"
       )}
           ${profitLossChart
@@ -1244,7 +1256,7 @@ export const generateWordDocument = async ({
       : ""
     }
 
-        ${balanceSheet.length > 0
+        ${safeBalanceSheet.length > 0
       ? `
           <div class="section">
             <div class="section-title">
@@ -1252,7 +1264,7 @@ export const generateWordDocument = async ({
             </div>
             <div class="section-content">
               ${generateTransposedTableHTML(
-        balanceSheet,
+        safeBalanceSheet,
         "Tabella stato patrimoniale"
       )}
               ${balanceSheetChart
@@ -1264,9 +1276,9 @@ export const generateWordDocument = async ({
                   <div style="flex: 1; padding-left: 20px;">
                     <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: bold; color: #2c3e50;">Componenti stato patrimoniale</h3>
                     <div style="display: flex; flex-direction: column; gap: 10px;">
-                      ${balanceSheet.length > 0
+                      ${safeBalanceSheet.length > 0
           ? (() => {
-            const item = balanceSheet[0];
+            const item = safeBalanceSheet[0];
             const assets = item.assets || 0;
             const liabilities = item.liabilities || 0;
             const equity = item.equity || 0;
@@ -1349,15 +1361,15 @@ export const generateWordDocument = async ({
 
     
 
-    ${netFinancialPosition.length > 0
+    ${safeNetFinancialPosition.length > 0
       ? `
       <div class="section">
         <div class="section-title">
           <h2>10. Posizione finanziaria netta</h2>
         </div>
         <div class="section-content">
-          ${generateTransposedTableHTML(
-        netFinancialPosition,
+          ${generateTableHTML(
+        safeNetFinancialPosition,
         "Tabella posizione finanziaria netta"
       )}
           ${netFinancialPositionChart
@@ -1376,21 +1388,21 @@ export const generateWordDocument = async ({
       `
       : ""
     }  
-    ${debtStructure.length > 0
+    ${safeDebtStructure.length > 0
       ? `
       <div class="section">
         <div class="section-title">
           <h2>11. Struttura del debito</h2>
         </div>
         <div class="section-content">
-          ${generateTableHTML(debtStructure, "Tabella struttura debito")}
+          ${generateTableHTML(safeDebtStructure, "Tabella struttura debito")}
         </div>
       </div>
       `
       : ""
     }  
 
-      ${financialAnalysis.length > 0
+      ${safeFinancialAnalysis.length > 0
       ? `
       <div class="section">
         <div class="section-title">
@@ -1398,7 +1410,7 @@ export const generateWordDocument = async ({
         </div>
         <div class="section-content">
           ${generateFinancialAnalysisTableHTML(
-        financialAnalysis,
+        safeFinancialAnalysis,
         "Tabella analisi finanziaria"
       )}
         </div>
@@ -1407,16 +1419,16 @@ export const generateWordDocument = async ({
       : ""
     }
 
-        ${financialHighlights.length > 0
+        ${safeFinancialHighlights.length > 0
       ? `
       <div class="section">
         <div class="section-title">
-          <h2>12.1 Punti salienti finanziari</h2>
+          <h2>13. Highlights finanziari</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
-        financialHighlights,
-        "Tabella punti salienti finanziari"
+        safeFinancialHighlights,
+        "Tabella highlights finanziari"
       )}
           ${financialChart
         ? `
@@ -1436,15 +1448,15 @@ export const generateWordDocument = async ({
     }
 
         
-       ${cashFlowAnalysis.length > 0
+       ${safeCashFlowAnalysis.length > 0
       ? `
       <div class="section">
         <div class="section-title">
-          <h2>12.2 Analisi flusso di cassa</h2>
+          <h2>14. Analisi del flusso di cassa</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
-        cashFlowAnalysis,
+        safeCashFlowAnalysis,
         "Tabella analisi flusso di cassa"
       )}
         </div>
@@ -1453,7 +1465,7 @@ export const generateWordDocument = async ({
       : ""
     }
 
-      ${ratiosAnalysis.length > 0
+      ${safeRatiosAnalysis.length > 0
       ? `
       <div class="section">
         <div class="section-title">
@@ -1461,7 +1473,7 @@ export const generateWordDocument = async ({
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-        ratiosAnalysis,
+        safeRatiosAnalysis,
         "Tabella analisi rapporti"
       )}
         </div>
