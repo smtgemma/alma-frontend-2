@@ -13,6 +13,7 @@ import MarketingDashboard from "../generated-plans-graph/Marketing";
 import OperationsDashboard from "../generated-plans-graph/OperationPlan";
 import DebtDashboard from "../generated-plans-graph/DebtStructure";
 import BalanceSheet from "../generated-plans-graph/BalanceSheet";
+import { SmartFormProvider } from "../ai-smart-form/SmartFormContext";
 
 interface PlanApprovedbyAdminProps {
   businessPlan?: {
@@ -214,10 +215,12 @@ const PlanApprovedbyAdmin: React.FC<PlanApprovedbyAdminProps> = ({
           profitLossProjection={defaultProps.profitLossProjection}
           sectorStrategy={defaultProps.sectorStrategy}
         />
-        <BalanceSheet
-          balanceSheet={defaultProps.balanceSheet}
-          netFinancialPosition={defaultProps.netFinancialPosition}
-        />
+        <SmartFormProvider>
+          <BalanceSheet
+            balanceSheet={defaultProps.balanceSheet}
+            netFinancialPosition={defaultProps.netFinancialPosition}
+          />
+        </SmartFormProvider>
         <DebtDashboard debtStructure={defaultProps.debtStructure} />
         <OperationsDashboard
           operationsPlan={defaultProps.operationsPlan}

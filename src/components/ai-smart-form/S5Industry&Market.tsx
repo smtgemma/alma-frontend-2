@@ -4,14 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
+import { toggleSuggestionInInput } from "./utils/aiSuggestionUtils";
 //
 interface IndustryMarketForm {
   industry: string;
   idealClient: string;
-  clientType01: string;
-  clientType02: string;
-  clientType03: string;
-  clientType04: string;
   marketingPlan: string;
   customIndustry: string[];
   customIdealClient: string[];
@@ -449,10 +446,17 @@ export default function S5IndustryMarket() {
         newOptions = [...currentOptions, option];
       }
 
+      // Update input field using utility function
+      const updatedInput = toggleSuggestionInInput(
+        prev.industry,
+        option,
+        isSelected
+      );
+
       return {
         ...prev,
         selectedIndustryOptions: newOptions,
-        industry: newOptions.join(", "), // Set input field value
+        industry: updatedInput,
       };
     });
   };
@@ -471,98 +475,17 @@ export default function S5IndustryMarket() {
         newOptions = [...currentOptions, option];
       }
 
+      // Update input field using utility function
+      const updatedInput = toggleSuggestionInInput(
+        prev.idealClient,
+        option,
+        isSelected
+      );
+
       return {
         ...prev,
         selectedIdealClientOptions: newOptions,
-        idealClient: newOptions.join(", "), // Set input field value
-      };
-    });
-  };
-
-  const handleClientType01OptionSelect = (option: string) => {
-    setForm((prev) => {
-      const currentOptions = prev.selectedClientType01Options;
-      const isSelected = currentOptions.includes(option);
-
-      let newOptions;
-      if (isSelected) {
-        // Remove if already selected
-        newOptions = currentOptions.filter((opt) => opt !== option);
-      } else {
-        // Add if not selected
-        newOptions = [...currentOptions, option];
-      }
-
-      return {
-        ...prev,
-        selectedClientType01Options: newOptions,
-        clientType01: newOptions.join(", "), // Set input field value
-      };
-    });
-  };
-
-  const handleClientType02OptionSelect = (option: string) => {
-    setForm((prev) => {
-      const currentOptions = prev.selectedClientType02Options;
-      const isSelected = currentOptions.includes(option);
-
-      let newOptions;
-      if (isSelected) {
-        // Remove if already selected
-        newOptions = currentOptions.filter((opt) => opt !== option);
-      } else {
-        // Add if not selected
-        newOptions = [...currentOptions, option];
-      }
-
-      return {
-        ...prev,
-        selectedClientType02Options: newOptions,
-        clientType02: newOptions.join(", "), // Set input field value
-      };
-    });
-  };
-
-  const handleClientType03OptionSelect = (option: string) => {
-    setForm((prev) => {
-      const currentOptions = prev.selectedClientType03Options;
-      const isSelected = currentOptions.includes(option);
-
-      let newOptions;
-      if (isSelected) {
-        // Remove if already selected
-        newOptions = currentOptions.filter((opt) => opt !== option);
-      } else {
-        // Add if not selected
-        newOptions = [...currentOptions, option];
-      }
-
-      return {
-        ...prev,
-        selectedClientType03Options: newOptions,
-        clientType03: newOptions.join(", "), // Set input field value
-      };
-    });
-  };
-
-  const handleClientType04OptionSelect = (option: string) => {
-    setForm((prev) => {
-      const currentOptions = prev.selectedClientType04Options;
-      const isSelected = currentOptions.includes(option);
-
-      let newOptions;
-      if (isSelected) {
-        // Remove if already selected
-        newOptions = currentOptions.filter((opt) => opt !== option);
-      } else {
-        // Add if not selected
-        newOptions = [...currentOptions, option];
-      }
-
-      return {
-        ...prev,
-        selectedClientType04Options: newOptions,
-        clientType04: newOptions.join(", "), // Set input field value
+        idealClient: updatedInput,
       };
     });
   };
@@ -581,10 +504,17 @@ export default function S5IndustryMarket() {
         newOptions = [...currentOptions, option];
       }
 
+      // Update input field using utility function
+      const updatedInput = toggleSuggestionInInput(
+        prev.marketingPlan,
+        option,
+        isSelected
+      );
+
       return {
         ...prev,
         selectedMarketingPlanOptions: newOptions,
-        marketingPlan: newOptions.join(", "), // Set input field value
+        marketingPlan: updatedInput,
       };
     });
   };
@@ -617,21 +547,21 @@ export default function S5IndustryMarket() {
   return (
     <div className="min-h-screen">
       <SmartNavbar />
-      <div className="bg-white flex flex-col items-center justify-center px-4 py-12">
-        <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
+      <div className="bg-white flex flex-col items-center justify-center px-[5px] md:px-8 py-12">
+        <div className="max-w-[1440px] mx-auto w-full bg-white px-[5px] md:px-8 py-2 md:py-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
             Passo 05 di 10
           </p>
 
           <div className="text-center mb-8">
-            <h2 className="text-[2rem] text-accent font-medium">
+            <h2 className="text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] lg:text-[2.25rem] xl:text-[2.5rem] leading-snug md:leading-tight text-accent font-semibold tracking-tight break-words">
               Settore Industriale e di Mercato
             </h2>
           </div>
 
           {/* Form */}
-          <div className="p-2 md:p-8 relative">
+          <div className="px-[5px] md:px-8 py-2 md:py-8 relative">
             {/* Top Right Decorative Image */}
             <div className="absolute top-0 right-0 w-24 h-24 md:w-48 md:h-48">
               <img
@@ -642,7 +572,7 @@ export default function S5IndustryMarket() {
             </div>
 
             <div
-              className="bg-white rounded-2xl p-4 m-2 md:p-8 md:m-8 shadow-lg relative"
+              className="bg-white rounded-2xl px-[5px] md:px-8 py-4 md:py-8 m-2 md:m-8 shadow-lg relative"
               style={{
                 boxShadow:
                   "0 10px 15px -3px #4F46E540, 0 4px 6px -4px #4F46E540",
@@ -678,9 +608,9 @@ export default function S5IndustryMarket() {
                       }`}
                     />
 
-                    {/* Selected Options Display */}
+{/* Selected Options Display */}
                     {form.selectedIndustryOptions.length > 0 && (
-                      <div className="mt-3">
+                      <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">
                           Opzioni selezionate:
                         </div>
@@ -830,9 +760,9 @@ export default function S5IndustryMarket() {
                       className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent "
                     />
 
-                    {/* Selected Options Display */}
+{/* Selected Options Display */}
                     {form.selectedIdealClientOptions.length > 0 && (
-                      <div className="mt-3">
+                      <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">
                           Opzioni selezionate:
                         </div>
@@ -969,531 +899,6 @@ export default function S5IndustryMarket() {
                   )}
                 </div>
 
-                {/* Client Type Questions */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Client Type 01 */}
-                  <div>
-                    <label className="text-[1rem] font-medium text-accent mb-2 block">
-                      Tipo Cliente 01
-                    </label>
-                    <input
-                      type="text"
-                      value={form.clientType01}
-                      onChange={(e) =>
-                        handleTextareaChange("clientType01", e.target.value)
-                      }
-                      onKeyPress={(e) =>
-                        handleKeyPress(e, "customClientType01", "clientType01")
-                      }
-                      onClick={() =>
-                        handleTextareaClick("showClientType01Options")
-                      }
-                      className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-
-                    {/* Selected Options Display */}
-                    {form.selectedClientType01Options.length > 0 && (
-                      <div className="mt-3">
-                        <div className="text-sm text-gray-600 mb-2">
-                          Opzioni selezionate:
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {form.selectedClientType01Options.map(
-                            (option, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
-                              >
-                                <span className="mr-2">{option}</span>
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleClientType01OptionSelect(option)
-                                  }
-                                  className="text-primary hover:text-primary/70"
-                                >
-                                  ×
-                                </button>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Sub-options */}
-                    {form.showClientType01Options && (
-                      <div
-                        className="mt-2 space-y-1"
-                        ref={clientTypeDropdownRef}
-                      >
-                        {/* AI Suggestions */}
-                        {isLoadingClientTypeSuggestions ? (
-                          <div className="flex items-center p-2 rounded-lg">
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                            <span className="text-[0.875rem] font-normal text-gray-500 ml-2">
-                              Caricamento suggerimenti AI...
-                            </span>
-                          </div>
-                        ) : (
-                          clientTypeAiSuggestions.map((option) => {
-                            const isSelected =
-                              form.selectedClientType01Options.includes(option);
-                            return (
-                              <button
-                                key={option}
-                                type="button"
-                                onClick={() =>
-                                  handleClientType01OptionSelect(option)
-                                }
-                                className={`flex items-center w-full text-left p-2 rounded transition-colors ${
-                                  isSelected
-                                    ? "bg-primary/10 border border-primary"
-                                    : "hover:bg-gray-50"
-                                }`}
-                              >
-                                <div
-                                  className={`w-4 h-4 border-2 rounded mr-2 ml-4 flex items-center justify-center ${
-                                    isSelected
-                                      ? "bg-primary border-primary"
-                                      : "border-gray-300"
-                                  }`}
-                                >
-                                  {isSelected && (
-                                    <svg
-                                      className="w-3 h-3 text-white"
-                                      fill="currentColor"
-                                      viewBox="0 0 20 20"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                  )}
-                                </div>
-                                <span className="text-[0.875rem] font-normal text-accent">
-                                  {option}
-                                </span>
-                              </button>
-                            );
-                          })
-                        )}
-
-                        {/* Custom options */}
-                        {form.customClientType01.map((option, index) => {
-                          const isSelected =
-                            form.selectedClientType01Options.includes(option);
-                          return (
-                            <button
-                              key={`custom-type01-${index}`}
-                              type="button"
-                              onClick={() =>
-                                handleClientType01OptionSelect(option)
-                              }
-                              className={`flex items-center w-full text-left p-2 rounded transition-colors ${
-                                isSelected
-                                  ? "bg-primary/10 border border-primary"
-                                  : "hover:bg-gray-50"
-                              }`}
-                            >
-                              <div
-                                className={`w-4 h-4 border-2 rounded mr-2 ml-4 flex items-center justify-center ${
-                                  isSelected
-                                    ? "bg-primary border-primary"
-                                    : "border-gray-300"
-                                }`}
-                              >
-                                {isSelected && (
-                                  <svg
-                                    className="w-3 h-3 text-white"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
-                              <span className="text-[0.875rem] font-normal text-accent">
-                                {option}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Client Type 02 */}
-                  <div>
-                    <label className="text-[1rem] font-medium text-accent mb-2 block">
-                      Tipo Cliente 02
-                    </label>
-                    <input
-                      type="text"
-                      value={form.clientType02}
-                      onChange={(e) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          clientType02: e.target.value,
-                        }))
-                      }
-                      onKeyPress={(e) =>
-                        handleKeyPress(e, "customClientType02", "clientType02")
-                      }
-                      onClick={() =>
-                        handleTextareaClick("showClientType02Options")
-                      }
-                      className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-
-                    {/* Selected Options Display */}
-                    {form.selectedClientType02Options.length > 0 && (
-                      <div className="mt-3">
-                        <div className="text-sm text-gray-600 mb-2">
-                          Opzioni selezionate:
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {form.selectedClientType02Options.map(
-                            (option, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
-                              >
-                                <span className="mr-2">{option}</span>
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleClientType02OptionSelect(option)
-                                  }
-                                  className="text-primary hover:text-primary/70"
-                                >
-                                  ×
-                                </button>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Sub-options */}
-                    {form.showClientType02Options && (
-                      <div
-                        className="mt-2 space-y-1"
-                        ref={clientTypeDropdownRef}
-                      >
-                        {/* AI Suggestions */}
-                        {isLoadingClientTypeSuggestions ? (
-                          <div className="flex items-center p-2 rounded-lg">
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                            <span className="text-[0.875rem] font-normal text-gray-500 ml-2">
-                              Caricamento suggerimenti AI...
-                            </span>
-                          </div>
-                        ) : (
-                          clientTypeAiSuggestions.map((option) => {
-                            const isSelected =
-                              form.selectedClientType02Options.includes(option);
-                            return (
-                              <button
-                                key={option}
-                                type="button"
-                                onClick={() =>
-                                  handleClientType02OptionSelect(option)
-                                }
-                                className={`flex items-center w-full text-left p-2 rounded transition-colors ${
-                                  isSelected
-                                    ? "bg-primary/10 border border-primary"
-                                    : "hover:bg-gray-50"
-                                }`}
-                              >
-                                <div
-                                  className={`w-4 h-4 border-2 rounded mr-2 ml-4 flex items-center justify-center ${
-                                    isSelected
-                                      ? "bg-primary border-primary"
-                                      : "border-gray-300"
-                                  }`}
-                                >
-                                  {isSelected && (
-                                    <svg
-                                      className="w-3 h-3 text-white"
-                                      fill="currentColor"
-                                      viewBox="0 0 20 20"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                  )}
-                                </div>
-                                <span className="text-[0.875rem] font-normal text-accent">
-                                  {option}
-                                </span>
-                              </button>
-                            );
-                          })
-                        )}
-
-                        {/* Custom options */}
-                        {form.customClientType02.map((option, index) => {
-                          const isSelected =
-                            form.selectedClientType02Options.includes(option);
-                          return (
-                            <button
-                              key={`custom-type02-${index}`}
-                              type="button"
-                              onClick={() =>
-                                handleClientType02OptionSelect(option)
-                              }
-                              className={`flex items-center w-full text-left p-2 rounded transition-colors ${
-                                isSelected
-                                  ? "bg-primary/10 border border-primary"
-                                  : "hover:bg-gray-50"
-                              }`}
-                            >
-                              <div
-                                className={`w-4 h-4 border-2 rounded mr-2 ml-4 flex items-center justify-center ${
-                                  isSelected
-                                    ? "bg-primary border-primary"
-                                    : "border-gray-300"
-                                }`}
-                              >
-                                {isSelected && (
-                                  <svg
-                                    className="w-3 h-3 text-white"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
-                              <span className="text-[0.875rem] font-normal text-accent">
-                                {option}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Client Type 03 */}
-                  <div>
-                    <label className="text-[1rem] font-medium text-accent mb-2 block">
-                      Tipo Cliente 03
-                    </label>
-                    <input
-                      type="text"
-                      value={form.clientType03}
-                      onChange={(e) =>
-                        handleTextareaChange("clientType03", e.target.value)
-                      }
-                      onKeyPress={(e) =>
-                        handleKeyPress(e, "customClientType03", "clientType03")
-                      }
-                      onClick={() =>
-                        handleTextareaClick("showClientType03Options")
-                      }
-                      className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-
-                    {/* Selected Options Display */}
-                    {form.selectedClientType03Options.length > 0 && (
-                      <div className="mt-3">
-                        <div className="text-sm text-gray-600 mb-2">
-                          Opzioni selezionate:
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {form.selectedClientType03Options.map(
-                            (option, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
-                              >
-                                <span className="mr-2">{option}</span>
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleClientType03OptionSelect(option)
-                                  }
-                                  className="text-primary hover:text-primary/70"
-                                >
-                                  ×
-                                </button>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Sub-options */}
-                    {form.showClientType03Options && (
-                      <div
-                        className="mt-2 space-y-1"
-                        ref={clientTypeDropdownRef}
-                      >
-                        {/* AI Suggestions */}
-                        {isLoadingClientTypeSuggestions ? (
-                          <div className="flex items-center p-2 rounded-lg">
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                            <span className="text-[0.875rem] font-normal text-gray-500 ml-2">
-                              Caricamento suggerimenti AI...
-                            </span>
-                          </div>
-                        ) : (
-                          clientTypeAiSuggestions.map((option) => (
-                            <button
-                              key={option}
-                              type="button"
-                              onClick={() =>
-                                handleClientType03OptionSelect(option)
-                              }
-                              className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                            >
-                              <div className="w-1 h-1 bg-[#6B4AFF] rounded-full mr-2 ml-4"></div>
-                              <span className="text-[0.875rem] font-normal text-accent">
-                                {option}
-                              </span>
-                            </button>
-                          ))
-                        )}
-
-                        {/* Custom options */}
-                        {form.customClientType03.map((option, index) => (
-                          <button
-                            key={`custom-type03-${index}`}
-                            type="button"
-                            onClick={() =>
-                              handleClientType03OptionSelect(option)
-                            }
-                            className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                          >
-                            <div className="w-1 h-1 bg-[#6B4AFF] rounded-full mr-2 ml-4"></div>
-                            <span className="text-[0.875rem] font-normal text-accent">
-                              {option}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  {/* Client Type 04 */}
-                  <div>
-                    <label className="text-[1rem] font-medium text-accent mb-2 block">
-                      Client Type 04
-                    </label>
-                    <input
-                      type="text"
-                      value={form.clientType04}
-                      onChange={(e) =>
-                        handleTextareaChange("clientType04", e.target.value)
-                      }
-                      onKeyPress={(e) =>
-                        handleKeyPress(e, "customClientType04", "clientType04")
-                      }
-                      onClick={() =>
-                        handleTextareaClick("showClientType04Options")
-                      }
-                      className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-
-                    {/* Selected Options Display */}
-                    {form.selectedClientType04Options.length > 0 && (
-                      <div className="mt-3">
-                        <div className="text-sm text-gray-600 mb-2">
-                          Opzioni selezionate:
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {form.selectedClientType04Options.map(
-                            (option, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
-                              >
-                                <span className="mr-2">{option}</span>
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleClientType04OptionSelect(option)
-                                  }
-                                  className="text-primary hover:text-primary/70"
-                                >
-                                  ×
-                                </button>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Sub-options */}
-                    {form.showClientType04Options && (
-                      <div
-                        className="mt-2 space-y-1"
-                        ref={clientTypeDropdownRef}
-                      >
-                        {/* AI Suggestions */}
-                        {isLoadingClientTypeSuggestions ? (
-                          <div className="flex items-center p-2 rounded-lg">
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                            <span className="text-[0.875rem] font-normal text-gray-500 ml-2">
-                              Caricamento suggerimenti AI...
-                            </span>
-                          </div>
-                        ) : (
-                          clientTypeAiSuggestions.map((option) => (
-                            <button
-                              key={option}
-                              type="button"
-                              onClick={() =>
-                                handleClientType04OptionSelect(option)
-                              }
-                              className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                            >
-                              <div className="w-1 h-1 bg-[#6B4AFF] rounded-full mr-2 ml-4"></div>
-                              <span className="text-[0.875rem] font-normal text-accent">
-                                {option}
-                              </span>
-                            </button>
-                          ))
-                        )}
-
-                        {/* Custom options */}
-                        {form.customClientType04.map((option, index) => (
-                          <button
-                            key={`custom-type04-${index}`}
-                            type="button"
-                            onClick={() =>
-                              handleClientType04OptionSelect(option)
-                            }
-                            className="flex items-center w-full text-left hover:bg-gray-50 p-2 rounded transition-colors"
-                          >
-                            <div className="w-1 h-1 bg-[#6B4AFF] rounded-full mr-2 ml-4"></div>
-                            <span className="text-[0.875rem] font-normal text-accent">
-                              {option}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
                 {/* Question 4: How do you plan to reach them? (marketing plan schemes) */}
                 <div>
                   <label className="question-text">
@@ -1521,9 +926,9 @@ export default function S5IndustryMarket() {
                       className="w-full px-4 py-3 border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
 
-                    {/* Selected Options Display */}
+{/* Selected Options Display */}
                     {form.selectedMarketingPlanOptions.length > 0 && (
-                      <div className="mt-3">
+                      <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">
                           Opzioni selezionate:
                         </div>

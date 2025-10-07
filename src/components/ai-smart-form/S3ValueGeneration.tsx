@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
+import { toggleSuggestionInInput, removeSuggestionFromInput } from "./utils/aiSuggestionUtils";
 //
 interface ValueGenerationForm {
   uniqueValue: string;
@@ -267,20 +268,28 @@ export default function S3ValueGeneration() {
     setForm((prev) => {
       const currentOptions = prev.selectedUniqueOptions;
       const isSelected = currentOptions.includes(option);
-
+      
+      let newOptions;
       if (isSelected) {
         // Remove if already selected
-        return {
-          ...prev,
-          selectedUniqueOptions: currentOptions.filter((opt) => opt !== option),
-        };
+        newOptions = currentOptions.filter((opt) => opt !== option);
       } else {
         // Add if not selected
-        return {
-          ...prev,
-          selectedUniqueOptions: [...currentOptions, option],
-        };
+        newOptions = [...currentOptions, option];
       }
+      
+      // Update input field using utility function
+      const updatedInput = toggleSuggestionInInput(
+        prev.uniqueValue,
+        option,
+        isSelected
+      );
+      
+      return {
+        ...prev,
+        selectedUniqueOptions: newOptions,
+        uniqueValue: updatedInput,
+      };
     });
   };
 
@@ -288,22 +297,28 @@ export default function S3ValueGeneration() {
     setForm((prev) => {
       const currentOptions = prev.selectedProblemOptions;
       const isSelected = currentOptions.includes(option);
-
+      
+      let newOptions;
       if (isSelected) {
         // Remove if already selected
-        return {
-          ...prev,
-          selectedProblemOptions: currentOptions.filter(
-            (opt) => opt !== option
-          ),
-        };
+        newOptions = currentOptions.filter((opt) => opt !== option);
       } else {
         // Add if not selected
-        return {
-          ...prev,
-          selectedProblemOptions: [...currentOptions, option],
-        };
+        newOptions = [...currentOptions, option];
       }
+      
+      // Update input field using utility function
+      const updatedInput = toggleSuggestionInInput(
+        prev.problemDescription,
+        option,
+        isSelected
+      );
+      
+      return {
+        ...prev,
+        selectedProblemOptions: newOptions,
+        problemDescription: updatedInput,
+      };
     });
   };
 
@@ -311,22 +326,28 @@ export default function S3ValueGeneration() {
     setForm((prev) => {
       const currentOptions = prev.selectedValueAddOptions;
       const isSelected = currentOptions.includes(option);
-
+      
+      let newOptions;
       if (isSelected) {
         // Remove if already selected
-        return {
-          ...prev,
-          selectedValueAddOptions: currentOptions.filter(
-            (opt) => opt !== option
-          ),
-        };
+        newOptions = currentOptions.filter((opt) => opt !== option);
       } else {
         // Add if not selected
-        return {
-          ...prev,
-          selectedValueAddOptions: [...currentOptions, option],
-        };
+        newOptions = [...currentOptions, option];
       }
+      
+      // Update input field using utility function
+      const updatedInput = toggleSuggestionInInput(
+        prev.valueAddDescription,
+        option,
+        isSelected
+      );
+      
+      return {
+        ...prev,
+        selectedValueAddOptions: newOptions,
+        valueAddDescription: updatedInput,
+      };
     });
   };
 
@@ -399,21 +420,21 @@ export default function S3ValueGeneration() {
   return (
     <div className="min-h-screen">
       <SmartNavbar />
-      <div className="bg-white flex flex-col items-center justify-center px-4 py-12">
-        <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
+      <div className="bg-white flex flex-col items-center justify-center px-[5px] md:px-8 py-12">
+        <div className="max-w-[1440px] mx-auto w-full bg-white px-[5px] md:px-8 py-2 md:py-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
             Passo 03 di 10
           </p>
 
           <div className="text-center mb-8">
-            <h2 className="text-[2rem] text-accent font-medium">
+            <h2 className="text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] lg:text-[2.25rem] xl:text-[2.5rem] leading-snug md:leading-tight text-accent font-semibold tracking-tight break-words">
               Generazione di Valore
             </h2>
           </div>
 
           {/* Form */}
-          <div className="p-2 md:p-8 relative">
+          <div className="px-[5px] md:px-8 py-2 md:py-8 relative">
             {/* Top Right Decorative Image */}
             <div className="absolute top-0 right-0 w-24 h-24 md:w-48 md:h-48">
               <img
@@ -424,7 +445,7 @@ export default function S3ValueGeneration() {
             </div>
 
             <div
-              className="bg-white rounded-2xl p-4 m-2 md:p-8 md:m-8 shadow-lg relative"
+              className="bg-white rounded-2xl px-[5px] md:px-8 py-4 md:py-8 m-2 md:m-8 shadow-lg relative"
               style={{
                 boxShadow:
                   "0 10px 15px -3px #4F46E540, 0 4px 6px -4px #4F46E540",
@@ -439,11 +460,7 @@ export default function S3ValueGeneration() {
                   <div className="mt-4 relative">
                     <input
                       type="text"
-                      value={
-                        form.selectedUniqueOptions.length > 0
-                          ? form.selectedUniqueOptions.join(", ")
-                          : form.uniqueValue
-                      }
+                      value={form.uniqueValue}
                       onChange={(e) =>
                         handleTextareaChange("uniqueValue", e.target.value)
                       }
@@ -457,13 +474,13 @@ export default function S3ValueGeneration() {
                           }));
                         }
                       }}
-                      placeholder="Es. Energia Rinnovabile, Architettura e Interni, Consulenza Legale, Gestione Eventi"
+                      placeholder="Puoi scrivere liberamente o selezionare dai suggerimenti AI"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
-                    {/* Selected Options Display */}
+{/* Selected Options Display */}
                     {form.selectedUniqueOptions.length > 0 && (
-                      <div className="mt-3">
+                      <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">
                           Opzioni selezionate:
                         </div>
@@ -563,11 +580,7 @@ export default function S3ValueGeneration() {
                   <div className="mt-4 relative">
                     <input
                       type="text"
-                      value={
-                        form.selectedProblemOptions.length > 0
-                          ? form.selectedProblemOptions.join(", ")
-                          : form.problemDescription
-                      }
+                      value={form.problemDescription}
                       onChange={(e) =>
                         handleTextareaChange(
                           "problemDescription",
@@ -584,13 +597,13 @@ export default function S3ValueGeneration() {
                           }));
                         }
                       }}
-                      placeholder="Es. Aiuta le piccole aziende a gestire il loro inventario senza assumere personale aggiuntivo"
+                      placeholder="Puoi scrivere liberamente o selezionare dai suggerimenti AI"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
-                    {/* Selected Options Display */}
+{/* Selected Options Display */}
                     {form.selectedProblemOptions.length > 0 && (
-                      <div className="mt-3">
+                      <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">
                           Opzioni selezionate:
                         </div>
@@ -684,6 +697,29 @@ export default function S3ValueGeneration() {
                   </div>
                 </div>
 
+                {/* IP Ownership moved from Step 2 to Step 3 */}
+                <div>
+                  <label className="question-text">L'azienda possiederà invenzioni, asset digitali, scoperte, segreti commerciali o simili?</label>
+                  <div className="mt-4 space-y-2">
+                    {["Sì", "No"].map((option) => (
+                      <div
+                        key={option}
+                        className={`flex items-center p-3 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
+                          (form as any).companyOwnership === option ? "border-primary" : "border-gray-200"
+                        }`}
+                        onClick={() => setForm((prev: any) => ({ ...prev, companyOwnership: option }))}
+                      >
+                        <div
+                          className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                            (form as any).companyOwnership === option ? "border-[#A9A4FE] bg-primary" : "border-primary bg-white"
+                          }`}
+                        ></div>
+                        <span className="text-[1rem] font-normal text-accent">{option}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Question 3: Do you offer any other value-add support or guarantees */}
                 <div>
                   <label className="question-text">
@@ -692,12 +728,8 @@ export default function S3ValueGeneration() {
                   <div className="mt-4 relative">
                     <input
                       type="text"
-                      placeholder="Es. Forniamo un account manager dedicato e supporto tecnico 24/7"
-                      value={
-                        form.selectedValueAddOptions.length > 0
-                          ? form.selectedValueAddOptions.join(", ")
-                          : form.valueAddDescription
-                      }
+                      placeholder="Puoi scrivere liberamente o selezionare dai suggerimenti AI"
+                      value={form.valueAddDescription}
                       onChange={(e) =>
                         handleTextareaChange(
                           "valueAddDescription",
@@ -730,9 +762,9 @@ export default function S3ValueGeneration() {
                       className="w-full px-4 py-3 bg-[#FCFCFC] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
-                    {/* Selected Options Display */}
+{/* Selected Options Display */}
                     {form.selectedValueAddOptions.length > 0 && (
-                      <div className="mt-3">
+                      <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">
                           Opzioni selezionate:
                         </div>

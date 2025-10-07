@@ -1,7 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import SmartNavbar from './SmartNavbar';
+import { formatEuro } from '@/utils/euFormat';
+import { useSmartForm } from './SmartFormContext';
 
 interface GeneratedPlanOutputProps {
   planContent: string;
@@ -84,6 +86,8 @@ export default function GeneratedPlanOutput({
   generatedAt, 
   onBack 
 }: GeneratedPlanOutputProps) {
+  const { getFormData } = useSmartForm();
+  const step1 = getFormData('step1') as any;
   console.log('=== GENERATED PLAN OUTPUT RENDERED ===');
   console.log('Plan content received:', planContent);
   console.log('Plan content length:', planContent?.length);
@@ -117,15 +121,30 @@ export default function GeneratedPlanOutput({
     console.log('Plan content is not JSON, treating as text');
   }
 
-  // Format currency
+  // Derive Year 0 for Profit & Loss from extracted financial data if present
+  const profitAndLossWithYear0 = useMemo(() => {
+    const base = businessPlanData?.profit_and_loss_projection || [];
+    try {
+      const fin = (step1?.balanceSheetExtractions || [])[0]?.financial_data || {};
+      const year0: any = { year: 0 };
+      if (typeof fin.revenue === 'number') year0.revenue = fin.revenue;
+      if (typeof fin.cogs === 'number') year0.cogs = fin.cogs;
+      if (typeof fin.operating_expenses === 'number') year0.operating_expenses = fin.operating_expenses;
+      if (typeof fin.amortization === 'number' || typeof fin.depreciation_amortization === 'number') {
+        year0.depreciation_amortization = fin.depreciation_amortization ?? fin.amortization;
+      }
+      if (typeof fin.net_income === 'number') year0.net_income = fin.net_income;
+      // Only prepend if we have at least one numeric field
+      const hasAny = ['revenue','cogs','operating_expenses','depreciation_amortization','net_income'].some(k => typeof year0[k as keyof typeof year0] === 'number');
+      if (hasAny) return [year0, ...base];
+    } catch {}
+    return base;
+  }, [businessPlanData?.profit_and_loss_projection, step1?.balanceSheetExtractions]);
+
+  // Format currency (EU)
   const formatCurrency = (amount: number | undefined) => {
     if (amount === undefined) return 'N/A';
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
+    return formatEuro(amount, { decimals: 2, withSymbol: true });
   };
 
   // Format percentage
@@ -252,6 +271,38 @@ export default function GeneratedPlanOutput({
       {/* Plan Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="space-y-8">
+          {/* Profile Section (from Visura Camerale if available) */}
+          {(step1?.extractedCompanyName || step1?.extractedCompanyId || step1?.extractedFounders || step1?.extractedEstablishmentDate) && (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Profilo Aziendale</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+                {step1?.extractedCompanyName && (
+                  <div>
+                    <div className="text-sm text-gray-500">Ragione sociale</div>
+                    <div className="font-medium">{step1.extractedCompanyName}</div>
+                  </div>
+                )}
+                {step1?.extractedCompanyId && (
+                  <div>
+                    <div className="text-sm text-gray-500">ID Impresa (P.IVA / CF)</div>
+                    <div className="font-medium">{step1.extractedCompanyId}</div>
+                  </div>
+                )}
+                {step1?.extractedEstablishmentDate && (
+                  <div>
+                    <div className="text-sm text-gray-500">Data di costituzione</div>
+                    <div className="font-medium">{step1.extractedEstablishmentDate}</div>
+                  </div>
+                )}
+                {step1?.extractedFounders && (
+                  <div className="md:col-span-2">
+                    <div className="text-sm text-gray-500">Soci / Fondatori</div>
+                    <div className="font-medium">{step1.extractedFounders}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
           {/* Executive Summary */}
           {renderTextSection('Executive Summary', businessPlanData?.executive_summary)}
 
@@ -273,8 +324,8 @@ export default function GeneratedPlanOutput({
           {/* Cash Flow Analysis */}
           {renderFinancialTable(businessPlanData?.cash_flow_analysis, 'Cash Flow Analysis', ['Operating', 'Investing', 'Financing', 'Net Cash'])}
 
-          {/* Profit and Loss Projection */}
-          {renderFinancialTable(businessPlanData?.profit_and_loss_projection, 'Profit and Loss Projection', ['Revenue', 'COGS', 'Gross Profit', 'Operating Expenses', 'EBITDA', 'Net Income'])}
+          {/* Profit and Loss Projection (with Year 0 if available) */}
+          {renderFinancialTable(profitAndLossWithYear0, 'Profit and Loss Projection', ['Revenue', 'COGS', 'Gross Profit', 'Operating Expenses', 'EBITDA', 'Net Income'])}
 
           {/* Balance Sheet */}
           {renderFinancialTable(businessPlanData?.balance_sheet, 'Balance Sheet', ['Assets', 'Current Assets', 'Non-Current Assets', 'Liabilities', 'Current Liabilities', 'Non-Current Liabilities', 'Equity'])}

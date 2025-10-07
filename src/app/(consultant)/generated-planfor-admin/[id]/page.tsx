@@ -22,6 +22,7 @@ import { generateEmpathyPDF } from "@/components/generated-plans-graph/pdf-downl
 import { generateWordDocument } from "@/components/consultant/DocDownload";
 import DownloadOptionsModal from "@/components/consultant/DownloadOptionsModal";
 import SocialShareModal from "@/components/shared/SocialShareModal";
+import { SmartFormProvider } from "@/components/ai-smart-form/SmartFormContext";
 
 const GeneratedPlanForAdminPage = () => {
   const { id } = useParams();
@@ -368,10 +369,12 @@ const GeneratedPlanForAdminPage = () => {
           profitLossProjection={profitLossProjection}
           sectorStrategy={sectorStrategy}
         />
-        <BalanceSheet
-          balanceSheet={balanceSheet}
-          netFinancialPosition={netFinancialPosition}
-        />
+        <SmartFormProvider>
+          <BalanceSheet
+            balanceSheet={balanceSheet}
+            netFinancialPosition={netFinancialPosition}
+          />
+        </SmartFormProvider>
         <DebtDashboard debtStructure={debtStructure} />
         <FinancialAnalysis financialAnalysis={financialAnalysis} />
         <FinancialDashboard

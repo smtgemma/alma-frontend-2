@@ -5,16 +5,89 @@ import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
 import { FiPlus } from "react-icons/fi";
+import { formatEuro, parseEuro } from "@/utils/euFormat";
 
 interface InvestmentItem {
   id: string;
   description: string;
-  amount: string;
+  amount: string; // stored as human string, sanitized to numbers only (.,, and digits)
+}
+
+interface FixedInvestmentRow {
+  key: string;
+  label: string;
+  amortizationRate: number; // e.g. 0.2 for 20%
+  category: "materiale" | "immateriale";
+  amount: string; // human input string
 }
 
 interface InvestmentPlanForm {
-  initialInvestment: string;
+  initialInvestment: string; // numeric-only string
   investmentItems: InvestmentItem[];
+  fixedInvestments: FixedInvestmentRow[];
+}
+
+const FIXED_INVESTMENTS_DEFINITION: Omit<FixedInvestmentRow, "amount">[] = [
+  {
+    key: "terreni",
+    label: "Terreni",
+    amortizationRate: 0.0,
+    category: "materiale",
+  },
+  {
+    key: "fabbricati",
+    label: "Fabbricati (uso industriale), Capannoni, stabilimenti produttivi",
+    amortizationRate: 0.03,
+    category: "materiale",
+  },
+  {
+    key: "impianti_macchinari",
+    label:
+      "Impianti e macchinari, Attrezzature di produzione, macchine industriali",
+    amortizationRate: 0.1,
+    category: "materiale",
+  },
+  {
+    key: "it_elettronica",
+    label: "Attrezzature elettroniche, Computer, server, periferiche",
+    amortizationRate: 0.2,
+    category: "materiale",
+  },
+  {
+    key: "arredi_ufficio",
+    label: "Arredi e mobili d’ufficio",
+    amortizationRate: 0.12,
+    category: "materiale",
+  },
+  {
+    key: "autovetture",
+    label: "Autovetture Auto aziendali",
+    amortizationRate: 0.25,
+    category: "materiale",
+  },
+  {
+    key: "veicoli_commerciali",
+    label: "Autocarri, furgoni, veicoli commerciali e industriali",
+    amortizationRate: 0.2,
+    category: "materiale",
+  },
+  {
+    key: "licenze_software",
+    label: "Licenze e Software gestionale, ERP, sistemi operativi",
+    amortizationRate: 0.2,
+    category: "immateriale",
+  },
+  {
+    key: "brevetti_marchi",
+    label: "Brevetti, marchi, diritti di proprietà intellettuale",
+    amortizationRate: 0.2,
+    category: "immateriale",
+  },
+];
+
+function sanitizeEuroInput(raw: string): string {
+  // keep only digits, dots and commas; strip letters and other chars
+  return (raw || "").replace(/[^0-9.,]/g, "");
 }
 
 export default function S6InvestmentPlan() {
@@ -46,28 +119,51 @@ export default function S6InvestmentPlan() {
 
   const persistedData = getFormData("step6");
 
-  const [form, setForm] = useState<InvestmentPlanForm>(
-    persistedData || {
+  // Ensure proper initialization with type safety
+  const initializeForm = (): InvestmentPlanForm => {
+    const defaultForm: InvestmentPlanForm = {
       initialInvestment: "",
       investmentItems: [
-        {
-          id: "1",
-          description: "",
-          amount: "",
-        },
-        {
-          id: "2",
-          description: "",
-          amount: "",
-        },
-        {
-          id: "3",
-          description: "",
-          amount: "",
-        },
+        { id: "1", description: "", amount: "" },
+        { id: "2", description: "", amount: "" },
+        { id: "3", description: "", amount: "" },
       ],
+      fixedInvestments: FIXED_INVESTMENTS_DEFINITION.map((row) => ({
+        ...row,
+        amount: "",
+      })),
+    };
+
+    if (!persistedData) {
+      return defaultForm;
     }
-  );
+
+    // Merge persisted data with defaults, ensuring all required fields exist
+    return {
+      initialInvestment:
+        persistedData.initialInvestment || defaultForm.initialInvestment,
+      investmentItems: Array.isArray(persistedData.investmentItems)
+        ? persistedData.investmentItems
+        : defaultForm.investmentItems,
+      fixedInvestments: Array.isArray(persistedData.fixedInvestments)
+        ? persistedData.fixedInvestments.map((item: any) => {
+            // Find matching definition to ensure we have all required properties
+            const definition = FIXED_INVESTMENTS_DEFINITION.find(
+              (def) => def.key === item.key
+            );
+            if (definition) {
+              return {
+                ...definition,
+                amount: item.amount || "",
+              };
+            }
+            return item;
+          })
+        : defaultForm.fixedInvestments,
+    };
+  };
+
+  const [form, setForm] = useState<InvestmentPlanForm>(initializeForm());
 
   // Sync form changes with context
   useEffect(() => {
@@ -153,15 +249,24 @@ export default function S6InvestmentPlan() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleSanitizedInputChange = (
+    field: keyof InvestmentPlanForm,
+    value: string
+  ) => {
+    const sanitized = sanitizeEuroInput(value);
+    setForm((prev) => ({ ...prev, [field]: sanitized }));
+  };
+
   const handleInvestmentItemChange = (
     id: string,
     field: "description" | "amount",
     value: string
   ) => {
+    const v = field === "amount" ? sanitizeEuroInput(value) : value;
     setForm((prev) => ({
       ...prev,
       investmentItems: prev.investmentItems.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item
+        item.id === id ? { ...item, [field]: v } : item
       ),
     }));
   };
@@ -177,27 +282,93 @@ export default function S6InvestmentPlan() {
     }));
   };
 
-  const calculateTotal = () => {
+  const fixedInvestmentsTotal = () => {
+    const list = form.fixedInvestments || [];
+    return list.reduce(
+      (sum: number, it: FixedInvestmentRow) =>
+        sum + (parseEuro(it.amount) || 0),
+      0
+    );
+  };
+
+  const dynamicInvestmentsTotal = () => {
     return form.investmentItems.reduce((total, item) => {
-      const amount = parseFloat(item.amount) || 0;
+      const amount = parseEuro(item.amount) || 0;
       return total + amount;
     }, 0);
   };
 
+  const calculateTotal = () => {
+    return dynamicInvestmentsTotal() + fixedInvestmentsTotal();
+  };
+
+  const materialTotal = () =>
+    form.fixedInvestments
+      .filter((r) => r.category === "materiale")
+      .reduce((sum, r) => sum + parseEuro(r.amount), 0);
+
+  const immaterialTotal = () => {
+    // Prefer explicit category, but also support legacy data without category by matching keys/labels
+    const keys = ["licenze_software", "brevetti_marchi"] as const;
+    const labelRegex = /(licen[zs]e|software|erp|sistemi operativi|brevetti|marchi|propriet[aà]|intellettuale)/i;
+
+    return (form.fixedInvestments || []).reduce((sum, row) => {
+      const isImmaterial =
+        row.category === "immateriale" ||
+        (row.key && (keys as readonly string[]).includes(row.key)) ||
+        labelRegex.test(row.label || "");
+      return isImmaterial ? sum + parseEuro(row.amount) : sum;
+    }, 0);
+  };
+
+  const totalAnnualAmortization = () =>
+    form.fixedInvestments.reduce(
+      (sum, r) => sum + parseEuro(r.amount) * (r.amortizationRate || 0),
+      0
+    );
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Create the proper object structure for fundingSources
-    const formData = {
+    // Build accounting mapping and normalized numeric values
+    const fixedInvestmentsNumeric = form.fixedInvestments.map((r) => ({
+      key: r.key,
+      label: r.label,
+      amortizationRate: r.amortizationRate,
+      category: r.category,
+      amount: parseEuro(r.amount),
+      annualAmortization: parseEuro(r.amount) * r.amortizationRate,
+    }));
+
+    const formData: any = {
       fundingSources: {
-        initialInvestment: form.initialInvestment,
+        initialInvestment: calculateTotal(),
         fromHome: calculateTotal(),
       },
+      initialInvestmentDescription: form.initialInvestment,
       investmentItems: form.investmentItems.map((item) => ({
         id: item.id,
         description: item.description,
-        amount: item.amount,
+        amount: parseEuro(item.amount),
       })),
+      fixedInvestments: fixedInvestmentsNumeric,
+      totals: {
+        totalInvestment: calculateTotal(),
+        materiali: materialTotal(),
+        immateriali: immaterialTotal(),
+        annualAmortization: totalAnnualAmortization(),
+      },
+      accountingMapping: {
+        statoPatrimoniale: {
+          immobilizzazioni: {
+            materiali: materialTotal(),
+            immateriali: immaterialTotal(),
+          },
+        },
+        contoEconomicoAValoreAggiunto: {
+          ammortamentiAnnui: totalAnnualAmortization(),
+        },
+      },
     };
 
     // Save current form data to context before validation
@@ -226,21 +397,21 @@ export default function S6InvestmentPlan() {
   return (
     <div className="min-h-screen">
       <SmartNavbar />
-      <div className="bg-white flex flex-col items-center justify-center p-2 md:p-8 py-12">
-        <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
+      <div className="bg-white flex flex-col items-center justify-center px-[5px] md:px-8 py-12">
+        <div className="max-w-[1440px] mx-auto w-full bg-white px-[5px] md:px-8 py-2 md:py-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
             Passo 06 di 10
           </p>
 
           <div className="text-center mb-8">
-            <h2 className="text-[2rem] text-accent font-medium">
+            <h2 className="text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] lg:text-[2.25rem] xl:text-[2.5rem] leading-snug md:leading-tight text-accent font-semibold tracking-tight break-words">
               Piano di Investimento
             </h2>
           </div>
 
           {/* Form */}
-          <div className="p-4 md:p-8 relative">
+          <div className="px-[5px] md:px-8 py-4 md:py-8 relative">
             {/* Top Right Decorative Image */}
             <div className="absolute top-0 right-0 w-24 h-24 md:w-48 md:h-48">
               <img
@@ -251,7 +422,7 @@ export default function S6InvestmentPlan() {
             </div>
 
             <div
-              className="bg-white rounded-2xl p-4 m-2 md:p-8 md:m-8 shadow-lg relative"
+              className="bg-white rounded-2xl px-[5px] md:px-8 py-4 md:py-8 m-2 md:m-8 shadow-lg relative"
               style={{
                 boxShadow:
                   "0 10px 15px -3px #4F46E540, 0 4px 6px -4px #4F46E540",
@@ -263,26 +434,126 @@ export default function S6InvestmentPlan() {
                   <label className="question-text">
                     Su cosa spenderai il tuo investimento iniziale?
                   </label>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Scrivi la descrizione (testo) e inserisci gli importi nei
+                    campi dedicati qui sotto.
+                  </p>
                   <div className="mt-4">
                     <input
                       type="text"
                       value={form.initialInvestment}
                       onChange={(e) =>
-                        handleTextareaChange(
-                          "initialInvestment",
-                          e.target.value
-                        )
+                        handleInputChange("initialInvestment", e.target.value)
                       }
-                      placeholder="Attrezzature"
+                      placeholder="Scrivi in poche parole su cosa spenderai l'investimento iniziale"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
                   </div>
                 </div>
 
-                {/* Investment Items Section */}
+                {/* Fixed Investment Categories with Amortization % */}
                 <div className="space-y-6">
-                  {/* Headers */}
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="border-b border-b-[#888888]/30 pb-2">
+                    <h3 className="question-text">
+                      Tabella investimenti fissi
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Le percentuali di ammortamento sono precompilate in base
+                      alla normativa italiana.
+                    </p>
+                  </div>
+                  {/* Desktop/tablet grid */}
+                  <div className="hidden md:block">
+                    <div className="grid grid-cols-12 gap-6">
+                      <div className="col-span-6 text-[1rem] font-medium text-accent">Tipo di investimento</div>
+                      <div className="col-span-2 text-[1rem] font-medium text-accent text-center">Ammortamento %</div>
+                      <div className="col-span-2 text-[1rem] font-medium text-accent text-right pr-1">Importo (€)</div>
+                      <div className="col-span-2 text-[1rem] font-medium text-accent text-right">Ammortamento annuo (€)</div>
+                    </div>
+                    {form.fixedInvestments.map((it) => (
+                      <div key={it.key} className="grid grid-cols-12 gap-6 items-center">
+                        <div className="col-span-6 text-[1rem] text-accent">{it.label}</div>
+                        <div className="col-span-2 text-center text-[1rem] text-accent">{Math.round((it.amortizationRate || 0) * 100)}%</div>
+                        <div className="col-span-2">
+                          <input
+                            type="text"
+                            inputMode="decimal"
+                            value={it.amount}
+                            onChange={(e) => {
+                              const v = sanitizeEuroInput(e.target.value);
+                              setForm((prev) => ({
+                                ...prev,
+                                fixedInvestments: prev.fixedInvestments.map((row) =>
+                                  row.key === it.key ? { ...row, amount: v } : row
+                                ),
+                              }));
+                            }}
+                            placeholder="0"
+className="w-full h-10 my-1 px-3 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-1 focus:ring-offset-white transition-shadow text-right"
+                          />
+                        </div>
+                        <div className="col-span-2 text-right text-[1rem] text-accent pl-2">
+                          {formatEuro(parseEuro(it.amount) * (it.amortizationRate || 0), { decimals: 2 })}
+                        </div>
+                      </div>
+                    ))}
+                    <div className="grid grid-cols-12 gap-6 pt-2 border-t border-[#888888]/20">
+                      <div className="col-span-6 text-[0.95rem] text-accent">Totale investimenti fissi</div>
+                      <div className="col-span-2"></div>
+                      <div className="col-span-2 text-right font-medium text-accent">{formatEuro(fixedInvestmentsTotal(), { decimals: 2 })}</div>
+                      <div className="col-span-2 text-right font-medium text-accent">{formatEuro(totalAnnualAmortization(), { decimals: 2 })}</div>
+                    </div>
+                  </div>
+
+                  {/* Mobile stacked cards */}
+                  <div className="md:hidden space-y-3">
+                    {form.fixedInvestments.map((it) => (
+                      <div key={it.key} className="border border-[#888888]/30 rounded-lg p-3 bg-white">
+                        <div className="text-[1rem] font-medium text-accent mb-2">{it.label}</div>
+                        <div className="flex items-center justify-between text-[0.95rem] text-accent mb-2">
+                          <span>Ammortamento %</span>
+                          <span className="font-medium">{Math.round((it.amortizationRate || 0) * 100)}%</span>
+                        </div>
+                        <div className="flex items-center justify-between gap-3 mb-2">
+                          <span className="text-[0.95rem] text-accent">Importo (€)</span>
+                        <input
+                            type="text"
+                            inputMode="decimal"
+                            value={it.amount}
+                            onChange={(e) => {
+                              const v = sanitizeEuroInput(e.target.value);
+                              setForm((prev) => ({
+                                ...prev,
+                                fixedInvestments: prev.fixedInvestments.map((row) =>
+                                  row.key === it.key ? { ...row, amount: v } : row
+                                ),
+                              }));
+                            }}
+                            placeholder="0"
+className="w-40 h-10 my-1 px-3 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-1 focus:ring-offset-white transition-shadow text-right"
+                          />
+                        </div>
+                        <div className="flex items-center justify-between text-[0.95rem] text-accent">
+                          <span>Ammortamento annuo (€)</span>
+                          <span className="font-medium">{formatEuro(parseEuro(it.amount) * (it.amortizationRate || 0), { decimals: 2 })}</span>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="flex items-center justify-between pt-1 border-t border-[#888888]/20">
+                      <span className="text-[0.95rem] text-accent">Totale investimenti fissi</span>
+                      <span className="text-[0.95rem] font-medium text-accent">{formatEuro(fixedInvestmentsTotal(), { decimals: 2 })}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[0.95rem] text-accent">Ammortamento annuo totale</span>
+                      <span className="text-[0.95rem] font-medium text-accent">{formatEuro(totalAnnualAmortization(), { decimals: 2 })}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Investment Items Section (liberi) */}
+                <div className="space-y-6">
+                  {/* Headers (hide on small screens to avoid cramped layout) */}
+                  <div className="hidden md:grid grid-cols-2 gap-6">
                     <div>
                       <label className="text-[1rem] font-medium text-accent">
                         Elemento di Investimento
@@ -294,14 +565,14 @@ export default function S6InvestmentPlan() {
                       </label>
                     </div>
                   </div>
-                  
+
                   {/* Investment Items */}
                   {form.investmentItems.map((item, index) => (
                     <div key={item.id} className="space-y-4">
                       {/* Main row with serial number, textarea, and amount */}
                       <div className="grid grid-cols-1 md:grid-cols-2 items-start md:items-center gap-4 md:gap-6">
-                        <div className="flex items-center gap-4">
-                          <label className="text-[0.875rem] font-medium text-accent flex-shrink-0">
+                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                          <label className="text-[0.875rem] font-medium text-accent flex-shrink-0 mb-1 md:mb-0">
                             0{index + 1}.
                           </label>
                           <input
@@ -315,15 +586,16 @@ export default function S6InvestmentPlan() {
                               )
                             }
                             placeholder="Scrivi elemento qui"
-                            className="flex-1 px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
+                            className="w-full md:flex-1 px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                           />
                         </div>
-                        <div className="flex items-center gap-4 ml-8 md:ml-0">
-                          <label className="text-[0.875rem] font-medium text-accent flex-shrink-0 md:hidden">
-                            Importo:
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                          <label className="text-[0.875rem] font-medium text-accent flex-shrink-0 sm:hidden">
+                            Importo
                           </label>
                           <input
                             type="text"
+                            inputMode="decimal"
                             value={item.amount}
                             onChange={(e) =>
                               handleInvestmentItemChange(
@@ -332,15 +604,15 @@ export default function S6InvestmentPlan() {
                                 e.target.value
                               )
                             }
-                            placeholder="Es. 20000"
-                            className="flex-1 px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
+                            placeholder="Es. 20.000"
+                            className="w-full sm:flex-1 px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                           />
                         </div>
                       </div>
                     </div>
                   ))}
                   {/* Add Investment Item Button */}
-                  <div className="flex justify-start ml-9">
+                  <div className="flex justify-start ml-0 md:ml-9">
                     <button
                       type="button"
                       onClick={addInvestmentItem}
@@ -350,12 +622,40 @@ export default function S6InvestmentPlan() {
                       Aggiungi Nuovo Elemento
                     </button>
                   </div>
-                  {/* Total Investment */}
-                  <div className="text-center pt-6">
-                    <p className="text-[1.25rem] font-medium text-accent">
-                      Investimento Iniziale Totale: €
-                      {calculateTotal().toLocaleString()}
-                    </p>
+                  {/* Totals and Accounting Mapping Summary */}
+                  <div className="pt-6 space-y-2">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-[1rem] text-accent">
+                        Immobilizzazioni materiali
+                      </div>
+                      <div className="text-right text-[1rem] text-accent">
+                        {formatEuro(materialTotal(), { decimals: 2 })}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-[1rem] text-accent">
+                        Immobilizzazioni immateriali
+                      </div>
+                      <div className="text-right text-[1rem] text-accent">
+                        {formatEuro(immaterialTotal(), { decimals: 2 })}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-[1rem] text-accent">
+                        Ammortamenti annui (CE)
+                      </div>
+                      <div className="text-right text-[1rem] text-accent">
+                        {formatEuro(totalAnnualAmortization(), { decimals: 2 })}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 border-t border-[#888888]/30 pt-2 mt-2">
+                      <div className="text-[1.1rem] font-medium text-accent">
+                        Investimento Iniziale Totale
+                      </div>
+                      <div className="text-right text-[1.1rem] font-medium text-accent">
+                        {formatEuro(calculateTotal(), { decimals: 2 })}
+                      </div>
+                    </div>
                   </div>
                 </div>
 

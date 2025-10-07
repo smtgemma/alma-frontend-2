@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
+import { toggleSuggestionInInput } from "./utils/aiSuggestionUtils";
 //
 interface BusinessGoalVisionForm {
   businessGoals: string;
@@ -228,22 +229,28 @@ export default function S4BusinessGoalVision() {
     setForm((prev) => {
       const currentOptions = prev.selectedBusinessGoalsOptions;
       const isSelected = currentOptions.includes(option);
-
+      
+      let newOptions;
       if (isSelected) {
         // Remove if already selected
-        return {
-          ...prev,
-          selectedBusinessGoalsOptions: currentOptions.filter(
-            (opt) => opt !== option
-          ),
-        };
+        newOptions = currentOptions.filter((opt) => opt !== option);
       } else {
         // Add if not selected
-        return {
-          ...prev,
-          selectedBusinessGoalsOptions: [...currentOptions, option],
-        };
+        newOptions = [...currentOptions, option];
       }
+      
+      // Update input field using utility function
+      const updatedInput = toggleSuggestionInInput(
+        prev.businessGoalsDescription,
+        option,
+        isSelected
+      );
+      
+      return {
+        ...prev,
+        selectedBusinessGoalsOptions: newOptions,
+        businessGoalsDescription: updatedInput,
+      };
     });
   };
 
@@ -251,22 +258,28 @@ export default function S4BusinessGoalVision() {
     setForm((prev) => {
       const currentOptions = prev.selectedLongTermVisionOptions;
       const isSelected = currentOptions.includes(option);
-
+      
+      let newOptions;
       if (isSelected) {
         // Remove if already selected
-        return {
-          ...prev,
-          selectedLongTermVisionOptions: currentOptions.filter(
-            (opt) => opt !== option
-          ),
-        };
+        newOptions = currentOptions.filter((opt) => opt !== option);
       } else {
         // Add if not selected
-        return {
-          ...prev,
-          selectedLongTermVisionOptions: [...currentOptions, option],
-        };
+        newOptions = [...currentOptions, option];
       }
+      
+      // Update input field using utility function
+      const updatedInput = toggleSuggestionInInput(
+        prev.longTermVisionDescription,
+        option,
+        isSelected
+      );
+      
+      return {
+        ...prev,
+        selectedLongTermVisionOptions: newOptions,
+        longTermVisionDescription: updatedInput,
+      };
     });
   };
 
@@ -274,22 +287,28 @@ export default function S4BusinessGoalVision() {
     setForm((prev) => {
       const currentOptions = prev.selectedMissionOptions;
       const isSelected = currentOptions.includes(option);
-
+      
+      let newOptions;
       if (isSelected) {
         // Remove if already selected
-        return {
-          ...prev,
-          selectedMissionOptions: currentOptions.filter(
-            (opt) => opt !== option
-          ),
-        };
+        newOptions = currentOptions.filter((opt) => opt !== option);
       } else {
         // Add if not selected
-        return {
-          ...prev,
-          selectedMissionOptions: [...currentOptions, option],
-        };
+        newOptions = [...currentOptions, option];
       }
+      
+      // Update input field using utility function
+      const updatedInput = toggleSuggestionInInput(
+        prev.missionDescription,
+        option,
+        isSelected
+      );
+      
+      return {
+        ...prev,
+        selectedMissionOptions: newOptions,
+        missionDescription: updatedInput,
+      };
     });
   };
 
@@ -401,21 +420,21 @@ export default function S4BusinessGoalVision() {
   return (
     <div className="min-h-screen">
       <SmartNavbar />
-      <div className="bg-white flex flex-col items-center justify-center px-4 py-12">
-        <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8">
+      <div className="bg-white flex flex-col items-center justify-center px-[5px] md:px-8 py-12">
+        <div className="max-w-[1440px] mx-auto w-full bg-white px-[5px] md:px-8 py-2 md:py-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] font-medium mb-2">
             Passo 04 di 10
           </p>
 
           <div className="text-center mb-8">
-            <h2 className="text-[2rem] text-accent font-medium">
+            <h2 className="text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] lg:text-[2.25rem] xl:text-[2.5rem] leading-snug md:leading-tight text-accent font-semibold tracking-tight break-words">
               Obiettivi e Visione Aziendale
             </h2>
           </div>
 
           {/* Form */}
-          <div className="p-2 md:p-8 relative">
+          <div className="px-[5px] md:px-8 py-2 md:py-8 relative">
             {/* Top Right Decorative Image */}
             <div className="absolute top-0 right-0 w-24 h-24 md:w-48 md:h-48">
               <img
@@ -426,7 +445,7 @@ export default function S4BusinessGoalVision() {
             </div>
 
             <div
-              className="bg-white rounded-2xl p-4 m-2 md:p-8 md:m-8 shadow-lg relative"
+              className="bg-white rounded-2xl px-[5px] md:px-8 py-4 md:py-8 m-2 md:m-8 shadow-lg relative"
               style={{
                 boxShadow:
                   "0 10px 15px -3px #4F46E540, 0 4px 6px -4px #4F46E540",
@@ -441,11 +460,7 @@ export default function S4BusinessGoalVision() {
                   <div className="mt-4">
                     <input
                       type="text"
-                      value={
-                        form.selectedBusinessGoalsOptions.length > 0
-                          ? form.selectedBusinessGoalsOptions.join(", ")
-                          : form.businessGoalsDescription
-                      }
+                      value={form.businessGoalsDescription}
                       onChange={(e) =>
                         handleTextareaChange(
                           "businessGoalsDescription",
@@ -462,13 +477,13 @@ export default function S4BusinessGoalVision() {
                       onClick={() =>
                         handleTextareaClick("showBusinessGoalsOptions")
                       }
-                      placeholder="Es. Miriamo a diventare leader nella tecnologia sostenibile..."
+                      placeholder="Puoi scrivere liberamente o selezionare dai suggerimenti AI"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
-                    {/* Selected Options Display */}
+{/* Selected Options Display */}
                     {form.selectedBusinessGoalsOptions.length > 0 && (
-                      <div className="mt-3">
+                      <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">
                           Opzioni selezionate:
                         </div>
@@ -610,11 +625,7 @@ export default function S4BusinessGoalVision() {
                   <div className="mt-4">
                     <input
                       type="text"
-                      value={
-                        form.selectedLongTermVisionOptions.length > 0
-                          ? form.selectedLongTermVisionOptions.join(", ")
-                          : form.longTermVisionDescription
-                      }
+                      value={form.longTermVisionDescription}
                       onChange={(e) =>
                         handleTextareaChange(
                           "longTermVisionDescription",
@@ -631,13 +642,13 @@ export default function S4BusinessGoalVision() {
                       onClick={() =>
                         handleTextareaClick("showLongTermVisionOptions")
                       }
-                      placeholder="Es. Rivoluzionare l'industria attraverso l'innovazione..."
+                      placeholder="Puoi scrivere liberamente o selezionare dai suggerimenti AI"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
-                    {/* Selected Options Display */}
+{/* Selected Options Display */}
                     {form.selectedLongTermVisionOptions.length > 0 && (
-                      <div className="mt-3">
+                      <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">
                           Opzioni selezionate:
                         </div>
@@ -775,11 +786,7 @@ export default function S4BusinessGoalVision() {
                   <div className="mt-4">
                     <input
                       type="text"
-                      value={
-                        form.selectedMissionOptions.length > 0
-                          ? form.selectedMissionOptions.join(", ")
-                          : form.missionDescription
-                      }
+                      value={form.missionDescription}
                       onChange={(e) =>
                         handleTextareaChange(
                           "missionDescription",
@@ -790,13 +797,13 @@ export default function S4BusinessGoalVision() {
                         handleKeyPress(e, "customMission", "missionDescription")
                       }
                       onClick={() => handleTextareaClick("showMissionOptions")}
-                      placeholder="Es. Potenziare le aziende attraverso soluzioni all'avanguardia..."
+                      placeholder="Puoi scrivere liberamente o selezionare dai suggerimenti AI"
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
-                    {/* Selected Options Display */}
+{/* Selected Options Display */}
                     {form.selectedMissionOptions.length > 0 && (
-                      <div className="mt-3">
+                      <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">
                           Opzioni selezionate:
                         </div>

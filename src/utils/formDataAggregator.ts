@@ -16,7 +16,8 @@ export interface AggregatedFormData {
   language?: string;
   currency?: string;
   fundingSources?: {
-    initialInvestment?: string;
+    // Accept either a textual description (legacy) or a numeric total (new)
+    initialInvestment?: string | number;
     fromHome?: number;
   };
 }
@@ -34,6 +35,9 @@ const stepQuestions: Record<string, Record<string, string>> = {
     sourceLanguage: "Source plan language",
     targetLanguage: "Target plan Currency",
     selectedBusinessStagesOptions: "Selected business stages options",
+    // Newly added inputs in Step 1
+    startupStructure: "Planned company structure",
+    plannedEstablishmentDate: "When do you plan to establish the company?",
   },
   step2: {
     businessStage: "What stage is your business currently in?",
@@ -87,8 +91,12 @@ const stepQuestions: Record<string, Record<string, string>> = {
     selectedMarketingPlanOptions: "Selected marketing plan options",
   },
   step6: {
+    // legacy field kept for backward compatibility
     initialInvestment: "Initial Investment",
     investmentItems: "Investment breakdown items",
+    // new fields used after recent changes
+    initialInvestmentDescription: "What will you spend your initial investment on?",
+    fixedInvestments: "Fixed investments (with amortization %)",
   },
   step7: {
     expectedRevenue: "Expected Revenue",
@@ -100,6 +108,12 @@ const stepQuestions: Record<string, Record<string, string>> = {
     selectedGrowthProjectionOptions: "Selected growth projection options",
     selectedBusinessShareOptions: "Selected business share options",
     selectedPricingLevelOptions: "Selected pricing level options",
+    // new fields after redesign
+    revenueStreams: "First-year revenue by product/service",
+    growthPercent: "Expected growth percentage for following years",
+    immediateCollectionPercent: "Immediate collection %",
+    collection60DaysPercent: "Collection after 60 days %",
+    collection90DaysPercent: "Collection after 90 days %",
   },
   step8: {
     operatingCosts: "Operating Costs",
@@ -112,6 +126,8 @@ const stepQuestions: Record<string, Record<string, string>> = {
     yourOwnEquity: "Your Own Equity",
     bankingSystem: "Banking System",
     otherInvestors: "Other Investors",
+    // new consolidated object
+    sources: "Financing sources (equity/bank/other)",
   },
 };
 
@@ -124,16 +140,37 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
   console.log("🚀 Starting form data aggregation...");
   console.log("📋 Raw form data:", formData);
 
+  // helper to parse possibly formatted numeric strings
+  const parseMaybeNumber = (v: any): number | undefined => {
+    if (v === null || v === undefined) return undefined;
+    if (typeof v === "number") return isNaN(v) ? undefined : v;
+    if (typeof v === "string") {
+      const n = parseFloat(v.replace(/[^0-9.-]/g, ""));
+      return isNaN(n) ? undefined : n;
+    }
+    return undefined;
+  };
+
+  const s6: any = (formData as any).step6 || {};
+  const s9: any = (formData as any).step9 || {};
+
   const aggregated: AggregatedFormData = {
     uploaded_file: [],
     user_input: [],
-    language: formData.step1?.sourceLanguage || undefined,
-    currency: formData.step1?.targetLanguage || undefined,
+    language: (formData as any).step1?.sourceLanguage || undefined,
+    currency: (formData as any).step1?.targetLanguage || undefined,
     fundingSources: {
-      initialInvestment: formData.step6?.initialInvestment || undefined,
-      fromHome: formData.step9?.yourOwnEquity
-        ? parseInt(formData.step9.yourOwnEquity) || undefined
-        : undefined,
+      // prefer new shape from step6, fallback to legacy
+      initialInvestment:
+        parseMaybeNumber(s6?.fundingSources?.initialInvestment) ??
+        parseMaybeNumber(s6?.totals?.totalInvestment) ??
+        parseMaybeNumber(s6?.initialInvestment) ??
+        undefined,
+      // equity moved under step9.sources.equity
+      fromHome:
+        parseMaybeNumber(s9?.sources?.equity) ??
+        parseMaybeNumber(s9?.yourOwnEquity) ??
+        undefined,
     },
   };
 
@@ -170,10 +207,73 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
         fieldKey === "extractedContent" ||
         fieldKey === "sourceLanguage" ||
         fieldKey === "targetLanguage" ||
+        fieldKey === "totals" ||
+        fieldKey === "accountingMapping" ||
+        fieldKey === "fundingSources" ||
         fieldKey.startsWith("custom") ||
         fieldKey.startsWith("show") ||
         (Array.isArray(fieldValue) && fieldValue.length === 0)
       ) {
+        return;
+      }
+
+      // Special cases for new complex structures
+      // Step 6: fixed investments
+      if (stepKey === "step6" && fieldKey === "fixedInvestments" && Array.isArray(fieldValue)) {
+        const items = fieldValue
+          .filter((it: any) => (it.amount !== undefined && it.amount !== null && it.amount !== ""))
+          .map((it: any) => `${it.label || it.key}: ${it.amount}`)
+          .join(", ");
+        if (items) {
+          aggregated.user_input.push({
+            question: questions["fixedInvestments"],
+            answer: items,
+          });
+        }
+        return;
+      }
+      // Step 7: revenue streams table
+      if (stepKey === "step7" && fieldKey === "revenueStreams" && Array.isArray(fieldValue)) {
+        const items = fieldValue
+          .filter((row: any) => row.name || row.amount)
+          .map((row: any) => `${row.name || `Item ${row.id}`}: ${row.amount}`)
+          .join(", ");
+        if (items) {
+          aggregated.user_input.push({
+            question: questions["revenueStreams"],
+            answer: items,
+          });
+        }
+        return;
+      }
+      // Step 7: payments breakdown object -> split into three questions
+      if (stepKey === "step7" && fieldKey === "payments" && typeof fieldValue === "object" && fieldValue) {
+        const p: any = fieldValue;
+        const map: Array<[string, any, string]> = [
+          ["immediateCollectionPercent", p.immediate, questions["immediateCollectionPercent"]],
+          ["collection60DaysPercent", p.days60, questions["collection60DaysPercent"]],
+          ["collection90DaysPercent", p.days90, questions["collection90DaysPercent"]],
+        ];
+        map.forEach(([k, v, q]) => {
+          if (q && (v || v === 0)) {
+            aggregated.user_input.push({ question: q, answer: String(v) });
+          }
+        });
+        return;
+      }
+      // Step 9: new consolidated sources object
+      if (stepKey === "step9" && fieldKey === "sources" && typeof fieldValue === "object" && fieldValue) {
+        const src: any = fieldValue;
+        const mapping: Array<[string, any, string]> = [
+          ["yourOwnEquity", src.equity, stepQuestions.step9.yourOwnEquity],
+          ["bankingSystem", src.bankLoan, stepQuestions.step9.bankingSystem],
+          ["otherInvestors", src.otherInvestors, stepQuestions.step9.otherInvestors],
+        ];
+        mapping.forEach(([key, val, q]) => {
+          if (q && (val || val === 0)) {
+            aggregated.user_input.push({ question: q, answer: String(val) });
+          }
+        });
         return;
       }
 
@@ -185,7 +285,7 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
             .replace("selected", "")
             .replace("Options", "");
           const question =
-            questions[baseQuestionKey] || `${baseQuestionKey} selected options`;
+            (questions as any)[baseQuestionKey] || `${baseQuestionKey} selected options`;
           console.log(
             `    📝 Adding to user_input: ${question} = ${fieldValue.join(
               ", "
@@ -202,7 +302,7 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
       }
 
       // Get the question text
-      const question = questions[fieldKey];
+      const question = (questions as any)[fieldKey];
       if (!question) return;
 
       // Format the answer based on field type
@@ -216,27 +316,27 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
         // Handle arrays (like investment items, product services, etc.)
         if (fieldKey === "investmentItems") {
           answer = fieldValue
-            .filter((item) => item.description || item.amount)
-            .map((item) => `${item.description}: ${item.amount}`)
+            .filter((item: any) => item.description || item.amount)
+            .map((item: any) => `${item.description}: ${item.amount}`)
             .join(", ");
         } else if (fieldKey === "productServices") {
           answer = fieldValue
-            .filter((item) => item.name || item.price)
-            .map((item) => `${item.name}: ${item.price}`)
+            .filter((item: any) => item.name || item.price)
+            .map((item: any) => `${item.name}: ${item.price}`)
             .join(", ");
         } else if (fieldKey === "operatingCostItems") {
           answer = fieldValue
-            .filter((item) => item.name || item.totalCost)
+            .filter((item: any) => item.name || item.totalCost)
             .map(
-              (item) => `${item.name}: ${item.totalCost} (${item.percentage})`
+              (item: any) => `${item.name}: ${item.totalCost} (${item.percentage})`
             )
             .join(", ");
         } else if (fieldKey === "businessGoals") {
           // businessGoals is a string, not an array
           answer =
-            typeof fieldValue === "string" ? fieldValue : fieldValue.join(", ");
+            typeof fieldValue === "string" ? fieldValue : (fieldValue as any).join(", ");
         } else {
-          answer = fieldValue.join(", ");
+          answer = (fieldValue as any).join(", ");
         }
       } else if (typeof fieldValue === "object" && fieldValue !== null) {
         // Handle objects by converting to string representation

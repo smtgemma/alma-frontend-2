@@ -17,16 +17,16 @@ import {
 interface BusinessInfoForm {
   businessName: string;
   businessStage: string;
-  businessType: string;
+  businessType: string; // "existing" | "new"
   businessDocument: File | null;
-  businessDocuments?: File[]; // Multiple PDF files
+  businessDocuments?: File[]; // Multiple PDF files (legacy)
   extractedContent?: string;
-  location: string;
+  location: string; // Town / City
   activity: string;
   totalEmployees: string;
   website: string;
-  sourceLanguage: string;
-  targetLanguage: string;
+  sourceLanguage: string; // e.g., "Italiano"
+  targetLanguage: string; // e.g., "Euro"
   customBusinessStages?: string[];
   selectedBusinessStagesOptions?: string[];
   uploaded_file?: Array<{
@@ -34,9 +34,35 @@ interface BusinessInfoForm {
     page_count: number;
     metadata: Record<string, any>;
     financial_data: any;
-    document_type: string;
+    document_type: string; // e.g., "balance_sheet" | "visura_camerale"
     file_name?: string; // Add file name for reference
   }>;
+  // New fields for clearer separation of uploads and startup info
+  balanceSheetFiles?: File[];
+  visuraCameraleFiles?: File[];
+  balanceSheetExtractions?: Array<{
+    text_content: string;
+    page_count: number;
+    metadata: Record<string, any>;
+    financial_data: any;
+    document_type: string;
+    file_name?: string;
+  }>;
+  visuraCameraleExtractions?: Array<{
+    text_content: string;
+    page_count: number;
+    metadata: Record<string, any>;
+    financial_data: any;
+    document_type: string;
+    file_name?: string;
+  }>;
+  startupStructure?: string; // Ditta individuale, SRL, etc.
+  plannedEstablishmentDate?: string; // YYYY-MM-DD or free text
+  // Extracted business identity fields from Visura Camerale
+  extractedCompanyId?: string;
+  extractedCompanyName?: string;
+  extractedFounders?: string;
+  extractedEstablishmentDate?: string;
 }
 
 interface BusinessIdeaForm {
@@ -68,6 +94,8 @@ interface ValueGenerationForm {
   showUniqueOptions: boolean;
   showProblemOptions: boolean;
   showValueAddOptions: boolean;
+  // Moved from Step 2
+  companyOwnership?: string; // "Yes" | "No"
 }
 
 interface BusinessGoalVisionForm {
@@ -129,6 +157,13 @@ interface InvestmentItem {
 interface InvestmentPlanForm {
   initialInvestment: string;
   investmentItems: InvestmentItem[];
+  // New fixed investment categories with amortization rates
+  fixedInvestments?: Array<{
+    key: string;
+    label: string;
+    amount: string; // numeric string in Euro
+    amortizationRate: number; // percentage (e.g., 0.2 for 20%)
+  }>;
 }
 
 interface ProductService {
@@ -137,6 +172,13 @@ interface ProductService {
   price: string;
   showOptions?: boolean;
   selectedOptions?: string[];
+}
+
+interface RevenueStream {
+  id: string;
+  name: string;
+  description?: string;
+  amount: string;
 }
 
 interface RevenueModelForm {
@@ -157,6 +199,13 @@ interface RevenueModelForm {
   showBusinessShareOptions: boolean;
   showPricingLevelOptions: boolean;
   productServices: ProductService[];
+  // Revenue streams table
+  revenueStreams?: RevenueStream[];
+  growthPercent?: string; // expected growth for future years
+  // New: customer payment collection breakdown
+  immediateCollectionPercent?: string; // e.g., "50" for 50%
+  collection60DaysPercent?: string; // e.g., "30"
+  collection90DaysPercent?: string; // e.g., "20"
 }
 
 interface OperatingCostItem {
@@ -339,10 +388,20 @@ const getDefaultFormData = (): SmartFormData => ({
     activity: "",
     totalEmployees: "",
     website: "",
-    sourceLanguage: "English",
-    targetLanguage: "English",
+    sourceLanguage: "Italiano",
+    targetLanguage: "Euro",
     customBusinessStages: [],
     selectedBusinessStagesOptions: [],
+    balanceSheetFiles: [],
+    visuraCameraleFiles: [],
+    balanceSheetExtractions: [],
+    visuraCameraleExtractions: [],
+    startupStructure: "",
+    plannedEstablishmentDate: "",
+    extractedCompanyId: "",
+    extractedCompanyName: "",
+    extractedFounders: "",
+    extractedEstablishmentDate: "",
   },
   step2: {
     businessStage: "",
@@ -357,7 +416,7 @@ const getDefaultFormData = (): SmartFormData => ({
     selectedProductCategoriesOptions: [],
     selectedServiceCategoriesOptions: [],
   },
-  step3: {
+step3: {
     uniqueValue: "",
     problemSolved: "",
     problemDescription: "",
@@ -372,6 +431,7 @@ const getDefaultFormData = (): SmartFormData => ({
     showUniqueOptions: false,
     showProblemOptions: false,
     showValueAddOptions: false,
+    companyOwnership: "",
   },
   step4: {
     businessGoals: "",
@@ -421,7 +481,7 @@ const getDefaultFormData = (): SmartFormData => ({
     showClientType04Options: false,
     showMarketingPlanOptions: false,
   },
-  step6: {
+step6: {
     initialInvestment: "",
     investmentItems: [
       {
@@ -440,8 +500,49 @@ const getDefaultFormData = (): SmartFormData => ({
         amount: "",
       },
     ],
+    fixedInvestments: [
+      { key: "terreni", label: "Terreni", amount: "", amortizationRate: 0 },
+      {
+        key: "fabbricati",
+        label: "Fabbricati (uso industriale), Capannoni, stabilimenti produttivi",
+        amount: "",
+        amortizationRate: 0.03,
+      },
+      {
+        key: "impianti",
+        label: "Impianti e macchinari, Attrezzature di produzione, macchine industriali",
+        amount: "",
+        amortizationRate: 0.1,
+      },
+      {
+        key: "it",
+        label: "Attrezzature elettroniche, Computer, server, periferiche",
+        amount: "",
+        amortizationRate: 0.2,
+      },
+      { key: "arredi", label: "Arredi e mobili d’ufficio", amount: "", amortizationRate: 0.12 },
+      { key: "auto", label: "Autovetture Auto aziendali", amount: "", amortizationRate: 0.25 },
+      {
+        key: "veicoli",
+        label: "Autocarri, furgoni, veicoli commerciali e industriali",
+        amount: "",
+        amortizationRate: 0.2,
+      },
+      {
+        key: "software",
+        label: "Licenze e Software gestionale, ERP, sistemi operativi",
+        amount: "",
+        amortizationRate: 0.2,
+      },
+      {
+        key: "ip",
+        label: "Brevetti, marchi, diritti di proprietà intellettuale",
+        amount: "",
+        amortizationRate: 0.2,
+      },
+    ],
   },
-  step7: {
+step7: {
     expectedRevenue: "",
     growthProjection: "",
     businessShare: "",
@@ -464,6 +565,14 @@ const getDefaultFormData = (): SmartFormData => ({
       { id: "3", name: "", price: "", showOptions: false, selectedOptions: [] },
       { id: "4", name: "", price: "", showOptions: false, selectedOptions: [] },
     ],
+    revenueStreams: [
+      { id: "1", name: "Prodotto/Servizio 1", description: "", amount: "" },
+      { id: "2", name: "Prodotto/Servizio 2", description: "", amount: "" },
+    ],
+    growthPercent: "",
+    immediateCollectionPercent: "",
+    collection60DaysPercent: "",
+    collection90DaysPercent: "",
   },
   step8: {
     operatingCosts: "",
@@ -570,18 +679,14 @@ export const SmartFormProvider = ({ children }: { children: ReactNode }) => {
       step: T,
       data: Partial<SmartFormData[T]>
     ) => {
-      console.log(`🔄 Updating form data for ${step}:`, data);
-      setFormData((prev) => {
-        const newData = {
-          ...prev,
-          [step]: {
-            ...prev[step],
-            ...data,
-          },
-        };
-        console.log(`📝 Updated form data:`, newData);
-        return newData;
-      });
+      // Avoid chatty console logs in production; update quietly
+      setFormData((prev) => ({
+        ...prev,
+        [step]: {
+          ...prev[step],
+          ...data,
+        },
+      }));
     },
     []
   );
@@ -608,25 +713,9 @@ export const SmartFormProvider = ({ children }: { children: ReactNode }) => {
     (
       plan: { content: string; planId?: string; generatedAt?: string } | null
     ) => {
-      console.log("=== SET GENERATED PLAN CALLED ===");
-      console.log("Plan to be set:", plan);
-      console.log("Plan content:", plan?.content);
-      console.log("Plan content length:", plan?.content?.length);
-      console.log("Plan content type:", typeof plan?.content);
-      console.log(
-        "Plan content is empty?",
-        !plan?.content || plan?.content.trim() === ""
-      );
-
       setGeneratedPlanState(plan);
-
-      // Add a callback to verify the state was updated
-      setTimeout(() => {
-        console.log("=== STATE UPDATE VERIFICATION ===");
-        console.log("Current generatedPlan state after update:", generatedPlan);
-      }, 200);
     },
-    [generatedPlan]
+    []
   );
 
   // Aggregation methods

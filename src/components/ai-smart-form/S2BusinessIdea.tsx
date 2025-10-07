@@ -4,6 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
+import {
+  toggleSuggestionInInput,
+  removeSuggestionFromInput,
+  createAISuggestionInputHandler,
+} from "./utils/aiSuggestionUtils";
 //
 interface BusinessIdeaForm {
   businessStage: string;
@@ -266,21 +271,21 @@ export default function S2BusinessIdea() {
   return (
     <div className="min-h-screen">
       <SmartNavbar />
-      <div className="bg-white flex flex-col items-center justify-center px-4 py-12">
-        <div className="max-w-[1440px] mx-auto w-full bg-white p-2 md:p-8 ">
+      <div className="bg-white flex flex-col items-center justify-center px-[5px] md:px-8 py-12">
+        <div className="max-w-[1440px] mx-auto w-full bg-white px-[5px] md:px-8 py-2 md:py-8">
           {/* Step Info */}
           <p className="text-center text-[1rem] text- font-medium mb-2">
             Passo 02 di 10
           </p>
 
           <div className="text-center mb-8">
-            <h2 className="text-[2rem] text-accent font-medium ">
+            <h2 className="text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] lg:text-[2.25rem] xl:text-[2.5rem] leading-snug md:leading-tight text-accent font-semibold tracking-tight break-words ">
               La Tua Idea di Business
             </h2>
           </div>
 
           {/* Form */}
-          <div className="p-2 md:p-8 relative">
+          <div className="px-[5px] md:px-8 py-2 md:py-8 relative">
             {/* Top Right Decorative Image */}
             <div className="absolute top-0 right-0 w-24 h-24 md:w-48 md:h-48">
               <img
@@ -291,7 +296,7 @@ export default function S2BusinessIdea() {
             </div>
 
             <div
-              className="bg-white rounded-2xl p-4 m-2 md:p-8 md:m-8 shadow-lg relative"
+              className="bg-white rounded-2xl px-[5px] md:px-8 py-4 md:py-8 m-2 md:m-8 shadow-lg relative"
               style={{
                 boxShadow:
                   "0 10px 15px -3px #4F46E540, 0 4px 6px -4px #4F46E540",
@@ -311,9 +316,10 @@ export default function S2BusinessIdea() {
                   )}
                   <div className="mt-4 space-y-4">
                     {[
-                      "Idea/Pianificazione (Stai ancora sviluppando l'idea o preparando il lancio)",
-                      "In Crescita (Generando ricavi e espandendosi)",
-                      "Stabilita (azienda stabile con operazioni costanti)",
+                      "Idea / Pianificazione (Still developing the idea or preparing to launch)",
+                      "Startup (Recently launched, in the first stages of operations)",
+                      "In crescita (Generating revenue and expanding)",
+                      "Stabilita (Stable business with steady operations)",
                     ].map((option) => (
                       <div
                         key={option}
@@ -409,10 +415,10 @@ export default function S2BusinessIdea() {
                                 </p>
                               )}
 
-                              {/* Selected Options Display */}
+{/* Selected Options Display */}
                               {form.selectedProductCategoriesOptions.length >
                                 0 && (
-                                <div className="mt-3">
+                                <div className="mt-3 hidden md:block">
                                   <div className="text-sm text-gray-600 mb-2">
                                     Opzioni selezionate:
                                   </div>
@@ -431,12 +437,20 @@ export default function S2BusinessIdea() {
                                                 form.selectedProductCategoriesOptions.filter(
                                                   (opt) => opt !== option
                                                 );
+
+                                              // Update input field using utility function
+                                              const updatedInput =
+                                                removeSuggestionFromInput(
+                                                  form.selectedProductCategory,
+                                                  option
+                                                );
+
                                               setForm({
                                                 ...form,
                                                 selectedProductCategoriesOptions:
                                                   newOptions,
                                                 selectedProductCategory:
-                                                  newOptions.join(", "),
+                                                  updatedInput,
                                               });
                                             }}
                                             className="text-primary hover:text-primary/70"
@@ -509,12 +523,20 @@ export default function S2BusinessIdea() {
                                                     ];
                                                   }
 
+                                                  // Update input field using utility function
+                                                  const updatedInput =
+                                                    toggleSuggestionInInput(
+                                                      form.selectedProductCategory,
+                                                      suggestion,
+                                                      isAlreadySelected
+                                                    );
+
                                                   setForm({
                                                     ...form,
                                                     selectedProductCategoriesOptions:
                                                       newOptions,
                                                     selectedProductCategory:
-                                                      newOptions.join(", "),
+                                                      updatedInput,
                                                   });
                                                 }}
                                               >
@@ -614,10 +636,10 @@ export default function S2BusinessIdea() {
                                 </p>
                               )}
 
-                              {/* Selected Options Display */}
+{/* Selected Options Display */}
                               {form.selectedServiceCategoriesOptions.length >
                                 0 && (
-                                <div className="mt-3">
+                                <div className="mt-3 hidden md:block">
                                   <div className="text-sm text-gray-600 mb-2">
                                     Opzioni selezionate:
                                   </div>
@@ -636,12 +658,20 @@ export default function S2BusinessIdea() {
                                                 form.selectedServiceCategoriesOptions.filter(
                                                   (opt) => opt !== option
                                                 );
+
+                                              // Update input field using utility function
+                                              const updatedInput =
+                                                removeSuggestionFromInput(
+                                                  form.selectedServiceCategory,
+                                                  option
+                                                );
+
                                               setForm({
                                                 ...form,
                                                 selectedServiceCategoriesOptions:
                                                   newOptions,
                                                 selectedServiceCategory:
-                                                  newOptions.join(", "),
+                                                  updatedInput,
                                               });
                                             }}
                                             className="text-primary hover:text-primary/70"
@@ -714,12 +744,20 @@ export default function S2BusinessIdea() {
                                                     ];
                                                   }
 
+                                                  // Update input field using utility function
+                                                  const updatedInput =
+                                                    toggleSuggestionInInput(
+                                                      form.selectedServiceCategory,
+                                                      suggestion,
+                                                      isAlreadySelected
+                                                    );
+
                                                   setForm({
                                                     ...form,
                                                     selectedServiceCategoriesOptions:
                                                       newOptions,
                                                     selectedServiceCategory:
-                                                      newOptions.join(", "),
+                                                      updatedInput,
                                                   });
                                                 }}
                                               >
@@ -793,12 +831,20 @@ export default function S2BusinessIdea() {
                                               ];
                                             }
 
+                                            // Update input field using utility function
+                                            const updatedInput =
+                                              toggleSuggestionInInput(
+                                                form.selectedServiceCategory,
+                                                category,
+                                                isAlreadySelected
+                                              );
+
                                             setForm({
                                               ...form,
                                               selectedServiceCategoriesOptions:
                                                 newOptions,
                                               selectedServiceCategory:
-                                                newOptions.join(", "),
+                                                updatedInput,
                                             });
                                           }}
                                         >
@@ -882,7 +928,7 @@ export default function S2BusinessIdea() {
                 </div>
 
                 {/* Question 4: Company Ownership */}
-                <div>
+                {/* <div>
                   <label className="question-text">
                     L'azienda possiederà invenzioni, asset digitali, marchi,
                     segreti commerciali o simili?
@@ -913,42 +959,7 @@ export default function S2BusinessIdea() {
                       </div>
                     ))}
                   </div>
-                </div>
-
-                {/* Question 5: Business Goals */}
-                <div>
-                  <label className="question-text">
-                    Quali obiettivi persegui con questo piano aziendale?
-                  </label>
-                  <div className="mt-4 space-y-4">
-                    {[
-                      "Lanciare un nuovo Prodotto o Servizio",
-                      "Ottenere Finanziamenti da Investitori o Sovvenzioni",
-                      "Aumentare Vendite e Ricavi",
-                    ].map((option) => (
-                      <div
-                        key={option}
-                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 ${
-                          form.businessGoals === option
-                            ? "border-primary"
-                            : "border-[#888888]/50"
-                        }`}
-                        onClick={() => handleBusinessGoalChange(option)}
-                      >
-                        <div
-                          className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${
-                            form.businessGoals === option
-                              ? "border-[#A9A4FE] bg-primary"
-                              : "border-primary bg-white"
-                          }`}
-                        ></div>
-                        <span className="text-[1rem] font-normal text-accent leading-relaxed">
-                          {option}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                </div> */}
 
                 {/* Navigation Buttons */}
                 <div className="flex flex-col md:flex-row gap-4 mt-8">

@@ -1,6 +1,7 @@
 "use client";
 
 import { IBalanceSheet } from "@/redux/types";
+import { useSmartForm } from "@/components/ai-smart-form/SmartFormContext";
 import {
   BarChart,
   Bar,
@@ -24,15 +25,11 @@ const defaultPieChartData = [
   { name: "Patrimonio netto", value: 20, fill: "#EF4444" },
 ];
 
-// Format currency for display
+import { formatEuro } from "@/utils/euFormat";
+// Format currency for display (EU)
 const formatCurrency = (value: number) => {
-  if (!value || isNaN(value)) return "$0";
-  if (value >= 1000000) {
-    return `$${(value / 1000000).toFixed(1)}M`;
-  } else if (value >= 1000) {
-    return `$${(value / 1000).toFixed(0)}K`;
-  }
-  return `$${value.toLocaleString()}`;
+  if (value === undefined || value === null || isNaN(value)) return "€ 0,00";
+  return formatEuro(Number(value), { decimals: 2, withSymbol: true });
 };
 
 // Custom label component for pie chart - values inside segments with names
@@ -86,6 +83,35 @@ export default function BalanceSheet({
   balanceSheet,
   netFinancialPosition,
 }: IBalanceSheet) {
+  // Inject Year 0 from Balance Sheet extractions (if available)
+  let step1: any = null;
+  try {
+    const { getFormData } = useSmartForm();
+    step1 = getFormData("step1") as any;
+  } catch (e) {
+    // If SmartFormProvider is not present, gracefully skip using step1 context
+    step1 = null;
+  }
+
+  let enhancedBalanceSheet = balanceSheet;
+  try {
+    const bsExtra = (step1?.balanceSheetExtractions || [])[0];
+    const fin = bsExtra?.financial_data || {};
+    // Try to derive assets/liabilities/equity from financial_data keys if present
+    const year0: any = { year: 0 };
+    const assets = fin.assets ?? (fin.current_assets || 0) + (fin.non_current_assets || 0);
+    const liabilities = fin.liabilities ?? (fin.current_liabilities || 0) + (fin.non_current_liabilities || 0);
+    const equity = fin.equity ?? fin.net_equity ?? (typeof assets === "number" && typeof liabilities === "number" ? assets - liabilities : undefined);
+    if (typeof assets === "number") year0.assets = assets;
+    if (typeof liabilities === "number") year0.liabilities = liabilities;
+    if (typeof equity === "number") year0.equity = equity;
+
+    if ((year0.assets ?? 0) !== 0 || (year0.liabilities ?? 0) !== 0 || (year0.equity ?? 0) !== 0) {
+      enhancedBalanceSheet = [year0, ...balanceSheet];
+    }
+  } catch (e) {
+    // fail-safe: do nothing
+  }
   // Helper: safely extract possible fields from API item (supports legacy and new backend keys)
   const getFieldValue = (item: any, key: string) => {
     // direct
@@ -307,7 +333,7 @@ export default function BalanceSheet({
               </tr>
             </thead>
             <tbody>
-              {balanceSheet.map((item: any, index) => (
+              {enhancedBalanceSheet.map((item: any, index) => (
                 <tr
                   key={item.year}
                   className={index % 2 === 0 ? "bg-gray-50" : "bg-gray-50"}

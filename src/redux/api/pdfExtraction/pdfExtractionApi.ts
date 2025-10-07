@@ -9,9 +9,14 @@ export interface PdfExtractionResponse {
   text_content?: string;
   business_name?: string;
   location?: string;
+  page_count?: number;
+  metadata?: Record<string, any>;
+  financial_data?: any;
+  document_type?: string;
   status?: string;
   success: boolean;
   message?: string;
+  [key: string]: any;
 }
 
 // Actual API response format from AI service
@@ -19,6 +24,10 @@ interface AIPdfExtractionResponse {
   text_content?: string;
   business_name?: string;
   location?: string;
+  page_count?: number;
+  metadata?: Record<string, any>;
+  financial_data?: any;
+  document_type?: string;
   [key: string]: any;
 }
 
@@ -46,15 +55,27 @@ export const pdfExtractionApi = createApi({
           body: formData,
         };
       },
-      transformResponse: (response) => {
-        return {
-          text_content: response.text_content,
-          business_name: response.business_name,
-          location: response.location,
+      transformResponse: (response: any) => {
+        console.log('🔍 PDF API Raw Response:', response);
+        
+        const transformedResponse = {
+          // Pass through all the original response data
+          ...response,
+          // Ensure we have the core fields
+          text_content: response.text_content || "",
+          business_name: response.business_name || "",
+          location: response.location || "",
+          page_count: response.page_count || 1,
+          metadata: response.metadata || {},
+          financial_data: response.financial_data || null,
+          document_type: response.document_type || "unknown",
           status: response.text_content ? 'extracted' : 'uploaded_no_extraction',
           success: true,
           message: "PDF processed successfully"
         };
+        
+        console.log('✅ PDF API Transformed Response:', transformedResponse);
+        return transformedResponse;
       },
       transformErrorResponse: (response: any) => {
         console.log('PDF API Error Response:', response);
