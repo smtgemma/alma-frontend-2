@@ -931,8 +931,7 @@ export default function S7RevenueModelPricing() {
                 </div>
 
                 {/* Product/Service Section 1 */}
-                <div className="mt-6 space-y-4">
-                  {/* Product/Service Input Fields */}
+                {/* <div className="mt-6 space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {form.productServices.slice(0, 4).map((item, index) => (
                       <div key={item.id}>
@@ -954,7 +953,7 @@ export default function S7RevenueModelPricing() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
 
                 {/* Customer Payments (Crediti vs. Clienti) */}
                 <div className="mt-6">

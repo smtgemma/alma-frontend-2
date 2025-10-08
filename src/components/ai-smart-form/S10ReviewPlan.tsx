@@ -231,29 +231,16 @@ export default function S10ReviewPlan() {
         );
 
         if (res) {
-          console.log("=== SUBSCRIPTION DEBUG ===");
-          console.log("Full API response:", res.data);
-          console.log("Response structure:", JSON.stringify(res.data, null, 2));
-          console.log(
-            "Status from res.data?.data?.status:",
-            res.data?.data?.status
-          );
-          console.log("Status from res.data?.status:", res.data?.status);
-          console.log("Status type:", typeof res.data?.data?.status);
-          console.log("Status length:", res.data?.data?.status?.length);
+         
 
           const finalStatus =
             res.data?.data?.status || res.data?.status || "INACTIVE";
-          console.log("Final status to set:", finalStatus);
-          console.log("Final status type:", typeof finalStatus);
-          console.log("Final status === 'ACTIVE':", finalStatus === "ACTIVE");
+ 
 
           setIsSubscribed(finalStatus);
-          console.log("isSubscribed state set to:", finalStatus);
-          console.log("=== END SUBSCRIPTION DEBUG ===");
+       
         }
       } catch (error) {
-        console.error("Error fetching subscription data:", error);
         setIsSubscribed("INACTIVE");
       } finally {
         setIsSubscriptionLoading(false);
@@ -349,7 +336,6 @@ export default function S10ReviewPlan() {
                       "Will show subscription flow:",
                       isSubscribed !== "ACTIVE"
                     );
-                    console.log("=== END BUTTON RENDER DEBUG ===");
 
                     if (isSubscriptionLoading) {
                       return (

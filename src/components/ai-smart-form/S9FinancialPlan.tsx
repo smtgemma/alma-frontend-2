@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { parseEuro, formatEuro } from "@/utils/euFormat";
+import { toast } from "sonner";
 //
 function sanitizeEuroInput(raw: string): string {
   return (raw || "").replace(/[^0-9.,]/g, "");
@@ -96,7 +97,7 @@ export default function S9FinancialPlan() {
     const isValid = validateStep(8); // 0-based index for step 9
 
     if (fundingGap > 0) {
-      alert(
+      toast.error(
         `Funding Gap: mancano ${formatEuro(fundingGap, { decimals: 2 })} per coprire l'investimento totale.`
       );
       return;
@@ -244,12 +245,29 @@ export default function S9FinancialPlan() {
                   >
                     Indietro
                   </button>
-                  <button
-                    type="submit"
-                    className="w-full py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
-                  >
-                    Avanti
-                  </button>
+                  {(() => {
+                    const s6 = getFormData("step6") as any;
+                    const required = s6?.totals?.totalInvestment ?? 0;
+                    const equity = parseEuro(form.yourOwnEquity) || 0;
+                    const bank = parseEuro(form.bankingSystem) || 0;
+                    const other = parseEuro(form.otherInvestors) || 0;
+                    const total = equity + bank + other;
+                    const hasGap = (required - total) > 0;
+                    return (
+                      <button
+                        type="submit"
+                        disabled={hasGap}
+                        className={`w-full py-3 cursor-pointer text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${
+                          hasGap
+                            ? "bg-gray-300 text-white cursor-not-allowed opacity-70 hover:scale-100"
+                            : "bg-primary text-white hover:bg-primary/90"
+                        }`}
+                        title={hasGap ? "Colma il funding gap per procedere" : undefined}
+                      >
+                        Avanti
+                      </button>
+                    );
+                  })()}
                 </div>
               </form>
             </div>
