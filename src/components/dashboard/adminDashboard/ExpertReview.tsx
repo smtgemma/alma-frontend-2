@@ -10,6 +10,8 @@ import {
   useAllReviewGetQuery,
   useReviewStatsQuery,
 } from "@/redux/api/admin/adminAPI";
+import { useUpdateReviewStatusMutation } from "@/redux/api/expertReview/expertReviewApi";
+import { toast } from "sonner";
 import { format } from "date-fns";
 
 const ExpertReview = () => {
@@ -17,10 +19,10 @@ const ExpertReview = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const { data: allReviews, isLoading } = useAllReviewGetQuery({
+  const { data: allReviews, isLoading, refetch } = useAllReviewGetQuery({
     page: currentPage,
     limit: itemsPerPage,
-    search: searchTerm || undefined,
+    search: searchTerm || "",
   });
   const reviews = allReviews?.data || [];
   const meta = allReviews?.meta;
@@ -32,6 +34,25 @@ const ExpertReview = () => {
     name: string;
   } | null>(null);
   const { data: reviewStats } = useReviewStatsQuery({});
+  const [updateReviewStatus, { isLoading: updatingStatus }] =
+    useUpdateReviewStatusMutation();
+  const STATUSES = ["PENDING", "APPROVED", "REJECTED"] as const;
+
+  const handleStatusChange = async (reviewId: string, newStatus: string) => {
+    try {
+      const res = await updateReviewStatus({
+        reviewId,
+        status: newStatus.toUpperCase(),
+      }).unwrap();
+      toast.success((res as any)?.message || "Stato aggiornato con successo");
+      refetch();
+    } catch (err: any) {
+      toast.error(
+        err?.data?.message || "Aggiornamento dello stato non riuscito"
+      );
+    }
+  };
+
   console.log("reviewStats", reviewStats);
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -189,8 +210,13 @@ const ExpertReview = () => {
                     </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <span
-                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${
+                    <select
+                      value={review.status}
+                      onChange={(e) =>
+                        handleStatusChange(review.id, e.target.value)
+                      }
+                      disabled={updatingStatus}
+                      className={`px-2 py-1 text-xs font-semibold rounded-full border focus:outline-none cursor-pointer ${
                         review.status === "PENDING"
                           ? "bg-red-100 text-red-800 border-red-200"
                           : review.status === "REJECTED"
@@ -198,8 +224,12 @@ const ExpertReview = () => {
                           : "bg-green-100 text-green-800 border-green-200"
                       }`}
                     >
-                      {review.status}
-                    </span>
+                      {STATUSES.map((s) => (
+                        <option key={s} value={s} className="text-black">
+                          {s}
+                        </option>
+                      ))}
+                    </select>
                   </td>
                   {/* <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <Link

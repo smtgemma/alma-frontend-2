@@ -10,7 +10,16 @@ export const expertReviewApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["ExpertReview"],
     }),
+    updateReviewStatus: builder.mutation({
+      query: ({ reviewId, status }: { reviewId: string; status: string }) => ({
+        url: `/expert-review/${reviewId}/status`,
+        method: "PATCH",
+        body: { status },
+      }),
+      invalidatesTags: ["ExpertReview"],
+    }),
   }),
 });
 
-export const { useSubmitExpertReviewMutation } = expertReviewApi;
+export const { useSubmitExpertReviewMutation, useUpdateReviewStatusMutation } =
+  expertReviewApi;

@@ -61,13 +61,14 @@ export const adminApi = baseApi.injectEndpoints({
       query: () => ({
         url: `/expert-review/stats`,
       }),
-      providesTags: ["Admin"],
+      providesTags: ["Admin", "ExpertReview"],
     }),
     allReviewGet: builder.query({
-      query: () => ({
+      query: ({ page = 1, limit = 10, search = "" }) => ({
         url: `/expert-review`,
+        params: { page, limit, search },
       }),
-      providesTags: ["Admin"],
+      providesTags: ["Admin", "ExpertReview"],
     }),
     userSuspend: builder.mutation({
       query: ({ id, body }) => ({
