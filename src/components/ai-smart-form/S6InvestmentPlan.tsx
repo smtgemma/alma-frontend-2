@@ -302,10 +302,62 @@ export default function S6InvestmentPlan() {
     return dynamicInvestmentsTotal() + fixedInvestmentsTotal();
   };
 
-  const materialTotal = () =>
-    form.fixedInvestments
-      .filter((r) => r.category === "materiale")
-      .reduce((sum, r) => sum + parseEuro(r.amount), 0);
+  const materialTotal = () => {
+    console.log('=== MATERIAL TOTAL CALCULATION ===');
+    console.log('Form fixedInvestments:', form.fixedInvestments);
+    console.log('Form fixedInvestments length:', form.fixedInvestments?.length);
+    
+    if (!form.fixedInvestments || form.fixedInvestments.length === 0) {
+      console.log('No fixedInvestments found');
+      return 0;
+    }
+    
+    // Material investment keys from definition
+    const materialKeys = [
+      "terreni", "fabbricati", "impianti_macchinari", 
+      "it_elettronica", "arredi_ufficio", "autovetture", "veicoli_commerciali"
+    ];
+    
+    let total = 0;
+    
+    // Method 1: Try to match by key
+    form.fixedInvestments.forEach((item, index) => {
+      console.log(`Item ${index}:`, item);
+      
+      const isMaterialByKey = item.key && materialKeys.includes(item.key);
+      const isMaterialByCategory = item.category === "materiale";
+      
+      // Also check by label matching as fallback
+      const isMaterialByLabel = item.label && (
+        item.label.toLowerCase().includes('terreni') ||
+        item.label.toLowerCase().includes('fabbricati') ||
+        item.label.toLowerCase().includes('impianti') ||
+        item.label.toLowerCase().includes('macchinari') ||
+        item.label.toLowerCase().includes('elettroniche') ||
+        item.label.toLowerCase().includes('computer') ||
+        item.label.toLowerCase().includes('arredi') ||
+        item.label.toLowerCase().includes('mobili') ||
+        item.label.toLowerCase().includes('autovetture') ||
+        item.label.toLowerCase().includes('auto aziendali') ||
+        item.label.toLowerCase().includes('autocarri') ||
+        item.label.toLowerCase().includes('furgoni') ||
+        item.label.toLowerCase().includes('veicoli')
+      );
+      
+      const isMaterial = isMaterialByKey || isMaterialByCategory || isMaterialByLabel;
+      
+      if (isMaterial) {
+        const amount = parseEuro(item.amount) || 0;
+        console.log(`MATERIAL: ${item.label} | Amount: ${item.amount} | Parsed: ${amount}`);
+        total += amount;
+      } else {
+        console.log(`NON-MATERIAL: ${item.label}`);
+      }
+    });
+    
+    console.log('Final material total:', total);
+    return total;
+  };
 
   const immaterialTotal = () => {
     // Prefer explicit category, but also support legacy data without category by matching keys/labels
@@ -553,75 +605,7 @@ className="w-40 h-10 my-1 px-3 bg-[#FCFCFC] border border-[#888888]/30 rounded-l
                 {/* Investment Items Section (liberi) */}
                 <div className="space-y-6">
                   {/* Headers (hide on small screens to avoid cramped layout) */}
-                  <div className="hidden md:grid grid-cols-2 gap-6">
-                    <div>
-                      <label className="text-[1rem] font-medium text-accent">
-                        Elemento di Investimento
-                      </label>
-                    </div>
-                    <div>
-                      <label className="text-[1rem] font-medium text-accent">
-                        Importo di Investimento
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Investment Items */}
-                  {form.investmentItems.map((item, index) => (
-                    <div key={item.id} className="space-y-4">
-                      {/* Main row with serial number, textarea, and amount */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 items-start md:items-center gap-4 md:gap-6">
-                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                          <label className="text-[0.875rem] font-medium text-accent flex-shrink-0 mb-1 md:mb-0">
-                            0{index + 1}.
-                          </label>
-                          <input
-                            type="text"
-                            value={item.description}
-                            onChange={(e) =>
-                              handleInvestmentItemChange(
-                                item.id,
-                                "description",
-                                e.target.value
-                              )
-                            }
-                            placeholder="Scrivi elemento qui"
-                            className="w-full md:flex-1 px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
-                          />
-                        </div>
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-                          <label className="text-[0.875rem] font-medium text-accent flex-shrink-0 sm:hidden">
-                            Importo
-                          </label>
-                          <input
-                            type="text"
-                            inputMode="decimal"
-                            value={item.amount}
-                            onChange={(e) =>
-                              handleInvestmentItemChange(
-                                item.id,
-                                "amount",
-                                e.target.value
-                              )
-                            }
-                            placeholder="Es. 20.000"
-                            className="w-full sm:flex-1 px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  {/* Add Investment Item Button */}
-                  <div className="flex justify-start ml-0 md:ml-9">
-                    <button
-                      type="button"
-                      onClick={addInvestmentItem}
-                      className="flex items-center px-6 py-3 bg-[#A9A4FE] text-white text-[0.875rem] font-medium rounded-lg hover:bg-primary/90 transition-all duration-200"
-                    >
-                      <FiPlus className="w-5 h-5 mr-2" />
-                      Aggiungi Nuovo Elemento
-                    </button>
-                  </div>
+             
                   {/* Totals and Accounting Mapping Summary */}
                   <div className="pt-6 space-y-2">
                     <div className="grid grid-cols-2 gap-4">

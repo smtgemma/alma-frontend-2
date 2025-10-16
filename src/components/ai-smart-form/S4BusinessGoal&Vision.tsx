@@ -229,7 +229,7 @@ export default function S4BusinessGoalVision() {
     setForm((prev) => {
       const currentOptions = prev.selectedBusinessGoalsOptions;
       const isSelected = currentOptions.includes(option);
-      
+
       let newOptions;
       if (isSelected) {
         // Remove if already selected
@@ -238,14 +238,14 @@ export default function S4BusinessGoalVision() {
         // Add if not selected
         newOptions = [...currentOptions, option];
       }
-      
+
       // Update input field using utility function
       const updatedInput = toggleSuggestionInInput(
         prev.businessGoalsDescription,
         option,
         isSelected
       );
-      
+
       return {
         ...prev,
         selectedBusinessGoalsOptions: newOptions,
@@ -254,40 +254,11 @@ export default function S4BusinessGoalVision() {
     });
   };
 
-  const handleVisionOptionSelect = (option: string) => {
-    setForm((prev) => {
-      const currentOptions = prev.selectedLongTermVisionOptions;
-      const isSelected = currentOptions.includes(option);
-      
-      let newOptions;
-      if (isSelected) {
-        // Remove if already selected
-        newOptions = currentOptions.filter((opt) => opt !== option);
-      } else {
-        // Add if not selected
-        newOptions = [...currentOptions, option];
-      }
-      
-      // Update input field using utility function
-      const updatedInput = toggleSuggestionInInput(
-        prev.longTermVisionDescription,
-        option,
-        isSelected
-      );
-      
-      return {
-        ...prev,
-        selectedLongTermVisionOptions: newOptions,
-        longTermVisionDescription: updatedInput,
-      };
-    });
-  };
-
   const handleMissionOptionSelect = (option: string) => {
     setForm((prev) => {
       const currentOptions = prev.selectedMissionOptions;
       const isSelected = currentOptions.includes(option);
-      
+
       let newOptions;
       if (isSelected) {
         // Remove if already selected
@@ -296,14 +267,14 @@ export default function S4BusinessGoalVision() {
         // Add if not selected
         newOptions = [...currentOptions, option];
       }
-      
+
       // Update input field using utility function
       const updatedInput = toggleSuggestionInInput(
         prev.missionDescription,
         option,
         isSelected
       );
-      
+
       return {
         ...prev,
         selectedMissionOptions: newOptions,
@@ -481,7 +452,7 @@ export default function S4BusinessGoalVision() {
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
-{/* Selected Options Display */}
+                    {/* Selected Options Display */}
                     {form.selectedBusinessGoalsOptions.length > 0 && (
                       <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">
@@ -617,167 +588,6 @@ export default function S4BusinessGoalVision() {
                   )}
                 </div>
 
-                {/* Question 2: What's your long-term vision? */}
-                <div>
-                  <label className="question-text">
-                    Qual è la tua visione a lungo termine?
-                  </label>
-                  <div className="mt-4">
-                    <input
-                      type="text"
-                      value={form.longTermVisionDescription}
-                      onChange={(e) =>
-                        handleTextareaChange(
-                          "longTermVisionDescription",
-                          e.target.value
-                        )
-                      }
-                      onKeyPress={(e) =>
-                        handleKeyPress(
-                          e,
-                          "customLongTermVision",
-                          "longTermVisionDescription"
-                        )
-                      }
-                      onClick={() =>
-                        handleTextareaClick("showLongTermVisionOptions")
-                      }
-                      placeholder="Puoi scrivere liberamente o selezionare dai suggerimenti AI"
-                      className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
-                    />
-
-{/* Selected Options Display */}
-                    {form.selectedLongTermVisionOptions.length > 0 && (
-                      <div className="mt-3 hidden md:block">
-                        <div className="text-sm text-gray-600 mb-2">
-                          Opzioni selezionate:
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {form.selectedLongTermVisionOptions.map(
-                            (option, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
-                              >
-                                <span className="mr-2">{option}</span>
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleVisionOptionSelect(option)
-                                  }
-                                  className="text-primary hover:text-primary/70"
-                                >
-                                  ×
-                                </button>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Sub-options */}
-                  {form.showLongTermVisionOptions && (
-                    <div className="mt-2  space-y-2" ref={visionDropdownRef}>
-                      {/* AI Suggestions */}
-                      {isLoadingVisionSuggestions ? (
-                        <div className="flex items-center p-2  rounded-lg ">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                          <span className="text-[1rem] font-normal text-gray-500 ml-2">
-                            Caricamento suggerimenti AI...
-                          </span>
-                        </div>
-                      ) : (
-                        visionAiSuggestions.map((option) => {
-                          const isSelected =
-                            form.selectedLongTermVisionOptions.includes(option);
-                          return (
-                            <button
-                              key={option}
-                              type="button"
-                              className={`flex items-center p-2 bg-white rounded-lg cursor-pointer text-left transition-colors w-full ${
-                                isSelected
-                                  ? "bg-primary/10 border border-primary"
-                                  : "hover:bg-gray-50"
-                              }`}
-                              onClick={() => handleVisionOptionSelect(option)}
-                            >
-                              <div
-                                className={`w-4 h-4 border-2 rounded mr-3 ml-5 flex items-center justify-center ${
-                                  isSelected
-                                    ? "bg-primary border-primary"
-                                    : "border-gray-300"
-                                }`}
-                              >
-                                {isSelected && (
-                                  <svg
-                                    className="w-3 h-3 text-white"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
-                              <span className="text-[1rem] font-normal text-accent">
-                                {option}
-                              </span>
-                            </button>
-                          );
-                        })
-                      )}
-
-                      {/* Custom options */}
-                      {form.customLongTermVision.map((option, index) => {
-                        const isSelected =
-                          form.selectedLongTermVisionOptions.includes(option);
-                        return (
-                          <button
-                            key={`custom-vision-${index}`}
-                            type="button"
-                            className={`flex items-center p-2 bg-white rounded-lg cursor-pointer text-left transition-colors w-full ${
-                              isSelected
-                                ? "bg-primary/10 border border-primary"
-                                : "hover:bg-gray-50"
-                            }`}
-                            onClick={() => handleVisionOptionSelect(option)}
-                          >
-                            <div
-                              className={`w-4 h-4 border-2 rounded mr-3 ml-5 flex items-center justify-center ${
-                                isSelected
-                                  ? "bg-primary border-primary"
-                                  : "border-gray-300"
-                              }`}
-                            >
-                              {isSelected && (
-                                <svg
-                                  className="w-3 h-3 text-white"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              )}
-                            </div>
-                            <span className="text-[1rem] font-normal text-accent">
-                              {option}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-
                 {/* Question 3: How would you describe your mission in one line? */}
                 <div>
                   <label className="question-text">
@@ -801,7 +611,7 @@ export default function S4BusinessGoalVision() {
                       className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                     />
 
-{/* Selected Options Display */}
+                    {/* Selected Options Display */}
                     {form.selectedMissionOptions.length > 0 && (
                       <div className="mt-3 hidden md:block">
                         <div className="text-sm text-gray-600 mb-2">

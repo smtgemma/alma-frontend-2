@@ -114,7 +114,6 @@ export default function S8OperatingCost() {
         { id: "amortization", name: "Ammortamenti", percentage: "-", totalCost: formatCurrency(amortizationFromInvestments), showOptions: false },
         { id: "other", name: "Other expenses", percentage: "1%", totalCost: calcFromPercent("1%"), showOptions: false },
         { id: "interest", name: "Interest expenses", percentage: "1%", totalCost: calcFromPercent("1%"), showOptions: false },
-        { id: "tax", name: "Income tax", percentage: "-", totalCost: formatCurrency(0), showOptions: false },
       ],
       firstYearTotalCost: formatCurrency(0),
       firstYearNetProfit: formatCurrency(0),

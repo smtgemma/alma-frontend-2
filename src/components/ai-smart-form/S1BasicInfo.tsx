@@ -7,6 +7,12 @@ import { useSmartForm } from "./SmartFormContext";
 import { useGetAISuggestionsMutation } from "@/redux/api/suggestions/suggestionsApi";
 import { useExtractPdfMutation } from "@/redux/api/pdfExtraction/pdfExtractionApi";
 
+interface TeamMember {
+  name: string;
+  position: string;
+  background: string;
+}
+
 interface BusinessInfoForm {
   businessName: string;
   businessStage: string;
@@ -22,6 +28,7 @@ interface BusinessInfoForm {
   targetLanguage: string;
   customBusinessStages?: string[];
   selectedBusinessStagesOptions?: string[];
+  teamMembers?: TeamMember[];
   uploaded_file?: {
     text_content: string;
     page_count: number;
@@ -80,6 +87,7 @@ export default function S1BasicInfo() {
       targetLanguage: "Euro",
       customBusinessStages: [],
       selectedBusinessStagesOptions: [],
+      teamMembers: [{ name: "", position: "", background: "" }],
       balanceSheetFiles: [],
       visuraCameraleFiles: [],
       balanceSheetExtractions: [],
@@ -148,6 +156,39 @@ export default function S1BasicInfo() {
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle team member input changes
+  const handleTeamMemberChange = (
+    index: number,
+    field: keyof TeamMember,
+    value: string
+  ) => {
+    setForm((prev) => ({
+      ...prev,
+      teamMembers: prev.teamMembers?.map((member, i) =>
+        i === index ? { ...member, [field]: value } : member
+      ) || [],
+    }));
+  };
+
+  // Add new team member
+  const addTeamMember = () => {
+    setForm((prev) => ({
+      ...prev,
+      teamMembers: [
+        ...(prev.teamMembers || []),
+        { name: "", position: "", background: "" },
+      ],
+    }));
+  };
+
+  // Remove team member
+  const removeTeamMember = (index: number) => {
+    setForm((prev) => ({
+      ...prev,
+      teamMembers: prev.teamMembers?.filter((_, i) => i !== index) || [],
+    }));
   };
 
   // Custom handler for AI suggestion fields that preserves both user input and selected options
@@ -1674,7 +1715,7 @@ export default function S1BasicInfo() {
                           }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent ">
-                          Azienda Esistente
+                          Impresa esistente
                         </span>
                       </div>
 
@@ -1984,7 +2025,7 @@ export default function S1BasicInfo() {
                           }`}
                         ></div>
                         <span className="text-[1rem] font-normal text-accent ">
-                          Nuova Azienda
+                          Impresa da costituire
                         </span>
                       </div>
 
@@ -2006,7 +2047,7 @@ export default function S1BasicInfo() {
                               onChange={handleInputChange}
                               onClick={() => setShowStructureDropdown(true)}
                               onFocus={() => setShowStructureDropdown(true)}
-                              placeholder="Seleziona o scrivi una struttura personalizzata"
+                              placeholder="Seleziona o inserisci una struttura personalizzata"
                               className="w-full mt-1 px-4 py-3 bg-[#FCFCFC] border border-[#888888]/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
                             />
 
@@ -2044,7 +2085,7 @@ export default function S1BasicInfo() {
                             </label>
                             <input
                               type="text"
-                              placeholder="Es. 12/2025"
+                              placeholder="Es. Dicembre 2025"
                               value={form.plannedEstablishmentDate || ""}
                               name="plannedEstablishmentDate"
                               onChange={handleInputChange}
@@ -2056,7 +2097,7 @@ export default function S1BasicInfo() {
                           <div className="mb-2">
                             <input
                               type="text"
-                              placeholder="Descrizione/stadio (facoltativo)"
+                              placeholder="Descrizione o stadio dell'impresa (facoltativo)"
                               value={form.businessStage}
                               onChange={(e) =>
                                 handleAISuggestionInputChange(
@@ -2597,7 +2638,7 @@ export default function S1BasicInfo() {
                 {/* Website */}
                 <div>
                   <label className="question-text">
-                    Hai un sito web o presenza online?
+                    Hai un sito web o presenza online? (Facoltativo)
                   </label>
                   <input
                     type="text"
@@ -2607,13 +2648,92 @@ export default function S1BasicInfo() {
                     className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
                       errors.website ? "border-red-500" : "border-[#888888]/50"
                     }`}
-                    placeholder=""
+                    placeholder="Inserisci URL del sito web"
                   />
                   {errors.website && (
                     <p className="text-red-500 text-sm mt-1">
                       {errors.website}
                     </p>
                   )}
+                </div>
+
+                {/* Management Team */}
+                <div>
+                  <label className="question-text">
+                    Il tuo team di gestione:
+                  </label>
+                  <div className="space-y-4 mt-4">
+                    {form.teamMembers?.map((member, index) => (
+                      <div key={index} className="bg-gray-50 p-4 rounded-lg space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium text-accent">
+                            Membro del Team {index + 1}
+                          </h4>
+                          {form.teamMembers && form.teamMembers.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removeTeamMember(index)}
+                              className="text-red-500 hover:text-red-700 text-sm"
+                            >
+                              Rimuovi
+                            </button>
+                          )}
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                          <div>
+                            <label className="block text-sm text-accent mb-1">
+                              Nome:
+                            </label>
+                            <input
+                              type="text"
+                              value={member.name}
+                              onChange={(e) =>
+                                handleTeamMemberChange(index, 'name', e.target.value)
+                              }
+                              className="w-full px-3 py-2 border border-[#888888]/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                              placeholder="Nome completo"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm text-accent mb-1">
+                              Posizione:
+                            </label>
+                            <input
+                              type="text"
+                              value={member.position}
+                              onChange={(e) =>
+                                handleTeamMemberChange(index, 'position', e.target.value)
+                              }
+                              className="w-full px-3 py-2 border border-[#888888]/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                              placeholder="Es. CEO, CTO, Responsabile Vendite"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm text-accent mb-1">
+                              Background:
+                            </label>
+                            <input
+                              type="text"
+                              value={member.background}
+                              onChange={(e) =>
+                                handleTeamMemberChange(index, 'background', e.target.value)
+                              }
+                              className="w-full px-3 py-2 border border-[#888888]/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                              placeholder="Esperienza e competenze"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={addTeamMember}
+                      className="flex items-center gap-2 px-4 py-2 text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-colors"
+                    >
+                      <span className="text-xl">+</span>
+                      Aggiungi altro membro
+                    </button>
+                  </div>
                 </div>
 
                 {/* Language and Currency */}
