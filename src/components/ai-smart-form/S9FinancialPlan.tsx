@@ -11,9 +11,10 @@ function sanitizeEuroInput(raw: string): string {
 }
 
 interface FinancialPlanForm {
-  yourOwnEquity: string; // numeric-only string
-  bankingSystem: string; // numeric-only string
-  otherInvestors: string; // numeric-only string
+  equity: string; // Shareholders' equity
+  shareholderLoan: string; // Interest-free shareholder loan
+  loanAmount: string; // Bank loan amount
+  interestRate: string; // Bank loan interest rate
 }
 
 export default function S9FinancialPlan() {
@@ -28,26 +29,50 @@ export default function S9FinancialPlan() {
 
   const persistedData = getFormData("step9");
 
-  const [form, setForm] = useState<FinancialPlanForm>(
-    persistedData || {
-      yourOwnEquity: "",
-      bankingSystem: "",
-      otherInvestors: "",
+  const [form, setForm] = useState<FinancialPlanForm>(() => {
+    const defaultForm: FinancialPlanForm = {
+      equity: "",
+      shareholderLoan: "",
+      loanAmount: "1000000",
+      interestRate: "5",
+    };
+
+    if (persistedData) {
+      return {
+        equity:
+          (persistedData as any).equity ||
+          (persistedData as any).yourOwnEquity ||
+          "",
+        shareholderLoan: (persistedData as any).shareholderLoan || "",
+        loanAmount:
+          (persistedData as any).loanAmount ||
+          (persistedData as any).bankingSystem ||
+          "1000000",
+        interestRate: (persistedData as any).interestRate || "5",
+      };
     }
-  );
+
+    return defaultForm;
+  });
 
   const handleInputChange = (field: keyof FinancialPlanForm, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    setForm(
+      (prev: FinancialPlanForm) =>
+        ({ ...prev, [field]: value } as FinancialPlanForm)
+    );
   };
 
   const handleMoneyChange = (field: keyof FinancialPlanForm, value: string) => {
     const sanitized = sanitizeEuroInput(value);
-    setForm((prev) => ({ ...prev, [field]: sanitized }));
+    setForm(
+      (prev: FinancialPlanForm) =>
+        ({ ...prev, [field]: sanitized } as FinancialPlanForm)
+    );
   };
 
   // Sync form changes with context
   useEffect(() => {
-    updateFormData("step9", form);
+    updateFormData("step9", { ...form } as any);
   }, [form, updateFormData]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -55,37 +80,41 @@ export default function S9FinancialPlan() {
 
     // Compute totals: investments (Step 6) vs financing (this step)
     const step6 = getFormData("step6") as any;
-    const totalInvestments = step6?.totals?.totalInvestment ?? (() => {
-      const dynamicInvestmentTotal = (step6?.investmentItems || []).reduce(
-        (sum: number, it: any) => sum + (Number(it.amount) || 0),
-        0
-      );
-      const fixedInvestmentTotal = (step6?.fixedInvestments || []).reduce(
-        (sum: number, it: any) => sum + (Number(it.amount) || parseEuro(it.amount || "0") || 0),
-        0
-      );
-      return dynamicInvestmentTotal + fixedInvestmentTotal;
-    })();
+    const totalInvestments =
+      step6?.totals?.totalInvestment ??
+      (() => {
+        const dynamicInvestmentTotal = (step6?.investmentItems || []).reduce(
+          (sum: number, it: any) => sum + (Number(it.amount) || 0),
+          0
+        );
+        const fixedInvestmentTotal = (step6?.fixedInvestments || []).reduce(
+          (sum: number, it: any) =>
+            sum + (Number(it.amount) || parseEuro(it.amount || "0") || 0),
+          0
+        );
+        return dynamicInvestmentTotal + fixedInvestmentTotal;
+      })();
 
-    const equity = parseEuro(form.yourOwnEquity) || 0;
-    const bank = parseEuro(form.bankingSystem) || 0;
-    const other = parseEuro(form.otherInvestors) || 0;
-    const financingTotal = equity + bank + other;
+    const equity = parseEuro(form.equity) || 0;
+    const shareholderLoan = parseEuro(form.shareholderLoan) || 0;
+    const loanAmount = parseEuro(form.loanAmount) || 0;
+    const financingTotal = equity + shareholderLoan + loanAmount;
     const fundingGap = Number((totalInvestments - financingTotal).toFixed(2));
 
     const payload: any = {
       sources: {
         equity,
-        bankLoan: bank,
-        otherInvestors: other,
+        shareholderLoan,
+        bankLoan: loanAmount,
+        bankLoanInterestRate: parseFloat(form.interestRate) || 0,
         total: financingTotal,
       },
       requiredInvestment: totalInvestments,
       fundingGap: fundingGap > 0 ? fundingGap : 0,
       accountingMapping: {
         statoPatrimoniale: {
-          patrimonioNetto: equity,
-          passivita: { debitiFinanziari: bank + other },
+          patrimonioNetto: equity + shareholderLoan, // Both equity and loan go to equity side
+          passivita: { debitiFinanziari: loanAmount },
         },
       },
     };
@@ -98,7 +127,9 @@ export default function S9FinancialPlan() {
 
     if (fundingGap > 0) {
       toast.error(
-        `Funding Gap: mancano ${formatEuro(fundingGap, { decimals: 2 })} per coprire l'investimento totale.`
+        `Funding Gap: mancano ${formatEuro(fundingGap, {
+          decimals: 2,
+        })} per coprire l'investimento totale.`
       );
       return;
     }
@@ -148,8 +179,8 @@ export default function S9FinancialPlan() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Question: How do you plan to finance your business idea? */}
                 <div>
-                  <label className="question-text">
-                    Come pianifichi di finanziare la tua idea di business?
+                  <label className="text-[24px] font-medium text-accent mb-6 block">
+                    How do you plan to finance your business idea?
                   </label>
 
                   {/* Totale investimento richiesto (Step 6) */}
@@ -160,56 +191,111 @@ export default function S9FinancialPlan() {
                       return (
                         <div className="flex justify-between text-[1rem] text-accent">
                           <span>Investimento totale (da Step 6)</span>
-                          <span className="font-medium">{formatEuro(required, { decimals: 2 })}</span>
+                          <span className="font-medium">
+                            {formatEuro(required, { decimals: 2 })}
+                          </span>
                         </div>
                       );
                     })()}
                   </div>
 
-                  {/* Your own equity */}
+                  {/* Shareholders funding */}
                   <div className="mt-6">
-                    <label className="question-text">
-                      Il tuo capitale proprio:
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        value={form.yourOwnEquity}
-                        onChange={(e) => handleMoneyChange("yourOwnEquity", e.target.value)}
-                        placeholder="Es. 50.000"
-                        className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
-                      />
+                    <h3 className="text-[1.2rem] font-semibold text-accent mb-4">
+                      Shareholders funding as:
+                    </h3>
+
+                    {/* Equity */}
+                    <div className="mb-4">
+                      <label className="block text-[1rem] font-medium text-accent mb-2">
+                        Equity:
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          value={form.equity}
+                          onChange={(e) =>
+                            handleMoneyChange("equity", e.target.value)
+                          }
+                          placeholder="Enter equity amount"
+                          className="w-full px-4 py-3 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent pr-8"
+                        />
+                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-accent">
+                          €
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Interest-free shareholder loan */}
+                    <div className="mb-6">
+                      <label className="block text-[1rem] font-medium text-accent mb-2">
+                        Interest-free shareholder loan:
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          value={form.shareholderLoan}
+                          onChange={(e) =>
+                            handleMoneyChange("shareholderLoan", e.target.value)
+                          }
+                          placeholder="Enter loan amount"
+                          className="w-full px-4 py-3 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent pr-8"
+                        />
+                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-accent">
+                          €
+                        </span>
+                      </div>
                     </div>
                   </div>
 
                   {/* Banking System */}
                   <div className="mt-6">
-                    <label className="question-text">Sistema Bancario:</label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        value={form.bankingSystem}
-                        onChange={(e) => handleMoneyChange("bankingSystem", e.target.value)}
-                        placeholder="Es. 80.000 (prestiti bancari)"
-                        className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
-                      />
-                    </div>
-                  </div>
+                    <h3 className="text-[1.2rem] font-semibold text-accent mb-4">
+                      Banking System:
+                    </h3>
 
-                  {/* Other investors */}
-                  <div className="mt-6">
-                    <label className="question-text">Altri investitori:</label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        value={form.otherInvestors}
-                        onChange={(e) => handleMoneyChange("otherInvestors", e.target.value)}
-                        placeholder="Es. 20.000 (altri finanziatori)"
-                        className="w-full px-4 py-4 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent"
-                      />
+                    <div className="mb-4">
+                      <label className="block text-[1rem] font-medium text-accent mb-2">
+                        Loan amount:
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          value={form.loanAmount}
+                          onChange={(e) =>
+                            handleMoneyChange("loanAmount", e.target.value)
+                          }
+                          placeholder="1,000,000"
+                          className="w-full px-4 py-3 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent pr-8"
+                        />
+                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-accent">
+                          €
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mb-6">
+                      <label className="block text-[1rem] font-medium text-accent mb-2">
+                        Interest rate:
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          value={form.interestRate}
+                          onChange={(e) =>
+                            handleInputChange("interestRate", e.target.value)
+                          }
+                          placeholder="5"
+                          className="w-full px-4 py-3 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent pr-8"
+                        />
+                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-accent">
+                          %
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -218,17 +304,37 @@ export default function S9FinancialPlan() {
                     {(() => {
                       const s6 = getFormData("step6") as any;
                       const required = s6?.totals?.totalInvestment ?? 0;
-                      const equity = parseEuro(form.yourOwnEquity) || 0;
-                      const bank = parseEuro(form.bankingSystem) || 0;
-                      const other = parseEuro(form.otherInvestors) || 0;
-                      const total = equity + bank + other;
+                      const equity = parseEuro(form.equity) || 0;
+                      const shareholderLoan =
+                        parseEuro(form.shareholderLoan) || 0;
+                      const loanAmount = parseEuro(form.loanAmount) || 0;
+                      const total = equity + shareholderLoan + loanAmount;
                       const gap = required - total;
                       return (
                         <>
-                          <div className="flex justify-between text-[1rem] text-accent"><span>Totale fonti</span><span className="font-medium">{formatEuro(total, { decimals: 2 })}</span></div>
-                          <div className={`flex justify-between text-[1rem] ${gap > 0 ? "text-red-600" : gap < 0 ? "text-yellow-600" : "text-green-600"}`}>
-                            <span>{gap >= 0 ? "Funding Gap" : "Eccedenza di finanziamento"}</span>
-                            <span className="font-medium">{formatEuro(Math.abs(gap), { decimals: 2 })}</span>
+                          <div className="flex justify-between text-[1rem] text-accent">
+                            <span>Totale fonti</span>
+                            <span className="font-medium">
+                              {formatEuro(total, { decimals: 2 })}
+                            </span>
+                          </div>
+                          <div
+                            className={`flex justify-between text-[1rem] ${
+                              gap > 0
+                                ? "text-red-600"
+                                : gap < 0
+                                ? "text-yellow-600"
+                                : "text-green-600"
+                            }`}
+                          >
+                            <span>
+                              {gap >= 0
+                                ? "Funding Gap"
+                                : "Eccedenza di finanziamento"}
+                            </span>
+                            <span className="font-medium">
+                              {formatEuro(Math.abs(gap), { decimals: 2 })}
+                            </span>
                           </div>
                         </>
                       );
@@ -248,11 +354,12 @@ export default function S9FinancialPlan() {
                   {(() => {
                     const s6 = getFormData("step6") as any;
                     const required = s6?.totals?.totalInvestment ?? 0;
-                    const equity = parseEuro(form.yourOwnEquity) || 0;
-                    const bank = parseEuro(form.bankingSystem) || 0;
-                    const other = parseEuro(form.otherInvestors) || 0;
-                    const total = equity + bank + other;
-                    const hasGap = (required - total) > 0;
+                    const equity = parseEuro(form.equity) || 0;
+                    const shareholderLoan =
+                      parseEuro(form.shareholderLoan) || 0;
+                    const loanAmount = parseEuro(form.loanAmount) || 0;
+                    const total = equity + shareholderLoan + loanAmount;
+                    const hasGap = required - total > 0;
                     return (
                       <button
                         type="submit"
@@ -262,7 +369,11 @@ export default function S9FinancialPlan() {
                             ? "bg-gray-300 text-white cursor-not-allowed opacity-70 hover:scale-100"
                             : "bg-primary text-white hover:bg-primary/90"
                         }`}
-                        title={hasGap ? "Colma il funding gap per procedere" : undefined}
+                        title={
+                          hasGap
+                            ? "Colma il funding gap per procedere"
+                            : undefined
+                        }
                       >
                         Avanti
                       </button>

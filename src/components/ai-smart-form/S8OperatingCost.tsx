@@ -1,57 +1,59 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { parseEuro, formatEuro } from "@/utils/euFormat";
-//
+
 interface OperatingCostItem {
   id: string;
   name: string;
   percentage: string;
   totalCost: string;
-  showOptions: boolean;
+  isAutoCalculated: boolean;
+  showTooltip: boolean;
+}
+
+interface SupplierPayments {
+  immediateCollection: string; // % of revenues collected immediately (cash or within 30 days)
+  collection60Days: string; // % of revenues collected with 60 days delay
+  collection90Days: string; // % of revenues collected with 90 days delay
 }
 
 interface OperatingCostForm {
-  operatingCosts: string;
   operatingCostItems: OperatingCostItem[];
-  firstYearTotalCost: string;
-  firstYearNetProfit: string;
-  netProfitMargin: string;
+  supplierPayments: SupplierPayments;
+  totalOperatingCosts: string;
+  netProfit: string;
+  profitMargin: string;
 }
 
-// Simple tooltip helper
+// Enhanced tooltip helper with detailed explanations for non-experts
 const TOOLTIP_MAP: Record<string, string> = {
-  cogs: "Costo del venduto: materie prime, merci, produzione diretta.",
-  salaries: "Stipendi e salari: personale operativo e amministrativo.",
-  marketing: "Marketing e pubblicità: campagne, social, contenuti, eventi.",
-  rent: "Affitti: uffici, negozi, capannoni.",
-  admin: "Amministrazione generale: utilities, software, consulenze, assicurazioni.",
-  amortization: "Ammortamenti: quota annua degli investimenti (calcolata automaticamente).",
-  other: "Altre spese: costi vari non ricorrenti e minori.",
-  interest: "Oneri finanziari: interessi su prestiti e linee di credito.",
-  tax: "Imposte: stima IRES 24% calcolata in base al reddito imponibile.",
-  accounting: "Contabilità e consulenze: servizi professionali e compliance fiscale.",
-};
-
-// Resolve tooltip text by id or by matching the item name when ids differ
-const getTooltipFromItem = (item: { id: string; name: string }) => {
-  if (TOOLTIP_MAP[item.id]) return TOOLTIP_MAP[item.id];
-  const name = (item.name || "").toLowerCase();
-  if (name.includes("marketing")) return TOOLTIP_MAP.marketing;
-  if (name.includes("salar") || name.includes("wage") || name.includes("dipendenti")) return TOOLTIP_MAP.salaries;
-  if (name.includes("rent") || name.includes("affitt")) return TOOLTIP_MAP.rent;
-  if (name.includes("general") || name.includes("amministr")) return TOOLTIP_MAP.admin;
-  if (name.includes("accounting") || name.includes("contabil")) return TOOLTIP_MAP.accounting;
-  if (name.includes("ammort") || name.includes("amortiz") ) return TOOLTIP_MAP.amortization;
-  if (name.includes("interest") || name.includes("oneri")) return TOOLTIP_MAP.interest;
-  if (name.includes("tax") || name.includes("imposte")) return TOOLTIP_MAP.tax;
-  if (name.includes("cogs") || name.includes("vendut") || name.includes("goods")) return TOOLTIP_MAP.cogs;
-  return TOOLTIP_MAP.other;
+  cogs: "Costo del venduto (COGS): Include materie prime, merci acquistate per la rivendita, costi di produzione diretti, manodopera diretta e altri costi direttamente collegati ai prodotti/servizi venduti. Esempio: se vendi scarpe, include il costo delle scarpe che acquisti dal fornitore.",
+  salaries:
+    "Stipendi e salari: Retribuzioni di dipendenti, contributi previdenziali, TFR, benefit aziendali, formazione del personale. Include tutto il personale operativo e amministrativo. Esempio: stipendio mensile di un commesso €1,500 + contributi €500 = €2,000/mese.",
+  marketing:
+    "Marketing e pubblicità: Campagne pubblicitarie, social media, contenuti, eventi, fiere, materiale promozionale, sito web, SEO, Google Ads, Facebook Ads, influencer marketing, branding. Esempio: budget mensile €1,000 per Google Ads + €500 per social media.",
+  rent: "Affitti: Canoni di locazione per uffici, negozi, capannoni, magazzini, spazi produttivi, parcheggi e qualsiasi immobile utilizzato per l'attività. Esempio: affitto negozio €2,000/mese + magazzino €800/mese.",
+  admin:
+    "Amministrazione generale: Utilities (luce, gas, acqua, telefono), software gestionale, consulenze legali/fiscali, assicurazioni, cancelleria, spese bancarie, servizi professionali. Esempio: bollette €300/mese + software €100/mese + commercialista €200/mese.",
+  amortization:
+    "Ammortamenti: Quota annuale di deprezzamento degli investimenti fissi (macchinari, attrezzature, software, brevetti). Calcolata automaticamente in base agli investimenti inseriti nel Passo 6. Esempio: se hai comprato un computer da €2,000 con ammortamento al 20%, l'ammortamento annuo è €400.",
+  other:
+    "Altre spese: Costi vari operativi non classificabili nelle altre categorie, spese di viaggio, rappresentanza, manutenzioni, riparazioni, spese legali straordinarie. Esempio: riparazione impianto €500, viaggio cliente €300, spese legali €800.",
+  interest:
+    "Oneri finanziari: Interessi passivi su prestiti bancari, mutui, linee di credito, finanziamenti, leasing, commissioni bancarie, spese per servizi finanziari. Esempio: prestito €50,000 al 4% annuo = €2,000 di interessi/anno.",
+  tax: "Imposte sul reddito: IRES (24% sui redditi delle società) calcolata automaticamente in base al reddito imponibile dopo aver sottratto tutti i costi operativi. Esempio: se il reddito imponibile è €100,000, l'IRES è €24,000.",
 };
 
 export default function S8OperatingCost() {
+  // Clear localStorage for this step to ensure fresh start
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("smartform-step8");
+    }
+  }, []);
   const {
     nextStep,
     prevStep,
@@ -65,99 +67,41 @@ export default function S8OperatingCost() {
   const step7Data = getFormData("step7");
   const step6Data = getFormData("step6");
 
-  // Refs for dropdown containers
-  const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-
-  const [form, setForm] = useState<OperatingCostForm>(() => {
-    if (persistedData) {
-      const updatedItems = persistedData.operatingCostItems.map((item) => ({
-        ...item,
-        showOptions: false,
-      }));
-      return { ...persistedData, operatingCostItems: updatedItems };
+  // Get Year 1 Revenue from Step 7
+  const getExpectedRevenue = (): number => {
+    const streams = (step7Data as any)?.revenueStreams || [];
+    if (Array.isArray(streams) && streams.length > 0) {
+      const total = streams.reduce(
+        (sum: number, row: any) => sum + (parseEuro(row.amount || "") || 0),
+        0
+      );
+      if (total > 0) return total;
     }
-
-    // Base: Year 1 expected revenue from Step 7
-    const expectedRevenueBase = (() => {
-      const raw = step7Data?.expectedRevenue || "0";
-      // Try to parse currency or range
-      const numeric = extractRevenueValue(raw);
-      return numeric > 0 ? numeric : 0;
-    })();
-
-    // Ammortamenti from Step 6 fixed investments
-    const amortizationFromInvestments = (() => {
-      const list = step6Data?.fixedInvestments || [];
-      const sum = list.reduce((acc: number, row: any) => {
-        const amt = parseEuro(row.amount || "0");
-        const rate = Number(row.amortizationRate || 0);
-        return acc + amt * rate;
-      }, 0);
-      return sum;
-    })();
-
-    // Helper: calculate total cost from % of revenue
-    const calcFromPercent = (pct: string) => {
-      const percentageValue = parseFloat(pct.replace("%", "")) || 0;
-      const totalCost = (percentageValue / 100) * expectedRevenueBase;
-      return formatCurrency(totalCost);
-    };
-
-    return {
-      operatingCosts: "",
-      operatingCostItems: [
-        { id: "cogs", name: "Cost of Goods Sold (COGS)", percentage: "30%", totalCost: calcFromPercent("30%"), showOptions: false },
-        { id: "salaries", name: "Employee salaries and wages", percentage: "20%", totalCost: calcFromPercent("20%"), showOptions: false },
-        { id: "marketing", name: "Marketing and advertising expenses", percentage: "5%", totalCost: calcFromPercent("5%"), showOptions: false },
-        { id: "rent", name: "Rent", percentage: "1%", totalCost: calcFromPercent("1%"), showOptions: false },
-        { id: "admin", name: "General administration", percentage: "2%", totalCost: calcFromPercent("2%"), showOptions: false },
-        { id: "amortization", name: "Ammortamenti", percentage: "-", totalCost: formatCurrency(amortizationFromInvestments), showOptions: false },
-        { id: "other", name: "Other expenses", percentage: "1%", totalCost: calcFromPercent("1%"), showOptions: false },
-        { id: "interest", name: "Interest expenses", percentage: "1%", totalCost: calcFromPercent("1%"), showOptions: false },
-      ],
-      firstYearTotalCost: formatCurrency(0),
-      firstYearNetProfit: formatCurrency(0),
-      netProfitMargin: "0%",
-    };
-  });
-
-  // Helper function to extract numeric value from currency string
-  const extractNumericValue = (currencyString: string): number => {
-    if (!currencyString) return 0;
-    const numericValue = currencyString.replace(/[€$£¥,\s]/g, "");
-    return parseFloat(numericValue) || 0;
+    return extractRevenueValue(step7Data?.expectedRevenue || "0");
   };
 
-  // Helper function to extract revenue from range strings (e.g., "€50,000 - €150,000")
+  // Helper function to extract revenue from various string formats
   const extractRevenueValue = (revenueString: string): number => {
     if (!revenueString) return 0;
 
-    // Handle text descriptions like "Expected first-year revenue: approximately $750,000"
-    // Extract all numbers with currency symbols from the text
     const currencyMatches = revenueString.match(/[€$£¥]\s*[\d,]+/g);
     if (currencyMatches && currencyMatches.length > 0) {
-      // Take the last/largest currency value found
       const lastMatch = currencyMatches[currencyMatches.length - 1];
       return extractNumericValue(lastMatch);
     }
 
-    // Handle standalone numbers like "750,000" or "750000"
     const numberMatches = revenueString.match(/[\d,]+/g);
     if (numberMatches && numberMatches.length > 0) {
-      // Take the largest number found
       const numbers = numberMatches.map((match) =>
         parseFloat(match.replace(/,/g, ""))
       );
       const largestNumber = Math.max(...numbers);
       if (largestNumber > 1000) {
-        // Assume it's a revenue amount if > 1000
         return largestNumber;
       }
     }
 
-    // Handle range formats like "€50,000 - €150,000"
     if (revenueString.includes("-")) {
-      // Extract the higher value from the range for conservative estimation
       const parts = revenueString.split("-");
       if (parts.length === 2) {
         const higherValue = parts[1].trim();
@@ -165,296 +109,425 @@ export default function S8OperatingCost() {
       }
     }
 
-    // Handle "Under €50,000" format
-    if (revenueString.toLowerCase().includes("under")) {
-      const value = revenueString.replace(/under/gi, "").trim();
-      return extractNumericValue(value);
-    }
-
-    // Handle "Over €500,000" format
-    if (revenueString.toLowerCase().includes("over")) {
-      const value = revenueString.replace(/over/gi, "").trim();
-      return extractNumericValue(value);
-    }
-
-    // Handle direct currency values like "€100,000"
     return extractNumericValue(revenueString);
   };
 
-  // Helper function to format currency (EU)
-  const formatCurrency = (value: number): string => {
-    return formatEuro(value, { decimals: 2 });
-  };
-
-  // Helper function to format percentage
-  const formatPercentage = (value: number): string => {
-    return `${value.toFixed(0)}%`;
-  };
-
-  // Helper function to extract percentage value
-  const extractPercentageValue = (percentageString: string): number => {
-    if (!percentageString) return 0;
-    const numericValue = percentageString.replace(/[%\s]/g, "");
+  const extractNumericValue = (currencyString: string): number => {
+    if (!currencyString) return 0;
+    const numericValue = currencyString.replace(/[€$£¥,\s]/g, "");
     return parseFloat(numericValue) || 0;
   };
 
-  // Base: Expected Revenue from Step 7
-  const getExpectedRevenueBase = (): number => {
-    // Prefer revenueStreams total if provided
-    const streams = (step7Data as any)?.revenueStreams || [];
-    if (Array.isArray(streams) && streams.length > 0) {
-      const total = streams.reduce((sum: number, row: any) => sum + (parseEuro(row.amount || "") || 0), 0);
-      if (total > 0) return total;
-    }
-    return extractRevenueValue(step7Data?.expectedRevenue || "0");
-  };
-
-  // Calculate total cost for an item based on percentage and Expected Revenue
-  const calculateItemTotalCost = (
-    percentage: string,
-    expectedRevenue: number
-  ): number => {
-    const percentageValue = extractPercentageValue(percentage);
-    return (percentageValue / 100) * expectedRevenue;
-  };
-
-  // Calculate all summary values
-  const calculateSummaryValues = (
-    operatingCostItems: OperatingCostItem[],
-    expectedRevenue: number
-  ) => {
-    // Calculate total operating costs
-    const totalOperatingCosts = operatingCostItems.reduce((total, item) => {
-      if (item.id === "amortization" || item.id === "tax") {
-        // Ammortamenti and taxes are not percentage-based here
-        return total + extractNumericValue(item.totalCost);
-      }
-      const itemCost = calculateItemTotalCost(
-        item.percentage,
-        expectedRevenue
-      );
-      return total + itemCost;
-    }, 0);
-
-    const expectedRevenueValue = expectedRevenue || 0;
-
-    // Calculate net profit
-    const netProfit = expectedRevenueValue - totalOperatingCosts;
-
-    // Calculate profit margin
-    const profitMargin =
-      expectedRevenueValue > 0 ? (netProfit / expectedRevenueValue) * 100 : 0;
-
-    return {
-      totalCost: formatCurrency(totalOperatingCosts),
-      netProfit: formatCurrency(netProfit),
-      profitMargin: formatPercentage(profitMargin),
-    };
-  };
-
-  // Update item total cost when percentage changes
-  const updateItemTotalCost = (id: string, percentage: string) => {
-    const expectedRevenue = getExpectedRevenueBase();
-    const totalCost = calculateItemTotalCost(
-      percentage,
-      expectedRevenue
-    );
-
-    setForm((prev) => ({
-      ...prev,
-      operatingCostItems: prev.operatingCostItems.map((item) =>
-        item.id === id
-          ? { ...item, percentage, totalCost: formatCurrency(totalCost) }
-          : item
-      ),
-    }));
-  };
-
-  // Recalculate all item costs when expected revenue changes
-  const recalculateAllItemCosts = () => {
-    const expectedRevenue = getExpectedRevenueBase();
-    setForm((prev) => {
-      const newItems = prev.operatingCostItems.map((item) => {
-        if (item.id === "amortization" || item.id === "tax") {
-          return item;
-        }
-        const totalCost = calculateItemTotalCost(
-          item.percentage,
-          expectedRevenue
-        );
-        const newTotal = formatCurrency(totalCost);
-        if (item.totalCost === newTotal) return item; // no change for this row
-        return { ...item, totalCost: newTotal };
-      });
-      // If nothing changed, return prev to avoid re-render loops
-      const changed = newItems.some((it, idx) => it !== prev.operatingCostItems[idx]);
-      if (!changed) return prev;
-      return { ...prev, operatingCostItems: newItems };
-    });
-  };
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-
-      Object.keys(dropdownRefs.current).forEach((itemId) => {
-        const ref = dropdownRefs.current[itemId];
-        if (ref && !ref.contains(target)) {
-          setForm((prev) => ({
-            ...prev,
-            operatingCostItems: prev.operatingCostItems.map((item) =>
-              item.id === itemId ? { ...item, showOptions: false } : item
-            ),
-          }));
-        }
-      });
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // Sync form changes with context (guard against unnecessary updates)
-  const lastSyncRef = useRef<string>("");
-  useEffect(() => {
-    const snapshot = JSON.stringify(form);
-    if (snapshot !== lastSyncRef.current) {
-      lastSyncRef.current = snapshot;
-      updateFormData("step8", form);
-    }
-  }, [form, updateFormData]);
-
-  // When step7 revenue changes, recompute item totals
-  useEffect(() => {
-    recalculateAllItemCosts();
-  }, [step7Data?.expectedRevenue]);
-
-  // When step6 fixed investments change, refresh amortization item only
-  useEffect(() => {
+  // Calculate amortization from Step 6 investments
+  const calculateAmortization = (): number => {
     const list = step6Data?.fixedInvestments || [];
     const sum = list.reduce((acc: number, row: any) => {
       const amt = parseEuro(row.amount || "0");
       const rate = Number(row.amortizationRate || 0);
       return acc + amt * rate;
     }, 0);
-    const newFormatted = formatCurrency(sum);
-
-    setForm((prev) => {
-      const current = prev.operatingCostItems.find((i) => i.id === "amortization");
-      if (current && current.totalCost === newFormatted) return prev; // no change
-      return {
-        ...prev,
-        operatingCostItems: prev.operatingCostItems.map((item) =>
-          item.id === "amortization" ? { ...item, totalCost: newFormatted } : item
-        ),
-      };
-    });
-  }, [step6Data?.fixedInvestments]);
-
-  // Build a signature that ignores the 'tax' row so setting tax doesn't retrigger the effect
-  const nonTaxSignature = useMemo(() => {
-    try {
-      const items = (form.operatingCostItems || []).filter((i) => i.id !== 'tax');
-      // include amortization total (depends on Step 6), but ignore other totals to avoid loops
-      const mapped = items.map((i) => ({
-        id: i.id,
-        percentage: i.percentage,
-        totalCost: i.id === 'amortization' ? i.totalCost : undefined,
-      }));
-      return JSON.stringify(mapped);
-    } catch {
-      return '';
-    }
-  }, [form.operatingCostItems]);
-
-  // Automatically compute Income Tax (~IRES 24%) based on taxable income and update tax item
-  useEffect(() => {
-    const expectedRevenue = getExpectedRevenueBase();
-    // Compute subtotal excluding tax (sum of all items except 'tax')
-    const subtotalExcludingTax = (form.operatingCostItems || []).reduce((sum, item) => {
-      if (item.id === 'tax') return sum;
-      if (item.id === 'amortization') {
-        return sum + extractNumericValue(item.totalCost);
-      }
-      const pct = extractPercentageValue(item.percentage);
-      return sum + (pct / 100) * expectedRevenue;
-    }, 0);
-    const taxableIncome = Math.max(0, expectedRevenue - subtotalExcludingTax);
-    const incomeTax = taxableIncome * 0.24; // 24% IRES baseline
-    const formattedTax = formatCurrency(incomeTax);
-
-    // Update tax only if it actually changed to avoid render loops
-    setForm((prev) => {
-      const currentTax = prev.operatingCostItems.find((i) => i.id === 'tax');
-      if (currentTax && currentTax.totalCost === formattedTax) return prev;
-      return {
-        ...prev,
-        operatingCostItems: prev.operatingCostItems.map((item) =>
-          item.id === 'tax' ? { ...item, totalCost: formattedTax } : item
-        ),
-      };
-    });
-  }, [step7Data?.expectedRevenue, nonTaxSignature]);
-
-  // Recompute summary whenever item costs or revenue change (after tax update)
-  useEffect(() => {
-    const expectedRevenue = getExpectedRevenueBase();
-    const summary = calculateSummaryValues(form.operatingCostItems as any, expectedRevenue);
-    setForm((prev) => {
-      if (
-        prev.firstYearTotalCost === summary.totalCost &&
-        prev.firstYearNetProfit === summary.netProfit &&
-        prev.netProfitMargin === summary.profitMargin
-      ) {
-        return prev; // avoid unnecessary re-render
-      }
-      return {
-        ...prev,
-        firstYearTotalCost: summary.totalCost,
-        firstYearNetProfit: summary.netProfit,
-        netProfitMargin: summary.profitMargin,
-      };
-    });
-  }, [form.operatingCostItems, step7Data?.expectedRevenue]);
-
-  const handleInputChange = (field: keyof OperatingCostForm, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    return sum;
   };
 
-  const handleOperatingCostItemChange = (
-    id: string,
-    field: "name" | "percentage" | "totalCost",
+  const [form, setForm] = useState<OperatingCostForm>(() => {
+    const expectedRevenue = getExpectedRevenue();
+    const amortizationAmount = calculateAmortization();
+
+    // Helper: calculate total cost from % of revenue
+    const calcFromPercent = (pct: string) => {
+      const percentageValue = parseFloat(pct.replace("%", "")) || 0;
+      const totalCost = (percentageValue / 100) * expectedRevenue;
+      return formatEuro(totalCost, { decimals: 2 });
+    };
+
+    const defaultForm: OperatingCostForm = {
+      operatingCostItems: [
+        {
+          id: "cogs",
+          name: "Cost of Goods Sold (COGS)",
+          percentage: "30%",
+          totalCost: calcFromPercent("30%"),
+          isAutoCalculated: false,
+          showTooltip: false,
+        },
+        {
+          id: "salaries",
+          name: "Employee salaries and wages",
+          percentage: "20%",
+          totalCost: calcFromPercent("20%"),
+          isAutoCalculated: false,
+          showTooltip: false,
+        },
+        {
+          id: "marketing",
+          name: "Marketing and advertising expenses",
+          percentage: "5%",
+          totalCost: calcFromPercent("5%"),
+          isAutoCalculated: false,
+          showTooltip: false,
+        },
+        {
+          id: "rent",
+          name: "Rent",
+          percentage: "1%",
+          totalCost: calcFromPercent("1%"),
+          isAutoCalculated: false,
+          showTooltip: false,
+        },
+        {
+          id: "admin",
+          name: "General administration",
+          percentage: "2%",
+          totalCost: calcFromPercent("2%"),
+          isAutoCalculated: false,
+          showTooltip: false,
+        },
+        {
+          id: "amortization",
+          name: "Ammortizing",
+          percentage: "-",
+          totalCost: formatEuro(amortizationAmount, { decimals: 2 }),
+          isAutoCalculated: true,
+          showTooltip: false,
+        },
+        {
+          id: "other",
+          name: "Other expenses",
+          percentage: "1%",
+          totalCost: calcFromPercent("1%"),
+          isAutoCalculated: false,
+          showTooltip: false,
+        },
+        {
+          id: "interest",
+          name: "Interest expenses",
+          percentage: "1%",
+          totalCost: calcFromPercent("1%"),
+          isAutoCalculated: false,
+          showTooltip: false,
+        },
+        {
+          id: "tax",
+          name: "Income tax",
+          percentage: "-",
+          totalCost: formatEuro(0, { decimals: 2 }),
+          isAutoCalculated: true,
+          showTooltip: false,
+        },
+      ],
+      supplierPayments: {
+        immediateCollection: "70%",
+        collection60Days: "20%",
+        collection90Days: "10%",
+      },
+      totalOperatingCosts: formatEuro(0, { decimals: 2 }),
+      netProfit: formatEuro(0, { decimals: 2 }),
+      profitMargin: "0%",
+    };
+
+    // Always use default form to ensure correct structure
+    // Remove this to use persisted data: if (persistedData) { ... }
+    return defaultForm;
+  });
+
+  // Calculate totals
+  const calculateTotals = () => {
+    const expectedRevenue = getExpectedRevenue();
+
+    // Calculate all operating costs
+    const allOperatingCosts = form.operatingCostItems.reduce((total, item) => {
+      if (item.isAutoCalculated && item.id === "amortization") {
+        return total + extractNumericValue(item.totalCost);
+      } else {
+        const pct = parseFloat(item.percentage.replace("%", "")) || 0;
+        if (item.id === "tax") {
+          // For tax, calculate based on taxable income
+          const otherCosts = form.operatingCostItems
+            .filter((otherItem) => otherItem.id !== "tax")
+            .reduce((otherTotal, otherItem) => {
+              if (
+                otherItem.isAutoCalculated &&
+                otherItem.id === "amortization"
+              ) {
+                return otherTotal + extractNumericValue(otherItem.totalCost);
+              } else if (!otherItem.isAutoCalculated) {
+                const otherPct =
+                  parseFloat(otherItem.percentage.replace("%", "")) || 0;
+                return otherTotal + (otherPct / 100) * expectedRevenue;
+              }
+              return otherTotal;
+            }, 0);
+          const taxableIncome = Math.max(0, expectedRevenue - otherCosts);
+          return total + (pct / 100) * taxableIncome;
+        } else {
+          return total + (pct / 100) * expectedRevenue;
+        }
+      }
+    }, 0);
+
+    // Net profit and margin
+    const netProfit = expectedRevenue - allOperatingCosts;
+    const profitMargin =
+      expectedRevenue > 0 ? (netProfit / expectedRevenue) * 100 : 0;
+
+    // For backwards compatibility, also calculate the old way
+    const operatingCostsExcludingTax = form.operatingCostItems
+      .filter((item) => item.id !== "tax")
+      .reduce((total, item) => {
+        if (item.isAutoCalculated) {
+          return total + extractNumericValue(item.totalCost);
+        } else {
+          const pct = parseFloat(item.percentage.replace("%", "")) || 0;
+          return total + (pct / 100) * expectedRevenue;
+        }
+      }, 0);
+    const taxableIncome = Math.max(
+      0,
+      expectedRevenue - operatingCostsExcludingTax
+    );
+    const incomeTax = extractNumericValue(
+      form.operatingCostItems.find((item) => item.id === "tax")?.totalCost ||
+        "0"
+    );
+    const totalCosts = allOperatingCosts;
+
+    return {
+      incomeTax,
+      totalCosts,
+      netProfit,
+      profitMargin,
+    };
+  };
+
+  // Update item costs when percentages change
+  const handlePercentageChange = (id: string, value: string) => {
+    let formattedValue = value;
+    if (value && !value.includes("%") && !isNaN(Number(value))) {
+      formattedValue = `${value}%`;
+    }
+
+    const expectedRevenue = getExpectedRevenue();
+    let totalCost;
+
+    if (id === "tax") {
+      // For tax, calculate based on taxable income (revenue minus other costs)
+      const otherCosts = form.operatingCostItems
+        .filter((item) => item.id !== "tax")
+        .reduce((total, item) => {
+          if (item.isAutoCalculated && item.id === "amortization") {
+            return total + extractNumericValue(item.totalCost);
+          } else if (!item.isAutoCalculated) {
+            const pct = parseFloat(item.percentage.replace("%", "")) || 0;
+            return total + (pct / 100) * expectedRevenue;
+          }
+          return total;
+        }, 0);
+      const taxableIncome = Math.max(0, expectedRevenue - otherCosts);
+      const pct = parseFloat(formattedValue.replace("%", "")) || 0;
+      totalCost = (pct / 100) * taxableIncome;
+    } else {
+      const pct = parseFloat(formattedValue.replace("%", "")) || 0;
+      totalCost = (pct / 100) * expectedRevenue;
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      operatingCostItems: prev.operatingCostItems.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              percentage: formattedValue,
+              totalCost: formatEuro(totalCost, { decimals: 2 }),
+            }
+          : item
+      ),
+    }));
+  };
+
+  const handleSupplierPaymentChange = (
+    field: keyof SupplierPayments,
     value: string
   ) => {
-    if (field === "percentage") {
-      // Ensure percentage has % symbol if not present
-      const formattedPercentage = value.includes("%") ? value : `${value}%`;
-      // Update the percentage and recalculate total cost
-      updateItemTotalCost(id, formattedPercentage);
-    } else {
-      setForm((prev) => ({
-        ...prev,
-        operatingCostItems: prev.operatingCostItems.map((item) =>
-          item.id === id ? { ...item, [field]: value } : item
-        ),
-      }));
+    let formattedValue = value;
+    if (value && !value.includes("%") && !isNaN(Number(value))) {
+      formattedValue = `${value}%`;
     }
+
+    setForm((prev) => ({
+      ...prev,
+      supplierPayments: {
+        ...prev.supplierPayments,
+        [field]: formattedValue,
+      },
+    }));
   };
+
+  const toggleTooltip = (id: string) => {
+    console.log(
+      "Toggling tooltip for:",
+      id,
+      "Available tooltips:",
+      Object.keys(TOOLTIP_MAP)
+    );
+    setForm((prev) => ({
+      ...prev,
+      operatingCostItems: prev.operatingCostItems.map((item) =>
+        item.id === id
+          ? { ...item, showTooltip: !item.showTooltip }
+          : { ...item, showTooltip: false }
+      ),
+    }));
+  };
+
+  // Recalculate when revenue or items change
+  useEffect(() => {
+    const expectedRevenue = getExpectedRevenue();
+    const amortizationAmount = calculateAmortization();
+    const totals = calculateTotals();
+
+    setForm((prev) => {
+      const updatedItems = prev.operatingCostItems.map((item) => {
+        if (item.id === "amortization") {
+          return {
+            ...item,
+            totalCost: formatEuro(amortizationAmount, { decimals: 2 }),
+          };
+        } else if (item.id === "tax") {
+          // Tax calculation based on taxable income and percentage
+          const otherCosts = prev.operatingCostItems
+            .filter((otherItem) => otherItem.id !== "tax")
+            .reduce((otherTotal, otherItem) => {
+              if (
+                otherItem.isAutoCalculated &&
+                otherItem.id === "amortization"
+              ) {
+                return otherTotal + amortizationAmount;
+              } else if (!otherItem.isAutoCalculated) {
+                const otherPct =
+                  parseFloat(otherItem.percentage.replace("%", "")) || 0;
+                return otherTotal + (otherPct / 100) * expectedRevenue;
+              }
+              return otherTotal;
+            }, 0);
+          const taxableIncome = Math.max(0, expectedRevenue - otherCosts);
+          const taxPct = parseFloat(item.percentage.replace("%", "")) || 0;
+          const taxAmount = (taxPct / 100) * taxableIncome;
+          return {
+            ...item,
+            totalCost: formatEuro(taxAmount, { decimals: 2 }),
+          };
+        } else if (!item.isAutoCalculated) {
+          const pct = parseFloat(item.percentage.replace("%", "")) || 0;
+          const totalCost = (pct / 100) * expectedRevenue;
+          return {
+            ...item,
+            totalCost: formatEuro(totalCost, { decimals: 2 }),
+          };
+        }
+        return item;
+      });
+
+      return {
+        ...prev,
+        operatingCostItems: updatedItems,
+        totalOperatingCosts: formatEuro(totals.totalCosts, { decimals: 2 }),
+        netProfit: formatEuro(totals.netProfit, { decimals: 2 }),
+        profitMargin: `${totals.profitMargin.toFixed(1)}%`,
+      };
+    });
+  }, [step7Data?.expectedRevenue, step6Data?.fixedInvestments]);
+
+  // Sync with context
+  useEffect(() => {
+    updateFormData("step8", form);
+  }, [form, updateFormData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Save current form data to context before validation
-    updateFormData("step8", form);
+    const expectedRevenue = getExpectedRevenue();
 
-    // Validate the form before proceeding
+    // Calculate accounts payable based on supplier payment deferrals
+    const calculateAccountsPayable = () => {
+      const collection60Pct =
+        parseFloat(
+          form.supplierPayments.collection60Days.replace("%", "") || "0"
+        ) / 100;
+      const collection90Pct =
+        parseFloat(
+          form.supplierPayments.collection90Days.replace("%", "") || "0"
+        ) / 100;
+
+      // Calculate deferrals impact on accounts payable
+      const deferredPayments60 = expectedRevenue * collection60Pct * (60 / 365);
+      const deferredPayments90 = expectedRevenue * collection90Pct * (90 / 365);
+
+      return deferredPayments60 + deferredPayments90;
+    };
+
+    // Build accounting mapping
+    const accountingMapping = {
+      contoEconomicoAValoreAggiunto: {
+        costiOperativi: {
+          costoDelVenduto: extractNumericValue(
+            form.operatingCostItems.find((i) => i.id === "cogs")?.totalCost ||
+              "0"
+          ),
+          stipendiSalari: extractNumericValue(
+            form.operatingCostItems.find((i) => i.id === "salaries")
+              ?.totalCost || "0"
+          ),
+          marketingPubblicita: extractNumericValue(
+            form.operatingCostItems.find((i) => i.id === "marketing")
+              ?.totalCost || "0"
+          ),
+          affitti: extractNumericValue(
+            form.operatingCostItems.find((i) => i.id === "rent")?.totalCost ||
+              "0"
+          ),
+          amministrazioneGenerale: extractNumericValue(
+            form.operatingCostItems.find((i) => i.id === "admin")?.totalCost ||
+              "0"
+          ),
+          ammortamenti: extractNumericValue(
+            form.operatingCostItems.find((i) => i.id === "amortization")
+              ?.totalCost || "0"
+          ),
+          altreSpese: extractNumericValue(
+            form.operatingCostItems.find((i) => i.id === "other")?.totalCost ||
+              "0"
+          ),
+          oneriFinanziari: extractNumericValue(
+            form.operatingCostItems.find((i) => i.id === "interest")
+              ?.totalCost || "0"
+          ),
+          imposte: extractNumericValue(
+            form.operatingCostItems.find((i) => i.id === "tax")?.totalCost ||
+              "0"
+          ),
+        },
+      },
+      statoPatrimoniale: {
+        debitiVsFornitori: calculateAccountsPayable(),
+      },
+    };
+
+    const formData = {
+      ...form,
+      expectedRevenue,
+      accountingMapping,
+    };
+
+    updateFormData("step8", formData);
+
     const isValid = validateStep(7); // 0-based index for step 8
 
     if (isValid) {
+      console.log("Operating Costs Form Submitted:", formData);
+      console.log("Accounting Mapping:", accountingMapping);
       nextStep();
     } else {
-      // Errors are already set by validateStep, they will be displayed automatically
+      console.log("Validation failed, showing errors:", errors);
     }
   };
 
@@ -470,7 +543,7 @@ export default function S8OperatingCost() {
 
           <div className="text-center mb-8">
             <h2 className="text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] lg:text-[2.25rem] xl:text-[2.5rem] leading-snug md:leading-tight text-accent font-semibold tracking-tight break-words">
-              Costi Operativi
+              Operating Costs
             </h2>
           </div>
 
@@ -493,126 +566,325 @@ export default function S8OperatingCost() {
               }}
             >
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Question: What are your operating costs? */}
+                {/* Question */}
                 <div>
-                  <label className="text-[24px] font-medium text-accent">
-                    Quali sono i tuoi costi operativi?
+                  <label className="text-[24px] font-medium text-accent mb-6 block">
+                    What are your operating costs?
                   </label>
-                  <div className="mt-12 border-b border-b-[#888888]/30 ">
-                    <h1 className="question-text pb-2">
-                      Inserisci Spese Operative Annuali (Modifica percentuali o
-                      lascia così):
-                    </h1>
-                  </div>
+                  <p className="text-sm text-gray-600 mb-8">
+                    Ricavi annui previsti dal Passo 7:{" "}
+                    <strong>
+                      {formatEuro(getExpectedRevenue(), { decimals: 2 })}
+                    </strong>
+                  </p>
                 </div>
 
                 {/* Operating Costs Table */}
-                <div className="mt-8">
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse">
-                      <thead>
-                        <tr className="space-x-2">
-                          <th className="text-left py-3 px-4 text-[1rem] font-medium text-accent w-1/2">
-                            Elemento di Costo Operativo
-                          </th>
-                          <th className="text-center py-3 px-2 mx-4 text-[1rem] font-medium text-accent w-1/4 border-b border-b-[#888888]/30">
-                            % dei Ricavi
-                            <br />
-                            <span className="text-sm font-normal">
-                              (preimpostato ma modificabile)
-                            </span>
-                          </th>
-                          <th className="text-center py-3 px-2 mx-4 text-[1rem] font-medium text-accent w-1/4 border-b border-b-[#888888]/30">
-                            Costo Totale
-                            <br />
-                            <span className="text-sm font-normal">
-                              (calcolato automaticamente)
-                            </span>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {form.operatingCostItems.map((item, index) => (
-                          <tr key={item.id}>
-                            <td className="py-3 px-4 w-1/2">
-                              <span className="text-[1rem] font-normal text-accent flex items-center gap-2">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border border-gray-200">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="border border-gray-200 px-4 py-3 text-left text-[1rem] font-medium text-accent w-2/5">
+                          Types of costs
+                        </th>
+                        <th className="border border-gray-200 px-4 py-3 text-center text-[1rem] font-medium text-accent w-1/5">
+                          % share on revenues
+                          <br />
+                          <span className="text-sm font-normal">
+                            (pre-set but changeable)
+                          </span>
+                        </th>
+                        <th className="border border-gray-200 px-4 py-3 text-center text-[1rem] font-medium text-accent w-2/5">
+                          Total amount
+                          <br />
+                          <span className="text-sm font-normal">
+                            (automatically calculated)
+                          </span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {form.operatingCostItems.map((item) => (
+                        <tr key={item.id} className="hover:bg-gray-25">
+                          <td className="border border-gray-200 px-4 py-3 relative">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[1rem] text-accent">
                                 {item.name}
-                                <span
-                                  className="inline-flex items-center justify-center w-4 h-4 text-xs rounded-full bg-gray-100 text-gray-600 border border-gray-300"
-title={getTooltipFromItem(item)}
-                                >
-                                  i
-                                </span>
                               </span>
-                            </td>
-                            <td className="py-3 text-center w-1/4 relative">
+                              <button
+                                type="button"
+                                onClick={() => toggleTooltip(item.id)}
+                                className="inline-flex items-center justify-center w-5 h-5 text-xs rounded-full bg-blue-100 text-blue-600 border border-blue-300 hover:bg-blue-200 transition-colors"
+                              >
+                                i
+                              </button>
+                            </div>
+                            {item.showTooltip && (
+                              <div className="absolute z-50 mt-2 p-3 bg-white border border-gray-300 rounded-lg shadow-lg max-w-md text-sm text-gray-700">
+                                {TOOLTIP_MAP[item.id] ||
+                                  `Informazioni non disponibili per ${
+                                    item.id
+                                  }. Available keys: ${Object.keys(
+                                    TOOLTIP_MAP
+                                  ).join(", ")}`}
+                                <div className="absolute -top-2 left-6 w-0 h-0 border-l-4 border-r-4 border-b-4 border-l-transparent border-r-transparent border-b-white"></div>
+                              </div>
+                            )}
+                          </td>
+                          <td className="border border-gray-200 px-4 py-3 text-center">
+                            {item.isAutoCalculated ? (
+                              <span className="text-[1rem] text-gray-500 italic">
+                                {item.id === "amortization"
+                                  ? "Auto-calculated from investments"
+                                  : item.id === "tax"
+                                  ? "Auto-calculated (24% IRES)"
+                                  : item.percentage}
+                              </span>
+                            ) : (
                               <input
                                 type="text"
                                 value={item.percentage}
                                 onChange={(e) =>
-                                  handleOperatingCostItemChange(
+                                  handlePercentageChange(
                                     item.id,
-                                    "percentage",
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-6 py-1 bg-transparent border-[0.3px] border-[#888888]/30 rounded focus:outline-none text-[1rem] font-normal text-accent text-start"
+                                className="w-20 px-3 py-1 text-center border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary bg-blue-50 hover:bg-blue-100 transition-colors"
+                                placeholder="%"
                               />
-                            </td>
-                            <td className="py-3 px-4 text-center w-1/4">
-                              <span className="text-[1rem] font-normal text-accent">
-                                {item.totalCost}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                            )}
+                          </td>
+                          <td className="border border-gray-200 px-4 py-3 text-center">
+                            <span className="text-[1rem] font-medium text-accent">
+                              {item.totalCost}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Supplier Payments Section */}
+                <div className="mt-12 space-y-6 border-t border-gray-200 pt-8">
+                  <div>
+                    <h3 className="text-[1.2rem] font-semibold text-accent mb-2">
+                      Supplier Payments (Debiti vs. Fornitori)
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-6">
+                      Indica come incassi i tuoi ricavi per calcolare l'impatto
+                      sui debiti verso fornitori
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <label className="block text-[1rem] font-medium text-accent mb-2">
+                        What percentage of your revenues is collected
+                        immediately (cash or within 30 days)?
+                      </label>
+                      <input
+                        type="text"
+                        value={form.supplierPayments.immediateCollection}
+                        onChange={(e) =>
+                          handleSupplierPaymentChange(
+                            "immediateCollection",
+                            e.target.value
+                          )
+                        }
+                        placeholder="70%"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[1rem] font-medium text-accent mb-2">
+                        60 days delay:
+                      </label>
+                      <input
+                        type="text"
+                        value={form.supplierPayments.collection60Days}
+                        onChange={(e) =>
+                          handleSupplierPaymentChange(
+                            "collection60Days",
+                            e.target.value
+                          )
+                        }
+                        placeholder="20%"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[1rem] font-medium text-accent mb-2">
+                        90 days delay:
+                      </label>
+                      <input
+                        type="text"
+                        value={form.supplierPayments.collection90Days}
+                        onChange={(e) =>
+                          handleSupplierPaymentChange(
+                            "collection90Days",
+                            e.target.value
+                          )
+                        }
+                        placeholder="10%"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    className={`text-sm p-3 rounded-lg transition-colors ${(() => {
+                      const total =
+                        parseFloat(
+                          form.supplierPayments.immediateCollection.replace(
+                            "%",
+                            ""
+                          ) || "0"
+                        ) +
+                        parseFloat(
+                          form.supplierPayments.collection60Days.replace(
+                            "%",
+                            ""
+                          ) || "0"
+                        ) +
+                        parseFloat(
+                          form.supplierPayments.collection90Days.replace(
+                            "%",
+                            ""
+                          ) || "0"
+                        );
+                      return total === 100
+                        ? "bg-green-50 text-green-700"
+                        : "bg-red-50 text-red-700";
+                    })()}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <p className="font-medium">
+                        Totale percentuale:{" "}
+                        {(
+                          parseFloat(
+                            form.supplierPayments.immediateCollection.replace(
+                              "%",
+                              ""
+                            ) || "0"
+                          ) +
+                          parseFloat(
+                            form.supplierPayments.collection60Days.replace(
+                              "%",
+                              ""
+                            ) || "0"
+                          ) +
+                          parseFloat(
+                            form.supplierPayments.collection90Days.replace(
+                              "%",
+                              ""
+                            ) || "0"
+                          )
+                        ).toFixed(0)}
+                        % (dovrebbe essere 100%)
+                      </p>
+                      <div className="w-32 bg-gray-200 rounded-full h-2">
+                        <div
+                          className={`h-2 rounded-full transition-all duration-300 ${(() => {
+                            const total =
+                              parseFloat(
+                                form.supplierPayments.immediateCollection.replace(
+                                  "%",
+                                  ""
+                                ) || "0"
+                              ) +
+                              parseFloat(
+                                form.supplierPayments.collection60Days.replace(
+                                  "%",
+                                  ""
+                                ) || "0"
+                              ) +
+                              parseFloat(
+                                form.supplierPayments.collection90Days.replace(
+                                  "%",
+                                  ""
+                                ) || "0"
+                              );
+                            return total === 100
+                              ? "bg-green-500"
+                              : total > 100
+                              ? "bg-red-500"
+                              : "bg-yellow-500";
+                          })()}`}
+                          style={{
+                            width: `${Math.min(
+                              100,
+                              parseFloat(
+                                form.supplierPayments.immediateCollection.replace(
+                                  "%",
+                                  ""
+                                ) || "0"
+                              ) +
+                                parseFloat(
+                                  form.supplierPayments.collection60Days.replace(
+                                    "%",
+                                    ""
+                                  ) || "0"
+                                ) +
+                                parseFloat(
+                                  form.supplierPayments.collection90Days.replace(
+                                    "%",
+                                    ""
+                                  ) || "0"
+                                )
+                            )}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Summary Section */}
-                <div className="mt-12 space-y-6 border-b border-b-[#888888]/30 border-t border-t-[#888888]/30 py-3">
-                  <div className="space-y-4 px-4">
-                    <div className="flex flex-col justify-start items-start py-2">
-                      <span className="question-text">
-                        Il tuo costo totale del primo anno è:
-                      </span>
-                      <span className="text-lg font-bold  text-accent">
-                        {form.firstYearTotalCost}
-                      </span>
+                {/* Summary */}
+                <div className="mt-12 border-t border-gray-200 pt-8">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div className="bg-red-100 p-4 rounded-lg border border-red-200">
+                      <h4 className="text-[1rem] font-medium text-accent mb-2">
+                        Costi Operativi Totali
+                      </h4>
+                      <p className="text-xl font-bold text-red-700">
+                        {form.totalOperatingCosts}
+                      </p>
                     </div>
-                    <div className="flex flex-col justify-start items-start py-2">
-                      <span className="question-text">
-                        Il tuo profitto netto del primo anno è:
-                      </span>
-                      <span className="text-lg font-bold  text-accent">
-                        {form.firstYearNetProfit}
-                      </span>
+                    <div className="bg-green-100 p-4 rounded-lg border border-green-200">
+                      <h4 className="text-[1rem] font-medium text-accent mb-2">
+                        Profitto Netto
+                      </h4>
+                      <p className="text-xl font-bold text-green-700">
+                        {form.netProfit}
+                      </p>
                     </div>
-                    <div className="flex flex-col justify-start items-start py-2">
-                      <span className="question-text">
-                        Il tuo margine di profitto netto è:
-                      </span>
-                      <span className="text-lg font-bold text-accent">
-                        {form.netProfitMargin}
-                      </span>
+                    <div className="bg-blue-100 p-4 rounded-lg border border-blue-200">
+                      <h4 className="text-[1rem] font-medium text-accent mb-2">
+                        Margine di Profitto
+                      </h4>
+                      <p className="text-xl font-bold text-blue-700">
+                        {form.profitMargin}
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Navigation Buttons */}
+                {/* Navigation */}
                 <div className="flex flex-col md:flex-row gap-4 mt-8">
                   <button
                     type="button"
                     onClick={prevStep}
-                    className="w-full py-3 cursor-pointer bg-white border border-[#888888] text-accent text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
+                    className="w-full cursor-pointer py-3 bg-white border border-gray-400 text-accent text-[1rem] font-semibold rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     Indietro
                   </button>
                   <button
                     type="submit"
-                    className="w-full py-3 cursor-pointer bg-primary text-white text-[1rem] font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
+                    className="w-full cursor-pointer py-3 bg-primary text-white text-[1rem] font-semibold rounded-lg hover:bg-primary/90 transition-colors"
                   >
                     Avanti
                   </button>

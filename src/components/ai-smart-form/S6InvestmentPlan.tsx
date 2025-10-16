@@ -303,12 +303,7 @@ export default function S6InvestmentPlan() {
   };
 
   const materialTotal = () => {
-    console.log('=== MATERIAL TOTAL CALCULATION ===');
-    console.log('Form fixedInvestments:', form.fixedInvestments);
-    console.log('Form fixedInvestments length:', form.fixedInvestments?.length);
-    
     if (!form.fixedInvestments || form.fixedInvestments.length === 0) {
-      console.log('No fixedInvestments found');
       return 0;
     }
     
@@ -320,10 +315,7 @@ export default function S6InvestmentPlan() {
     
     let total = 0;
     
-    // Method 1: Try to match by key
-    form.fixedInvestments.forEach((item, index) => {
-      console.log(`Item ${index}:`, item);
-      
+    form.fixedInvestments.forEach((item) => {
       const isMaterialByKey = item.key && materialKeys.includes(item.key);
       const isMaterialByCategory = item.category === "materiale";
       
@@ -348,14 +340,10 @@ export default function S6InvestmentPlan() {
       
       if (isMaterial) {
         const amount = parseEuro(item.amount) || 0;
-        console.log(`MATERIAL: ${item.label} | Amount: ${item.amount} | Parsed: ${amount}`);
         total += amount;
-      } else {
-        console.log(`NON-MATERIAL: ${item.label}`);
       }
     });
     
-    console.log('Final material total:', total);
     return total;
   };
 
