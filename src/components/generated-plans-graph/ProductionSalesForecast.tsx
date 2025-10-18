@@ -6,12 +6,7 @@ export default function ProductionSalesForecast({
   productionSalesForecast,
 }: IProductionSalesForecast) {
   const formatCurrency = (value: number) => {
-    if (!value || isNaN(value)) return "$0";
-    if (value >= 1000000) {
-      return `€${(value / 1000000).toFixed(1)}M`;
-    } else if (value >= 1000) {
-      return `€${(value / 1000).toFixed(0)}K`;
-    }
+    if (!value || isNaN(value)) return "€0";
     return `€${value.toLocaleString()}`;
   };
 

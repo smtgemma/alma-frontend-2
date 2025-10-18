@@ -35,12 +35,8 @@ export default function MarketingDashboard({
 
   //    console.log(chartData)
   const formatCurrency = (value: number) => {
-    if (value >= 1000000) {
-      return `€${(value / 1000000).toFixed(1)}M`;
-    } else if (value >= 1000) {
-      return `€${(value / 1000).toFixed(0)}K`;
-    }
-    return `€${value}`;
+    if (!value || isNaN(value)) return "€0";
+    return `€${value.toLocaleString()}`;
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {

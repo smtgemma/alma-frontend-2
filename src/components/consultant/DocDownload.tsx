@@ -115,11 +115,6 @@ const generateChartImage = async (
                 color: "#2c3e50",
                 callback: function (value: any) {
                   if (!value || isNaN(value)) return "€0";
-                  if (value >= 1000000) {
-                    return `€${(value / 1000000).toFixed(1)}M`;
-                  } else if (value >= 1000) {
-                    return `€${(value / 1000).toFixed(0)}K`;
-                  }
                   return `€${value.toLocaleString()}`;
                 },
               },
@@ -194,11 +189,7 @@ const generateChartImage = async (
                       const formattedValue =
                         !originalValue || isNaN(originalValue)
                           ? "€0"
-                          : originalValue >= 1000000
-                            ? `€${(originalValue / 1000000).toFixed(1)}M`
-                            : originalValue >= 1000
-                              ? `€${(originalValue / 1000).toFixed(0)}K`
-                              : `€${originalValue.toLocaleString()}`;
+                          : `€${originalValue.toLocaleString()}`;
 
                       return {
                         text: `${label}: ${percentage}% (${formattedValue})`,
@@ -245,11 +236,7 @@ const generateChartImage = async (
                   const formattedValue =
                     !value || isNaN(value)
                       ? "€0"
-                      : value >= 1000000
-                        ? `€${(value / 1000000).toFixed(1)}M`
-                        : value >= 1000
-                          ? `€${(value / 1000).toFixed(0)}K`
-                          : `€${value.toLocaleString()}`;
+                      : `€${value.toLocaleString()}`;
 
                   return `${context.label}: ${percentage}% (${formattedValue})`;
                 },
@@ -308,11 +295,7 @@ const generateChartImage = async (
                   const formattedValue =
                     !value || isNaN(value)
                       ? "€0"
-                      : value >= 1000000
-                        ? `€${(value / 1000000).toFixed(1)}M`
-                        : value >= 1000
-                          ? `€${(value / 1000).toFixed(0)}K`
-                          : `€${value.toLocaleString()}`;
+                      : `€${value.toLocaleString()}`;
                   return `${context.dataset.label}: ${formattedValue}`;
                 },
               },
@@ -326,12 +309,7 @@ const generateChartImage = async (
               ticks: {
                 color: "#2c3e50",
                 callback: function (value: any) {
-                  if (!value || isNaN(value)) return "$0";
-                  if (value >= 1000000) {
-                    return `€${(value / 1000000).toFixed(1)}M`;
-                  } else if (value >= 1000) {
-                    return `€${(value / 1000).toFixed(0)}K`;
-                  }
+                  if (!value || isNaN(value)) return "€0";
                   return `€${value.toLocaleString()}`;
                 },
               },
@@ -598,11 +576,6 @@ export const generateWordDocument = async ({
       return num.toString();
     }
 
-    if (num >= 1000000) {
-      return `€${(num / 1000000).toFixed(1)}M`;
-    } else if (num >= 1000) {
-      return `€${(num / 1000).toFixed(0)}K`;
-    }
     return `€${num.toLocaleString()}`;
   };
 
@@ -1057,7 +1030,6 @@ export const generateWordDocument = async ({
             <p style="margin: 10px 0;">5. Analisi di mercato</p>
             <p style="margin: 10px 0;">6. Fonti di finanziamento</p>
             <p style="margin: 10px 0;">7. Conto economico a valore aggiunto</p>
-            <p style="margin: 10px 0; padding-left: 20px;">7.1 Ripartizione dei costi operativi</p>
             <p style="margin: 10px 0;">8. Proiezione di profitti e perdite</p>
             <p style="margin: 10px 0;">9. Stato Patrimoniale</p>
             <p style="margin: 10px 0;">10. Posizione finanziaria netta</p>
@@ -1306,10 +1278,6 @@ export const generateWordDocument = async ({
             // Format currency
             const formatCurrency = (value: any) => {
               if (!value || isNaN(value)) return "€0";
-              if (value >= 1000000)
-                return `€${(value / 1000000).toFixed(1)}M`;
-              if (value >= 1000)
-                return `€${(value / 1000).toFixed(0)}K`;
               return `€${value.toLocaleString()}`;
             };
 

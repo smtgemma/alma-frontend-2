@@ -717,7 +717,6 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
           <p>5. Analisi di mercato</p>
           <p>6. Fonti di finanziamento</p>
           <p>7. Conto economico a valore aggiunto</p>
-          <p style="padding-left: 20px;">7.1 Ripartizione dei costi operativi</p>
           <p>8. Proiezione di profitti e perdite</p>
           <p>9. Stato Patrimoniale</p>
           <p>10. Posizione finanziaria netta</p>
