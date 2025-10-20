@@ -42,6 +42,7 @@ const RecapPreviewsFixed = () => {
   // Debug logging for S10 Review Plan
   console.log('📊 S10ReviewPlan - RecapPreviewsFixed render:', {
     step1_extractions: formData.step1?.balanceSheetExtractions?.length || 0,
+    raw_step1_data: formData.step1?.balanceSheetExtractions?.[0],
     year0SP_result: year0SP,
     year1SP_result: year1SP,
     year0_values: {
@@ -53,7 +54,11 @@ const RecapPreviewsFixed = () => {
       totaleAttivita: year1SP?.totaleAttivita,
       totalePassivita: year1SP?.totalePassivita, 
       patrimonioNetto: year1SP?.patrimonioNetto
-    }
+    },
+    step6_investments: formData.step6,
+    step7_revenue: formData.step7,
+    step8_costs: formData.step8,
+    step9_financing: formData.step9
   });
   const containerRef = useRef<HTMLDivElement>(null);
 

@@ -106,9 +106,19 @@ export default function S8OperatingCost() {
         (sum: number, row: any) => sum + (parseEuro(row.amount || "") || 0),
         0
       );
-      if (total > 0) return total;
+      if (total > 0) {
+        console.log("📈 Revenue from streams:", total);
+        return total;
+      }
     }
-    return extractRevenueValue(step7Data?.expectedRevenue || "0");
+    const revenue = extractRevenueValue(step7Data?.expectedRevenue || "0");
+    console.log("📈 Revenue calculation:", {
+      step7Data: !!step7Data,
+      expectedRevenue: step7Data?.expectedRevenue,
+      parsedRevenue: revenue,
+      streams: streams.length,
+    });
+    return revenue;
   };
 
   // Helper function to extract revenue from various string formats
@@ -163,14 +173,40 @@ export default function S8OperatingCost() {
   // Calculate automatic interest expenses from Step 9 bank loan
   const calculateInterestExpenses = (): number => {
     const step9Data = getFormData("step9") as any;
-    const bankLoan = step9Data?.sources?.bankLoan || 0;
-    const interestRate = step9Data?.sources?.bankLoanInterestRate || 0;
-    console.log("💰 Interest calculation from Step 9:", {
-      bankLoan,
-      interestRate,
-      annualInterest: bankLoan * (interestRate / 100),
+    console.log("📊 Step 9 raw data:", step9Data);
+
+    // Try multiple field names to get bank loan amount
+    const bankLoan = parseEuro(step9Data?.sources?.bankLoan || step9Data?.bankingSystem || step9Data?.loanAmount || "0") || 0;
+    
+    // Try multiple field names to get interest rate, default to 5% if not set
+    let interestRate = step9Data?.sources?.bankLoanInterestRate || step9Data?.interestRate || 0;
+    
+    // If no interest rate is set and we have a loan amount, use default 5%
+    if (!interestRate && bankLoan > 0) {
+      interestRate = 5;
+      console.log("💰 Using default 5% interest rate");
+    }
+    
+    // If no loan amount but we're expecting one (user hasn't completed step 9 yet), 
+    // estimate with a typical loan amount based on expected revenue
+    const expectedRevenue = getExpectedRevenue();
+    const estimatedLoanAmount = bankLoan || (expectedRevenue > 0 ? expectedRevenue * 0.3 : 0); // Assume 30% of revenue if no loan specified
+    const estimatedInterestRate = interestRate || 5; // Default 5%
+    
+    const annualInterest = estimatedLoanAmount * (estimatedInterestRate / 100);
+
+    console.log("💰 Interest calculation:", {
+      step9DataExists: !!step9Data,
+      originalBankLoan: bankLoan,
+      estimatedLoanAmount,
+      originalInterestRate: step9Data?.sources?.bankLoanInterestRate || step9Data?.interestRate,
+      estimatedInterestRate,
+      annualInterest,
+      calculation: `${estimatedLoanAmount} × (${estimatedInterestRate} / 100) = ${annualInterest}`,
+      isEstimate: !bankLoan || !interestRate
     });
-    return bankLoan * (interestRate / 100);
+
+    return annualInterest;
   };
 
   const [form, setForm] = useState<OperatingCostForm>(() => {
@@ -187,20 +223,30 @@ export default function S8OperatingCost() {
 
     // Calculate initial tax amount (24% IRES on taxable income)
     const calculateInitialTax = () => {
-      // Calculate all other costs as percentages of revenue
-      const otherCostsTotal =
+      // Calculate percentage-based costs
+      const percentageCostsTotal =
         ((30 + // COGS 30%
           20 + // Salaries 20%
           5 + // Marketing 5%
           1 + // Rent 1%
           2 + // Admin 2%
-          1 + // Other 1%
-          1) / // Interest 1%
+          1) / // Other 1%
           100) *
         expectedRevenue;
 
-      // Add amortization (fixed amount)
-      const totalOtherCosts = otherCostsTotal + amortizationAmount;
+      // Add fixed costs: amortization + interest from Step 9
+      const totalOtherCosts =
+        percentageCostsTotal + amortizationAmount + interestExpenses;
+
+      console.log("🧮 Initial tax calculation:", {
+        expectedRevenue,
+        percentageCostsTotal,
+        amortizationAmount,
+        interestExpenses,
+        totalOtherCosts,
+        taxableIncome: Math.max(0, expectedRevenue - totalOtherCosts),
+        taxAmount: Math.max(0, expectedRevenue - totalOtherCosts) * 0.24,
+      });
 
       const taxableIncome = Math.max(0, expectedRevenue - totalOtherCosts);
       const taxAmount = taxableIncome * 0.24; // 24% IRES
@@ -542,6 +588,28 @@ export default function S8OperatingCost() {
     }));
   };
 
+  // Handle ESC key to close tooltip
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setForm((prev) => ({
+          ...prev,
+          operatingCostItems: prev.operatingCostItems.map((item) => ({
+            ...item,
+            showTooltip: false,
+          }))
+        }));
+      }
+    };
+
+    // Only add listener if any tooltip is showing
+    const anyTooltipShowing = form.operatingCostItems.some(item => item.showTooltip);
+    if (anyTooltipShowing) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [form.operatingCostItems]);
+
   // Recalculate when revenue or items change
   useEffect(() => {
     const expectedRevenue = getExpectedRevenue();
@@ -623,8 +691,57 @@ export default function S8OperatingCost() {
   }, [
     step7Data?.expectedRevenue,
     step6Data?.fixedInvestments,
-    getFormData("step9"),
+    JSON.stringify(getFormData("step9")), // Stringify to detect deep changes
   ]);
+
+  // Additional real-time listener for Step 9 changes
+  useEffect(() => {
+    const step9Data = getFormData("step9") as any;
+    const interestExpenses = calculateInterestExpenses();
+    
+    // Update interest expenses item immediately when Step 9 data changes
+    setForm((prev) => ({
+      ...prev,
+      operatingCostItems: prev.operatingCostItems.map((item) =>
+        item.id === "interest"
+          ? { ...item, totalCost: formatEuro(interestExpenses, { decimals: 2 }) }
+          : item
+      )
+    }));
+    
+    console.log("🔄 Real-time interest update:", {
+      step9Changes: !!step9Data,
+      newInterestExpenses: interestExpenses,
+      formattedAmount: formatEuro(interestExpenses, { decimals: 2 })
+    });
+  }, [
+    JSON.stringify((getFormData("step9") as any)?.sources),
+    JSON.stringify((getFormData("step9") as any)?.bankingSystem),
+    JSON.stringify((getFormData("step9") as any)?.interestRate),
+    JSON.stringify((getFormData("step9") as any)?.loanAmount)
+  ]);
+
+  // Listen for storage changes (when user navigates back from Step 9 or other updates)
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key?.includes('smartform-step9') || e.key === 'smartform-step9') {
+        console.log('📋 Storage change detected for Step 9:', e.key);
+        // Trigger a recalculation
+        const interestExpenses = calculateInterestExpenses();
+        setForm((prev) => ({
+          ...prev,
+          operatingCostItems: prev.operatingCostItems.map((item) =>
+            item.id === "interest"
+              ? { ...item, totalCost: formatEuro(interestExpenses, { decimals: 2 }) }
+              : item
+          )
+        }));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // Dedicated tax recalculation for real-time updates
   useEffect(() => {
@@ -830,7 +947,7 @@ export default function S8OperatingCost() {
                 </div>
 
                 {/* Operating Costs Table */}
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto overflow-y-visible">
                   <table className="w-full border-collapse border border-gray-200">
                     <thead>
                       <tr className="bg-gray-50">
@@ -856,7 +973,7 @@ export default function S8OperatingCost() {
                     <tbody>
                       {form.operatingCostItems.map((item) => (
                         <tr key={item.id} className="hover:bg-gray-25">
-                          <td className="border border-gray-200 px-4 py-3 relative">
+                          <td className="border border-gray-200 px-4 py-3 relative overflow-visible">
                             <div className="flex items-center gap-2">
                               <span className="text-[1rem] text-accent">
                                 {item.name}
@@ -870,15 +987,63 @@ export default function S8OperatingCost() {
                               </button>
                             </div>
                             {item.showTooltip && (
-                              <div className="absolute z-50 mt-2 p-3 bg-white border border-gray-300 rounded-lg shadow-lg max-w-md text-sm text-gray-700">
-                                {TOOLTIP_MAP[item.id] ||
-                                  `Informazioni non disponibili per ${
-                                    item.id
-                                  }. Available keys: ${Object.keys(
-                                    TOOLTIP_MAP
-                                  ).join(", ")}`}
-                                <div className="absolute -top-2 left-6 w-0 h-0 border-l-4 border-r-4 border-b-4 border-l-transparent border-r-transparent border-b-white"></div>
-                              </div>
+                              <>
+                                {/* Invisible overlay to detect clicks outside */}
+                                <div 
+                                  className="fixed inset-0 z-40"
+                                  onClick={() => {
+                                    setForm((prev) => ({
+                                      ...prev,
+                                      operatingCostItems: prev.operatingCostItems.map((tooltipItem) => ({
+                                        ...tooltipItem,
+                                        showTooltip: false,
+                                      }))
+                                    }));
+                                  }}
+                                />
+                                {/* Tooltip popup with smart positioning */}
+                                <div className={`absolute z-50 p-4 bg-white border border-gray-300 rounded-lg shadow-lg max-w-md w-80 text-sm text-gray-700 ${
+                                  // Check if this is one of the last items that might be cut off
+                                  ['interest', 'tax', 'other'].includes(item.id)
+                                    ? 'bottom-8 right-0' // Position above and to the right for last items
+                                    : 'top-8 left-0' // Position below and to the left for first items
+                                }`}>
+                                  <div className="flex justify-between items-start mb-2">
+                                    <h4 className="font-semibold text-accent text-base">
+                                      {item.name}
+                                    </h4>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setForm((prev) => ({
+                                          ...prev,
+                                          operatingCostItems: prev.operatingCostItems.map((tooltipItem) => ({
+                                            ...tooltipItem,
+                                            showTooltip: false,
+                                          }))
+                                        }));
+                                      }}
+                                      className="text-gray-400 hover:text-gray-600 text-lg leading-none ml-2"
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                  <p className="leading-relaxed">
+                                    {TOOLTIP_MAP[item.id] ||
+                                      `Informazioni non disponibili per ${
+                                        item.id
+                                      }. Available keys: ${Object.keys(
+                                        TOOLTIP_MAP
+                                      ).join(", ")}`}
+                                  </p>
+                                  {/* Tooltip arrow - adjust position based on tooltip placement */}
+                                  <div className={`absolute w-0 h-0 ${
+                                    ['interest', 'tax', 'other'].includes(item.id)
+                                      ? 'top-4 -right-2 border-l-4 border-t-4 border-b-4 border-t-transparent border-b-transparent border-l-white' // Arrow pointing right when tooltip is above and to the right
+                                      : 'bottom-4 -left-2 border-r-4 border-t-4 border-b-4 border-t-transparent border-b-transparent border-r-white' // Arrow pointing left when tooltip is below and to the left
+                                  }`}></div>
+                                </div>
+                              </>
                             )}
                           </td>
                           <td className="border border-gray-200 px-4 py-3 text-center">
@@ -920,6 +1085,7 @@ export default function S8OperatingCost() {
                     </tbody>
                   </table>
                 </div>
+
 
                 {/* Supplier Payments Section */}
                 <div className="mt-12 space-y-6 border-t border-gray-200 pt-8">

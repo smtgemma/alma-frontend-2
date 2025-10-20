@@ -33,9 +33,34 @@ export function amortizationFromFixedInvestments(step6: any): number {
 
 export function totalFixedInvestments(step6: any): number {
   const list = step6?.fixedInvestments || [];
-  const dyn = (step6?.investmentItems || []).reduce((t: number, it: any) => t + (parseFloat(it.amount) || 0), 0);
-  const fix = list.reduce((acc: number, row: any) => acc + (parseEuro(row.amount || "0") || 0), 0);
-  return dyn + fix;
+  
+  console.log('🔍 totalFixedInvestments - Input step6:', step6);
+  console.log('🔍 totalFixedInvestments - Fixed investments list:', list);
+  console.log('🔍 totalFixedInvestments - Investment items:', step6?.investmentItems);
+  
+  const dyn = (step6?.investmentItems || []).reduce((t: number, it: any) => {
+    const amount = parseFloat(it.amount) || 0;
+    console.log('🔍 totalFixedInvestments - Dynamic item:', it, 'parsed amount:', amount);
+    return t + amount;
+  }, 0);
+  
+  const fix = list.reduce((acc: number, row: any) => {
+    const amount = parseEuro(row.amount || "0") || 0;
+    console.log('🔍 totalFixedInvestments - Fixed item:', row, 'parsed amount:', amount);
+    return acc + amount;
+  }, 0);
+  
+  const total = dyn + fix;
+  console.log('🔍 totalFixedInvestments - Result:', { dyn, fix, total });
+  
+  // Check for unrealistic scaling
+  if (total > 100000000) { // Over 100 million seems unrealistic for most businesses
+    const scaledDown = total / 1000;
+    console.log(`⚠️ totalFixedInvestments - Large total detected, scaling down by 1000: ${total} -> ${scaledDown}`);
+    return scaledDown;
+  }
+  
+  return total;
 }
 
 export function operatingCostBreakdown(step8: any, expectedRevenue: number) {
@@ -70,7 +95,19 @@ export function computeIncomeStatementPreview(step7: any, step8: any) {
   const oneriFinanziari = oc.interest;
   const imposte = oc.tax;
   const utile = ricavi - (costiOperativi + ammortamenti + oneriFinanziari + imposte);
-  return { ricavi, costiOperativi, ammortamenti, oneriFinanziari, imposte, utile };
+  
+  const result = { ricavi, costiOperativi, ammortamenti, oneriFinanziari, imposte, utile };
+  
+  console.log('📊 computeIncomeStatementPreview - Result:', result);
+  
+  // Check for unrealistically large values that might indicate scaling issues
+  Object.entries(result).forEach(([key, value]) => {
+    if (typeof value === 'number' && value > 1000000000) { // Over 1 billion
+      console.log(`⚠️ computeIncomeStatementPreview - Large value detected in ${key}: ${value}`);
+    }
+  });
+  
+  return result;
 }
 
 export function computeCashFlowPreview(step6: any, step7: any, step8: any, step9: any) {
@@ -107,23 +144,70 @@ export function parseYear0Balance(extractions: any[] | undefined): Year0Balance 
   const parseFinancialValue = (value: any): number => {
     if (value === null || value === undefined || value === '') return 0;
     
-    // If it's already a number, use it directly
+    console.log(`📊 parseFinancialValue - Input value (${typeof value}):`, value);
+    
+    // If it's already a number, check for unrealistic scaling
     if (typeof value === 'number') {
-      console.log(`📊 parseFinancialValue - Number value: ${value}`);
-      return Math.abs(value); // Ensure positive values for balance sheet
+      const absValue = Math.abs(value);
+      console.log(`📊 parseFinancialValue - Number value: ${value} -> abs: ${absValue}`);
+      
+      // Detect if value seems to be scaled by 1000 (common issue)
+      // If value is over 100 million, it's likely incorrectly scaled for most SMEs
+      if (absValue > 100000000) {
+        const scaledDown = absValue / 1000;
+        console.log(`⚠️ parseFinancialValue - Large number detected (${absValue}), scaling down by 1000: ${scaledDown}`);
+        return scaledDown;
+      }
+      
+      return absValue; // Ensure positive values for balance sheet
     }
     
     // If it's a string, try to parse it properly
     if (typeof value === 'string') {
+      const originalValue = value;
+      
       // Remove common formatting characters and convert Italian decimal format
-      const cleanValue = value.toString()
+      let cleanValue = value.toString()
         .replace(/[€\s]/g, '') // Remove currency symbols and spaces
-        .replace(/\./g, '') // Remove thousands separators (dots in Italian format)
-        .replace(/,/g, '.'); // Convert decimal comma to dot
+        .trim();
+      
+      // Handle Italian number format: 1.234.567,89
+      // Count dots and commas to determine format
+      const dotCount = (cleanValue.match(/\./g) || []).length;
+      const commaCount = (cleanValue.match(/,/g) || []).length;
+      
+      if (dotCount > 0 && commaCount === 1) {
+        // Italian format: 1.234.567,89
+        cleanValue = cleanValue.replace(/\./g, '').replace(',', '.');
+      } else if (dotCount === 1 && commaCount === 0) {
+        // English format: 1234567.89 (keep as is)
+      } else if (dotCount === 0 && commaCount === 1) {
+        // Format: 1234567,89
+        cleanValue = cleanValue.replace(',', '.');
+      } else if (dotCount > 1 && commaCount === 0) {
+        // Thousands separators only: 1.234.567
+        cleanValue = cleanValue.replace(/\./g, '');
+      }
       
       const parsed = parseFloat(cleanValue);
       const result = isNaN(parsed) ? 0 : Math.abs(parsed);
-      console.log(`📊 parseFinancialValue - String "${value}" -> cleaned "${cleanValue}" -> ${result}`);
+      
+      console.log(`📊 parseFinancialValue - String parsing:`, {
+        original: originalValue,
+        cleaned: cleanValue,
+        dotCount,
+        commaCount,
+        parsed,
+        result
+      });
+      
+      // Check for unrealistic scaling in parsed result
+      if (result > 100000000) {
+        const scaledDown = result / 1000;
+        console.log(`⚠️ parseFinancialValue - Large parsed value detected (${result}), scaling down by 1000: ${scaledDown}`);
+        return scaledDown;
+      }
+      
       return result;
     }
     
@@ -237,16 +321,31 @@ export function parseYear0Income(extractions: any[] | undefined): Year0Income | 
 export function computeYear1Balance(year0Balance: Year0Balance | undefined, step6: any, step7: any, step8: any, step9: any): Year0Balance | undefined {
   if (!year0Balance) return undefined;
   
+  console.log('🔍 computeYear1Balance - Input year0Balance:', year0Balance);
+  console.log('🔍 computeYear1Balance - Step9 raw data:', step9);
+  
   const incomeStatement = computeIncomeStatementPreview(step7, step8);
   const netProfit = incomeStatement.utile;
   
-  // Get financing from Step 9
-  const equityIncrease = parseEuro(step9?.sources?.equity || "0") || 0;
-  const newBankLoan = parseEuro(step9?.sources?.bankLoan || "0") || 0;
-  const shareholderLoan = parseEuro(step9?.sources?.shareholderLoan || "0") || 0;
+  console.log('🔍 computeYear1Balance - Income statement:', incomeStatement);
+  
+  // Get financing from Step 9 - check multiple possible field names
+  const equityIncrease = parseEuro(step9?.sources?.equity || step9?.yourOwnEquity || "0") || 0;
+  const newBankLoan = parseEuro(step9?.sources?.bankLoan || step9?.bankingSystem || "0") || 0;
+  const shareholderLoan = parseEuro(step9?.sources?.shareholderLoan || step9?.otherInvestors || "0") || 0;
+  
+  console.log('🔍 computeYear1Balance - Financing components:', {
+    raw_step9_sources: step9?.sources,
+    raw_step9_direct: { yourOwnEquity: step9?.yourOwnEquity, bankingSystem: step9?.bankingSystem, otherInvestors: step9?.otherInvestors },
+    parsed_equity_increase: equityIncrease,
+    parsed_bank_loan: newBankLoan,
+    parsed_shareholder_loan: shareholderLoan
+  });
   
   // Get investments from Step 6
   const newInvestments = totalFixedInvestments(step6);
+  
+  console.log('🔍 computeYear1Balance - New investments:', newInvestments);
   
   // Calculate Year 1 projected values
   const year1 = {
