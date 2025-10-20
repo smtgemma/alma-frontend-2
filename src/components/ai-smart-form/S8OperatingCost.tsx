@@ -5,6 +5,37 @@ import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { parseEuro, formatEuro } from "@/utils/euFormat";
 
+// Italian number formatting utilities
+const parseItalianNumber = (value: string): number => {
+  if (!value) return 0;
+  // Remove spaces and convert Italian format to English format
+  // Italian: 1.234,56 -> English: 1234.56
+  const cleaned = value
+    .replace(/\s/g, "") // Remove spaces
+    .replace(/\./g, "") // Remove thousands separators (dots)
+    .replace(",", "."); // Replace decimal comma with dot
+  return parseFloat(cleaned) || 0;
+};
+
+const formatItalianNumber = (value: number, decimals: number = 2): string => {
+  if (isNaN(value)) return "0,00";
+
+  // Format number with proper decimals
+  const formatted = value.toFixed(decimals);
+  const [integer, decimal] = formatted.split(".");
+
+  // Add thousands separators (dots) to integer part
+  const integerWithSeparators = integer.replace(
+    /(\d)(?=(\d{3})+(?!\d))/g,
+    "$1."
+  );
+
+  // Combine with Italian decimal separator (comma)
+  return decimal
+    ? `${integerWithSeparators},${decimal}`
+    : integerWithSeparators;
+};
+
 interface OperatingCostItem {
   id: string;
   name: string;
@@ -129,22 +160,58 @@ export default function S8OperatingCost() {
     return sum;
   };
 
+  // Calculate automatic interest expenses from Step 9 bank loan
+  const calculateInterestExpenses = (): number => {
+    const step9Data = getFormData("step9") as any;
+    const bankLoan = step9Data?.sources?.bankLoan || 0;
+    const interestRate = step9Data?.sources?.bankLoanInterestRate || 0;
+    console.log("💰 Interest calculation from Step 9:", {
+      bankLoan,
+      interestRate,
+      annualInterest: bankLoan * (interestRate / 100),
+    });
+    return bankLoan * (interestRate / 100);
+  };
+
   const [form, setForm] = useState<OperatingCostForm>(() => {
     const expectedRevenue = getExpectedRevenue();
     const amortizationAmount = calculateAmortization();
+    const interestExpenses = calculateInterestExpenses();
 
     // Helper: calculate total cost from % of revenue
     const calcFromPercent = (pct: string) => {
-      const percentageValue = parseFloat(pct.replace("%", "")) || 0;
+      const percentageValue = parseItalianNumber(pct.replace("%", "")) || 0;
       const totalCost = (percentageValue / 100) * expectedRevenue;
       return formatEuro(totalCost, { decimals: 2 });
+    };
+
+    // Calculate initial tax amount (24% IRES on taxable income)
+    const calculateInitialTax = () => {
+      // Calculate all other costs as percentages of revenue
+      const otherCostsTotal =
+        ((30 + // COGS 30%
+          20 + // Salaries 20%
+          5 + // Marketing 5%
+          1 + // Rent 1%
+          2 + // Admin 2%
+          1 + // Other 1%
+          1) / // Interest 1%
+          100) *
+        expectedRevenue;
+
+      // Add amortization (fixed amount)
+      const totalOtherCosts = otherCostsTotal + amortizationAmount;
+
+      const taxableIncome = Math.max(0, expectedRevenue - totalOtherCosts);
+      const taxAmount = taxableIncome * 0.24; // 24% IRES
+      return formatEuro(taxAmount, { decimals: 2 });
     };
 
     const defaultForm: OperatingCostForm = {
       operatingCostItems: [
         {
           id: "cogs",
-          name: "Cost of Goods Sold (COGS)",
+          name: "Costo del Venduto (COGS)",
           percentage: "30%",
           totalCost: calcFromPercent("30%"),
           isAutoCalculated: false,
@@ -152,7 +219,7 @@ export default function S8OperatingCost() {
         },
         {
           id: "salaries",
-          name: "Employee salaries and wages",
+          name: "Stipendi e salari dipendenti",
           percentage: "20%",
           totalCost: calcFromPercent("20%"),
           isAutoCalculated: false,
@@ -160,7 +227,7 @@ export default function S8OperatingCost() {
         },
         {
           id: "marketing",
-          name: "Marketing and advertising expenses",
+          name: "Spese di marketing e pubblicità",
           percentage: "5%",
           totalCost: calcFromPercent("5%"),
           isAutoCalculated: false,
@@ -168,7 +235,7 @@ export default function S8OperatingCost() {
         },
         {
           id: "rent",
-          name: "Rent",
+          name: "Affitti",
           percentage: "1%",
           totalCost: calcFromPercent("1%"),
           isAutoCalculated: false,
@@ -176,7 +243,7 @@ export default function S8OperatingCost() {
         },
         {
           id: "admin",
-          name: "General administration",
+          name: "Amministrazione generale",
           percentage: "2%",
           totalCost: calcFromPercent("2%"),
           isAutoCalculated: false,
@@ -184,7 +251,7 @@ export default function S8OperatingCost() {
         },
         {
           id: "amortization",
-          name: "Ammortizing",
+          name: "Ammortamenti",
           percentage: "-",
           totalCost: formatEuro(amortizationAmount, { decimals: 2 }),
           isAutoCalculated: true,
@@ -192,7 +259,7 @@ export default function S8OperatingCost() {
         },
         {
           id: "other",
-          name: "Other expenses",
+          name: "Altre spese",
           percentage: "1%",
           totalCost: calcFromPercent("1%"),
           isAutoCalculated: false,
@@ -200,17 +267,17 @@ export default function S8OperatingCost() {
         },
         {
           id: "interest",
-          name: "Interest expenses",
-          percentage: "1%",
-          totalCost: calcFromPercent("1%"),
-          isAutoCalculated: false,
+          name: "Oneri finanziari",
+          percentage: "-",
+          totalCost: formatEuro(interestExpenses, { decimals: 2 }),
+          isAutoCalculated: true,
           showTooltip: false,
         },
         {
           id: "tax",
-          name: "Income tax",
-          percentage: "-",
-          totalCost: formatEuro(0, { decimals: 2 }),
+          name: "Imposte sul reddito",
+          percentage: "24%",
+          totalCost: calculateInitialTax(),
           isAutoCalculated: true,
           showTooltip: false,
         },
@@ -233,35 +300,39 @@ export default function S8OperatingCost() {
   // Calculate totals
   const calculateTotals = () => {
     const expectedRevenue = getExpectedRevenue();
+    const interestExpenses = calculateInterestExpenses();
 
     // Calculate all operating costs
     const allOperatingCosts = form.operatingCostItems.reduce((total, item) => {
       if (item.isAutoCalculated && item.id === "amortization") {
         return total + extractNumericValue(item.totalCost);
+      } else if (item.isAutoCalculated && item.id === "interest") {
+        return total + interestExpenses;
+      } else if (item.isAutoCalculated && item.id === "tax") {
+        // For tax, calculate based on taxable income
+        const otherCosts = form.operatingCostItems
+          .filter((otherItem) => otherItem.id !== "tax")
+          .reduce((otherTotal, otherItem) => {
+            if (otherItem.isAutoCalculated && otherItem.id === "amortization") {
+              return otherTotal + extractNumericValue(otherItem.totalCost);
+            } else if (
+              otherItem.isAutoCalculated &&
+              otherItem.id === "interest"
+            ) {
+              return otherTotal + interestExpenses;
+            } else if (!otherItem.isAutoCalculated) {
+              const otherPct =
+                parseItalianNumber(otherItem.percentage.replace("%", "")) || 0;
+              return otherTotal + (otherPct / 100) * expectedRevenue;
+            }
+            return otherTotal;
+          }, 0);
+        const taxableIncome = Math.max(0, expectedRevenue - otherCosts);
+        const pct = 24; // Fixed 24% IRES
+        return total + (pct / 100) * taxableIncome;
       } else {
-        const pct = parseFloat(item.percentage.replace("%", "")) || 0;
-        if (item.id === "tax") {
-          // For tax, calculate based on taxable income
-          const otherCosts = form.operatingCostItems
-            .filter((otherItem) => otherItem.id !== "tax")
-            .reduce((otherTotal, otherItem) => {
-              if (
-                otherItem.isAutoCalculated &&
-                otherItem.id === "amortization"
-              ) {
-                return otherTotal + extractNumericValue(otherItem.totalCost);
-              } else if (!otherItem.isAutoCalculated) {
-                const otherPct =
-                  parseFloat(otherItem.percentage.replace("%", "")) || 0;
-                return otherTotal + (otherPct / 100) * expectedRevenue;
-              }
-              return otherTotal;
-            }, 0);
-          const taxableIncome = Math.max(0, expectedRevenue - otherCosts);
-          return total + (pct / 100) * taxableIncome;
-        } else {
-          return total + (pct / 100) * expectedRevenue;
-        }
+        const pct = parseItalianNumber(item.percentage.replace("%", "")) || 0;
+        return total + (pct / 100) * expectedRevenue;
       }
     }, 0);
 
@@ -301,13 +372,13 @@ export default function S8OperatingCost() {
 
   // Update item costs when percentages change
   const handlePercentageChange = (id: string, value: string) => {
-    let formattedValue = value;
-    if (value && !value.includes("%") && !isNaN(Number(value))) {
-      formattedValue = `${value}%`;
-    }
-
+    // Allow user to type freely, only format on blur or when complete
     const expectedRevenue = getExpectedRevenue();
-    let totalCost;
+    let totalCost = 0;
+
+    // Extract numeric value for calculation
+    let numericValue = value.replace("%", "").trim();
+    let parsedValue = parseItalianNumber(numericValue) || 0;
 
     if (id === "tax") {
       // For tax, calculate based on taxable income (revenue minus other costs)
@@ -317,17 +388,86 @@ export default function S8OperatingCost() {
           if (item.isAutoCalculated && item.id === "amortization") {
             return total + extractNumericValue(item.totalCost);
           } else if (!item.isAutoCalculated) {
-            const pct = parseFloat(item.percentage.replace("%", "")) || 0;
+            const pct =
+              parseItalianNumber(item.percentage.replace("%", "")) || 0;
             return total + (pct / 100) * expectedRevenue;
           }
           return total;
         }, 0);
       const taxableIncome = Math.max(0, expectedRevenue - otherCosts);
-      const pct = parseFloat(formattedValue.replace("%", "")) || 0;
-      totalCost = (pct / 100) * taxableIncome;
+      totalCost = (24 / 100) * taxableIncome; // Fixed 24% IRES
     } else {
-      const pct = parseFloat(formattedValue.replace("%", "")) || 0;
-      totalCost = (pct / 100) * expectedRevenue;
+      totalCost = (parsedValue / 100) * expectedRevenue;
+    }
+
+    // Update the current item and also recalculate tax if this change affects taxable income
+    setForm((prev) => {
+      const updatedItems = prev.operatingCostItems.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            percentage: value, // Keep raw input value
+            totalCost: formatEuro(totalCost, { decimals: 2 }),
+          };
+        }
+        return item;
+      });
+
+      // If this change affects taxable income, recalculate tax immediately
+      if (id !== "tax") {
+        const amortizationAmount = calculateAmortization();
+        const otherCosts = updatedItems
+          .filter((item) => item.id !== "tax")
+          .reduce((total, item) => {
+            if (item.isAutoCalculated && item.id === "amortization") {
+              return total + amortizationAmount;
+            } else if (item.isAutoCalculated && item.id === "interest") {
+              return total + calculateInterestExpenses();
+            } else if (!item.isAutoCalculated) {
+              const pct =
+                parseItalianNumber(item.percentage.replace("%", "")) || 0;
+              return total + (pct / 100) * expectedRevenue;
+            }
+            return total;
+          }, 0);
+
+        const taxableIncome = Math.max(0, expectedRevenue - otherCosts);
+        const taxAmount = (24 / 100) * taxableIncome;
+
+        // Update tax item
+        const finalItems = updatedItems.map((item) =>
+          item.id === "tax"
+            ? { ...item, totalCost: formatEuro(taxAmount, { decimals: 2 }) }
+            : item
+        );
+
+        return {
+          ...prev,
+          operatingCostItems: finalItems,
+        };
+      }
+
+      return {
+        ...prev,
+        operatingCostItems: updatedItems,
+      };
+    });
+  };
+
+  // Format percentage on blur (when user finishes typing)
+  const handlePercentageBlur = (id: string, value: string) => {
+    let numericValue = value.replace("%", "").trim();
+    let parsedValue = parseItalianNumber(numericValue);
+
+    // Format to Italian style with % if valid number
+    let formattedValue = value;
+    if (numericValue && !isNaN(parsedValue) && parsedValue > 0) {
+      formattedValue = `${formatItalianNumber(
+        parsedValue,
+        parsedValue % 1 === 0 ? 0 : 1
+      )}%`;
+    } else if (numericValue === "" || parsedValue === 0) {
+      formattedValue = "0%";
     }
 
     setForm((prev) => ({
@@ -337,7 +477,6 @@ export default function S8OperatingCost() {
           ? {
               ...item,
               percentage: formattedValue,
-              totalCost: formatEuro(totalCost, { decimals: 2 }),
             }
           : item
       ),
@@ -348,9 +487,33 @@ export default function S8OperatingCost() {
     field: keyof SupplierPayments,
     value: string
   ) => {
+    // Allow user to type freely, keep raw input
+    setForm((prev) => ({
+      ...prev,
+      supplierPayments: {
+        ...prev.supplierPayments,
+        [field]: value,
+      },
+    }));
+  };
+
+  // Format supplier payment on blur
+  const handleSupplierPaymentBlur = (
+    field: keyof SupplierPayments,
+    value: string
+  ) => {
+    let numericValue = value.replace("%", "").trim();
+    let parsedValue = parseItalianNumber(numericValue);
+
+    // Format to Italian style with % if valid number
     let formattedValue = value;
-    if (value && !value.includes("%") && !isNaN(Number(value))) {
-      formattedValue = `${value}%`;
+    if (numericValue && !isNaN(parsedValue) && parsedValue > 0) {
+      formattedValue = `${formatItalianNumber(
+        parsedValue,
+        parsedValue % 1 === 0 ? 0 : 1
+      )}%`;
+    } else if (numericValue === "" || parsedValue === 0) {
+      formattedValue = "0%";
     }
 
     setForm((prev) => ({
@@ -383,6 +546,7 @@ export default function S8OperatingCost() {
   useEffect(() => {
     const expectedRevenue = getExpectedRevenue();
     const amortizationAmount = calculateAmortization();
+    const interestExpenses = calculateInterestExpenses();
     const totals = calculateTotals();
 
     setForm((prev) => {
@@ -391,6 +555,11 @@ export default function S8OperatingCost() {
           return {
             ...item,
             totalCost: formatEuro(amortizationAmount, { decimals: 2 }),
+          };
+        } else if (item.id === "interest") {
+          return {
+            ...item,
+            totalCost: formatEuro(interestExpenses, { decimals: 2 }),
           };
         } else if (item.id === "tax") {
           // Tax calculation based on taxable income and percentage
@@ -402,22 +571,38 @@ export default function S8OperatingCost() {
                 otherItem.id === "amortization"
               ) {
                 return otherTotal + amortizationAmount;
+              } else if (
+                otherItem.isAutoCalculated &&
+                otherItem.id === "interest"
+              ) {
+                return otherTotal + interestExpenses;
               } else if (!otherItem.isAutoCalculated) {
                 const otherPct =
-                  parseFloat(otherItem.percentage.replace("%", "")) || 0;
+                  parseItalianNumber(otherItem.percentage.replace("%", "")) ||
+                  0;
                 return otherTotal + (otherPct / 100) * expectedRevenue;
               }
               return otherTotal;
             }, 0);
           const taxableIncome = Math.max(0, expectedRevenue - otherCosts);
-          const taxPct = parseFloat(item.percentage.replace("%", "")) || 0;
+          const taxPct = 24; // Fixed 24% IRES
           const taxAmount = (taxPct / 100) * taxableIncome;
+
+          // Debug logging
+          console.log("Tax calculation:", {
+            expectedRevenue,
+            otherCosts,
+            taxableIncome,
+            taxPct,
+            taxAmount,
+          });
+
           return {
             ...item,
             totalCost: formatEuro(taxAmount, { decimals: 2 }),
           };
         } else if (!item.isAutoCalculated) {
-          const pct = parseFloat(item.percentage.replace("%", "")) || 0;
+          const pct = parseItalianNumber(item.percentage.replace("%", "")) || 0;
           const totalCost = (pct / 100) * expectedRevenue;
           return {
             ...item,
@@ -435,7 +620,72 @@ export default function S8OperatingCost() {
         profitMargin: `${totals.profitMargin.toFixed(1)}%`,
       };
     });
-  }, [step7Data?.expectedRevenue, step6Data?.fixedInvestments]);
+  }, [
+    step7Data?.expectedRevenue,
+    step6Data?.fixedInvestments,
+    getFormData("step9"),
+  ]);
+
+  // Dedicated tax recalculation for real-time updates
+  useEffect(() => {
+    const expectedRevenue = getExpectedRevenue();
+    const amortizationAmount = calculateAmortization();
+    const interestExpenses = calculateInterestExpenses();
+
+    // Calculate other costs (excluding tax)
+    const otherCosts = form.operatingCostItems
+      .filter((item) => item.id !== "tax")
+      .reduce((total, item) => {
+        if (item.isAutoCalculated && item.id === "amortization") {
+          return total + amortizationAmount;
+        } else if (item.isAutoCalculated && item.id === "interest") {
+          return total + interestExpenses;
+        } else if (!item.isAutoCalculated) {
+          const pct = parseItalianNumber(item.percentage.replace("%", "")) || 0;
+          return total + (pct / 100) * expectedRevenue;
+        }
+        return total;
+      }, 0);
+
+    const taxableIncome = Math.max(0, expectedRevenue - otherCosts);
+    const taxAmount = (24 / 100) * taxableIncome; // 24% IRES
+    const newTaxCost = formatEuro(taxAmount, { decimals: 2 });
+
+    console.log("💸 Dedicated tax recalculation:", {
+      expectedRevenue,
+      amortizationAmount,
+      interestExpenses,
+      otherCosts,
+      taxableIncome,
+      taxAmount,
+      newTaxCost,
+    });
+
+    // Update tax if amount has changed
+    const currentTaxItem = form.operatingCostItems.find(
+      (item) => item.id === "tax"
+    );
+    if (
+      currentTaxItem &&
+      currentTaxItem.totalCost !== newTaxCost &&
+      taxAmount > 0
+    ) {
+      setForm((prev) => ({
+        ...prev,
+        operatingCostItems: prev.operatingCostItems.map((item) =>
+          item.id === "tax" ? { ...item, totalCost: newTaxCost } : item
+        ),
+      }));
+    }
+  }, [
+    form.operatingCostItems
+      .filter((item) => item.id !== "tax")
+      .map((item) => item.percentage)
+      .join(","),
+    step7Data?.expectedRevenue,
+    step6Data?.fixedInvestments,
+    JSON.stringify(getFormData("step9")), // Include all step 9 data
+  ]);
 
   // Sync with context
   useEffect(() => {
@@ -450,11 +700,11 @@ export default function S8OperatingCost() {
     // Calculate accounts payable based on supplier payment deferrals
     const calculateAccountsPayable = () => {
       const collection60Pct =
-        parseFloat(
+        parseItalianNumber(
           form.supplierPayments.collection60Days.replace("%", "") || "0"
         ) / 100;
       const collection90Pct =
-        parseFloat(
+        parseItalianNumber(
           form.supplierPayments.collection90Days.replace("%", "") || "0"
         ) / 100;
 
@@ -543,7 +793,7 @@ export default function S8OperatingCost() {
 
           <div className="text-center mb-8">
             <h2 className="text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] lg:text-[2.25rem] xl:text-[2.5rem] leading-snug md:leading-tight text-accent font-semibold tracking-tight break-words">
-              Operating Costs
+              Costi Operativi
             </h2>
           </div>
 
@@ -569,7 +819,7 @@ export default function S8OperatingCost() {
                 {/* Question */}
                 <div>
                   <label className="text-[24px] font-medium text-accent mb-6 block">
-                    What are your operating costs?
+                    Quali sono i tuoi costi operativi?
                   </label>
                   <p className="text-sm text-gray-600 mb-8">
                     Ricavi annui previsti dal Passo 7:{" "}
@@ -585,20 +835,20 @@ export default function S8OperatingCost() {
                     <thead>
                       <tr className="bg-gray-50">
                         <th className="border border-gray-200 px-4 py-3 text-left text-[1rem] font-medium text-accent w-2/5">
-                          Types of costs
+                          Tipologia di costi
                         </th>
                         <th className="border border-gray-200 px-4 py-3 text-center text-[1rem] font-medium text-accent w-1/5">
-                          % share on revenues
+                          % sui ricavi
                           <br />
                           <span className="text-sm font-normal">
-                            (pre-set but changeable)
+                            (preimpostato ma modificabile)
                           </span>
                         </th>
                         <th className="border border-gray-200 px-4 py-3 text-center text-[1rem] font-medium text-accent w-2/5">
-                          Total amount
+                          Importo totale
                           <br />
                           <span className="text-sm font-normal">
-                            (automatically calculated)
+                            (calcolato automaticamente)
                           </span>
                         </th>
                       </tr>
@@ -635,9 +885,11 @@ export default function S8OperatingCost() {
                             {item.isAutoCalculated ? (
                               <span className="text-[1rem] text-gray-500 italic">
                                 {item.id === "amortization"
-                                  ? "Auto-calculated from investments"
+                                  ? "Calcolato automaticamente dagli investimenti"
+                                  : item.id === "interest"
+                                  ? "Calcolato automaticamente dal prestito bancario (Step 9)"
                                   : item.id === "tax"
-                                  ? "Auto-calculated (24% IRES)"
+                                  ? "Calcolato automaticamente (24% IRES)"
                                   : item.percentage}
                               </span>
                             ) : (
@@ -650,8 +902,11 @@ export default function S8OperatingCost() {
                                     e.target.value
                                   )
                                 }
+                                onBlur={(e) =>
+                                  handlePercentageBlur(item.id, e.target.value)
+                                }
                                 className="w-20 px-3 py-1 text-center border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary bg-blue-50 hover:bg-blue-100 transition-colors"
-                                placeholder="%"
+                                placeholder="es. 1,5%"
                               />
                             )}
                           </td>
@@ -670,7 +925,7 @@ export default function S8OperatingCost() {
                 <div className="mt-12 space-y-6 border-t border-gray-200 pt-8">
                   <div>
                     <h3 className="text-[1.2rem] font-semibold text-accent mb-2">
-                      Supplier Payments (Debiti vs. Fornitori)
+                      Pagamenti Fornitori (Debiti vs. Fornitori)
                     </h3>
                     <p className="text-sm text-gray-600 mb-6">
                       Indica come incassi i tuoi ricavi per calcolare l'impatto
@@ -678,11 +933,11 @@ export default function S8OperatingCost() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                      <label className="block text-[1rem] font-medium text-accent mb-2">
-                        What percentage of your revenues is collected
-                        immediately (cash or within 30 days)?
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="flex flex-col">
+                      <label className="block text-[1rem] font-medium text-accent mb-2 min-h-[3rem] flex items-start">
+                        Che percentuale dei tuoi ricavi viene incassata
+                        immediatamente (contanti o entro 30 giorni)?
                       </label>
                       <input
                         type="text"
@@ -693,14 +948,20 @@ export default function S8OperatingCost() {
                             e.target.value
                           )
                         }
-                        placeholder="70%"
+                        onBlur={(e) =>
+                          handleSupplierPaymentBlur(
+                            "immediateCollection",
+                            e.target.value
+                          )
+                        }
+                        placeholder="70% o 70,5%"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-[1rem] font-medium text-accent mb-2">
-                        60 days delay:
+                    <div className="flex flex-col">
+                      <label className="block text-[1rem] font-medium text-accent mb-2 min-h-[3rem] flex items-start">
+                        Ritardo di 60 giorni:
                       </label>
                       <input
                         type="text"
@@ -711,14 +972,20 @@ export default function S8OperatingCost() {
                             e.target.value
                           )
                         }
-                        placeholder="20%"
+                        onBlur={(e) =>
+                          handleSupplierPaymentBlur(
+                            "collection60Days",
+                            e.target.value
+                          )
+                        }
+                        placeholder="20% o 20,5%"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-[1rem] font-medium text-accent mb-2">
-                        90 days delay:
+                    <div className="flex flex-col">
+                      <label className="block text-[1rem] font-medium text-accent mb-2 min-h-[3rem] flex items-start">
+                        Ritardo di 90 giorni:
                       </label>
                       <input
                         type="text"
@@ -729,7 +996,13 @@ export default function S8OperatingCost() {
                             e.target.value
                           )
                         }
-                        placeholder="10%"
+                        onBlur={(e) =>
+                          handleSupplierPaymentBlur(
+                            "collection90Days",
+                            e.target.value
+                          )
+                        }
+                        placeholder="10% o 10,5%"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
@@ -738,19 +1011,19 @@ export default function S8OperatingCost() {
                   <div
                     className={`text-sm p-3 rounded-lg transition-colors ${(() => {
                       const total =
-                        parseFloat(
+                        parseItalianNumber(
                           form.supplierPayments.immediateCollection.replace(
                             "%",
                             ""
                           ) || "0"
                         ) +
-                        parseFloat(
+                        parseItalianNumber(
                           form.supplierPayments.collection60Days.replace(
                             "%",
                             ""
                           ) || "0"
                         ) +
-                        parseFloat(
+                        parseItalianNumber(
                           form.supplierPayments.collection90Days.replace(
                             "%",
                             ""
@@ -764,45 +1037,46 @@ export default function S8OperatingCost() {
                     <div className="flex items-center justify-between">
                       <p className="font-medium">
                         Totale percentuale:{" "}
-                        {(
-                          parseFloat(
+                        {formatItalianNumber(
+                          parseItalianNumber(
                             form.supplierPayments.immediateCollection.replace(
                               "%",
                               ""
                             ) || "0"
                           ) +
-                          parseFloat(
-                            form.supplierPayments.collection60Days.replace(
-                              "%",
-                              ""
-                            ) || "0"
-                          ) +
-                          parseFloat(
-                            form.supplierPayments.collection90Days.replace(
-                              "%",
-                              ""
-                            ) || "0"
-                          )
-                        ).toFixed(0)}
+                            parseItalianNumber(
+                              form.supplierPayments.collection60Days.replace(
+                                "%",
+                                ""
+                              ) || "0"
+                            ) +
+                            parseItalianNumber(
+                              form.supplierPayments.collection90Days.replace(
+                                "%",
+                                ""
+                              ) || "0"
+                            ),
+                          0
+                        )}
                         % (dovrebbe essere 100%)
                       </p>
                       <div className="w-32 bg-gray-200 rounded-full h-2">
                         <div
                           className={`h-2 rounded-full transition-all duration-300 ${(() => {
                             const total =
-                              parseFloat(
+                              parseItalianNumber(
                                 form.supplierPayments.immediateCollection.replace(
                                   "%",
                                   ""
                                 ) || "0"
                               ) +
-                              parseFloat(
+                              parseItalianNumber(
                                 form.supplierPayments.collection60Days.replace(
                                   "%",
                                   ""
                                 ) || "0"
                               ) +
-                              parseFloat(
+                              parseItalianNumber(
                                 form.supplierPayments.collection90Days.replace(
                                   "%",
                                   ""
@@ -817,19 +1091,19 @@ export default function S8OperatingCost() {
                           style={{
                             width: `${Math.min(
                               100,
-                              parseFloat(
+                              parseItalianNumber(
                                 form.supplierPayments.immediateCollection.replace(
                                   "%",
                                   ""
                                 ) || "0"
                               ) +
-                                parseFloat(
+                                parseItalianNumber(
                                   form.supplierPayments.collection60Days.replace(
                                     "%",
                                     ""
                                   ) || "0"
                                 ) +
-                                parseFloat(
+                                parseItalianNumber(
                                   form.supplierPayments.collection90Days.replace(
                                     "%",
                                     ""

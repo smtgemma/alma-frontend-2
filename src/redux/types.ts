@@ -32,13 +32,45 @@ interface ProfitLossProjection {
 
 interface BalanceSheet {
   year: number;
-  assets: number;
-  current_assets: number;
-  non_current_assets: number;
-  liabilities: number;
-  current_liabilities: number;
-  non_current_liabilities: number;
-  equity: number;
+  // Assets
+  intangible_assets?: number;
+  tangible_assets?: number;
+  financial_assets?: number;
+  net_fixed_assets?: number;
+  inventories?: number;
+  net_receivables_from_customers?: number;
+  other_operating_receivables?: number;
+  accrued_expenses_and_prepaid_income?: number;
+  net_operating_working_capital?: number;
+  invested_capital?: number;
+  cash_and_banks?: number;
+  // Liabilities
+  payables_to_suppliers?: number;
+  payables_to_subsidiaries?: number;
+  other_operating_payables?: number;
+  accrued_expenses_and_prepaid_income_passive?: number;
+  short_term_bank_debts?: number;
+  other_short_term_financial_debts?: number;
+  long_term_bank_debts?: number;
+  other_long_term_financial_debts?: number;
+  shareholder_loans?: number;
+  leasing_debts?: number;
+  financial_receivables?: number;
+  net_financial_debt?: number;
+  // Equity
+  share_capital?: number;
+  reserves?: number;
+  profit_loss?: number;
+  net_equity?: number;
+  sources_of_financing?: number;
+  // Legacy/simplified fields for backward compatibility
+  assets?: number;
+  current_assets?: number;
+  non_current_assets?: number;
+  liabilities?: number;
+  current_liabilities?: number;
+  non_current_liabilities?: number;
+  equity?: number;
 }
 
 interface NetFinancialPosition {

@@ -2,6 +2,7 @@
 
 import { IBalanceSheet } from "@/redux/types";
 import { useSmartForm } from "@/components/ai-smart-form/SmartFormContext";
+import { useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -79,10 +80,62 @@ const CustomLabel = (props: any) => {
   );
 };
 
+// Extract balance sheet components from your exact data structure
+const extractBalanceSheetComponents = (item: any) => {
+  if (!item || typeof item !== 'object') {
+    return { assets: 0, liabilities: 0, equity: 0 };
+  }
+  
+  // Use your exact data structure fields
+  // Assets: Use invested_capital (represents total capital invested)
+  const assets = item.invested_capital || item.sources_of_financing || 0;
+  
+  // Equity: Use net_equity (represents shareholders' equity)
+  const equity = item.net_equity || 0;
+  
+  // Liabilities: For balance sheet visualization, we can use net_financial_debt
+  // as it represents the debt/liability portion, or calculate as Assets - Equity
+  const netFinancialDebt = item.net_financial_debt || 0;
+  const calculatedLiabilities = Math.max(0, assets - equity);
+  
+  // Use the larger of the two liability calculations
+  const liabilities = Math.max(netFinancialDebt, calculatedLiabilities);
+  
+  // Debug: Log extracted values for verification
+  if (assets > 0 || liabilities > 0 || equity > 0) {
+    console.log('✅ Successfully extracted:', {
+      year: item.year,
+      assets,
+      liabilities, 
+      equity,
+      source_invested_capital: item.invested_capital,
+      source_net_equity: item.net_equity,
+      source_net_financial_debt: item.net_financial_debt
+    });
+  }
+  
+  return { assets, liabilities, equity };
+};
+
 export default function BalanceSheet({
   balanceSheet,
   netFinancialPosition,
 }: IBalanceSheet) {
+  // Debug: Log the incoming data and test extraction (only once)
+  if (balanceSheet?.length > 0) {
+    console.log('📊 BalanceSheet received:', balanceSheet?.length, 'items');
+    console.log('📊 Available keys in first item:', Object.keys(balanceSheet[0]));
+    console.log('📊 Sample data values:', {
+      invested_capital: balanceSheet[0].invested_capital,
+      net_equity: balanceSheet[0].net_equity,
+      net_financial_debt: balanceSheet[0].net_financial_debt,
+      net_fixed_assets: balanceSheet[0].net_fixed_assets,
+      cash_and_banks: balanceSheet[0].cash_and_banks
+    });
+    const testItem = balanceSheet[balanceSheet.length - 1];
+    const testExtraction = extractBalanceSheetComponents(testItem);
+    console.log('🎯 Test extraction result:', testExtraction);
+  }
   // Inject Year 0 from Balance Sheet extractions (if available)
   let step1: any = null;
   try {
@@ -99,14 +152,21 @@ export default function BalanceSheet({
     const fin = bsExtra?.financial_data || {};
     // Try to derive assets/liabilities/equity from financial_data keys if present
     const year0: any = { year: 0 };
-    const assets = fin.assets ?? (fin.current_assets || 0) + (fin.non_current_assets || 0);
-    const liabilities = fin.liabilities ?? (fin.current_liabilities || 0) + (fin.non_current_liabilities || 0);
-    const equity = fin.equity ?? fin.net_equity ?? (typeof assets === "number" && typeof liabilities === "number" ? assets - liabilities : undefined);
-    if (typeof assets === "number") year0.assets = assets;
-    if (typeof liabilities === "number") year0.liabilities = liabilities;
-    if (typeof equity === "number") year0.equity = equity;
+    
+    // Map extracted financial data to your balance sheet structure if available
+    if (fin.assets || fin.current_assets || fin.non_current_assets) {
+      const assets = fin.assets ?? (fin.current_assets || 0) + (fin.non_current_assets || 0);
+      const liabilities = fin.liabilities ?? (fin.current_liabilities || 0) + (fin.non_current_liabilities || 0);
+      const equity = fin.equity ?? fin.net_equity ?? (typeof assets === "number" && typeof liabilities === "number" ? assets - liabilities : undefined);
+      
+      // Map to your structure
+      if (typeof assets === "number") year0.invested_capital = assets;
+      if (typeof equity === "number") year0.net_equity = equity;
+      if (typeof liabilities === "number") year0.net_financial_debt = liabilities;
+      year0.sources_of_financing = assets;
+    }
 
-    if ((year0.assets ?? 0) !== 0 || (year0.liabilities ?? 0) !== 0 || (year0.equity ?? 0) !== 0) {
+    if (year0.invested_capital || year0.net_equity || year0.net_financial_debt) {
       enhancedBalanceSheet = [year0, ...balanceSheet];
     }
   } catch (e) {
@@ -114,100 +174,103 @@ export default function BalanceSheet({
   }
   // Helper: safely extract possible fields from API item (supports legacy and new backend keys)
   const getFieldValue = (item: any, key: string) => {
-    // direct
-    if (typeof item?.[key] === "number") return item[key] as number;
+    if (!item) {
+      return 0;
+    }
+    
+    const value = item[key];
+    
+    // Handle numeric values
+    if (typeof value === "number") {
+      return value;
+    }
+    
+    // Handle string values
+    if (typeof value === "string") {
+      const parsed = parseFloat(value);
+      if (!isNaN(parsed)) {
+        return parsed;
+      }
+    }
+    
+    // Return 0 for undefined, null, or invalid values
     return 0;
   };
 
-  // Compute derived buckets compatible with pie-chart: Assets, Liabilities, Equity
-  const computeBuckets = (raw: any) => {
-    const equity =
-      (typeof raw?.equity === "number" ? raw.equity : 0) ||
-      (typeof raw?.net_equity === "number" ? raw.net_equity : 0);
-
-    // Sum potential liability components if aggregate not provided
-    const liabilitiesAggregate =
-      (typeof raw?.liabilities === "number" ? raw.liabilities : 0) +
-      getFieldValue(raw, "current_liabilities") +
-      getFieldValue(raw, "non_current_liabilities") +
-      getFieldValue(raw, "short_term_bank_debts") +
-      getFieldValue(raw, "other_short_term_financial_debts") +
-      getFieldValue(raw, "long_term_bank_debts") +
-      getFieldValue(raw, "other_long_term_financial_debts") +
-      getFieldValue(raw, "shareholder_loans") +
-      getFieldValue(raw, "leasing_debts") +
-      getFieldValue(raw, "payables_to_suppliers") +
-      getFieldValue(raw, "payables_to_subsidiaries") +
-      getFieldValue(raw, "other_operating_payables") +
-      getFieldValue(raw, "accrued_expenses_and_prepaid_income_passive");
-
-    const liabilities = liabilitiesAggregate;
-
-    // Assets either provided, or derived as Liabilities + Equity (basic accounting identity)
-    const providedAssets =
-      (typeof raw?.assets === "number" ? raw.assets : 0) ||
-      getFieldValue(raw, "current_assets") +
-        getFieldValue(raw, "non_current_assets");
-
-    const assets = providedAssets || equity + liabilities;
-
-    return { assets, liabilities, equity };
-  };
 
   // Determine which columns to show in the table: pick two fields that actually have values
   const italianLabels: Record<string, string> = {
-    assets: "Attività",
-    liabilities: "Passività",
-    equity: "Patrimonio netto",
-    net_equity: "Patrimonio netto",
-    share_capital: "Capitale sociale",
-    net_financial_debt: "Indebitamento finanziario netto",
-    current_assets: "Attività correnti",
-    non_current_assets: "Attività non correnti",
-    current_liabilities: "Passività correnti",
-    non_current_liabilities: "Passività non correnti",
+    // Computed fields
+    assets: "Attività Totali",
+    liabilities: "Passività Totali", 
+    equity: "Patrimonio Netto",
+    // Italian field names (from your console logs)
+    totale_attivita: "Totale Attività",
+    attivita_correnti: "Attività Correnti",
+    attivita_non_correnti: "Attività Non Correnti",
+    passivita_correnti: "Passività Correnti",
+    // English field names (original structure)
+    net_equity: "Patrimonio Netto",
+    invested_capital: "Capitale Investito",
+    net_fixed_assets: "Attività Fisse Nette",
+    net_operating_working_capital: "Capitale Circolante Netto Operativo",
+    net_financial_debt: "Indebitamento Finanziario Netto",
+    share_capital: "Capitale Sociale",
+    reserves: "Riserve",
+    profit_loss: "Utile/Perdita",
+    sources_of_financing: "Fonti di Finanziamento",
+    intangible_assets: "Attività Immateriali",
+    tangible_assets: "Attività Materiali",
+    financial_assets: "Attività Finanziarie",
+    inventories: "Rimanenze",
+    net_receivables_from_customers: "Crediti Netti verso Clienti",
+    cash_and_banks: "Cassa e Banche",
+    current_assets: "Attività Correnti",
+    non_current_assets: "Attività Non Correnti",
+    current_liabilities: "Passività Correnti",
+    non_current_liabilities: "Passività Non Correnti",
+    short_term_bank_debts: "Debiti Bancari a Breve Termine",
+    long_term_bank_debts: "Debiti Bancari a Lungo Termine",
+    payables_to_suppliers: "Debiti verso Fornitori",
+    other_operating_payables: "Altri Debiti Operativi",
   };
 
   const priorityKeys = [
+    "invested_capital",
+    "net_equity",
+    "net_financial_debt",
+    "net_fixed_assets",
+    "net_operating_working_capital",
+    "cash_and_banks",
+    "share_capital",
+    "reserves",
+    "profit_loss",
     "assets",
     "liabilities",
     "equity",
-    "net_equity",
-    "share_capital",
-    "net_financial_debt",
   ];
 
   const activeKeys = priorityKeys.filter((k) => {
     return balanceSheet?.some((row: any) => {
       if (k === "assets" || k === "liabilities" || k === "equity") {
-        const buckets = computeBuckets(row);
+        const buckets = extractBalanceSheetComponents(row);
         return (buckets as any)[k] !== 0;
       }
       return getFieldValue(row, k) !== 0;
     });
   });
 
-  const tableKeys = (
-    activeKeys.length > 0 ? activeKeys : ["equity", "assets"]
-  ).slice(0, 2);
-
-  // Always show the original columns; append the two dynamic ones if different
-  const baseKeys = [
-    "assets",
-    "current_assets",
-    "non_current_assets",
-    "liabilities",
-    "current_liabilities",
-    "non_current_liabilities",
-    "equity",
-  ];
-
+  // Use the actual keys from your data structure
   const combinedKeys = [
-    ...baseKeys,
-    ...tableKeys.filter((k) => !baseKeys.includes(k)),
+    "invested_capital",
+    "net_equity", 
+    "net_financial_debt",
+    "net_fixed_assets",
+    "net_operating_working_capital",
+    "cash_and_banks"
   ];
   // Generate dynamic pie chart data from balanceSheet - Balance Sheet Components
-  const generatePieChartData = () => {
+  const pieChartData = useMemo(() => {
     if (!balanceSheet || balanceSheet.length === 0) {
       return [
         {
@@ -234,12 +297,12 @@ export default function BalanceSheet({
       ];
     }
 
-    // Use the first item from balanceSheet for pie chart data
-    const item = balanceSheet[0] as any;
-    const buckets = computeBuckets(item);
-    const assets = buckets.assets || 0;
-    const liabilities = buckets.liabilities || 0;
-    const equity = buckets.equity || 0;
+    // Use the latest year item from balanceSheet for pie chart data (last item usually has the most recent data)
+    const item = balanceSheet[balanceSheet.length - 1] as any;
+    
+    // Use the robust extraction function
+    const { assets, liabilities, equity } = extractBalanceSheetComponents(item);
+    
 
     // Calculate total for percentage calculation using absolute values
     const absAssets = Math.abs(assets);
@@ -303,9 +366,7 @@ export default function BalanceSheet({
     ];
 
     return segments;
-  };
-
-  const pieChartData = generatePieChartData();
+  }, [balanceSheet]); // Add dependency array to prevent continuous recalculation
 
   return (
     <div className="mt-10 mx-auto space-y-8">
@@ -333,7 +394,7 @@ export default function BalanceSheet({
               </tr>
             </thead>
             <tbody>
-              {enhancedBalanceSheet.map((item: any, index) => (
+              {balanceSheet.map((item: any, index) => (
                 <tr
                   key={item.year}
                   className={index % 2 === 0 ? "bg-gray-50" : "bg-gray-50"}
@@ -349,11 +410,17 @@ export default function BalanceSheet({
                       key === "liabilities" ||
                       key === "equity"
                     ) {
-                      const buckets = computeBuckets(item);
+                      const buckets = extractBalanceSheetComponents(item);
                       value = (buckets as any)[key] || 0;
                     } else {
                       value = getFieldValue(item, key);
                     }
+                    
+                    // Debug: Log the first item's values to verify extraction
+                    if (index === 0) {
+                      console.log(`🔍 Year ${item.year}, Key: ${key}, Raw value: ${item[key]}, Processed value: ${value}`);
+                    }
+                    
                     return (
                       <td
                         key={key}

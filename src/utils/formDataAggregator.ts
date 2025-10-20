@@ -18,7 +18,17 @@ export interface AggregatedFormData {
   fundingSources?: {
     // Accept either a textual description (legacy) or a numeric total (new)
     initialInvestment?: string | number;
-    fromHome?: number;
+    fromHome?: number; // User's own equity
+    bankLoan?: number; // Bank financing
+    otherInvestors?: number; // External investors
+    totalInvestment?: number; // Total investment amount
+    fixedInvestments?: Array<{
+      key: string;
+      label: string;
+      amount: string;
+      amortizationRate: number;
+    }>;
+    expectedRevenue?: number; // Expected revenue
   };
 }
 
@@ -60,6 +70,8 @@ const stepQuestions: Record<string, Record<string, string>> = {
     selectedUniqueOptions: "Selected unique value options",
     selectedProblemOptions: "Selected problem solving options",
     selectedValueAddOptions: "Selected value-add support options",
+    companyOwnership:
+      "Will the company own any inventions, digital assets, discoveries, trade secrets or similar?",
   },
   step4: {
     businessGoals: "What is your business aiming to achieve?",
@@ -95,7 +107,8 @@ const stepQuestions: Record<string, Record<string, string>> = {
     initialInvestment: "Initial Investment",
     investmentItems: "Investment breakdown items",
     // new fields used after recent changes
-    initialInvestmentDescription: "What will you spend your initial investment on?",
+    initialInvestmentDescription:
+      "What will you spend your initial investment on?",
     fixedInvestments: "Fixed investments (with amortization %)",
   },
   step7: {
@@ -140,6 +153,15 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
   console.log("🚀 Starting form data aggregation...");
   console.log("📋 Raw form data:", formData);
 
+  // Log all available fields for debugging
+  console.log("\n🔍 Available fields per step:");
+  Object.entries(formData).forEach(([stepKey, stepData]) => {
+    if (stepData && typeof stepData === "object") {
+      const fields = Object.keys(stepData);
+      console.log(`  ${stepKey}: [${fields.join(", ")}]`);
+    }
+  });
+
   // helper to parse possibly formatted numeric strings
   const parseMaybeNumber = (v: any): number | undefined => {
     if (v === null || v === undefined) return undefined;
@@ -160,17 +182,38 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
     language: (formData as any).step1?.sourceLanguage || undefined,
     currency: (formData as any).step1?.targetLanguage || undefined,
     fundingSources: {
-      // prefer new shape from step6, fallback to legacy
+      // Initial investment from step 6
       initialInvestment:
         parseMaybeNumber(s6?.fundingSources?.initialInvestment) ??
         parseMaybeNumber(s6?.totals?.totalInvestment) ??
         parseMaybeNumber(s6?.initialInvestment) ??
         undefined,
-      // equity moved under step9.sources.equity
+      // Equity from step 9 ("fromHome" represents user's own equity)
       fromHome:
         parseMaybeNumber(s9?.sources?.equity) ??
         parseMaybeNumber(s9?.yourOwnEquity) ??
         undefined,
+      // Bank financing from step 9
+      bankLoan:
+        parseMaybeNumber(s9?.sources?.bankLoan) ??
+        parseMaybeNumber(s9?.bankingSystem) ??
+        undefined,
+      // Other investors from step 9
+      otherInvestors:
+        parseMaybeNumber(s9?.sources?.otherInvestors) ??
+        parseMaybeNumber(s9?.otherInvestors) ??
+        undefined,
+      // Total investment calculation
+      totalInvestment:
+        parseMaybeNumber(s6?.totals?.totalInvestment) ?? undefined,
+      // Fixed investments details (from step 6)
+      fixedInvestments:
+        s6?.fixedInvestments?.filter(
+          (item: any) => item.amount && parseMaybeNumber(item.amount)
+        ) ?? [],
+      // Expected revenue (from step 7)
+      expectedRevenue:
+        parseMaybeNumber((formData as any).step7?.expectedRevenue) ?? undefined,
     },
   };
 
@@ -204,24 +247,38 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
       if (
         fieldKey === "uploaded_file" ||
         fieldKey === "businessDocument" ||
+        fieldKey === "businessDocuments" ||
         fieldKey === "extractedContent" ||
         fieldKey === "sourceLanguage" ||
         fieldKey === "targetLanguage" ||
         fieldKey === "totals" ||
         fieldKey === "accountingMapping" ||
         fieldKey === "fundingSources" ||
+        fieldKey === "balanceSheetFiles" ||
+        fieldKey === "visuraCameraleFiles" ||
+        fieldKey === "balanceSheetExtractions" ||
+        fieldKey === "visuraCameraleExtractions" ||
         fieldKey.startsWith("custom") ||
         fieldKey.startsWith("show") ||
+        fieldKey.startsWith("extracted") || // Skip extracted fields from documents
         (Array.isArray(fieldValue) && fieldValue.length === 0)
       ) {
+        console.log(`    ⚠️ Skipping ${fieldKey} - excluded field`);
         return;
       }
 
       // Special cases for new complex structures
       // Step 6: fixed investments
-      if (stepKey === "step6" && fieldKey === "fixedInvestments" && Array.isArray(fieldValue)) {
+      if (
+        stepKey === "step6" &&
+        fieldKey === "fixedInvestments" &&
+        Array.isArray(fieldValue)
+      ) {
         const items = fieldValue
-          .filter((it: any) => (it.amount !== undefined && it.amount !== null && it.amount !== ""))
+          .filter(
+            (it: any) =>
+              it.amount !== undefined && it.amount !== null && it.amount !== ""
+          )
           .map((it: any) => `${it.label || it.key}: ${it.amount}`)
           .join(", ");
         if (items) {
@@ -233,7 +290,11 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
         return;
       }
       // Step 7: revenue streams table
-      if (stepKey === "step7" && fieldKey === "revenueStreams" && Array.isArray(fieldValue)) {
+      if (
+        stepKey === "step7" &&
+        fieldKey === "revenueStreams" &&
+        Array.isArray(fieldValue)
+      ) {
         const items = fieldValue
           .filter((row: any) => row.name || row.amount)
           .map((row: any) => `${row.name || `Item ${row.id}`}: ${row.amount}`)
@@ -247,12 +308,29 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
         return;
       }
       // Step 7: payments breakdown object -> split into three questions
-      if (stepKey === "step7" && fieldKey === "payments" && typeof fieldValue === "object" && fieldValue) {
+      if (
+        stepKey === "step7" &&
+        fieldKey === "payments" &&
+        typeof fieldValue === "object" &&
+        fieldValue
+      ) {
         const p: any = fieldValue;
         const map: Array<[string, any, string]> = [
-          ["immediateCollectionPercent", p.immediate, questions["immediateCollectionPercent"]],
-          ["collection60DaysPercent", p.days60, questions["collection60DaysPercent"]],
-          ["collection90DaysPercent", p.days90, questions["collection90DaysPercent"]],
+          [
+            "immediateCollectionPercent",
+            p.immediate,
+            questions["immediateCollectionPercent"],
+          ],
+          [
+            "collection60DaysPercent",
+            p.days60,
+            questions["collection60DaysPercent"],
+          ],
+          [
+            "collection90DaysPercent",
+            p.days90,
+            questions["collection90DaysPercent"],
+          ],
         ];
         map.forEach(([k, v, q]) => {
           if (q && (v || v === 0)) {
@@ -262,12 +340,21 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
         return;
       }
       // Step 9: new consolidated sources object
-      if (stepKey === "step9" && fieldKey === "sources" && typeof fieldValue === "object" && fieldValue) {
+      if (
+        stepKey === "step9" &&
+        fieldKey === "sources" &&
+        typeof fieldValue === "object" &&
+        fieldValue
+      ) {
         const src: any = fieldValue;
         const mapping: Array<[string, any, string]> = [
           ["yourOwnEquity", src.equity, stepQuestions.step9.yourOwnEquity],
           ["bankingSystem", src.bankLoan, stepQuestions.step9.bankingSystem],
-          ["otherInvestors", src.otherInvestors, stepQuestions.step9.otherInvestors],
+          [
+            "otherInvestors",
+            src.otherInvestors,
+            stepQuestions.step9.otherInvestors,
+          ],
         ];
         mapping.forEach(([key, val, q]) => {
           if (q && (val || val === 0)) {
@@ -285,7 +372,8 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
             .replace("selected", "")
             .replace("Options", "");
           const question =
-            (questions as any)[baseQuestionKey] || `${baseQuestionKey} selected options`;
+            (questions as any)[baseQuestionKey] ||
+            `${baseQuestionKey} selected options`;
           console.log(
             `    📝 Adding to user_input: ${question} = ${fieldValue.join(
               ", "
@@ -328,13 +416,16 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
           answer = fieldValue
             .filter((item: any) => item.name || item.totalCost)
             .map(
-              (item: any) => `${item.name}: ${item.totalCost} (${item.percentage})`
+              (item: any) =>
+                `${item.name}: ${item.totalCost} (${item.percentage})`
             )
             .join(", ");
         } else if (fieldKey === "businessGoals") {
           // businessGoals is a string, not an array
           answer =
-            typeof fieldValue === "string" ? fieldValue : (fieldValue as any).join(", ");
+            typeof fieldValue === "string"
+              ? fieldValue
+              : (fieldValue as any).join(", ");
         } else {
           answer = (fieldValue as any).join(", ");
         }
@@ -358,11 +449,83 @@ export function aggregateFormData(formData: SmartFormData): AggregatedFormData {
     });
   });
 
+  // Validate that we haven't missed any important fields
+  const totalFieldsProcessed = aggregated.user_input.length;
+  const totalAvailableFields = Object.values(formData).reduce(
+    (acc, stepData) => {
+      if (stepData && typeof stepData === "object") {
+        return acc + Object.keys(stepData).length;
+      }
+      return acc;
+    },
+    0
+  );
+
+  console.log("\n📊 Field Processing Summary:");
+  console.log(`  📝 Fields processed as user_input: ${totalFieldsProcessed}`);
+  console.log(`  📋 Total fields available: ${totalAvailableFields}`);
+  console.log(`  📁 Files processed: ${aggregated.uploaded_file.length}`);
+  console.log(`  🌐 Language: ${aggregated.language || "Not set"}`);
+  console.log(`  💱 Currency: ${aggregated.currency || "Not set"}`);
+  console.log(
+    `  💰 Funding sources: ${aggregated.fundingSources ? "Set" : "Not set"}`
+  );
+
+  // Check for any potentially missed fields with values
+  console.log("\n🔍 Checking for potentially missed fields:");
+  Object.entries(formData).forEach(([stepKey, stepData]) => {
+    if (stepData && typeof stepData === "object") {
+      const questions = stepQuestions[stepKey];
+      Object.entries(stepData).forEach(([fieldKey, fieldValue]) => {
+        if (
+          fieldValue &&
+          typeof fieldValue === "string" &&
+          fieldValue.trim() &&
+          !questions?.[fieldKey] &&
+          !fieldKey.startsWith("custom") &&
+          !fieldKey.startsWith("show") &&
+          !fieldKey.startsWith("selected") &&
+          !fieldKey.startsWith("extracted") &&
+          fieldKey !== "uploaded_file" &&
+          fieldKey !== "businessDocument" &&
+          fieldKey !== "businessDocuments" &&
+          fieldKey !== "extractedContent" &&
+          fieldKey !== "sourceLanguage" &&
+          fieldKey !== "targetLanguage" &&
+          fieldKey !== "balanceSheetFiles" &&
+          fieldKey !== "visuraCameraleFiles"
+        ) {
+          console.log(
+            `  ⚠️ ${stepKey}.${fieldKey}: No question mapping found (value: "${fieldValue.substring(
+              0,
+              50
+            )}${fieldValue.length > 50 ? "..." : ""}")`
+          );
+        }
+      });
+    }
+  });
+
   console.log("\n🎉 Aggregation complete!");
   console.log("📊 Final aggregated data:", aggregated);
   console.log("📈 Total user inputs:", aggregated.user_input.length);
   console.log("📁 Total uploaded files:", aggregated.uploaded_file.length);
   console.log("💰 Funding sources:", aggregated.fundingSources);
+
+  // Validate completeness
+  const completenessCheck = validateFormDataCompleteness(formData, aggregated);
+  console.log("\n✅ Completeness Validation:", completenessCheck);
+
+  if (!completenessCheck.isComplete) {
+    console.warn(
+      "⚠️ Missing critical fields:",
+      completenessCheck.missingCriticalFields
+    );
+  }
+
+  if (completenessCheck.warnings.length > 0) {
+    console.warn("📝 Warnings:", completenessCheck.warnings);
+  }
 
   return aggregated;
 }
@@ -428,6 +591,103 @@ export function validateAggregatedData(aggregatedData: AggregatedFormData) {
   return {
     isValid: issues.length === 0,
     issues,
+  };
+}
+
+/**
+ * Validates that all important form fields are captured in the aggregated data
+ * @param formData - The original form data
+ * @param aggregatedData - The aggregated form data
+ * @returns Validation result with any missing critical fields
+ */
+export function validateFormDataCompleteness(
+  formData: any,
+  aggregatedData: AggregatedFormData
+) {
+  const missingFields: string[] = [];
+  const warnings: string[] = [];
+
+  // Critical business info fields (step 1)
+  const businessName = aggregatedData.user_input.find((input) =>
+    input.question.toLowerCase().includes("business name")
+  )?.answer;
+  if (!businessName) {
+    missingFields.push("Business Name (Step 1)");
+  }
+
+  const location = aggregatedData.user_input.find(
+    (input) =>
+      input.question.toLowerCase().includes("city") ||
+      input.question.toLowerCase().includes("location")
+  )?.answer;
+  if (!location) {
+    missingFields.push("Business Location (Step 1)");
+  }
+
+  // Product/Service info (step 2)
+  const productService = aggregatedData.user_input.find((input) =>
+    input.question.toLowerCase().includes("product or service")
+  )?.answer;
+  if (!productService) {
+    missingFields.push("Product/Service Type (Step 2)");
+  }
+
+  // Industry info (step 5)
+  const industry = aggregatedData.user_input.find((input) =>
+    input.question.toLowerCase().includes("industry")
+  )?.answer;
+  if (!industry) {
+    missingFields.push("Industry (Step 5)");
+  }
+
+  // Financial planning data
+  if (
+    !aggregatedData.fundingSources?.initialInvestment &&
+    !aggregatedData.fundingSources?.totalInvestment
+  ) {
+    warnings.push("No initial investment amount specified (Step 6)");
+  }
+
+  if (
+    !aggregatedData.fundingSources?.fromHome &&
+    !aggregatedData.fundingSources?.bankLoan &&
+    !aggregatedData.fundingSources?.otherInvestors
+  ) {
+    warnings.push("No funding sources specified (Step 9)");
+  }
+
+  // Check for empty user_input
+  if (aggregatedData.user_input.length === 0) {
+    missingFields.push("No user input data captured");
+  }
+
+  // Check language and currency
+  if (!aggregatedData.language) {
+    warnings.push("No language specified");
+  }
+
+  if (!aggregatedData.currency) {
+    warnings.push("No currency specified");
+  }
+
+  return {
+    isComplete: missingFields.length === 0,
+    missingCriticalFields: missingFields,
+    warnings: warnings,
+    summary: {
+      totalUserInputs: aggregatedData.user_input.length,
+      totalFiles: aggregatedData.uploaded_file.length,
+      hasLanguage: !!aggregatedData.language,
+      hasCurrency: !!aggregatedData.currency,
+      hasFunding:
+        !!aggregatedData.fundingSources &&
+        Object.keys(aggregatedData.fundingSources).some(
+          (key) =>
+            aggregatedData.fundingSources![
+              key as keyof typeof aggregatedData.fundingSources
+            ] !== undefined
+        ),
+    },
   };
 }
 

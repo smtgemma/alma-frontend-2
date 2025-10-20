@@ -180,7 +180,7 @@ export default function S9FinancialPlan() {
                 {/* Question: How do you plan to finance your business idea? */}
                 <div>
                   <label className="text-[24px] font-medium text-accent mb-6 block">
-                    How do you plan to finance your business idea?
+                    Come prevedi di finanziare la tua idea di business?
                   </label>
 
                   {/* Totale investimento richiesto (Step 6) */}
@@ -202,13 +202,13 @@ export default function S9FinancialPlan() {
                   {/* Shareholders funding */}
                   <div className="mt-6">
                     <h3 className="text-[1.2rem] font-semibold text-accent mb-4">
-                      Shareholders funding as:
+                      Finanziamento dei soci come:
                     </h3>
 
                     {/* Equity */}
                     <div className="mb-4">
                       <label className="block text-[1rem] font-medium text-accent mb-2">
-                        Equity:
+                        Capitale proprio:
                       </label>
                       <div className="relative">
                         <input
@@ -218,7 +218,7 @@ export default function S9FinancialPlan() {
                           onChange={(e) =>
                             handleMoneyChange("equity", e.target.value)
                           }
-                          placeholder="Enter equity amount"
+                          placeholder="Inserisci importo capitale"
                           className="w-full px-4 py-3 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent pr-8"
                         />
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-accent">
@@ -230,7 +230,7 @@ export default function S9FinancialPlan() {
                     {/* Interest-free shareholder loan */}
                     <div className="mb-6">
                       <label className="block text-[1rem] font-medium text-accent mb-2">
-                        Interest-free shareholder loan:
+                        Prestito soci senza interessi:
                       </label>
                       <div className="relative">
                         <input
@@ -240,7 +240,7 @@ export default function S9FinancialPlan() {
                           onChange={(e) =>
                             handleMoneyChange("shareholderLoan", e.target.value)
                           }
-                          placeholder="Enter loan amount"
+                          placeholder="Inserisci importo prestito"
                           className="w-full px-4 py-3 bg-[#FCFCFC] border border-[#888888]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-[1rem] font-normal text-accent pr-8"
                         />
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-accent">
@@ -253,12 +253,12 @@ export default function S9FinancialPlan() {
                   {/* Banking System */}
                   <div className="mt-6">
                     <h3 className="text-[1.2rem] font-semibold text-accent mb-4">
-                      Banking System:
+                      Sistema Bancario:
                     </h3>
 
                     <div className="mb-4">
                       <label className="block text-[1rem] font-medium text-accent mb-2">
-                        Loan amount:
+                        Importo prestito:
                       </label>
                       <div className="relative">
                         <input
@@ -279,7 +279,7 @@ export default function S9FinancialPlan() {
 
                     <div className="mb-6">
                       <label className="block text-[1rem] font-medium text-accent mb-2">
-                        Interest rate:
+                        Tasso di interesse:
                       </label>
                       <div className="relative">
                         <input
@@ -329,7 +329,7 @@ export default function S9FinancialPlan() {
                           >
                             <span>
                               {gap >= 0
-                                ? "Funding Gap"
+                                ? "Gap di finanziamento"
                                 : "Eccedenza di finanziamento"}
                             </span>
                             <span className="font-medium">

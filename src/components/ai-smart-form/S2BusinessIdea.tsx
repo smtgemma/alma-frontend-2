@@ -316,10 +316,10 @@ export default function S2BusinessIdea() {
                   )}
                   <div className="mt-4 space-y-4">
                     {[
-                      "Idea / Pianificazione (Still developing the idea or preparing to launch)",
-                      "Startup (Recently launched, in the first stages of operations)",
-                      "In crescita (Generating revenue and expanding)",
-                      "Stabilita (Stable business with steady operations)",
+                      "Idea / Pianificazione (Ancora sviluppando l'idea o preparando il lancio)",
+                      "Startup (Lanciata di recente, nelle prime fasi operative)",
+                      "In crescita (Generando ricavi e in espansione)",
+                      "Stabilita (Business stabile con operazioni consolidate)",
                     ].map((option) => (
                       <div
                         key={option}

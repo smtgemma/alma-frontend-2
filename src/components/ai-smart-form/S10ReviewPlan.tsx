@@ -15,10 +15,17 @@ import { useRouter } from "next/navigation";
 import Loading from "../Others/Loading";
 import { useGetUserProfileQuery } from "@/redux/api/auth/authApi";
 //
-import { computeIncomeStatementPreview, computeCashFlowPreview, parseYear0Balance, parseYear0Income } from "@/utils/italianAccounting";
+import { computeIncomeStatementPreview, computeCashFlowPreview, parseYear0Balance, parseYear0Income, computeYear1Balance } from "@/utils/italianAccounting";
 
 function Euro({ value }: { value: number }) {
-  return <span>€ {value.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>;
+  // Debug logging to identify where large values are coming from
+  if (value > 100000000) { // Values over 100 million euros are likely errors
+    console.warn(`🚨 Euro component - Suspiciously large value: ${value}`);
+    console.trace('Euro component call stack');
+  }
+  
+  const safeValue = isNaN(value) ? 0 : value;
+  return <span>€ {safeValue.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>;
 }
 
 import { useRef } from "react";
@@ -29,7 +36,25 @@ const RecapPreviewsFixed = () => {
   const ce = computeIncomeStatementPreview(formData.step7, formData.step8);
   const cf = computeCashFlowPreview(formData.step6, formData.step7, formData.step8, formData.step9) as any;
   const year0SP = parseYear0Balance(formData.step1?.balanceSheetExtractions);
+  const year1SP = computeYear1Balance(year0SP, formData.step6, formData.step7, formData.step8, formData.step9);
   const year0CE = parseYear0Income(formData.step1?.balanceSheetExtractions);
+  
+  // Debug logging for S10 Review Plan
+  console.log('📊 S10ReviewPlan - RecapPreviewsFixed render:', {
+    step1_extractions: formData.step1?.balanceSheetExtractions?.length || 0,
+    year0SP_result: year0SP,
+    year1SP_result: year1SP,
+    year0_values: {
+      totaleAttivita: year0SP?.totaleAttivita,
+      totalePassivita: year0SP?.totalePassivita, 
+      patrimonioNetto: year0SP?.patrimonioNetto
+    },
+    year1_values: {
+      totaleAttivita: year1SP?.totaleAttivita,
+      totalePassivita: year1SP?.totalePassivita, 
+      patrimonioNetto: year1SP?.patrimonioNetto
+    }
+  });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleExportPdf = () => {
@@ -66,7 +91,7 @@ const RecapPreviewsFixed = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <button onClick={handleExportPdf} type="button" className="px-4 py-2 bg-[#A9A4FE] text-white rounded-md hover:bg-primary/90">
+        <button onClick={handleExportPdf} type="button" className="px-4 cursor-pointer py-2 bg-[#A9A4FE] text-white rounded-md hover:bg-primary/90">
           Esporta PDF
         </button>
       </div>
@@ -87,11 +112,11 @@ const RecapPreviewsFixed = () => {
           )}
         </div>
 
-        <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
           {/* CE */}
           <div className="border rounded-lg p-4">
-            <h3 className="text-[1.1rem] font-semibold text-accent mb-3">Conto Economico (Preview)</h3>
-            <div className="space-y-1 text-[0.95rem] text-accent">
+            <h3 className="text-[1.1rem] font-semibold text-accent mb-3">Conto Economico (Anno 1)</h3>
+            <div className="space-y-1 text-[0.85rem] text-accent">
               <div className="flex justify-between"><span>Ricavi</span><Euro value={ce.ricavi} /></div>
               <div className="flex justify-between"><span>Costi operativi</span><Euro value={ce.costiOperativi} /></div>
               <div className="flex justify-between"><span>Ammortamenti</span><Euro value={ce.ammortamenti} /></div>
@@ -103,24 +128,60 @@ const RecapPreviewsFixed = () => {
 
           {/* SP Year 0 */}
           <div className="border rounded-lg p-4">
-            <h3 className="text-[1.1rem] font-semibold text-accent mb-3">Stato Patrimoniale (Year 0)</h3>
+            <h3 className="text-[1.1rem] font-semibold text-accent mb-3">Stato Patrimoniale (Anno 0)</h3>
             {year0SP ? (
-              <div className="space-y-1 text-[0.95rem] text-accent">
+              <div className="space-y-1 text-[0.85rem] text-accent">
                 <div className="flex justify-between"><span>Totale Attività</span><Euro value={year0SP.totaleAttivita || 0} /></div>
                 <div className="flex justify-between"><span>Totale Passività + PN</span><Euro value={year0SP.totalePassivita || 0} /></div>
-                {typeof year0SP.patrimonioNetto === "number" && (
-                  <div className="flex justify-between"><span>Patrimonio Netto</span><Euro value={year0SP.patrimonioNetto} /></div>
-                )}
+                <div className="flex justify-between"><span>Patrimonio Netto</span><Euro value={year0SP.patrimonioNetto || 0} /></div>
+                {/* Balance sheet equation validation */}
+                <div className="mt-2 p-2 rounded text-xs">
+                  {Math.abs((year0SP.totaleAttivita || 0) - (year0SP.totalePassivita || 0)) < 0.01 ? (
+                    <div className="bg-green-50 text-green-600 border border-green-200 p-1">
+                      ✓ Bilancio in pareggio
+                    </div>
+                  ) : (
+                    <div className="bg-red-50 text-red-600 border border-red-200 p-1">
+                      ⚠️ Non in pareggio
+                    </div>
+                  )}
+                </div>
               </div>
             ) : (
-              <p className="text-[0.95rem] text-gray-500">Carica un Bilancio per visualizzare il Year 0.</p>
+              <p className="text-[0.85rem] text-gray-500">Carica un Bilancio per visualizzare l'Anno 0.</p>
+            )}
+          </div>
+
+          {/* SP Year 1 */}
+          <div className="border rounded-lg p-4">
+            <h3 className="text-[1.1rem] font-semibold text-accent mb-3">Stato Patrimoniale (Anno 1)</h3>
+            {year1SP ? (
+              <div className="space-y-1 text-[0.85rem] text-accent">
+                <div className="flex justify-between"><span>Totale Attività</span><Euro value={year1SP.totaleAttivita || 0} /></div>
+                <div className="flex justify-between"><span>Totale Passività + PN</span><Euro value={year1SP.totalePassivita || 0} /></div>
+                <div className="flex justify-between"><span>Patrimonio Netto</span><Euro value={year1SP.patrimonioNetto || 0} /></div>
+                {/* Balance sheet equation validation */}
+                <div className="mt-2 p-2 rounded text-xs">
+                  {Math.abs((year1SP.totaleAttivita || 0) - (year1SP.totalePassivita || 0)) < 0.01 ? (
+                    <div className="bg-green-50 text-green-600 border border-green-200 p-1">
+                      ✓ Bilancio in pareggio
+                    </div>
+                  ) : (
+                    <div className="bg-red-50 text-red-600 border border-red-200 p-1">
+                      ⚠️ Non in pareggio: Attività €{(year1SP.totaleAttivita || 0).toLocaleString()} ≠ Pass.+PN €{(year1SP.totalePassivita || 0).toLocaleString()}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <p className="text-[0.85rem] text-gray-500">Impossibile calcolare l'Anno 1 senza i dati dell'Anno 0.</p>
             )}
           </div>
 
           {/* Cash Flow */}
           <div className="border rounded-lg p-4">
-            <h3 className="text-[1.1rem] font-semibold text-accent mb-3">Rendiconto Finanziario (Preview)</h3>
-            <div className="space-y-1 text-[0.95rem] text-accent">
+            <h3 className="text-[1.1rem] font-semibold text-accent mb-3">Rendiconto Finanziario (Anno 1)</h3>
+            <div className="space-y-1 text-[0.85rem] text-accent">
               <div className="flex justify-between"><span>Flusso Operativo</span><Euro value={cf.operating} /></div>
               <div className="flex justify-between"><span>Investimenti</span><Euro value={cf.investing} /></div>
               <div className="flex justify-between"><span>Finanziamenti</span><Euro value={cf.financing} /></div>

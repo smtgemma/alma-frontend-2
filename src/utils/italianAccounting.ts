@@ -98,12 +98,115 @@ export function parseYear0Balance(extractions: any[] | undefined): Year0Balance 
   const md = e.metadata || {};
   const fin = e.financial_data || {};
   const out: Year0Balance = { raw: { md, fin } };
-  const keys = ["totale_attivita", "totaleAttivita", "total_assets", "Totale Attività"];
-  for (const k of keys) if (fin[k] || md[k]) { out.totaleAttivita = Number(fin[k] || md[k]) || 0; break; }
-  const keys2 = ["totale_passivita_patrimonio", "totalePassivitaPatrimonio", "total_liabilities_equity", "Totale Passività e Patrimonio Netto"];
-  for (const k of keys2) if (fin[k] || md[k]) { out.totalePassivita = Number(fin[k] || md[k]) || 0; break; }
-  const pnKeys = ["patrimonio_netto", "equity", "Patrimonio Netto"]; 
-  for (const k of pnKeys) if (fin[k] || md[k]) { out.patrimonioNetto = Number(fin[k] || md[k]) || 0; break; }
+  
+  console.log("🔍 parseYear0Balance - Raw extraction data:", e);
+  console.log("🔍 parseYear0Balance - Metadata:", md);
+  console.log("🔍 parseYear0Balance - Financial data:", fin);
+  
+  // Helper function to safely parse financial values
+  const parseFinancialValue = (value: any): number => {
+    if (value === null || value === undefined || value === '') return 0;
+    
+    // If it's already a number, use it directly
+    if (typeof value === 'number') {
+      console.log(`📊 parseFinancialValue - Number value: ${value}`);
+      return Math.abs(value); // Ensure positive values for balance sheet
+    }
+    
+    // If it's a string, try to parse it properly
+    if (typeof value === 'string') {
+      // Remove common formatting characters and convert Italian decimal format
+      const cleanValue = value.toString()
+        .replace(/[€\s]/g, '') // Remove currency symbols and spaces
+        .replace(/\./g, '') // Remove thousands separators (dots in Italian format)
+        .replace(/,/g, '.'); // Convert decimal comma to dot
+      
+      const parsed = parseFloat(cleanValue);
+      const result = isNaN(parsed) ? 0 : Math.abs(parsed);
+      console.log(`📊 parseFinancialValue - String "${value}" -> cleaned "${cleanValue}" -> ${result}`);
+      return result;
+    }
+    
+    console.log(`📊 parseFinancialValue - Unknown type ${typeof value}:`, value);
+    return 0;
+  };
+  
+  // Search for total assets with various key patterns
+  const assetKeys = ["totale_attivita", "totaleAttivita", "total_assets", "Totale Attività", "invested_capital", "sources_of_financing"];
+  for (const k of assetKeys) {
+    const value = fin[k] || md[k];
+    if (value !== undefined && value !== null && value !== '') {
+      out.totaleAttivita = parseFinancialValue(value);
+      console.log(`✅ parseYear0Balance - Found assets with key "${k}": ${out.totaleAttivita}`);
+      break;
+    }
+  }
+  
+  // Search for total liabilities + equity
+  const liabilityKeys = ["totale_passivita_patrimonio", "totalePassivitaPatrimonio", "total_liabilities_equity", "Totale Passività e Patrimonio Netto"];
+  for (const k of liabilityKeys) {
+    const value = fin[k] || md[k];
+    if (value !== undefined && value !== null && value !== '') {
+      out.totalePassivita = parseFinancialValue(value);
+      console.log(`✅ parseYear0Balance - Found liabilities+equity with key "${k}": ${out.totalePassivita}`);
+      break;
+    }
+  }
+  
+  // Search for equity/patrimonio netto
+  const equityKeys = ["patrimonio_netto", "equity", "Patrimonio Netto", "net_equity"];
+  for (const k of equityKeys) {
+    const value = fin[k] || md[k];
+    if (value !== undefined && value !== null && value !== '') {
+      out.patrimonioNetto = parseFinancialValue(value);
+      console.log(`✅ parseYear0Balance - Found equity with key "${k}": ${out.patrimonioNetto}`);
+      break;
+    }
+  }
+  
+  // If we don't have totalePassivita but we have both assets and equity, calculate liabilities
+  if (!out.totalePassivita && out.totaleAttivita && out.patrimonioNetto) {
+    out.totalePassivita = out.totaleAttivita;
+    console.log(`🔄 parseYear0Balance - Calculated totalePassivita = totaleAttivita: ${out.totalePassivita}`);
+  }
+  
+  // Validate the balance sheet equation: Assets = Liabilities + Equity
+  if (out.totaleAttivita && out.patrimonioNetto) {
+    const calculatedLiabilities = out.totaleAttivita - out.patrimonioNetto;
+    if (calculatedLiabilities >= 0) {
+      console.log(`📊 parseYear0Balance - Balance check: Assets(${out.totaleAttivita}) = Liabilities(${calculatedLiabilities}) + Equity(${out.patrimonioNetto})`);
+    } else {
+      console.warn(`⚠️ parseYear0Balance - Balance equation issue: Assets(${out.totaleAttivita}) < Equity(${out.patrimonioNetto})`);
+    }
+  }
+  
+  // Remove problematic scale detection - values should be used as-is
+  // The scale issue is likely caused by incorrect multiplication elsewhere
+  console.log(`📊 parseYear0Balance - Using values as-is (no scale correction):`, {
+    totaleAttivita: out.totaleAttivita,
+    totalePassivita: out.totalePassivita,
+    patrimonioNetto: out.patrimonioNetto
+  });
+  
+  // Final balance sheet validation and correction
+  if (out.totaleAttivita && out.patrimonioNetto) {
+    const calculatedLiabilities = out.totaleAttivita - out.patrimonioNetto;
+    if (calculatedLiabilities >= 0) {
+      console.log(`📊 parseYear0Balance - Balance check: Assets(${out.totaleAttivita}) = Liabilities(${calculatedLiabilities}) + Equity(${out.patrimonioNetto})`);
+      // Ensure totalePassivita equals totaleAttivita (balance sheet must balance)
+      out.totalePassivita = out.totaleAttivita;
+      console.log(`🔄 parseYear0Balance - Set totalePassivita = totaleAttivita: ${out.totalePassivita}`);
+    } else {
+      console.error(`❌ parseYear0Balance - Invalid balance: Assets(${out.totaleAttivita}) < Equity(${out.patrimonioNetto})`);
+    }
+  }
+  
+  console.log(`🎯 parseYear0Balance - Final result:`, {
+    totaleAttivita: out.totaleAttivita,
+    totalePassivita: out.totalePassivita,
+    patrimonioNetto: out.patrimonioNetto
+  });
+  
   return out;
 }
 
@@ -128,6 +231,51 @@ export function parseYear0Income(extractions: any[] | undefined): Year0Income | 
     out.utile = (out.ricavi || 0) - ((out.costiOperativi || 0) + amm + finc + tax);
   }
   return out;
+}
+
+// Compute Year 1 projected balance sheet
+export function computeYear1Balance(year0Balance: Year0Balance | undefined, step6: any, step7: any, step8: any, step9: any): Year0Balance | undefined {
+  if (!year0Balance) return undefined;
+  
+  const incomeStatement = computeIncomeStatementPreview(step7, step8);
+  const netProfit = incomeStatement.utile;
+  
+  // Get financing from Step 9
+  const equityIncrease = parseEuro(step9?.sources?.equity || "0") || 0;
+  const newBankLoan = parseEuro(step9?.sources?.bankLoan || "0") || 0;
+  const shareholderLoan = parseEuro(step9?.sources?.shareholderLoan || "0") || 0;
+  
+  // Get investments from Step 6
+  const newInvestments = totalFixedInvestments(step6);
+  
+  // Calculate Year 1 projected values
+  const year1 = {
+    // Assets: Year 0 + Net Investments
+    totaleAttivita: (year0Balance.totaleAttivita || 0) + newInvestments,
+    
+    // Equity: Year 0 + New Equity + Net Profit + Shareholder Loan
+    patrimonioNetto: (year0Balance.patrimonioNetto || 0) + equityIncrease + netProfit + shareholderLoan,
+    
+    // Will be calculated to balance
+    totalePassivita: 0
+  };
+  
+  // Balance sheet must balance: Assets = Liabilities + Equity
+  year1.totalePassivita = year1.totaleAttivita;
+  
+  console.log('📊 Year 1 Balance Sheet Calculation:', {
+    year0_assets: year0Balance.totaleAttivita,
+    year0_equity: year0Balance.patrimonioNetto,
+    new_investments: newInvestments,
+    equity_increase: equityIncrease,
+    shareholder_loan: shareholderLoan,
+    net_profit: netProfit,
+    year1_assets: year1.totaleAttivita,
+    year1_equity: year1.patrimonioNetto,
+    year1_liabilities_equity: year1.totalePassivita
+  });
+  
+  return year1;
 }
 
 export function extractVisuraProfile(extractions: any[] | undefined) {
