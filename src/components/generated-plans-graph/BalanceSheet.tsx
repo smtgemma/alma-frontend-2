@@ -393,8 +393,9 @@ export default function BalanceSheet({
                 ))}
               </tr>
             </thead>
+           
             <tbody>
-              {balanceSheet.map((item: any, index) => (
+              {balanceSheet?.map((item: any, index) => (
                 <tr
                   key={item.year}
                   className={index % 2 === 0 ? "bg-gray-50" : "bg-gray-50"}

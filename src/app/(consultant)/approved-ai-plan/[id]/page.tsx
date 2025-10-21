@@ -14,13 +14,12 @@ import FinancialAnalysis from "@/components/generated-plans-graph/FinancalAnalys
 import ProductionSalesForecast from "@/components/generated-plans-graph/ProductionSalesForecast";
 import RatiosAnalysis from "@/components/generated-plans-graph/RatiosAnalysis";
 import Image from "next/image";
-import Link from "next/link";
 import { toast } from "sonner";
 
 const ApprovedAiPlanPage = () => {
   const { id } = useParams();
   const { data: planInfo } = useGetSingleBusinessPlanQuery(id);
- 
+
   const [submitExpertReview, { isLoading: isSubmitting }] =
     useSubmitExpertReviewMutation();
   const [isRequestSubmitted, setIsRequestSubmitted] = useState(false);
@@ -269,10 +268,13 @@ const ApprovedAiPlanPage = () => {
           profitLossProjection={profitLossProjection}
           sectorStrategy={sectorStrategy}
         />
-        <BalanceSheet
-          balanceSheet={balanceSheet}
-          netFinancialPosition={netFinancialPosition}
-        />
+        {balanceSheet?.length > 0 && (
+          <BalanceSheet
+            balanceSheet={balanceSheet}
+            netFinancialPosition={netFinancialPosition}
+          />
+        )}
+
         <DebtDashboard debtStructure={debtStructure} />
         <FinancialAnalysis financialAnalysis={financialAnalysis} />
         <FinancialDashboard
