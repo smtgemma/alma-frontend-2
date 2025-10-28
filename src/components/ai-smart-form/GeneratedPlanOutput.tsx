@@ -86,13 +86,134 @@ export default function GeneratedPlanOutput({
   generatedAt, 
   onBack 
 }: GeneratedPlanOutputProps) {
-  const { getFormData } = useSmartForm();
+  const { getFormData, getAggregatedData } = useSmartForm();
   const step1 = getFormData('step1') as any;
+  const step2 = getFormData('step2') as any;
+  const step3 = getFormData('step3') as any;
+  const step4 = getFormData('step4') as any;
+  const step5 = getFormData('step5') as any;
+  const step6 = getFormData('step6') as any;
+  const step7 = getFormData('step7') as any;
+  const step8 = getFormData('step8') as any;
+  const step9 = getFormData('step9') as any;
+  const aggregatedData = getAggregatedData();
   console.log('=== GENERATED PLAN OUTPUT RENDERED ===');
   console.log('Plan content received:', planContent);
   console.log('Plan content length:', planContent?.length);
   console.log('Plan ID:', planId);
   console.log('Generated at:', generatedAt);
+  console.log('Form data:', { step1, step2, step3, step4, step5, step6, step7, step8, step9 });
+  
+  // Generate business plan content from form data
+  const generateBusinessOverview = () => {
+    const businessName = step1?.businessName || 'La nostra azienda';
+    const activity = step1?.activity || 'attività commerciale';
+    const location = step1?.location || 'il nostro territorio';
+    const productService = step2?.productService === 'Product' ? 'prodotti' : 'servizi';
+    const stage = step2?.businessStage || 'fase di sviluppo';
+    
+    return `${businessName} è un'azienda specializzata in ${activity}, operante in ${location}. 
+La nostra organizzazione si concentra sulla fornitura di ${productService} di alta qualità, posizionandosi attualmente nella ${stage}.
+
+La nostra missione è ${step4?.mission || 'fornire soluzioni innovative ai nostri clienti'}, mentre la nostra visione a lungo termine prevede ${step4?.longTermVision || 'una crescita sostenibile nel mercato di riferimento'}.
+
+I nostri obiettivi aziendali includono ${step4?.businessGoals || 'l\'espansione del business e il miglioramento continuo dei nostri servizi'}.`;
+  };
+  
+  const generateMarketAnalysis = () => {
+    const industry = step5?.industry || 'il nostro settore di riferimento';
+    const idealClient = step5?.idealClient || 'clienti target';
+    const marketingPlan = step5?.marketingPlan || 'strategie di marketing mirate';
+    
+    return `La nostra analisi di mercato si concentra su ${industry}, dove identifichiamo ${idealClient} come nostro target principale.
+
+La strategia di marketing prevede ${marketingPlan} per raggiungere efficacemente il nostro pubblico di riferimento.
+
+Il mercato presenta opportunità significative di crescita, e la nostra posizione competitiva ci permette di sfruttare al meglio queste opportunità attraverso la nostra proposta di valore unica.`;
+  };
+  
+  const generateBusinessModel = () => {
+    const deliveryMethod = step2?.deliveryMethod || 'canali di distribuzione ottimizzati';
+    const uniqueValue = step3?.uniqueValue || 'il nostro valore unico';
+    const valueAdd = step3?.valueAddSupport || 'supporto aggiuntivo ai clienti';
+    
+    return `Il nostro modello di business si basa su ${deliveryMethod} per garantire la migliore esperienza cliente.
+
+Ciò che ci distingue nel mercato è ${uniqueValue}, supportato da ${valueAdd} che aggiunge valore concreto per i nostri clienti.
+
+Il modello operativo è progettato per massimizzare l'efficienza e garantire la sostenibilità economica a lungo termine.`;
+  };
+  
+  const generateFundingSources = () => {
+    const ownEquity = formatCurrency(parseFloat(step9?.yourOwnEquity?.replace(/[^0-9.-]/g, '') || '0'));
+    const bankLoan = formatCurrency(parseFloat(step9?.bankingSystem?.replace(/[^0-9.-]/g, '') || '0'));
+    const otherInvestors = formatCurrency(parseFloat(step9?.otherInvestors?.replace(/[^0-9.-]/g, '') || '0'));
+    
+    return `Le fonti di finanziamento per il progetto includono:\n
+• Capitale proprio: ${ownEquity}\n• Finanziamento bancario: ${bankLoan}\n• Altri investitori: ${otherInvestors}
+
+Questa diversificazione delle fonti di finanziamento garantisce una struttura finanziaria solida e sostenibile per lo sviluppo del business.`;
+  };
+  
+  const generateExecutiveSummary = () => {
+    const businessName = step1?.businessName || 'La nostra azienda';
+    const activity = step1?.activity || 'attività commerciale';
+    const expectedRevenue = step7?.revenueStreams?.reduce((total: number, stream: any) => total + parseFloat(stream.amount?.replace(/[^0-9.-]/g, '') || '0'), 0) || 0;
+    
+    return `${businessName} rappresenta un'opportunità di business innovativa nel settore ${activity}.
+
+Con ricavi previsti di ${formatCurrency(expectedRevenue)} per il primo anno, l'azienda si posiziona strategicamente per catturare quote di mercato significative.
+
+Il piano finanziario robusto e la strategia di mercato ben definita supportano una crescita sostenibile e profittevole nel medio-lungo termine.`;
+  };
+  
+  // Generate financial data from form inputs
+  const generateFormBasedFinancialData = () => {
+    const expectedRevenue = step7?.revenueStreams?.reduce((total: number, stream: any) => 
+      total + parseFloat(stream.amount?.replace(/[^0-9.-]/g, '') || '0'), 0
+    ) || 0;
+    
+    const operatingCosts = step8?.operatingCostItems?.reduce((total: number, item: any) => 
+      total + parseFloat(item.totalCost?.replace(/[^0-9.-]/g, '') || '0'), 0
+    ) || 0;
+    
+    const netIncome = expectedRevenue - operatingCosts;
+    
+    // Generate basic financial highlights
+    const financialHighlights: FinancialData[] = [
+      {
+        year: 1,
+        revenue: expectedRevenue,
+        net_income: netIncome,
+        capex: step6?.fixedInvestments?.reduce((total: number, inv: any) => 
+          total + parseFloat(inv.amount?.replace(/[^0-9.-]/g, '') || '0'), 0
+        ) || 0,
+        debt_repayment: 0
+      }
+    ];
+    
+    // Generate investment breakdown
+    const investmentBreakdown: FinancialData[] = step6?.fixedInvestments
+      ?.filter((inv: any) => inv.amount && parseFloat(inv.amount.replace(/[^0-9.-]/g, '') || '0') > 0)
+      ?.map((inv: any, index: number) => ({
+        year: index,
+        assets: parseFloat(inv.amount.replace(/[^0-9.-]/g, '') || '0'),
+        // Add investment category as a property that can be displayed
+        ...(inv.label && { category: inv.label })
+      })) || [];
+    
+    return {
+      financial_highlights: financialHighlights,
+      investment_breakdown: investmentBreakdown,
+      funding_summary: {
+        own_equity: parseFloat(step9?.yourOwnEquity?.replace(/[^0-9.-]/g, '') || '0'),
+        bank_loan: parseFloat(step9?.bankingSystem?.replace(/[^0-9.-]/g, '') || '0'),
+        other_investors: parseFloat(step9?.otherInvestors?.replace(/[^0-9.-]/g, '') || '0')
+      }
+    };
+  };
+  
+  const formFinancialData = generateFormBasedFinancialData();
   
   // Add a visual indicator if content is empty
   if (!planContent || planContent.trim() === '') {
@@ -304,22 +425,68 @@ export default function GeneratedPlanOutput({
             </div>
           )}
           {/* Executive Summary */}
-          {renderTextSection('Executive Summary', businessPlanData?.executive_summary)}
+          {renderTextSection('Executive Summary', businessPlanData?.executive_summary || generateExecutiveSummary())}
 
           {/* Business Overview */}
-          {renderTextSection('Business Overview', businessPlanData?.business_overview)}
+          {renderTextSection('Business Overview', businessPlanData?.business_overview || generateBusinessOverview())}
 
           {/* Market Analysis */}
-          {renderTextSection('Market Analysis', businessPlanData?.market_analysis)}
+          {renderTextSection('Market Analysis', businessPlanData?.market_analysis || generateMarketAnalysis())}
 
           {/* Business Model */}
-          {renderTextSection('Business Model', businessPlanData?.business_model)}
+          {renderTextSection('Business Model', businessPlanData?.business_model || generateBusinessModel())}
 
           {/* Marketing and Sales Strategy */}
-          {renderTextSection('Marketing and Sales Strategy', businessPlanData?.marketing_and_sales_strategy)}
+          {renderTextSection('Marketing and Sales Strategy', businessPlanData?.marketing_and_sales_strategy || generateMarketAnalysis())}
 
           {/* Financial Highlights */}
-          {renderFinancialTable(businessPlanData?.financial_highlights, 'Financial Highlights', ['Revenue', 'Net Income', 'Capex', 'Debt Repayment'])}
+          {renderFinancialTable(
+            businessPlanData?.financial_highlights || formFinancialData.financial_highlights, 
+            'Evidenze Finanziarie (Financial Highlights)', 
+            ['Revenue', 'Net Income', 'Capex', 'Debt Repayment']
+          )}
+          
+          {/* Investment Breakdown (from form data) */}
+          {formFinancialData.investment_breakdown.length > 0 && (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Dettaglio Investimenti</h3>
+              <div className="space-y-3">
+                {formFinancialData.investment_breakdown.map((inv: any, index: number) => (
+                  <div key={index} className="flex justify-between items-center p-3 border-b border-gray-100">
+                    <span className="text-gray-700 font-medium">{(inv as any).category || `Investimento ${index + 1}`}</span>
+                    <span className="text-gray-900 font-semibold">{formatCurrency(inv.assets || 0)}</span>
+                  </div>
+                ))}
+                <div className="flex justify-between items-center p-3 font-bold text-lg border-t-2 border-gray-300">
+                  <span>Totale Investimenti</span>
+                  <span>{formatCurrency(formFinancialData.investment_breakdown.reduce((sum: number, inv: any) => sum + (inv.assets || 0), 0))}</span>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Funding Summary (from form data) */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Riepilogo Finanziamenti</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center p-3 border-b border-gray-100">
+                <span className="text-gray-700 font-medium">Capitale Proprio</span>
+                <span className="text-gray-900 font-semibold">{formatCurrency(formFinancialData.funding_summary.own_equity)}</span>
+              </div>
+              <div className="flex justify-between items-center p-3 border-b border-gray-100">
+                <span className="text-gray-700 font-medium">Finanziamento Bancario</span>
+                <span className="text-gray-900 font-semibold">{formatCurrency(formFinancialData.funding_summary.bank_loan)}</span>
+              </div>
+              <div className="flex justify-between items-center p-3 border-b border-gray-100">
+                <span className="text-gray-700 font-medium">Altri Investitori</span>
+                <span className="text-gray-900 font-semibold">{formatCurrency(formFinancialData.funding_summary.other_investors)}</span>
+              </div>
+              <div className="flex justify-between items-center p-3 font-bold text-lg border-t-2 border-gray-300">
+                <span>Totale Finanziamenti</span>
+                <span>{formatCurrency(formFinancialData.funding_summary.own_equity + formFinancialData.funding_summary.bank_loan + formFinancialData.funding_summary.other_investors)}</span>
+              </div>
+            </div>
+          </div>
 
           {/* Cash Flow Analysis */}
           {renderFinancialTable(businessPlanData?.cash_flow_analysis, 'Cash Flow Analysis', ['Operating', 'Investing', 'Financing', 'Net Cash'])}
@@ -346,7 +513,7 @@ export default function GeneratedPlanOutput({
           {/* {renderTextSection('Sector Strategy', businessPlanData?.sector_strategy)} */}
 
           {/* Funding Sources */}
-          {renderTextSection('Funding Sources', businessPlanData?.funding_sources)}
+          {renderTextSection('Fonti di Finanziamento', businessPlanData?.funding_sources || generateFundingSources())}
 
           {/* Operations Plan */}
           {/* {renderTextSection('Operations Plan', businessPlanData?.operations_plan)} */}
@@ -367,14 +534,70 @@ export default function GeneratedPlanOutput({
             type="button"
             onClick={() => {
               console.log('=== DOWNLOAD BUTTON CLICKED ===');
-              console.log('Plan content to download:', planContent);
-              console.log('Plan content length:', planContent?.length);
               
-              const blob = new Blob([planContent || ''], { type: 'text/plain' });
+              // Generate comprehensive business plan content
+              const businessPlanText = `
+🏢 PIANO AZIENDALE - ${step1?.businessName || 'Business Plan'}
+${'='.repeat(60)}
+
+Generato il: ${new Date().toLocaleDateString('it-IT')}
+ID Piano: ${planId || 'N/A'}
+
+📋 SOMMARIO ESECUTIVO
+${'='.repeat(60)}
+${generateExecutiveSummary()}
+
+🏢 PANORAMICA AZIENDALE  
+${'='.repeat(60)}
+${generateBusinessOverview()}
+
+📊 ANALISI DI MERCATO
+${'='.repeat(60)}
+${generateMarketAnalysis()}
+
+💼 MODELLO DI BUSINESS
+${'='.repeat(60)}
+${generateBusinessModel()}
+
+💰 FONTI DI FINANZIAMENTO
+${'='.repeat(60)}
+${generateFundingSources()}
+
+📈 DATI FINANZIARI
+${'='.repeat(60)}
+Ricavi Previsti Anno 1: ${formatCurrency(formFinancialData.financial_highlights[0]?.revenue || 0)}
+Utile Netto Anno 1: ${formatCurrency(formFinancialData.financial_highlights[0]?.net_income || 0)}
+Investimenti Totali: ${formatCurrency(formFinancialData.investment_breakdown.reduce((sum: number, inv: any) => sum + (inv.assets || 0), 0))}
+
+💼 DETTAGLIO INVESTIMENTI
+${'='.repeat(60)}
+${formFinancialData.investment_breakdown.map((inv: any, index: number) => 
+  `• ${(inv as any).category || `Investimento ${index + 1}`}: ${formatCurrency(inv.assets || 0)}`
+).join('\n')}
+
+🏦 RIEPILOGO FINANZIAMENTI
+${'='.repeat(60)}
+• Capitale Proprio: ${formatCurrency(formFinancialData.funding_summary.own_equity)}
+• Finanziamento Bancario: ${formatCurrency(formFinancialData.funding_summary.bank_loan)}
+• Altri Investitori: ${formatCurrency(formFinancialData.funding_summary.other_investors)}
+• Totale Finanziamenti: ${formatCurrency(formFinancialData.funding_summary.own_equity + formFinancialData.funding_summary.bank_loan + formFinancialData.funding_summary.other_investors)}
+
+📊 DATI MODULO
+${'='.repeat(60)}
+${aggregatedData.user_input.map(input => `${input.question}: ${input.answer}`).join('\n')}
+
+${'='.repeat(60)}
+Piano generato da: AI Smart Form
+Data: ${new Date().toISOString()}
+              `;
+              
+              console.log('Generated business plan content:', businessPlanText);
+              
+              const blob = new Blob([businessPlanText], { type: 'text/plain; charset=utf-8' });
               const url = window.URL.createObjectURL(blob);
               const a = document.createElement('a');
               a.href = url;
-              a.download = `business-plan-${planId || Date.now()}.txt`;
+              a.download = `piano-aziendale-${step1?.businessName?.replace(/[^a-zA-Z0-9]/g, '-') || 'business-plan'}-${Date.now()}.txt`;
               document.body.appendChild(a);
               a.click();
               window.URL.revokeObjectURL(url);
@@ -382,7 +605,7 @@ export default function GeneratedPlanOutput({
             }}
             className="px-6 py-3 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors"
           >
-            Download Plan
+            Scarica Piano
           </button>
           <button
             type="button"

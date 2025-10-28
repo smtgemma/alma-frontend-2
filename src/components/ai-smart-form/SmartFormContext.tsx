@@ -248,6 +248,45 @@ export interface SmartFormData {
   step10: {}; // Review Plan - no form data
 }
 
+// Business plan API response interface
+interface BusinessPlanApiResponse {
+  success: boolean;
+  data: {
+    id: string;
+    userId: string;
+    fundingSources?: {
+      initialInvestment: number;
+      fromHome: number;
+      bankLoan: number;
+      totalInvestment: number;
+      fixedInvestments?: Array<{
+        key: string;
+        label: string;
+        amortizationRate: number;
+        category: string;
+        amount: number;
+        annualAmortization: number;
+      }>;
+    };
+    user_input: {
+      uploaded_file?: Array<{
+        text_content: string;
+        page_count: number;
+        metadata: Record<string, any>;
+        financial_data: any;
+        document_type: string;
+      }>;
+      user_input: Array<{
+        question: string;
+        answer: string;
+      }>;
+      language: string;
+      currency: string;
+    };
+    [key: string]: any;
+  };
+}
+
 type StepContextType = {
   currentStep: number;
   formData: SmartFormData;
@@ -276,6 +315,8 @@ type StepContextType = {
   getAggregatedData: () => AggregatedFormData;
   logFormData: () => void;
   exportFormDataAsJSON: () => string;
+  loadBusinessPlanData: (apiResponse: BusinessPlanApiResponse) => void;
+  resetFormData: () => void;
 };
 
 const SmartFormContext = createContext<StepContextType | undefined>(undefined);
@@ -629,6 +670,163 @@ step7: {
   step10: {},
 });
 
+// Function to map API response to form data structure
+const mapBusinessPlanToFormData = (apiResponse: BusinessPlanApiResponse): Partial<SmartFormData> => {
+  const { data } = apiResponse;
+  const userInputs = data.user_input?.user_input || [];
+  const uploadedFiles = data.user_input?.uploaded_file || [];
+  
+  // Helper function to find answer by question
+  const findAnswer = (questionKeyword: string): string => {
+    const input = userInputs.find(item => 
+      item.question.toLowerCase().includes(questionKeyword.toLowerCase())
+    );
+    return input?.answer || "";
+  };
+  
+  // Helper function to parse selected options from comma-separated string
+  const parseSelectedOptions = (answer: string): string[] => {
+    return answer ? answer.split(',').map(s => s.trim()).filter(s => s) : [];
+  };
+  
+  // Helper function to parse fixed investments from answer string
+  const parseFixedInvestments = (answer: string) => {
+    const investments = getDefaultFormData().step6.fixedInvestments || [];
+    if (!answer) return investments;
+    
+    const parts = answer.split(',');
+    const updatedInvestments = [...investments];
+    
+    parts.forEach(part => {
+      const [label, amountStr] = part.split(':');
+      if (label && amountStr) {
+        const cleanLabel = label.trim();
+        const amount = amountStr.trim();
+        const investmentIndex = updatedInvestments.findIndex(inv => 
+          inv.label.toLowerCase().includes(cleanLabel.toLowerCase()) ||
+          cleanLabel.toLowerCase().includes(inv.label.toLowerCase())
+        );
+        if (investmentIndex >= 0) {
+          updatedInvestments[investmentIndex].amount = amount;
+        }
+      }
+    });
+    
+    return updatedInvestments;
+  };
+  
+  // Helper function to parse revenue streams
+  const parseRevenueStreams = (answer: string): RevenueStream[] => {
+    if (!answer) return getDefaultFormData().step7.revenueStreams || [];
+    
+    const parts = answer.split(',');
+    const streams: RevenueStream[] = [];
+    
+    parts.forEach((part, index) => {
+      const [name, amount] = part.split(':');
+      if (name && amount) {
+        streams.push({
+          id: (index + 1).toString(),
+          name: name.trim(),
+          description: "",
+          amount: amount.trim()
+        });
+      }
+    });
+    
+    return streams.length > 0 ? streams : getDefaultFormData().step7.revenueStreams || [];
+  };
+  
+  // Map the data
+  const formData: Partial<SmartFormData> = {
+    step1: {
+      ...getDefaultFormData().step1,
+      businessName: findAnswer("business name"),
+      businessType: findAnswer("business type") === "existing" ? "existing" : "new",
+      location: findAnswer("state") || findAnswer("city") || findAnswer("located"),
+      activity: findAnswer("describe your activity") || findAnswer("activity"),
+      totalEmployees: findAnswer("total employees") || findAnswer("employees"),
+      website: findAnswer("website") || findAnswer("online presence"),
+      businessStage: findAnswer("stage") || findAnswer("currently in"),
+      sourceLanguage: data.user_input?.language || "Italiano",
+      targetLanguage: data.user_input?.currency === "Euro" ? "Euro" : "Euro",
+      // Map uploaded files
+      balanceSheetExtractions: uploadedFiles.filter(f => f.document_type === "balance_sheet"),
+      visuraCameraleExtractions: uploadedFiles.filter(f => f.document_type === "visura_camerale"),
+    },
+    step2: {
+      ...getDefaultFormData().step2,
+      businessStage: findAnswer("stage") || findAnswer("currently in"),
+      productService: findAnswer("product or service") === "Product" ? "Product" : "Service",
+      selectedProductCategory: findAnswer("product category"),
+      selectedServiceCategory: findAnswer("service category"),
+      deliveryMethod: findAnswer("deliver") || findAnswer("delivery"),
+      selectedProductCategoriesOptions: parseSelectedOptions(findAnswer("ProductCategories selected")),
+      selectedServiceCategoriesOptions: parseSelectedOptions(findAnswer("ServiceCategories selected")),
+    },
+    step3: {
+      ...getDefaultFormData().step3,
+      uniqueValue: findAnswer("unique") || findAnswer("makes your"),
+      valueAddSupport: findAnswer("value add") || findAnswer("support"),
+      selectedUniqueOptions: parseSelectedOptions(findAnswer("Unique selected")),
+      selectedValueAddOptions: parseSelectedOptions(findAnswer("ValueAdd selected")),
+      companyOwnership: findAnswer("own any inventions") || findAnswer("digital assets"),
+    },
+    step4: {
+      ...getDefaultFormData().step4,
+      businessGoals: findAnswer("business goals"),
+      businessGoalsDescription: findAnswer("Business goals description"),
+      mission: findAnswer("mission"),
+      missionDescription: findAnswer("Mission description"),
+      operationalArea: findAnswer("operational area") || findAnswer("primary operational"),
+      selectedBusinessGoalsOptions: parseSelectedOptions(findAnswer("BusinessGoals selected")),
+      selectedMissionOptions: parseSelectedOptions(findAnswer("Mission selected")),
+    },
+    step5: {
+      ...getDefaultFormData().step5,
+      industry: findAnswer("industry") || findAnswer("business belong"),
+      idealClient: findAnswer("ideal client") || findAnswer("target customer"),
+      marketingPlan: findAnswer("reach them") || findAnswer("marketing plan"),
+      selectedIndustryOptions: parseSelectedOptions(findAnswer("Industry selected")),
+      selectedIdealClientOptions: parseSelectedOptions(findAnswer("IdealClient selected")),
+      selectedMarketingPlanOptions: parseSelectedOptions(findAnswer("MarketingPlan selected")),
+    },
+    step6: {
+      ...getDefaultFormData().step6,
+      initialInvestment: findAnswer("initial investment") || data.fundingSources?.initialInvestment?.toString() || "",
+      fixedInvestments: data.fundingSources?.fixedInvestments?.map(inv => ({
+        key: inv.key,
+        label: inv.label,
+        amount: inv.amount.toString(),
+        amortizationRate: inv.amortizationRate
+      })) || parseFixedInvestments(findAnswer("fixed investments")),
+    },
+    step7: {
+      ...getDefaultFormData().step7,
+      growthProjection: findAnswer("growth percentage") || findAnswer("expected growth"),
+      growthPercent: findAnswer("growth percentage") || findAnswer("expected growth"),
+      revenueStreams: parseRevenueStreams(findAnswer("revenue by product") || findAnswer("first-year revenue")),
+      immediateCollectionPercent: findAnswer("immediate collection"),
+      collection60DaysPercent: findAnswer("60 days"),
+      collection90DaysPercent: findAnswer("90 days"),
+    },
+    step8: {
+      ...getDefaultFormData().step8,
+      firstYearTotalCost: findAnswer("total cost") || findAnswer("first year total cost"),
+      firstYearNetProfit: findAnswer("net profit") || findAnswer("first year net profit"),
+      netProfitMargin: findAnswer("profit margin") || findAnswer("net profit margin"),
+    },
+    step9: {
+      ...getDefaultFormData().step9,
+      yourOwnEquity: findAnswer("your own equity") || findAnswer("equity") || data.fundingSources?.fromHome?.toString() || "",
+      bankingSystem: findAnswer("banking system") || findAnswer("bank loan") || data.fundingSources?.bankLoan?.toString() || "",
+      otherInvestors: findAnswer("other investors") || "",
+    },
+  };
+  
+  return formData;
+};
+
 export const SmartFormProvider = ({ children }: { children: ReactNode }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<SmartFormData>(getDefaultFormData());
@@ -733,6 +931,38 @@ export const SmartFormProvider = ({ children }: { children: ReactNode }) => {
     return JSON.stringify(aggregated, null, 2);
   }, [formData]);
 
+  const loadBusinessPlanData = useCallback((apiResponse: BusinessPlanApiResponse) => {
+    console.log('📊 Loading business plan data:', apiResponse);
+    const mappedData = mapBusinessPlanToFormData(apiResponse);
+    
+    setFormData(prevData => {
+      const newData = { ...prevData };
+      
+      // Merge each step's data
+      Object.entries(mappedData).forEach(([stepKey, stepData]) => {
+        if (stepData && newData[stepKey as keyof SmartFormData]) {
+          newData[stepKey as keyof SmartFormData] = {
+            ...newData[stepKey as keyof SmartFormData],
+            ...stepData
+          } as any;
+        }
+      });
+      
+      console.log('✅ Form data updated with business plan data:', newData);
+      return newData;
+    });
+    
+    // Clear any existing errors
+    setErrors({});
+  }, []);
+
+  const resetFormData = useCallback(() => {
+    console.log('🔄 Resetting form data to defaults');
+    setFormData(getDefaultFormData());
+    setErrors({});
+    setCurrentStep(0);
+  }, []);
+
   return (
     <SmartFormContext.Provider
       value={{
@@ -754,6 +984,8 @@ export const SmartFormProvider = ({ children }: { children: ReactNode }) => {
         getAggregatedData,
         logFormData,
         exportFormDataAsJSON,
+        loadBusinessPlanData,
+        resetFormData,
       }}
     >
       {children}

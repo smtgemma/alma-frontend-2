@@ -149,7 +149,66 @@ const GeneratedPlanForAdminPage = () => {
     subscriptionType = "",
     updatedAt = "",
     userId = "",
+    user_input = null, // Add user_input data extraction
   } = planInfo?.data || {}; // default to empty object if `data` is undefined
+  
+  // Generate enhanced content from user_input data when available
+  const generateEnhancedContent = () => {
+    if (!user_input?.user_input) return null;
+    
+    const userInputs = user_input.user_input;
+    const findAnswer = (questionKeyword: string): string => {
+      const input = userInputs.find((item: any) => 
+        item.question.toLowerCase().includes(questionKeyword.toLowerCase())
+      );
+      return input?.answer || "";
+    };
+    
+    const businessName = findAnswer("business name") || "La nostra azienda";
+    const activity = findAnswer("activity") || "attività commerciale";
+    const location = findAnswer("state") || findAnswer("city") || findAnswer("located");
+    const stage = findAnswer("stage") || findAnswer("currently in");
+    const industry = findAnswer("industry") || "settore di riferimento";
+    const uniqueValue = findAnswer("unique") || findAnswer("makes your");
+    const mission = findAnswer("mission");
+    const businessGoals = findAnswer("business goals");
+    
+    // Enhanced executive summary from form data
+    const enhancedExecutiveSummary = `${businessName} rappresenta un'opportunità di business innovativa nel settore ${activity}${location ? `, operante in ${location}` : ''}.
+
+${stage ? `L'azienda si trova attualmente nella fase: ${stage}.` : ''}
+
+${uniqueValue ? `Ciò che ci distingue nel mercato è ${uniqueValue}.` : ''}
+
+${industry ? `Operiamo nel settore ${industry}, ` : ''}con un approccio strategico mirato alla crescita sostenibile e alla creazione di valore per i nostri stakeholder.`;
+    
+    // Enhanced business overview
+    const enhancedBusinessOverview = `${businessName} è un'azienda specializzata in ${activity}${location ? `, con sede in ${location}` : ''}.
+
+${mission ? `La nostra missione è ${mission}.` : ''}
+
+${businessGoals ? `I nostri principali obiettivi aziendali includono: ${businessGoals}.` : ''}
+
+La nostra organizzazione è strutturata per fornire soluzioni di alta qualità, mantenendo sempre al centro le esigenze dei clienti e la sostenibilità del business.`;
+    
+    // Enhanced market analysis
+    const enhancedMarketAnalysis = `${industry ? `La nostra analisi di mercato si concentra sul settore ${industry}.` : 'La nostra analisi di mercato evidenzia opportunità significative nel nostro settore di riferimento.'}
+
+${findAnswer("ideal client") ? `Il nostro target principale è rappresentato da: ${findAnswer("ideal client")}.` : ''}
+
+${findAnswer("marketing plan") || findAnswer("reach them") ? `La strategia di marketing prevede: ${findAnswer("marketing plan") || findAnswer("reach them")}.` : ''}
+
+Il mercato presenta opportunità di crescita che intendiamo sfruttare attraverso la nostra proposta di valore unica e un approccio customer-centric.`;
+    
+    return {
+      enhancedExecutiveSummary,
+      enhancedBusinessOverview, 
+      enhancedMarketAnalysis,
+      userInputs
+    };
+  };
+  
+  const enhancedContent = generateEnhancedContent();
 
   // Map cashFlowAnalysisData to cashFlowAnalysis for compatibility
   const cashFlowAnalysisArray = cashFlowAnalysisData || [];
@@ -328,9 +387,9 @@ const GeneratedPlanForAdminPage = () => {
           </div>
         </header>
         <GeneratedBusinessPlanforAdmin
-          executiveSummary={executiveSummary}
-          businessOverview={businessOverview}
-          marketAnalysis={marketAnalysis}
+          executiveSummary={enhancedContent?.enhancedExecutiveSummary || executiveSummary}
+          businessOverview={enhancedContent?.enhancedBusinessOverview || businessOverview}
+          marketAnalysis={enhancedContent?.enhancedMarketAnalysis || marketAnalysis}
           businessModel={businessModel}
           marketingSalesStrategy={marketingSalesStrategy}
           sectorStrategy={sectorStrategy}
@@ -338,6 +397,7 @@ const GeneratedPlanForAdminPage = () => {
           operationsPlan={operationsPlan}
           managementTeam={managementTeam}
           planId={planId}
+          // userInputData={enhancedContent?.userInputs} // Pass user input data
           onPlanUpdate={(updatedData) => {
             // Handle plan update if needed
             console.log("Plan updated:", updatedData);

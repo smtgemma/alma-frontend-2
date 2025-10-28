@@ -36,11 +36,14 @@ const steps = [
 
 const StepContent = () => {
   const searchParams = useSearchParams();
-  const { currentStep, generatedPlan, setGeneratedPlan, goToStep } = useSmartForm();
+  const { currentStep, generatedPlan, setGeneratedPlan, goToStep, loadBusinessPlanData } = useSmartForm();
   
-  // Handle URL step parameter on mount
+  // Handle URL step parameter and business plan ID on mount
   useEffect(() => {
     const stepParam = searchParams.get('step');
+    const planIdParam = searchParams.get('planId');
+    
+    // Handle step navigation
     if (stepParam) {
       const stepNumber = parseInt(stepParam, 10);
       // Convert to 0-based index (URL uses 1-based, internal uses 0-based)
@@ -48,7 +51,32 @@ const StepContent = () => {
         goToStep(stepNumber - 1);
       }
     }
-  }, [searchParams, goToStep]);
+    
+    // Handle business plan loading
+    if (planIdParam) {
+      console.log('📋 Loading business plan with ID:', planIdParam);
+      loadBusinessPlanFromId(planIdParam);
+    }
+  }, [searchParams, goToStep, loadBusinessPlanData]);
+  
+  // Function to load business plan from API
+  const loadBusinessPlanFromId = async (planId: string) => {
+    try {
+      console.log('🔄 Fetching business plan data...');
+      // You'll need to replace this URL with your actual API endpoint
+      const response = await fetch(`/api/business-plans/${planId}`);
+      
+      if (response.ok) {
+        const businessPlanData = await response.json();
+        console.log('✅ Business plan data received:', businessPlanData);
+        loadBusinessPlanData(businessPlanData);
+      } else {
+        console.error('❌ Failed to load business plan:', response.statusText);
+      }
+    } catch (error) {
+      console.error('❌ Error loading business plan:', error);
+    }
+  };
   
   
   

@@ -300,7 +300,7 @@ const GeneratedBusinessPlanforAdmin = ({
                             Investment Amount:
                           </h3>
                           <p className="text-gray-700 text-base">
-                          €{cleanData.fromHome.toLocaleString()}
+                            €{cleanData.fromHome.toLocaleString()}
                           </p>
                         </div>
                       )}
@@ -318,7 +318,6 @@ const GeneratedBusinessPlanforAdmin = ({
           </div>
         </div>
       </main>
-
     </div>
   );
 };
