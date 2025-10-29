@@ -989,25 +989,32 @@ export default function S8OperatingCost() {
                             {item.showTooltip && (
                               <>
                                 {/* Invisible overlay to detect clicks outside */}
-                                <div 
+                                <div
                                   className="fixed inset-0 z-40"
                                   onClick={() => {
                                     setForm((prev) => ({
                                       ...prev,
-                                      operatingCostItems: prev.operatingCostItems.map((tooltipItem) => ({
-                                        ...tooltipItem,
-                                        showTooltip: false,
-                                      }))
+                                      operatingCostItems:
+                                        prev.operatingCostItems.map(
+                                          (tooltipItem) => ({
+                                            ...tooltipItem,
+                                            showTooltip: false,
+                                          })
+                                        ),
                                     }));
                                   }}
                                 />
                                 {/* Tooltip popup with smart positioning */}
-                                <div className={`absolute z-50 p-4 bg-white border border-gray-300 rounded-lg shadow-lg max-w-md w-80 text-sm text-gray-700 ${
-                                  // Check if this is one of the last items that might be cut off
-                                  ['interest', 'tax', 'other'].includes(item.id)
-                                    ? 'bottom-8 right-0' // Position above and to the right for last items
-                                    : 'top-8 left-0' // Position below and to the left for first items
-                                }`}>
+                                <div
+                                  className={`absolute z-50 p-4 bg-white border border-gray-300 rounded-lg shadow-lg max-w-md w-80 text-sm text-gray-700 ${
+                                    // Check if this is one of the last items that might be cut off
+                                    ["interest", "tax", "other"].includes(
+                                      item.id
+                                    )
+                                      ? "bottom-8 right-0" // Position above and to the right for last items
+                                      : "top-8 left-0" // Position below and to the left for first items
+                                  }`}
+                                >
                                   <div className="flex justify-between items-start mb-2">
                                     <h4 className="font-semibold text-accent text-base">
                                       {item.name}
@@ -1017,10 +1024,13 @@ export default function S8OperatingCost() {
                                       onClick={() => {
                                         setForm((prev) => ({
                                           ...prev,
-                                          operatingCostItems: prev.operatingCostItems.map((tooltipItem) => ({
-                                            ...tooltipItem,
-                                            showTooltip: false,
-                                          }))
+                                          operatingCostItems:
+                                            prev.operatingCostItems.map(
+                                              (tooltipItem) => ({
+                                                ...tooltipItem,
+                                                showTooltip: false,
+                                              })
+                                            ),
                                         }));
                                       }}
                                       className="text-gray-400 hover:text-gray-600 text-lg leading-none ml-2"
@@ -1037,11 +1047,15 @@ export default function S8OperatingCost() {
                                       ).join(", ")}`}
                                   </p>
                                   {/* Tooltip arrow - adjust position based on tooltip placement */}
-                                  <div className={`absolute w-0 h-0 ${
-                                    ['interest', 'tax', 'other'].includes(item.id)
-                                      ? 'top-4 -right-2 border-l-4 border-t-4 border-b-4 border-t-transparent border-b-transparent border-l-white' // Arrow pointing right when tooltip is above and to the right
-                                      : 'bottom-4 -left-2 border-r-4 border-t-4 border-b-4 border-t-transparent border-b-transparent border-r-white' // Arrow pointing left when tooltip is below and to the left
-                                  }`}></div>
+                                  <div
+                                    className={`absolute w-0 h-0 ${
+                                      ["interest", "tax", "other"].includes(
+                                        item.id
+                                      )
+                                        ? "top-4 -right-2 border-l-4 border-t-4 border-b-4 border-t-transparent border-b-transparent border-l-white" // Arrow pointing right when tooltip is above and to the right
+                                        : "bottom-4 -left-2 border-r-4 border-t-4 border-b-4 border-t-transparent border-b-transparent border-r-white" // Arrow pointing left when tooltip is below and to the left
+                                    }`}
+                                  ></div>
                                 </div>
                               </>
                             )}
@@ -1086,7 +1100,6 @@ export default function S8OperatingCost() {
                   </table>
                 </div>
 
-
                 {/* Supplier Payments Section */}
                 <div className="mt-12 space-y-6 border-t border-gray-200 pt-8">
                   <div>
@@ -1094,15 +1107,15 @@ export default function S8OperatingCost() {
                       Pagamenti Fornitori (Debiti vs. Fornitori)
                     </h3>
                     <p className="text-sm text-gray-600 mb-6">
-                      Indica come incassi i tuoi ricavi per calcolare l'impatto
-                      sui debiti verso fornitori
+                      Indica come paghi i tuoi costi per calcolare l'impatto sui
+                      debiti verso fornitori.
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="flex flex-col">
-                      <label className="block text-[1rem] font-medium text-accent mb-2 min-h-[3rem] flex items-start">
-                        Che percentuale dei tuoi ricavi viene incassata
+                      <label className="text-[1rem] font-medium text-accent mb-2 min-h-[3rem] flex items-start">
+                        Che percentuale dei tuoi costi viene pagata
                         immediatamente (contanti o entro 30 giorni)?
                       </label>
                       <input
