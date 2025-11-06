@@ -28,6 +28,10 @@ interface ProfitLossProjection {
   interest: number;
   taxes: number;
   net_income: number;
+  // Italian/alternate backend fields (optional)
+  ricavi_vendite_prestazioni?: number;
+  valore_produzione_operativa?: number;
+  risultato_netto?: number;
 }
 
 interface BalanceSheet {
@@ -206,6 +210,7 @@ export interface IMarketing {
 export interface IBalanceSheet {
   balanceSheet: BalanceSheet[];
   netFinancialPosition: NetFinancialPosition[];
+  balanceSheetAnalysis?: string;
 }
 
 export interface IDebt {

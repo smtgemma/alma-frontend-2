@@ -120,18 +120,12 @@ const extractBalanceSheetComponents = (item: any) => {
 export default function BalanceSheet({
   balanceSheet,
   netFinancialPosition,
+  balanceSheetAnalysis,
 }: IBalanceSheet) {
   // Debug: Log the incoming data and test extraction (only once)
   if (balanceSheet?.length > 0) {
-    console.log('📊 BalanceSheet received:', balanceSheet?.length, 'items');
-    console.log('📊 Available keys in first item:', Object.keys(balanceSheet[0]));
-    console.log('📊 Sample data values:', {
-      invested_capital: balanceSheet[0].invested_capital,
-      net_equity: balanceSheet[0].net_equity,
-      net_financial_debt: balanceSheet[0].net_financial_debt,
-      net_fixed_assets: balanceSheet[0].net_fixed_assets,
-      cash_and_banks: balanceSheet[0].cash_and_banks
-    });
+    console.log("📊 BalanceSheet received:", balanceSheetAnalysis, "items");
+ 
     const testItem = balanceSheet[balanceSheet.length - 1];
     const testExtraction = extractBalanceSheetComponents(testItem);
     console.log('🎯 Test extraction result:', testExtraction);
@@ -178,7 +172,48 @@ export default function BalanceSheet({
       return 0;
     }
     
-    const value = item[key];
+    // Support alternative backend field names
+    const fieldAliases: Record<string, string[]> = {
+      invested_capital: [
+        "total_invested_capital",
+        "net_invested_capital",
+        "total_funding_sources",
+        "total_funding_sources_eur",
+        "total_funding_sources_amount",
+        "total_funding_sources_value",
+        "total_funding_sources"
+      ],
+      net_equity: [
+        "total_equity",
+        "equity",
+      ],
+      net_fixed_assets: [
+        "total_fixed_assets",
+        "fixed_assets",
+      ],
+      net_operating_working_capital: [
+        "net_operating_current_assets",
+        "net_working_capital",
+      ],
+      cash_and_banks: [
+        "cash_bank_accounts",
+        "cash_bank",
+        "cash_and_bank",
+      ],
+      net_financial_debt: [
+        "net_financial_debt",
+      ],
+    };
+
+    let value = item[key];
+    if (value === undefined && fieldAliases[key]) {
+      for (const alias of fieldAliases[key]) {
+        if (item[alias] !== undefined && item[alias] !== null) {
+          value = item[alias];
+          break;
+        }
+      }
+    }
     
     // Handle numeric values
     if (typeof value === "number") {
@@ -438,95 +473,101 @@ export default function BalanceSheet({
         </div>
       </div>
 
-      {/* Balance Sheet Pie Chart */}
+      {/* Balance Sheet Analysis (replaces graph if provided) */}
       <div className="">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
           9.1 Analisi dello stato patrimoniale
         </h2>
-        <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8">
-          <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg h-80 sm:h-96 bg-white rounded-lg shadow-sm">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart style={{ backgroundColor: "white" }}>
-                <Pie
-                  data={pieChartData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius="35%"
-                  outerRadius="90%"
-                  paddingAngle={2}
-                  dataKey="value"
-                  label={CustomLabel}
-                  labelLine={false}
-                >
-                  {pieChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value: number, name: string, props: any) => [
-                    `${value}% (${
-                      props.payload.formattedValue ||
-                      formatCurrency(props.payload.actualValue || 0)
-                    })`,
-                    name,
-                  ]}
-                  contentStyle={{
-                    backgroundColor: "#333",
-                    border: "none",
-                    borderRadius: "8px",
-                    color: "white",
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800">
-                  {/* Balance */}
-                  Bilancio
-                </div>
-                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800">
-                  {/* Sheet */}
-                  Patrimoniale
+        {balanceSheetAnalysis && balanceSheetAnalysis.trim().length > 0 ? (
+          <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6">
+            <p className="text-base md:text-lg text-gray-700 leading-relaxed whitespace-pre-line text-justify">
+              {balanceSheetAnalysis}
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8">
+            <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg h-80 sm:h-96 bg-white rounded-lg shadow-sm">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart style={{ backgroundColor: "white" }}>
+                  <Pie
+                    data={pieChartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius="35%"
+                    outerRadius="90%"
+                    paddingAngle={2}
+                    dataKey="value"
+                    label={CustomLabel}
+                    labelLine={false}
+                  >
+                    {pieChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value: number, name: string, props: any) => [
+                      `${value}% (${ 
+                        props.payload.formattedValue ||
+                        formatCurrency(props.payload.actualValue || 0)
+                      })`,
+                      name,
+                    ]}
+                    contentStyle={{
+                      backgroundColor: "#333",
+                      border: "none",
+                      borderRadius: "8px",
+                      color: "white",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800">
+                    Bilancio
+                  </div>
+                  <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800">
+                    Patrimoniale
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Enhanced Legend with actual values */}
-          <div className="flex flex-col gap-4 mt-4 lg:mt-8 w-full lg:w-auto">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 text-center lg:text-left">
-              Componenti dello stato patrimoniale
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
-              {pieChartData.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg min-w-0 lg:min-w-[250px]"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div
-                      className="w-3 h-3 sm:w-4 sm:h-4 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: item.fill }}
-                    ></div>
-                    <span className="text-xs sm:text-sm font-medium text-gray-700 truncate">
-                      {item.name}
-                    </span>
+            {/* Enhanced Legend with actual values */}
+            <div className="flex flex-col gap-4 mt-4 lg:mt-8 w-full lg:w-auto">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 text-center lg:text-left">
+                Componenti dello stato patrimoniale
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+                {pieChartData.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg min-w-0 lg:min-w-[250px]"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className="w-3 h-3 sm:w-4 sm:h-4 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: item.fill }}
+                      ></div>
+                      <span className="text-xs sm:text-sm font-medium text-gray-700 truncate">
+                        {item.name}
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-end ml-2">
+                      <span className="text-xs sm:text-sm font-bold text-gray-900">
+                        {item.value}%
+                      </span>
+                      <span className="text-xs text-gray-600">
+                        {item.formattedValue ||
+                          formatCurrency(item.actualValue || 0)}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex flex-col items-end ml-2">
-                    <span className="text-xs sm:text-sm font-bold text-gray-900">
-                      {item.value}%
-                    </span>
-                    <span className="text-xs text-gray-600">
-                      {item.formattedValue ||
-                        formatCurrency(item.actualValue || 0)}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Net Financial Position Chart */}

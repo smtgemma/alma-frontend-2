@@ -29,6 +29,7 @@ interface DocDownloadProps {
   debtStructure?: any[];
   keyRatios?: any[];
   operatingCostBreakdown?: any[];
+  balanceSheetAnalysis?: string;
 }
 
 // Helper function to create and capture charts as images
@@ -363,6 +364,7 @@ export const generateWordDocument = async ({
   debtStructure = [],
   keyRatios = [],
   operatingCostBreakdown = [],
+  balanceSheetAnalysis = "",
 }: DocDownloadProps) => {
   // Ensure all array parameters are properly initialized to prevent null reference errors
   const safeFinancialAnalysis = Array.isArray(financialAnalysis) ? financialAnalysis : [];
@@ -372,6 +374,41 @@ export const generateWordDocument = async ({
   const safeCashFlowAnalysis = Array.isArray(cashFlowAnalysis) ? cashFlowAnalysis : [];
   const safeProfitLossProjection = Array.isArray(profitLossProjection) ? profitLossProjection : [];
   const safeBalanceSheet = Array.isArray(balanceSheet) ? balanceSheet : [];
+  // Normalize balance sheet to common keys used across UI/PDF
+  const normalizeBalanceSheetItem = (item: any) => {
+    if (!item || typeof item !== "object") return item;
+    const invested_capital =
+      item.invested_capital ??
+      item.total_invested_capital ??
+      item.net_invested_capital ??
+      item.sources_of_financing ??
+      0;
+    const net_equity = item.net_equity ?? item.total_equity ?? item.equity ?? 0;
+    const net_financial_debt = item.net_financial_debt ?? item.liabilities ?? 0;
+    const net_fixed_assets = item.net_fixed_assets ?? item.total_fixed_assets ?? 0;
+    const net_operating_working_capital =
+      item.net_operating_working_capital ?? item.net_operating_current_assets ?? 0;
+    const cash_and_banks =
+      item.cash_and_banks ?? item.cash_bank_accounts ?? item.cash_bank ?? 0;
+
+    const assets = item.assets ?? invested_capital;
+    const liabilities = item.liabilities ?? net_financial_debt;
+    const equity = item.equity ?? net_equity;
+
+    return {
+      year: item.year,
+      invested_capital,
+      net_equity,
+      net_financial_debt,
+      net_fixed_assets,
+      net_operating_working_capital,
+      cash_and_banks,
+      assets,
+      liabilities,
+      equity,
+    };
+  };
+  const normalizedBalanceSheet = safeBalanceSheet.map(normalizeBalanceSheetItem);
   const safeNetFinancialPosition = Array.isArray(netFinancialPosition) ? netFinancialPosition : [];
   const safeDebtStructure = Array.isArray(debtStructure) ? debtStructure : [];
   const safeKeyRatios = Array.isArray(keyRatios) ? keyRatios : [];
@@ -382,12 +419,24 @@ export const generateWordDocument = async ({
 
     // Handle different chart types and data structures
     if (chartType === "financial") {
-      // For financial highlights - show Revenue and Net Income over years
-      return data.map((item, index) => ({
-        name: `Year ${item.year || index + 1}`,
-        value: item.revenue || 0,
-        amount: item.revenue || 0,
-      }));
+      // For financial/profit-loss trends - prefer Italian aliases when provided
+      return data
+        .map((item, index) => {
+          const revenue =
+            item.revenue ??
+            item.valore_produzione_operativa ??
+            item.ricavi_vendite_prestazioni ??
+            0;
+          const netIncome = item.net_income ?? item.risultato_netto ?? 0;
+          return {
+            name: `Year ${item.year || index + 1}`,
+            value: revenue,
+            amount: revenue,
+            // Keep netIncome in case a future dual-series export is added
+            netIncome,
+          } as any;
+        })
+        .filter((row: any) => (row.value || 0) !== 0 || (row.netIncome || 0) !== 0);
     }
 
     if (chartType === "operating_cost") {
@@ -413,14 +462,17 @@ export const generateWordDocument = async ({
       // For balance sheet - show Assets, Liabilities, Equity
       if (data.length > 0) {
         const item = data[0]; // Use first year's data
+        // Support multiple possible input shapes
+        const investedCap = item.invested_capital ?? item.total_invested_capital ?? item.net_invested_capital ?? item.sources_of_financing ?? 0;
+        const equity = item.net_equity ?? item.total_equity ?? item.equity ?? 0;
+        const liabilities = item.net_financial_debt ?? item.liabilities ?? 0;
+        const assets = item.assets ?? investedCap;
         const chartData = [
-          { name: "Attività", value: item.assets || 0 },
-          { name: "Passività", value: item.liabilities || 0 },
-          { name: "Patrimonio netto", value: item.equity || 0 },
+          { name: "Attività", value: assets || 0 },
+          { name: "Passività", value: liabilities || 0 },
+          { name: "Patrimonio netto", value: Math.max(0, equity) || 0 },
         ];
-        // Store original data for formatting
         (chartData as any).originalData = chartData;
-        // Always show all three components (Assets, Liabilities, Equity)
         return chartData;
       }
       return [];
@@ -531,10 +583,10 @@ export const generateWordDocument = async ({
       : "";
 
   const balanceSheetChart =
-    safeBalanceSheet.length > 0
+    normalizedBalanceSheet.length > 0
       ? await generateChartImage(
         "pie",
-        convertDataForChart(safeBalanceSheet, "balance_sheet"),
+        convertDataForChart(normalizedBalanceSheet, "balance_sheet"),
         "Grafico distribuzione stato patrimoniale"
       )
       : "";
@@ -1199,7 +1251,7 @@ export const generateWordDocument = async ({
     }
 
 
-        ${safeBalanceSheet.length > 0
+        ${normalizedBalanceSheet.length > 0
       ? `
           <div class="section">
             <div class="section-title">
@@ -1207,89 +1259,21 @@ export const generateWordDocument = async ({
             </div>
             <div class="section-content">
               ${generateTransposedTableHTML(
-        safeBalanceSheet,
+        normalizedBalanceSheet,
         "Tabella stato patrimoniale"
       )}
-              ${balanceSheetChart
+              ${balanceSheetAnalysis && balanceSheetAnalysis.trim().length > 0
         ? `
-                <div style="display: flex; align-items: center; gap: 20px; margin: 20px 0;">
-                  <div style="flex: 1; max-width: 400px; display: flex; justify-content: center;">
-                    <img src="${balanceSheetChart}" alt="Grafico distribuzione stato patrimoniale" style="width: 100%; height: auto;" />
-                  </div>
-                  <div style="flex: 1; padding-left: 20px;">
-                    <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: bold; color: #2c3e50;">Componenti stato patrimoniale</h3>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                      ${safeBalanceSheet.length > 0
-          ? (() => {
-            const item = safeBalanceSheet[0];
-            const assets = item.assets || 0;
-            const liabilities = item.liabilities || 0;
-            const equity = item.equity || 0;
-
-            // Calculate percentages using absolute values
-            const absAssets = Math.abs(assets);
-            const absLiabilities = Math.abs(liabilities);
-            const absEquity = Math.abs(equity);
-            const total =
-              absAssets + absLiabilities + absEquity;
-
-            const assetsPercentage =
-              total > 0
-                ? Math.round((absAssets / total) * 100)
-                : 0;
-            const liabilitiesPercentage =
-              total > 0
-                ? Math.round((absLiabilities / total) * 100)
-                : 0;
-            const equityPercentage =
-              total > 0
-                ? Math.round((absEquity / total) * 100)
-                : 0;
-
-            // Format currency
-            const formatCurrency = (value: any) => {
-              if (!value || isNaN(value)) return "€0";
-              return `€${value.toLocaleString()}`;
-            };
-
-            return `
-                          <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: #f8f9fa; border-radius: 6px;">
-                            <div style="width: 12px; height: 12px; background: #8B5CF6; border-radius: 50%;"></div>
-                            <span style="font-weight: 500; color: #2c3e50;">Attività</span>
-                            <span style="margin-left: auto; font-weight: bold; color: #2c3e50;">${assetsPercentage}%</span>
-                            <span style="font-size: 12px; color: #666;">${formatCurrency(
-              assets
-            )}</span>
-                          </div>
-                          <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: #f8f9fa; border-radius: 6px;">
-                            <div style="width: 12px; height: 12px; background: #1E1B4B; border-radius: 50%;"></div>
-                            <span style="font-weight: 500; color: #2c3e50;">Passività</span>
-                            <span style="margin-left: auto; font-weight: bold; color: #2c3e50;">${liabilitiesPercentage}%</span>
-                            <span style="font-size: 12px; color: #666;">${formatCurrency(
-              liabilities
-            )}</span>
-                          </div>
-                          <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: #f8f9fa; border-radius: 6px;">
-                            <div style="width: 12px; height: 12px; background: #EF4444; border-radius: 50%;"></div>
-                            <span style="font-weight: 500; color: #2c3e50;">Patrimonio netto</span>
-                            <span style="margin-left: auto; font-weight: bold; color: #2c3e50;">${equityPercentage}%</span>
-                            <span style="font-size: 12px; color: #666;">${formatCurrency(
-              equity
-            )}</span>
-                          </div>
-                        `;
-          })()
-          : ""
-        }
-                    </div>
-                  </div>
+                <div style="margin-top: 16px; padding: 12px; background: #f8f9fa; border-left: 4px solid #3498db;">
+                  <h3 style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold; color: #2c3e50;">Analisi dello stato patrimoniale</h3>
+                  <div style="font-size: 12px; color: #333; text-align: justify;">${balanceSheetAnalysis
+                    .split('\n')
+                    .map(p => `<p style="margin: 6px 0;">${p}</p>`) 
+                    .join('')}</div>
                 </div>
               `
         : ""
       }
-              <div class="chart-note">
-                <strong>Nota:</strong> Questa sezione include grafici a ciambella che mostrano la distribuzione di Attività, Passività e Patrimonio netto.
-              </div>
             </div>
           </div>
           `

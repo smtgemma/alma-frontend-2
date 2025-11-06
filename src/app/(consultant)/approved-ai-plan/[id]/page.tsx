@@ -140,6 +140,7 @@ const ApprovedAiPlanPage = () => {
 
   const {
     balanceSheet = [],
+    balanceSheetAnalysis = "",
     businessModel = "",
     businessOverview = "",
     cashFlowAnalysisData = [],
@@ -254,6 +255,7 @@ const ApprovedAiPlanPage = () => {
           financialAnalysis={financialAnalysis}
           ratiosAnalysis={ratiosAnalysis}
           productionSalesForecast={productionSalesForecast}
+          balanceSheetAnalysis={balanceSheetAnalysis}
         />
         <ProductionSalesForecast
           productionSalesForecast={productionSalesForecast}
@@ -272,6 +274,7 @@ const ApprovedAiPlanPage = () => {
           <BalanceSheet
             balanceSheet={balanceSheet}
             netFinancialPosition={netFinancialPosition}
+            balanceSheetAnalysis={balanceSheetAnalysis}
           />
         )}
 

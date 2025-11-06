@@ -26,6 +26,7 @@ interface GeneratedBusinessPlanforUserProps {
   financialAnalysis?: any[];
   ratiosAnalysis?: any[];
   productionSalesForecast?: any[];
+  balanceSheetAnalysis?: string;
 }
 
 const GeneratedBusinessPlanforUser = ({
@@ -49,6 +50,7 @@ const GeneratedBusinessPlanforUser = ({
   financialAnalysis = [],
   ratiosAnalysis = [],
   productionSalesForecast = [],
+  balanceSheetAnalysis = "",
 }: GeneratedBusinessPlanforUserProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -84,6 +86,7 @@ const GeneratedBusinessPlanforUser = ({
       financialAnalysis,
       ratiosAnalysis,
       productionSalesForecast,
+      balanceSheetAnalysis,
     });
   };
 

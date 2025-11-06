@@ -27,11 +27,29 @@ export default function MarketingDashboard({
 
   // ]
 
-  const chartData = profitLossProjection.map((item) => ({
-    year: `${item.year} Year`, // Convert to "1st Year", "2nd Year", etc.
-    revenue: item.revenue,
-    net_income: Math.abs(item.net_income),
-  }));
+  const chartData = profitLossProjection
+    .map((item) => {
+      // Support multiple possible field names coming from backend
+      const revenue =
+        item.revenue ??
+        item.valore_produzione_operativa ??
+        item.ricavi_vendite_prestazioni ??
+        0;
+      const netIncome = item.net_income ?? item.risultato_netto ?? 0;
+      return {
+        year: `${item.year} Year`,
+        revenue,
+        net_income: Math.abs(netIncome),
+      };
+    })
+    // Keep only entries where at least one series is non-zero
+    .filter((row) => (row.revenue || 0) !== 0 || (row.net_income || 0) !== 0);
+
+  // Compute dynamic max for better axis readability
+  const maxValue = chartData.reduce((max, row) => {
+    return Math.max(max, row.revenue || 0, row.net_income || 0);
+  }, 0);
+  const yMax = maxValue > 0 ? Math.ceil(maxValue * 1.1) : 1000;
 
   //    console.log(chartData)
   const formatCurrency = (value: number) => {
@@ -110,8 +128,8 @@ export default function MarketingDashboard({
                 tick={{ fontSize: 12, fill: "#666" }}
               />
               <YAxis
-                scale="log"
-                domain={["dataMin", "dataMax"]}
+                width={90}
+                domain={[0, yMax]}
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 12, fill: "#666" }}

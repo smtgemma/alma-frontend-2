@@ -342,9 +342,7 @@ const UpdateBusinessPlanPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4 ">
-            Errore
-          </h1>
+          <h1 className="text-2xl font-bold text-red-600 mb-4 ">Errore</h1>
           <p className="text-gray-600 ">Impossibile caricare i dati</p>
         </div>
       </div>
@@ -416,9 +414,7 @@ const UpdateBusinessPlanPage = () => {
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                <span className="hidden sm:inline ">
-                  Aggiornamento...
-                </span>
+                <span className="hidden sm:inline ">Aggiornamento...</span>
               </>
             ) : (
               <>
@@ -511,7 +507,7 @@ const UpdateBusinessPlanPage = () => {
               {/* Business Overview */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                 Panoramica aziendal
+                  Panoramica aziendal
                 </label>
                 <textarea
                   value={formData.businessOverview}
@@ -524,10 +520,10 @@ const UpdateBusinessPlanPage = () => {
                 />
               </div>
 
-               {/* Management Team */}
-               <div>
+              {/* Management Team */}
+              <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                Gruppo dirigente
+                  Gruppo dirigente
                 </label>
                 <textarea
                   value={formData.managementTeam}
@@ -543,7 +539,7 @@ const UpdateBusinessPlanPage = () => {
               {/* Business Model */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                   Modello di Business
+                  Modello di Business
                 </label>
                 <textarea
                   value={formData.businessModel}
@@ -559,7 +555,7 @@ const UpdateBusinessPlanPage = () => {
               {/* Market Analysis */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                   Analisi di Mercato
+                  Analisi di Mercato
                 </label>
                 <textarea
                   value={formData.marketAnalysis}
@@ -572,10 +568,10 @@ const UpdateBusinessPlanPage = () => {
                 />
               </div>
 
-               {/* Funding Sources */}
-               <div>
+              {/* Funding Sources */}
+              <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                   Fonti di Finanziamento
+                  Fonti di Finanziamento
                 </label>
                 <div className="space-y-4">
                   <div>
@@ -601,7 +597,7 @@ const UpdateBusinessPlanPage = () => {
               {/* Profit Loss Projection Analysis */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                   Proiezione di Profitti e Perdite
+                  Proiezione di Profitti e Perdite
                 </label>
                 <textarea
                   value={formData.profitLossProjectionAnalysis}
@@ -623,7 +619,7 @@ const UpdateBusinessPlanPage = () => {
                 formData.profitLossProjection.length > 0 && (
                   <div>
                     <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                     8.1 Proiezione di Profitti e Perdite
+                      8.1 Proiezione di Profitti e Perdite
                     </label>
                     <div className="space-y-4">
                       {formData.profitLossProjection.map(
@@ -837,8 +833,6 @@ const UpdateBusinessPlanPage = () => {
                   </div>
                 )}
 
-              
-
               {/* Marketing & Sales Strategy */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
@@ -871,8 +865,6 @@ const UpdateBusinessPlanPage = () => {
                 />
               </div> */}
 
-             
-
               {/* Operations Plan */}
               {/* <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3">
@@ -888,8 +880,6 @@ const UpdateBusinessPlanPage = () => {
                   placeholder="Enter operations plan"
                 />
               </div> */}
-
-             
 
               {/* Financial Highlights Analysis */}
               <div>
@@ -1022,12 +1012,10 @@ const UpdateBusinessPlanPage = () => {
                   </div>
                 )}
 
-              
-
               {/* Balance Sheet Analysis */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-               Stato Patrimoniale
+                  Stato Patrimoniale
                 </label>
                 <textarea
                   value={formData.balanceSheetAnalysis}
@@ -1043,7 +1031,7 @@ const UpdateBusinessPlanPage = () => {
               {/* Net Financial Position Analysis */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                   Posizione Finanziaria Netta
+                  Posizione Finanziaria Netta
                 </label>
                 <textarea
                   value={formData.netFinancialPositionAnalysis}
@@ -1078,7 +1066,7 @@ const UpdateBusinessPlanPage = () => {
               {/* Financial Analysis */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                   Analisi Finanziaria
+                  Analisi Finanziaria
                 </label>
                 <textarea
                   value={formData.financialAnalysisAnalysis}
@@ -1125,8 +1113,6 @@ const UpdateBusinessPlanPage = () => {
                   placeholder="Inserisci l'analisi dei rapporti"
                 />
               </div>
-
-              
 
               {/* Production Sales Forecast Analysis */}
               <div>
@@ -1654,8 +1640,6 @@ const UpdateBusinessPlanPage = () => {
                   </div>
                 </div>
               )}
-
-              
 
               {/* Financial Analysis */}
               {formData.financialAnalysis &&

@@ -23,6 +23,7 @@ import { generateWordDocument } from "@/components/consultant/DocDownload";
 import DownloadOptionsModal from "@/components/consultant/DownloadOptionsModal";
 import SocialShareModal from "@/components/shared/SocialShareModal";
 import { SmartFormProvider } from "@/components/ai-smart-form/SmartFormContext";
+import CountdownTimer from "@/components/common/CountdownTimer";
 
 const GeneratedPlanForAdminPage = () => {
   const { id } = useParams();
@@ -47,82 +48,29 @@ const GeneratedPlanForAdminPage = () => {
   // Only show Share/Download if coming from Expert Review
   const shouldShowShareDownload = isFromExpertReview;
 
-  // State for countdown timer - MUST be at the top level
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  // End date for countdown
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
-  // Use useRef to store end time so it doesn't get recalculated on every render - MUST be at the top level
-  const endTimeRef = useRef<Date | null>(null);
-
-  // Countdown effect - MUST be at the top level
   useEffect(() => {
-    // Only proceed if we have plan data
     if (!planInfo?.data?.createdAt) return;
-
-    // Create a unique key for this plan's timer
     const timerKey = `plan_timer_${id}`;
-
-    // Check if we already have a stored end time for this plan
-    const storedEndTime = localStorage.getItem(timerKey);
-
+    const storedEndTime = typeof window !== "undefined" ? localStorage.getItem(timerKey) : null;
     if (storedEndTime) {
-      // Use the stored end time
-      endTimeRef.current = new Date(storedEndTime);
-      // console.log("Using stored end time:", endTimeRef.current.toLocaleString());
+      setEndDate(new Date(storedEndTime));
     } else {
-      // Calculate end time from plan creation time (2 days from creation)
       const startTime = new Date(planInfo.data.createdAt);
-      const endTime = new Date(startTime.getTime() + 48 * 60 * 60 * 1000); // 48 hours in milliseconds
-      endTimeRef.current = endTime;
-
-      // Store the end time in localStorage for persistence
-      localStorage.setItem(timerKey, endTime.toISOString());
-      // console.log("Stored new end time:", endTime.toLocaleString());
-    }
-
-    const timer = setInterval(() => {
-      if (!endTimeRef.current) return;
-
-      const now = new Date().getTime();
-      const distance = endTimeRef.current.getTime() - now;
-
-      if (distance > 0) {
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(
-          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        setTimeLeft({ days, hours, minutes, seconds });
-
-        // Debug log every 10 seconds
-        if (seconds % 10 === 0) {
-          // console.log("Countdown:", { days, hours, minutes, seconds });
-        }
-      } else {
-        // Time's up
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        clearInterval(timer);
-
-        // Clear the stored timer data when countdown finishes
-        const timerKey = `plan_timer_${id}`;
-        localStorage.removeItem(timerKey);
-        // console.log("Countdown finished and timer data cleared!");
+      const endTime = new Date(startTime.getTime() + 48 * 60 * 60 * 1000);
+      setEndDate(endTime);
+      if (typeof window !== "undefined") {
+        localStorage.setItem(timerKey, endTime.toISOString());
       }
-    }, 1000);
-
-    // Cleanup timer on component unmount
-    return () => clearInterval(timer);
-  }, [planInfo?.data?.createdAt, id]); // Re-run if plan creation time or id changes
+    }
+  }, [planInfo?.data?.createdAt, id]);
 
   // Extract data from planInfo - MUST be at the top level
   const {
     balanceSheet = [],
+    balanceSheetAnalysis = "",
     businessModel = "",
     businessOverview = "",
     cashFlowAnalysisData = [],
@@ -255,6 +203,7 @@ Il mercato presenta opportunità di crescita che intendiamo sfruttare attraverso
       cashFlowAnalysis: cashFlowAnalysisArray,
       profitLossProjection,
       balanceSheet,
+      balanceSheetAnalysis,
       netFinancialPosition,
       debtStructure,
       keyRatios,
@@ -339,49 +288,7 @@ Il mercato presenta opportunità di crescita che intendiamo sfruttare attraverso
                     Tempo Rimanente
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-2 sm:gap-3">
-                  <div className="flex items-center">
-                    <div className="border-b-2 border-red-500 px-1 py-1 sm:py-2">
-                      <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded-lg">
-                        {timeLeft.days.toString().padStart(2, "0")}
-                      </span>
-                    </div>
-                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-1 sm:ml-2">
-                      Giorni
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="border-b-2 border-red-500 px-1 py-1 sm:py-2">
-                      <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded-lg">
-                        {timeLeft.hours.toString().padStart(2, "0")}
-                      </span>
-                    </div>
-                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-1 sm:ml-2">
-                      Ore
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="border-b-2 border-red-500 px-1 py-1 sm:py-2">
-                      <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded-lg">
-                        {timeLeft.minutes.toString().padStart(2, "0")}
-                      </span>
-                    </div>
-                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-1 sm:ml-2">
-                      Minuti
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="border-b-2 border-red-500 px-1 py-1 sm:py-2">
-                      <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 bg-gray-100 px-2 sm:px-3 py-1 sm:py-2 rounded-lg">
-                        {timeLeft.seconds.toString().padStart(2, "0")}
-                      </span>
-                    </div>
-                    <span className="text-xs md:text-sm font-medium text-gray-600 ml-1 sm:ml-2">
-                      Secondi
-                    </span>
-                    {/* Will delete this later */}
-                  </div>
-                </div>
+              {endDate && <CountdownTimer endDate={endDate} />}
               </div>
             </div>
           </div>
@@ -433,6 +340,7 @@ Il mercato presenta opportunità di crescita che intendiamo sfruttare attraverso
           <BalanceSheet
             balanceSheet={balanceSheet}
             netFinancialPosition={netFinancialPosition}
+            balanceSheetAnalysis={balanceSheetAnalysis}
           />
         </SmartFormProvider>
         <DebtDashboard debtStructure={debtStructure} />
