@@ -72,7 +72,7 @@ export default function ProductionSalesForecast({
                 <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
                   Metriche
                 </th>
-                {productionSalesForecast.map((item) => (
+                {productionSalesForecast?.map((item) => (
                   <th
                     key={item.year}
                     className="px-4 py-3 text-left text-sm font-medium text-[#121417]"
@@ -93,7 +93,7 @@ export default function ProductionSalesForecast({
                   <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
                     {metric.label}
                   </td>
-                  {productionSalesForecast.map((item) => (
+                  {productionSalesForecast?.map((item) => (
                     <td
                       key={`${item.year}-${metric.key}`}
                       className="px-4 py-3 text-sm font-normal text-[#61758A]"

@@ -721,7 +721,6 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
           <p>9. Stato Patrimoniale</p>
           <p>10. Posizione finanziaria netta</p>
           <p>11. Struttura del debito</p>
-          <p>12. Financial Analysis</p>
           <p>13. Ratios Analysi</p>
         </div>
       </div>

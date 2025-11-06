@@ -71,91 +71,9 @@ export default function MarketingDashboard({
         </p>
       </div>
 
-      {/* Profit Loss Projection Table */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        8.1 Proiezione di profitti e perdite
-      </h2>
-      <div className=" ">
-        <div className="overflow-x-auto">
-          <table className="w-full border border-gray-200">
-            <thead>
-              <tr className="bg-purple-100">
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417] border-r border-white">
-                  {/* Year */}
-                  Anno
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417] border-r border-white">
-                  {/* COGS */}
-                  COGS
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417] border-r border-white">
-                  {/* Gross Profit */}
-                  Profitto lordo
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417] border-r border-white">
-                  {/* Operating Expenses */}
-                  Spese operative
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417] border-r border-white">
-                  {/* EBITDA */}
-                  EBITDA
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417] border-r border-white">
-                  {/* Depreciation Amortization */}
-                  Ammortamento
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417] border-r border-white">
-                  {/* EBIT */}
-                  EBIT
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417] border-r border-white">
-                  {/* Interest */}
-                  Interessi
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  {/* Taxes */}
-                  Tasse
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {profitLossProjection.map((row, index) => (
-                <tr key={index} className="border-b border-gray-200">
-                  <td className="px-4 py-3 text-sm text-gray-800 font-medium">
-                    Year {String(row.year).padStart(2, "0")}
-                  </td>
-                  <td className="px-4 py-3 ">{formatCurrency(row.cogs)}</td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(row.gross_profit)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(row.operating_expenses)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(row.ebitda)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(row.depreciation_amortization)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(row.ebit)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(row.interest)}
-                  </td>
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    {formatCurrency(row.taxes)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
       {/* Profit Loss Projection Chart */}
       <h2 className="text-2xl sm:text-3xl font-bold text-white px-6 py-3 bg-[#A78BFA]">
-        8.2 Proiezione di profitti e perdite
+        8.1 Proiezione di profitti e perdite
       </h2>
       <div className="bg-gray-50 rounded-lg p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">

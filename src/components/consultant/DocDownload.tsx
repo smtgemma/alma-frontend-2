@@ -1030,11 +1030,9 @@ export const generateWordDocument = async ({
             <p style="margin: 10px 0;">5. Analisi di mercato</p>
             <p style="margin: 10px 0;">6. Fonti di finanziamento</p>
             <p style="margin: 10px 0;">7. Conto economico a valore aggiunto</p>
-            <p style="margin: 10px 0;">8. Proiezione di profitti e perdite</p>
             <p style="margin: 10px 0;">9. Stato Patrimoniale</p>
             <p style="margin: 10px 0;">10. Posizione finanziaria netta</p>
             <p style="margin: 10px 0;">11. Struttura del debito</p>
-            <p style="margin: 10px 0;">12. Analisi finanziaria</p>
             <p style="margin: 10px 0;">13. Analisi rapporti</p>
           </div>
         </div>
@@ -1200,33 +1198,6 @@ export const generateWordDocument = async ({
       : ""
     }
 
-        ${safeProfitLossProjection.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>8. Proiezione profitti e perdite</h2>
-        </div>
-        <div class="section-content">
-          ${generateTableHTML(
-        safeProfitLossProjection,
-        "Tabella proiezione profitti e perdite"
-      )}
-          ${profitLossChart
-        ? `
-            <div style="text-align: center;">
-              <img src="${profitLossChart}" alt="Grafico tendenza profitti e perdite" />
-            </div>
-          `
-        : ""
-      }
-          <div class="chart-note">
-            <strong>Nota:</strong> Questa sezione include grafici a linee che mostrano le tendenze di profitti e perdite nel tempo.
-          </div>
-        </div>
-      </div>
-      `
-      : ""
-    }
 
         ${safeBalanceSheet.length > 0
       ? `
@@ -1370,50 +1341,7 @@ export const generateWordDocument = async ({
       : ""
     }  
 
-      ${safeFinancialAnalysis.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>12. Analisi finanziaria</h2>
-        </div>
-        <div class="section-content">
-          ${generateFinancialAnalysisTableHTML(
-        safeFinancialAnalysis,
-        "Tabella analisi finanziaria"
-      )}
-        </div>
-      </div>
-      `
-      : ""
-    }
 
-        ${safeFinancialHighlights.length > 0
-      ? `
-      <div class="section">
-        <div class="section-title">
-          <h2>13. Highlights finanziari</h2>
-        </div>
-        <div class="section-content">
-          ${generateTableHTML(
-        safeFinancialHighlights,
-        "Tabella highlights finanziari"
-      )}
-          ${financialChart
-        ? `
-            <div style="text-align: center;">
-              <img src="${financialChart}" alt="Grafico punti salienti finanziari" />
-            </div>
-          `
-        : ""
-      }
-          <div class="chart-note">
-            <strong>Nota:</strong> Questa sezione include grafici a barre che mostrano le tendenze di Ricavi e Reddito netto su più anni.
-          </div>
-        </div>
-      </div>
-      `
-      : ""
-    }
 
         
        ${safeCashFlowAnalysis.length > 0

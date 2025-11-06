@@ -33,66 +33,6 @@ export default function FinancialDashboard({
 
   return (
     <div className="mx-auto space-y-10 mt-10">
-      {/* Financial Highlights Table */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        12.1 Punti salienti finanziari
-      </h2>
-      <div className=" rounded-lg  border border-gray-200 ">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-[#E6D8FF] ">
-                <th className="px-4 py-3 text-left text-sm $ font-medium text-[#374151] ">
-                  {/* Year */}
-                  Anno
-                </th>
-                <th className="px-4 py-3 text-left text-sm $ font-medium text-[#374151] ">
-                  {/* Revenue */}
-                  Ricavi
-                </th>
-                <th className="px-4 py-3 text-left text-sm $ font-medium text-[#374151] ">
-                  {/* Net Income */}
-                  Reddito netto
-                </th>
-                <th className="px-4 py-3 text-left text-sm $ font-medium text-[#374151] ">
-                  {/* CAPEX */}
-                  CAPEX
-                </th>
-                <th className="px-4 py-3 text-left text-sm $ font-medium text-[#374151] ">
-                  {/* Debt Repayment */}
-                  Rimborso del debito
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {financialHighlights.map((item, index) => (
-                <tr
-                  key={item.year}
-                  className={`${
-                    index % 2 === 0 ? "bg-gray-50" : "bg-gray-50"
-                  } border-b border-b-gray-200`}
-                >
-                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
-                    Year {item.year}
-                  </td>
-                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
-                    {formatCurrency(item.revenue)}
-                  </td>
-                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
-                    {formatCurrency(item.net_income)}
-                  </td>
-                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
-                    {formatCurrency(item.capex)}
-                  </td>
-                  <td className="px-4 py-3 text-base font-normal text-[#374151]">
-                    {formatCurrency(item.debt_repayment)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
 
       {/* Financial Highlights Chart */}
       <div className="bg-gray-50 rounded-lg  p-6">
@@ -180,7 +120,7 @@ export default function FinancialDashboard({
 
       {/* Cash Flow Analysis */}
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        12.2 Analisi del flusso di cassa
+        12 Analisi del flusso di cassa
       </h2>
       <div className="">
         <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-justify">
@@ -190,7 +130,7 @@ export default function FinancialDashboard({
 
       {/* Cash Flow Analysis Data */}
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        12.3 Dati dell'Analisi del Flusso di Cassa
+        12.1 Dati dell'Analisi del Flusso di Cassa
       </h2>
       <div className="">
         <div className="overflow-x-auto">
