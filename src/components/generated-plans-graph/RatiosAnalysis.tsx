@@ -96,7 +96,7 @@ export default function RatiosAnalysis({ ratiosAnalysis }: IRatiosAnalysis) {
     <div className="mx-auto space-y-10 mt-10">
       {/* Comprehensive Ratios Analysis Table */}
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        13. Analisi dei rapporti
+        12. Analisi dei rapporti
       </h2>
       <div className="rounded-lg border border-gray-200">
         <div className="overflow-x-auto">

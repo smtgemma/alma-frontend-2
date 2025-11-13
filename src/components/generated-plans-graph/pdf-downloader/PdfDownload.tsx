@@ -710,18 +710,17 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
         <div class="section-content">
           <p><strong>Sommario</strong></p>
           <p><strong>Disclaimer</strong> (Insert this section to be standard for all generated plans)</p>
-          <p>1. Sintesi</p>
+          <p>1. Sintesi esecutiva</p>
           <p>2. Panoramica aziendale</p>
-          <p>3. Gruppo dirigente</p>
+          <p>3. Team di gestione</p>
           <p>4. Modello di business</p>
           <p>5. Analisi di mercato</p>
           <p>6. Fonti di finanziamento</p>
           <p>7. Conto economico a valore aggiunto</p>
-          <p>8. Proiezione di profitti e perdite</p>
-          <p>9. Stato Patrimoniale</p>
-          <p>10. Posizione finanziaria netta</p>
-          <p>11. Struttura del debito</p>
-          <p>13. Ratios Analysi</p>
+          <p>8. Stato Patrimoniale</p>
+          <p>9. Posizione finanziaria netta</p>
+          <p>10. Struttura del debito</p>
+          <p>11. Ratios Analysi</p>
         </div>
       </div>
 

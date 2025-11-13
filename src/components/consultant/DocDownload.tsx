@@ -1082,10 +1082,10 @@ export const generateWordDocument = async ({
             <p style="margin: 10px 0;">5. Analisi di mercato</p>
             <p style="margin: 10px 0;">6. Fonti di finanziamento</p>
             <p style="margin: 10px 0;">7. Conto economico a valore aggiunto</p>
-            <p style="margin: 10px 0;">9. Stato Patrimoniale</p>
-            <p style="margin: 10px 0;">10. Posizione finanziaria netta</p>
-            <p style="margin: 10px 0;">11. Struttura del debito</p>
-            <p style="margin: 10px 0;">13. Analisi rapporti</p>
+            <p style="margin: 10px 0;">8. Stato Patrimoniale</p>
+            <p style="margin: 10px 0;">9. Posizione finanziaria netta</p>
+            <p style="margin: 10px 0;">10. Struttura del debito</p>
+            <p style="margin: 10px 0;">12. Analisi rapporti</p>
           </div>
         </div>
       </div>
@@ -1123,8 +1123,9 @@ export const generateWordDocument = async ({
         </div>
       </div>
 
-       ${managementTeam
-      ? `
+       ${
+         managementTeam
+           ? `
       <div class="section">
         <div class="section-title">
           <h2>3. Team di gestione</h2>
@@ -1134,11 +1135,12 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
-    }
+           : ""
+       }
 
-        ${businessModel
-      ? `
+        ${
+          businessModel
+            ? `
       <div class="section">
         <div class="section-title">
           <h2>4. Modello di business</h2>
@@ -1148,8 +1150,8 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
-    }
+            : ""
+        }
 
 
       <!-- Market Analysis - New page -->
@@ -1162,82 +1164,89 @@ export const generateWordDocument = async ({
         </div>
       </div>
 
-      ${fundingSources
-      ? `
+      ${
+        fundingSources
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>6. Fonti di finanziamento</h2>
         </div>
         <div class="section-content">
-          <p>${typeof fundingSources === "string"
-        ? fundingSources.replace(/\n/g, "</p><p>")
-        : typeof fundingSources === "object" && fundingSources !== null
-          ? Object.entries(fundingSources)
-            .map(
-              ([key, value]) =>
-                `${key
-                  .replace(/\n/g, " ")
-                  .replace(/^./, (str) => str.toUpperCase())}: ${typeof value === "number"
-                    ? `€${value.toLocaleString()}`
-                    : value
-                }`
-            )
-            .join(", ")
-          : "No funding information available"
-      }</p>
+          <p>${
+            typeof fundingSources === "string"
+              ? fundingSources.replace(/\n/g, "</p><p>")
+              : typeof fundingSources === "object" && fundingSources !== null
+              ? Object.entries(fundingSources)
+                  .map(
+                    ([key, value]) =>
+                      `${key
+                        .replace(/\n/g, " ")
+                        .replace(/^./, (str) => str.toUpperCase())}: ${
+                        typeof value === "number"
+                          ? `€${value.toLocaleString()}`
+                          : value
+                      }`
+                  )
+                  .join(", ")
+              : "No funding information available"
+          }</p>
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
 
-      ${safeProductionSalesForecast.length > 0
-      ? `
+      ${
+        safeProductionSalesForecast.length > 0
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>7. Previsione vendite produzione</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
-        safeProductionSalesForecast,
-        "Tabella previsione vendite produzione"
-      )}
+            safeProductionSalesForecast,
+            "Tabella previsione vendite produzione"
+          )}
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
 
-       ${safeOperatingCostBreakdown.length > 0
-      ? `
+       ${
+         safeOperatingCostBreakdown.length > 0
+           ? `
       <div class="section">
         <div class="section-title">
           <h2>7.1 Ripartizione costi operativi</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-        safeOperatingCostBreakdown,
-        "Tabella ripartizione costi operativi 7.2"
-      )}
-          ${operatingCostChart
-        ? `
+            safeOperatingCostBreakdown,
+            "Tabella ripartizione costi operativi 7.2"
+          )}
+          ${
+            operatingCostChart
+              ? `
             <div style="text-align: center;">
               <img src="${operatingCostChart}" alt="Grafico distribuzione costi operativi" />
             </div>
           `
-        : ""
-      }
+              : ""
+          }
           <div class="chart-note">
             <strong>Nota:</strong> Questa sezione include grafici a ciambella che mostrano la distribuzione dei costi tra diverse categorie.
           </div>
         </div>
       </div>
       `
-      : ""
-    }
+           : ""
+       }
 
-        ${marketingSalesStrategy
-      ? `
+        ${
+          marketingSalesStrategy
+            ? `
       <div class="section">
         <div class="section-title">
           <h2>8. Strategia marketing e vendite</h2>
@@ -1247,120 +1256,127 @@ export const generateWordDocument = async ({
         </div>
       </div>
       `
-      : ""
-    }
+            : ""
+        }
 
 
-        ${normalizedBalanceSheet.length > 0
-      ? `
+        ${
+          normalizedBalanceSheet.length > 0
+            ? `
           <div class="section">
             <div class="section-title">
-              <h2>9. Stato patrimoniale</h2>
+              <h2>8. Stato patrimoniale</h2>
             </div>
             <div class="section-content">
               ${generateTransposedTableHTML(
-        normalizedBalanceSheet,
-        "Tabella stato patrimoniale"
-      )}
-              ${balanceSheetAnalysis && balanceSheetAnalysis.trim().length > 0
-        ? `
+                normalizedBalanceSheet,
+                "Tabella stato patrimoniale"
+              )}
+              ${
+                balanceSheetAnalysis && balanceSheetAnalysis.trim().length > 0
+                  ? `
                 <div style="margin-top: 16px; padding: 12px; background: #f8f9fa; border-left: 4px solid #3498db;">
                   <h3 style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold; color: #2c3e50;">Analisi dello stato patrimoniale</h3>
                   <div style="font-size: 12px; color: #333; text-align: justify;">${balanceSheetAnalysis
-                    .split('\n')
-                    .map(p => `<p style="margin: 6px 0;">${p}</p>`) 
-                    .join('')}</div>
+                    .split("\n")
+                    .map((p) => `<p style="margin: 6px 0;">${p}</p>`)
+                    .join("")}</div>
                 </div>
               `
-        : ""
-      }
+                  : ""
+              }
             </div>
           </div>
           `
-      : ""
-    }
+            : ""
+        }
   
 
 
     
 
-    ${safeNetFinancialPosition.length > 0
-      ? `
+    ${
+      safeNetFinancialPosition.length > 0
+        ? `
       <div class="section">
         <div class="section-title">
-          <h2>10. Posizione finanziaria netta</h2>
+          <h2>9. Posizione finanziaria netta</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
-        safeNetFinancialPosition,
-        "Tabella posizione finanziaria netta"
-      )}
-          ${netFinancialPositionChart
-        ? `
+            safeNetFinancialPosition,
+            "Tabella posizione finanziaria netta"
+          )}
+          ${
+            netFinancialPositionChart
+              ? `
             <div style="text-align: center;">
               <img src="${netFinancialPositionChart}" alt="Grafico posizione finanziaria netta" />
             </div>
           `
-        : ""
-      }
+              : ""
+          }
           <div class="chart-note">
             <strong>Nota:</strong> Questa sezione include grafici a linee che mostrano le tendenze della posizione finanziaria netta nel tempo.
           </div>
         </div>
       </div>
       `
-      : ""
+        : ""
     }  
-    ${safeDebtStructure.length > 0
-      ? `
+    ${
+      safeDebtStructure.length > 0
+        ? `
       <div class="section">
         <div class="section-title">
-          <h2>11. Struttura del debito</h2>
+          <h2>10. Struttura del debito</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(safeDebtStructure, "Tabella struttura debito")}
         </div>
       </div>
       `
-      : ""
+        : ""
     }  
 
 
 
         
-       ${safeCashFlowAnalysis.length > 0
-      ? `
+       ${
+         safeCashFlowAnalysis.length > 0
+           ? `
       <div class="section">
         <div class="section-title">
           <h2>14. Analisi del flusso di cassa</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
-        safeCashFlowAnalysis,
-        "Tabella analisi flusso di cassa"
-      )}
+            safeCashFlowAnalysis,
+            "Tabella analisi flusso di cassa"
+          )}
         </div>
       </div>
       `
-      : ""
-    }
+           : ""
+       }
 
-      ${safeRatiosAnalysis.length > 0
-      ? `
+      ${
+        safeRatiosAnalysis.length > 0
+          ? `
       <div class="section">
         <div class="section-title">
           <h2>13. Analisi rapporti</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-        safeRatiosAnalysis,
-        "Tabella analisi rapporti"
-      )}
+            safeRatiosAnalysis,
+            "Tabella analisi rapporti"
+          )}
         </div>
       </div>
       `
-      : ""
-    }
+          : ""
+      }
 
    
       
@@ -1369,7 +1385,7 @@ export const generateWordDocument = async ({
       
 
       <div class="footer">
-        <p>Questo documento è stato generato da BusinessPlanAI</p>
+        <p>Questo documento è stato generato da PIANIFICO SUITE</p>
         <p>© ${new Date().getFullYear()} Tutti i diritti riservati</p>
       </div>
     </body>

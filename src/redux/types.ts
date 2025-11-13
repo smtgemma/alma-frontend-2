@@ -202,11 +202,7 @@ export interface IFinancial {
   cashFlowAnalysisText?: string;
 }
 
-export interface IMarketing {
-  marketingSalesStrategy: string;
-  profitLossProjection: ProfitLossProjection[];
-  sectorStrategy: string;
-}
+
 export interface IBalanceSheet {
   balanceSheet: BalanceSheet[];
   netFinancialPosition: NetFinancialPosition[];

@@ -8,7 +8,7 @@ import { useAdminGetSingleBusinessPlanQuery } from "@/redux/api/admin/adminAPI";
 import Navbar from "@/components/shared/Navbar/Navbar";
 import FinancialDashboard from "@/components/generated-plans-graph/FinancialHighlights";
 import FinancialDashboard2 from "@/components/generated-plans-graph/BalanceSheet";
-import MarketingDashboard from "@/components/generated-plans-graph/Marketing";
+
 import OperationsDashboard from "@/components/generated-plans-graph/OperationPlan";
 import DebtDashboard from "@/components/generated-plans-graph/DebtStructure";
 import BalanceSheet from "@/components/generated-plans-graph/BalanceSheet";
@@ -331,11 +331,7 @@ Il mercato presenta opportunità di crescita che intendiamo sfruttare attraverso
           keyRatios={keyRatios}
           operatingCostBreakdown={operatingCostBreakdown}
         />
-        <MarketingDashboard
-          marketingSalesStrategy={marketingSalesStrategy}
-          profitLossProjection={profitLossProjection}
-          sectorStrategy={sectorStrategy}
-        />
+
         <SmartFormProvider>
           <BalanceSheet
             balanceSheet={balanceSheet}

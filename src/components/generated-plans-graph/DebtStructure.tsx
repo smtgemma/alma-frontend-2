@@ -22,7 +22,7 @@ export default function DebtDashboard({ debtStructure }: IDebt) {
     <div className="mt-10 mx-auto space-y-8">
       {/* Debt Structure Table */}
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        11. Struttura del debito
+        10. Struttura del debito
       </h2>
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6">

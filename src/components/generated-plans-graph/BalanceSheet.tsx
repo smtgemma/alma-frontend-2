@@ -406,7 +406,7 @@ export default function BalanceSheet({
   return (
     <div className="mt-10 mx-auto space-y-8">
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        9. Stato Patrimoniale
+        8. Stato Patrimoniale
       </h2>
       {/* Balance Sheet Table */}
       <div className="pdf-no-break">
@@ -476,7 +476,7 @@ export default function BalanceSheet({
       {/* Balance Sheet Analysis (replaces graph if provided) */}
       <div className="">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-          9.1 Analisi dello stato patrimoniale
+          8.1 Analisi dello stato patrimoniale
         </h2>
         {balanceSheetAnalysis && balanceSheetAnalysis.trim().length > 0 ? (
           <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6">
@@ -572,7 +572,7 @@ export default function BalanceSheet({
 
       {/* Net Financial Position Chart */}
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        10. Posizione Finanziaria Netta
+        9. Posizione Finanziaria Netta
       </h2>
       <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6 pdf-no-break pdf-chart-container">
         <div className="bg-purple-500 text-white px-4 py-2 rounded-t-lg mb-4">

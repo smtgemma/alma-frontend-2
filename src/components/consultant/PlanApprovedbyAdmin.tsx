@@ -9,7 +9,7 @@ import Image from "next/image";
 import { GrDownload } from "react-icons/gr";
 import GeneratedBusinessPlanforAdmin from "./GeneratedBusinessPlanforAdmin";
 import FinancialDashboard from "../generated-plans-graph/FinancialHighlights";
-import MarketingDashboard from "../generated-plans-graph/Marketing";
+
 import OperationsDashboard from "../generated-plans-graph/OperationPlan";
 import DebtDashboard from "../generated-plans-graph/DebtStructure";
 import BalanceSheet from "../generated-plans-graph/BalanceSheet";
@@ -210,11 +210,7 @@ const PlanApprovedbyAdmin: React.FC<PlanApprovedbyAdminProps> = ({
           financialHighlights={defaultProps.financialHighlights}
           cashFlowAnalysis={defaultProps.cashFlowAnalysis}
         />
-        <MarketingDashboard
-          marketingSalesStrategy={defaultProps.marketingSalesStrategy}
-          profitLossProjection={defaultProps.profitLossProjection}
-          sectorStrategy={defaultProps.sectorStrategy}
-        />
+
         <SmartFormProvider>
           <BalanceSheet
             balanceSheet={defaultProps.balanceSheet}

@@ -6,7 +6,7 @@ import { useGetSingleBusinessPlanQuery } from "@/redux/api/businessPlan/business
 import { useSubmitExpertReviewMutation } from "@/redux/api/expertReview/expertReviewApi";
 import Navbar from "@/components/shared/Navbar/Navbar";
 import FinancialDashboard from "@/components/generated-plans-graph/FinancialHighlights";
-import MarketingDashboard from "@/components/generated-plans-graph/Marketing";
+
 import OperationsDashboard from "@/components/generated-plans-graph/OperationPlan";
 import DebtDashboard from "@/components/generated-plans-graph/DebtStructure";
 import BalanceSheet from "@/components/generated-plans-graph/BalanceSheet";
@@ -265,11 +265,7 @@ const ApprovedAiPlanPage = () => {
           keyRatios={keyRatios}
           operatingCostBreakdown={operatingCostBreakdown}
         />
-        <MarketingDashboard
-          marketingSalesStrategy={marketingSalesStrategy}
-          profitLossProjection={profitLossProjection}
-          sectorStrategy={sectorStrategy}
-        />
+
         {balanceSheet?.length > 0 && (
           <BalanceSheet
             balanceSheet={balanceSheet}

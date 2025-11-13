@@ -98,7 +98,7 @@ const GeneratedBusinessPlanforUser = ({
           {/* Business Overview Section */}
           <section className=" ">
             <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-              1. Sintesi
+              1. Sintesi esecutiva
             </h3>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl text-justify">
@@ -121,7 +121,7 @@ const GeneratedBusinessPlanforUser = ({
 
           {/* Management Team */}
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-            3. Gruppo dirigente
+            3. Team di gestione
           </h2>
           <div className="">
             <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-justify">

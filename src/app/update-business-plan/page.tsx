@@ -491,7 +491,7 @@ const UpdateBusinessPlanPage = () => {
               {/* Executive Summary */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                  Sintesi
+                  Sintesi esecutiva
                 </label>
                 <textarea
                   value={formData.executiveSummary}
@@ -523,7 +523,7 @@ const UpdateBusinessPlanPage = () => {
               {/* Management Team */}
               <div>
                 <label className="block text-xl font-semibold text-gray-800 mb-3 ">
-                  Gruppo dirigente
+                  Team di gestione
                 </label>
                 <textarea
                   value={formData.managementTeam}
