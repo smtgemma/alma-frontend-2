@@ -82,38 +82,38 @@ const CustomLabel = (props: any) => {
 
 // Extract balance sheet components from your exact data structure
 const extractBalanceSheetComponents = (item: any) => {
-  if (!item || typeof item !== 'object') {
+  if (!item || typeof item !== "object") {
     return { assets: 0, liabilities: 0, equity: 0 };
   }
-  
+
   // Use your exact data structure fields
   // Assets: Use invested_capital (represents total capital invested)
   const assets = item.invested_capital || item.sources_of_financing || 0;
-  
+
   // Equity: Use net_equity (represents shareholders' equity)
   const equity = item.net_equity || 0;
-  
+
   // Liabilities: For balance sheet visualization, we can use net_financial_debt
   // as it represents the debt/liability portion, or calculate as Assets - Equity
   const netFinancialDebt = item.net_financial_debt || 0;
   const calculatedLiabilities = Math.max(0, assets - equity);
-  
+
   // Use the larger of the two liability calculations
   const liabilities = Math.max(netFinancialDebt, calculatedLiabilities);
-  
+
   // Debug: Log extracted values for verification
   if (assets > 0 || liabilities > 0 || equity > 0) {
-    console.log('✅ Successfully extracted:', {
+    console.log("✅ Successfully extracted:", {
       year: item.year,
       assets,
-      liabilities, 
+      liabilities,
       equity,
       source_invested_capital: item.invested_capital,
       source_net_equity: item.net_equity,
-      source_net_financial_debt: item.net_financial_debt
+      source_net_financial_debt: item.net_financial_debt,
     });
   }
-  
+
   return { assets, liabilities, equity };
 };
 
@@ -125,10 +125,10 @@ export default function BalanceSheet({
   // Debug: Log the incoming data and test extraction (only once)
   if (balanceSheet?.length > 0) {
     console.log("📊 BalanceSheet received:", balanceSheetAnalysis, "items");
- 
+
     const testItem = balanceSheet[balanceSheet.length - 1];
     const testExtraction = extractBalanceSheetComponents(testItem);
-    console.log('🎯 Test extraction result:', testExtraction);
+    console.log("🎯 Test extraction result:", testExtraction);
   }
   // Inject Year 0 from Balance Sheet extractions (if available)
   let step1: any = null;
@@ -146,21 +146,34 @@ export default function BalanceSheet({
     const fin = bsExtra?.financial_data || {};
     // Try to derive assets/liabilities/equity from financial_data keys if present
     const year0: any = { year: 0 };
-    
+
     // Map extracted financial data to your balance sheet structure if available
     if (fin.assets || fin.current_assets || fin.non_current_assets) {
-      const assets = fin.assets ?? (fin.current_assets || 0) + (fin.non_current_assets || 0);
-      const liabilities = fin.liabilities ?? (fin.current_liabilities || 0) + (fin.non_current_liabilities || 0);
-      const equity = fin.equity ?? fin.net_equity ?? (typeof assets === "number" && typeof liabilities === "number" ? assets - liabilities : undefined);
-      
+      const assets =
+        fin.assets ?? (fin.current_assets || 0) + (fin.non_current_assets || 0);
+      const liabilities =
+        fin.liabilities ??
+        (fin.current_liabilities || 0) + (fin.non_current_liabilities || 0);
+      const equity =
+        fin.equity ??
+        fin.net_equity ??
+        (typeof assets === "number" && typeof liabilities === "number"
+          ? assets - liabilities
+          : undefined);
+
       // Map to your structure
       if (typeof assets === "number") year0.invested_capital = assets;
       if (typeof equity === "number") year0.net_equity = equity;
-      if (typeof liabilities === "number") year0.net_financial_debt = liabilities;
+      if (typeof liabilities === "number")
+        year0.net_financial_debt = liabilities;
       year0.sources_of_financing = assets;
     }
 
-    if (year0.invested_capital || year0.net_equity || year0.net_financial_debt) {
+    if (
+      year0.invested_capital ||
+      year0.net_equity ||
+      year0.net_financial_debt
+    ) {
       enhancedBalanceSheet = [year0, ...balanceSheet];
     }
   } catch (e) {
@@ -171,7 +184,7 @@ export default function BalanceSheet({
     if (!item) {
       return 0;
     }
-    
+
     // Support alternative backend field names
     const fieldAliases: Record<string, string[]> = {
       invested_capital: [
@@ -181,28 +194,16 @@ export default function BalanceSheet({
         "total_funding_sources_eur",
         "total_funding_sources_amount",
         "total_funding_sources_value",
-        "total_funding_sources"
+        "total_funding_sources",
       ],
-      net_equity: [
-        "total_equity",
-        "equity",
-      ],
-      net_fixed_assets: [
-        "total_fixed_assets",
-        "fixed_assets",
-      ],
+      net_equity: ["total_equity", "equity"],
+      net_fixed_assets: ["total_fixed_assets", "fixed_assets"],
       net_operating_working_capital: [
         "net_operating_current_assets",
         "net_working_capital",
       ],
-      cash_and_banks: [
-        "cash_bank_accounts",
-        "cash_bank",
-        "cash_and_bank",
-      ],
-      net_financial_debt: [
-        "net_financial_debt",
-      ],
+      cash_and_banks: ["cash_bank_accounts", "cash_bank", "cash_and_bank"],
+      net_financial_debt: ["net_financial_debt"],
     };
 
     let value = item[key];
@@ -214,12 +215,12 @@ export default function BalanceSheet({
         }
       }
     }
-    
+
     // Handle numeric values
     if (typeof value === "number") {
       return value;
     }
-    
+
     // Handle string values
     if (typeof value === "string") {
       const parsed = parseFloat(value);
@@ -227,17 +228,16 @@ export default function BalanceSheet({
         return parsed;
       }
     }
-    
+
     // Return 0 for undefined, null, or invalid values
     return 0;
   };
-
 
   // Determine which columns to show in the table: pick two fields that actually have values
   const italianLabels: Record<string, string> = {
     // Computed fields
     assets: "Attività Totali",
-    liabilities: "Passività Totali", 
+    liabilities: "Passività Totali",
     equity: "Patrimonio Netto",
     // Italian field names (from your console logs)
     totale_attivita: "Totale Attività",
@@ -298,11 +298,11 @@ export default function BalanceSheet({
   // Use the actual keys from your data structure
   const combinedKeys = [
     "invested_capital",
-    "net_equity", 
+    "net_equity",
     "net_financial_debt",
     "net_fixed_assets",
     "net_operating_working_capital",
-    "cash_and_banks"
+    "cash_and_banks",
   ];
   // Generate dynamic pie chart data from balanceSheet - Balance Sheet Components
   const pieChartData = useMemo(() => {
@@ -334,10 +334,9 @@ export default function BalanceSheet({
 
     // Use the latest year item from balanceSheet for pie chart data (last item usually has the most recent data)
     const item = balanceSheet[balanceSheet.length - 1] as any;
-    
+
     // Use the robust extraction function
     const { assets, liabilities, equity } = extractBalanceSheetComponents(item);
-    
 
     // Calculate total for percentage calculation using absolute values
     const absAssets = Math.abs(assets);
@@ -428,7 +427,7 @@ export default function BalanceSheet({
                 ))}
               </tr>
             </thead>
-           
+
             <tbody>
               {balanceSheet?.map((item: any, index) => (
                 <tr
@@ -451,12 +450,14 @@ export default function BalanceSheet({
                     } else {
                       value = getFieldValue(item, key);
                     }
-                    
+
                     // Debug: Log the first item's values to verify extraction
                     if (index === 0) {
-                      console.log(`🔍 Year ${item.year}, Key: ${key}, Raw value: ${item[key]}, Processed value: ${value}`);
+                      console.log(
+                        `🔍 Year ${item.year}, Key: ${key}, Raw value: ${item[key]}, Processed value: ${value}`
+                      );
                     }
-                    
+
                     return (
                       <td
                         key={key}
@@ -506,7 +507,7 @@ export default function BalanceSheet({
                   </Pie>
                   <Tooltip
                     formatter={(value: number, name: string, props: any) => [
-                      `${value}% (${ 
+                      `${value}% (${
                         props.payload.formattedValue ||
                         formatCurrency(props.payload.actualValue || 0)
                       })`,
