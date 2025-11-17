@@ -1234,7 +1234,7 @@ const UpdateBusinessPlanPage = () => {
                       Evidenziatori Finanziari
                     </label>
                     <div className="space-y-4">
-                      {formData.financialHighlights.map(
+                      {formData.financialHighlights?.map(
                         (item: any, index: number) => (
                           <div
                             key={index}

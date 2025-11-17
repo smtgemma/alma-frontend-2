@@ -149,7 +149,7 @@ const ApprovedAiPlanPage = () => {
     debtStructure = [],
     executiveSummary = "",
     financialHighlights = [],
-    fundingSources = "",
+    fundingSources = {} as any,
     id: planId = "",
     keyRatios = [],
     marketAnalysis = "",
@@ -258,7 +258,7 @@ const ApprovedAiPlanPage = () => {
           balanceSheetAnalysis={balanceSheetAnalysis}
         />
         <ProductionSalesForecast
-          productionSalesForecast={productionSalesForecast}
+          profitLossProjection={profitLossProjection}
         />
         <OperationsDashboard
           operationsPlan={operationsPlan}

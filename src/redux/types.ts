@@ -18,18 +18,31 @@ interface CashFlowAnalysis {
 
 interface ProfitLossProjection {
   year: number;
-  revenue: number;
-  cogs: number;
-  gross_profit: number;
-  operating_expenses: number;
-  ebitda: number;
-  depreciation_amortization: number;
-  ebit: number;
-  interest: number;
-  taxes: number;
-  net_income: number;
+  revenue?: number;
+  cogs?: number;
+  gross_profit?: number;
+  operating_expenses?: number;
+  ebitda?: number;
+  depreciation_amortization?: number;
+  ebit?: number;
+  interest?: number;
+  taxes?: number;
+  net_income?: number;
   // Italian/alternate backend fields (optional)
   ricavi_vendite_prestazioni?: number;
+  acquisti_merci?: number;
+  acquisti_servizi?: number;
+  godimento_beni_terzi?: number;
+  valore_aggiunto?: number;
+  costi_personale?: number;
+  margine_operativo_lordo?: number;
+  ammortamenti_immateriali?: number;
+  ammortamenti_materiali?: number;
+  risultato_operativo?: number;
+  oneri_finanziari?: number;
+  risultato_prima_imposte?: number;
+  imposte_reddito?: number;
+  utile_netto?: number;
   valore_produzione_operativa?: number;
   risultato_netto?: number;
 }

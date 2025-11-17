@@ -80,7 +80,7 @@ const GeneratedPlanForAdminPage = () => {
     executiveSummary = "",
     financialAnalysis = [],
     financialHighlights = [],
-    fundingSources = "",
+    fundingSources = {} as any,
     id: planId = "",
     keyRatios = [],
     managementTeam = "",
@@ -324,7 +324,7 @@ Il mercato presenta opportunità di crescita che intendiamo sfruttare attraverso
           shouldShowShareDownload={shouldShowShareDownload}
         />
         <ProductionSalesForecast
-          productionSalesForecast={productionSalesForecast}
+          profitLossProjection={profitLossProjection}
         />
         <OperationsDashboard
           operationsPlan={operationsPlan}

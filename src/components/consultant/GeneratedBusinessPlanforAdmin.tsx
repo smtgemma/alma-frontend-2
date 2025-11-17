@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import AdminEditBusinessPlan from "./AdminEditBusinessPlan";
+import FundingSources from "../generated-plans-graph/FundingSources";
 
 interface GeneratedBusinessPlanforAdminProps {
   executiveSummary: string;
@@ -9,7 +10,7 @@ interface GeneratedBusinessPlanforAdminProps {
   businessModel?: string;
   marketingSalesStrategy?: string;
   sectorStrategy?: string;
-  fundingSources?: string;
+  fundingSources?: any;
   operationsPlan?: string;
   managementTeam?: string;
   planId?: string; // Add plan ID for edit functionality
@@ -164,158 +165,7 @@ const GeneratedBusinessPlanforAdmin = ({
           </section>
 
           {/* Funding Sources */}
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-            6. Fonti di finanziamento
-          </h2>
-          <div className="">
-            <div className="prose max-w-none">
-              {(() => {
-                // Function to clean and parse corrupted fundingSources data
-                const cleanFundingSources = (data: any) => {
-                  console.log("🔍 Raw fundingSources data:", data);
-                  console.log("🔍 Data type:", typeof data);
-
-                  if (typeof data === "object" && data !== null) {
-                    console.log("✅ Data is already an object:", data);
-                    return data;
-                  }
-
-                  if (typeof data === "string") {
-                    console.log("📝 Data is a string, attempting to parse...");
-                    try {
-                      // Try to parse as JSON first
-                      const parsed = JSON.parse(data);
-                      if (typeof parsed === "object" && parsed !== null) {
-                        console.log("✅ Successfully parsed as JSON:", parsed);
-                        return parsed;
-                      }
-                    } catch (e) {
-                      console.log(
-                        "❌ JSON parsing failed, checking for corrupted format..."
-                      );
-                      // If JSON parsing fails, check if it's the corrupted format
-                      if (data.includes('"0":') && data.includes('"1":')) {
-                        console.log(
-                          "🔍 Detected corrupted format, attempting extraction..."
-                        );
-                        // This is the corrupted format, try to extract the actual data
-                        try {
-                          // Look for the actual JSON data after the corrupted part
-                          // Try to find both initialInvestment and fromHome
-                          const jsonMatch = data.match(/\{.*"fromHome":\d+\}/);
-                          if (jsonMatch) {
-                            console.log("✅ Found JSON match:", jsonMatch[0]);
-                            const cleanData = JSON.parse(jsonMatch[0]);
-                            console.log("✅ Parsed clean data:", cleanData);
-                            return cleanData;
-                          }
-
-                          // If that doesn't work, try to extract from the corrupted string directly
-                          // Look for the pattern that contains both fields
-                          const fullJsonMatch = data.match(
-                            /\{.*"initialInvestment".*"fromHome".*\}/
-                          );
-                          if (fullJsonMatch) {
-                            console.log(
-                              "✅ Found full JSON match:",
-                              fullJsonMatch[0]
-                            );
-                            const cleanData = JSON.parse(fullJsonMatch[0]);
-                            console.log(
-                              "✅ Parsed full clean data:",
-                              cleanData
-                            );
-                            return cleanData;
-                          }
-
-                          // As a last resort, try to reconstruct the data from the corrupted string
-                          // Extract the fromHome value
-                          const fromHomeMatch = data.match(/"fromHome":(\d+)/);
-                          const fromHome = fromHomeMatch
-                            ? parseInt(fromHomeMatch[1])
-                            : 0;
-                          console.log("🔍 Extracted fromHome:", fromHome);
-
-                          // Try to extract initialInvestment text from the corrupted string
-                          // Look for the pattern that shows the actual text
-                          const textMatch = data.match(
-                            /"initialInvestment":"([^"]+)"/
-                          );
-                          const initialInvestment = textMatch
-                            ? textMatch[1]
-                            : "Investment";
-                          console.log(
-                            "🔍 Extracted initialInvestment:",
-                            initialInvestment
-                          );
-
-                          const reconstructed = {
-                            initialInvestment: initialInvestment,
-                            fromHome: fromHome,
-                          };
-                          console.log("✅ Reconstructed data:", reconstructed);
-                          return reconstructed;
-                        } catch (e) {
-                          console.error(
-                            "❌ Failed to parse corrupted fundingSources:",
-                            e
-                          );
-                        }
-                      }
-                    }
-                  }
-
-                  console.log("❌ No valid data found, returning null");
-                  return null;
-                };
-
-                const cleanData = cleanFundingSources(
-                  currentPlanData.fundingSources
-                );
-
-                console.log("🎯 Final cleanData:", cleanData);
-                console.log("🎯 cleanData type:", typeof cleanData);
-                console.log(
-                  "🎯 cleanData.initialInvestment:",
-                  cleanData?.initialInvestment
-                );
-                console.log("🎯 cleanData.fromHome:", cleanData?.fromHome);
-
-                if (cleanData && typeof cleanData === "object") {
-                  return (
-                    <div className="space-y-4">
-                      {cleanData.initialInvestment && (
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                            Initial Investment Source:
-                          </h3>
-                          <p className="text-gray-700 text-base">
-                            {cleanData.initialInvestment}
-                          </p>
-                        </div>
-                      )}
-                      {cleanData.fromHome && (
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                            Investment Amount:
-                          </h3>
-                          <p className="text-gray-700 text-base">
-                            €{cleanData.fromHome.toLocaleString()}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  );
-                } else {
-                  return (
-                    <p className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl text-justify">
-                      No funding information available
-                    </p>
-                  );
-                }
-              })()}
-            </div>
-          </div>
+          <FundingSources fundingSources={currentPlanData.fundingSources} />
         </div>
       </main>
     </div>

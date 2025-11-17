@@ -525,19 +525,46 @@ export default function EditBusinessPlan({
             </p>
           </div>
           <ProductionSalesForecast
-            productionSalesForecast={
-              formData.productionSalesForecast &&
-              formData.productionSalesForecast.length > 0
-                ? formData.productionSalesForecast
+            profitLossProjection={
+              (formData as any).profitLossProjection &&
+              (formData as any).profitLossProjection.length > 0
+                ? (formData as any).profitLossProjection
+                : formData.productionSalesForecast &&
+                  formData.productionSalesForecast.length > 0
+                ? formData.productionSalesForecast.map((item: any) => ({
+                    year: item.year || 0,
+                    ricavi_vendite_prestazioni: item.sales_revenue || 0,
+                    acquisti_merci: 0,
+                    acquisti_servizi: 0,
+                    godimento_beni_terzi: 0,
+                    valore_aggiunto: 0,
+                    costi_personale: 0,
+                    margine_operativo_lordo: 0,
+                    ammortamenti_immateriali: 0,
+                    ammortamenti_materiali: 0,
+                    risultato_operativo: 0,
+                    oneri_finanziari: 0,
+                    risultato_prima_imposte: 0,
+                    imposte_reddito: 0,
+                    utile_netto: 0,
+                  }))
                 : [
                     {
                       year: 1,
-                      sales_revenue: 0,
-                      revenue_growth: 0,
-                      units_sold: 0,
-                      average_price: 0,
-                      unit_production_cost: 0,
-                      unit_margin: 0,
+                      ricavi_vendite_prestazioni: 0,
+                      acquisti_merci: 0,
+                      acquisti_servizi: 0,
+                      godimento_beni_terzi: 0,
+                      valore_aggiunto: 0,
+                      costi_personale: 0,
+                      margine_operativo_lordo: 0,
+                      ammortamenti_immateriali: 0,
+                      ammortamenti_materiali: 0,
+                      risultato_operativo: 0,
+                      oneri_finanziari: 0,
+                      risultato_prima_imposte: 0,
+                      imposte_reddito: 0,
+                      utile_netto: 0,
                     },
                     {
                       year: 2,

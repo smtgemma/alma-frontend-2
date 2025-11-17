@@ -14,7 +14,7 @@ interface DocDownloadProps {
   businessModel?: string;
   marketingSalesStrategy?: string;
   sectorStrategy?: string;
-  fundingSources?: string;
+  fundingSources?: any;
   operationsPlan?: string;
   managementTeam?: string;
   implementationTimeline?: any[];
@@ -91,7 +91,7 @@ const generateChartImage = async (
               data: data.map((item) =>
                 parseFloat(item.value || item.amount || 0)
               ),
-              backgroundColor: colors.slice(0, data.length),
+              backgroundColor: colors?.slice(0, data.length),
               borderColor: "#2c3e50",
               borderWidth: 2,
             },
@@ -350,7 +350,7 @@ export const generateWordDocument = async ({
   businessModel = "",
   marketingSalesStrategy = "",
   sectorStrategy = "",
-  fundingSources = "",
+  fundingSources = {} as any,
   operationsPlan = "",
   managementTeam = "",
   financialAnalysis = [],
@@ -367,12 +367,24 @@ export const generateWordDocument = async ({
   balanceSheetAnalysis = "",
 }: DocDownloadProps) => {
   // Ensure all array parameters are properly initialized to prevent null reference errors
-  const safeFinancialAnalysis = Array.isArray(financialAnalysis) ? financialAnalysis : [];
-  const safeRatiosAnalysis = Array.isArray(ratiosAnalysis) ? ratiosAnalysis : [];
-  const safeProductionSalesForecast = Array.isArray(productionSalesForecast) ? productionSalesForecast : [];
-  const safeFinancialHighlights = Array.isArray(financialHighlights) ? financialHighlights : [];
-  const safeCashFlowAnalysis = Array.isArray(cashFlowAnalysis) ? cashFlowAnalysis : [];
-  const safeProfitLossProjection = Array.isArray(profitLossProjection) ? profitLossProjection : [];
+  const safeFinancialAnalysis = Array.isArray(financialAnalysis)
+    ? financialAnalysis
+    : [];
+  const safeRatiosAnalysis = Array.isArray(ratiosAnalysis)
+    ? ratiosAnalysis
+    : [];
+  const safeProductionSalesForecast = Array.isArray(productionSalesForecast)
+    ? productionSalesForecast
+    : [];
+  const safeFinancialHighlights = Array.isArray(financialHighlights)
+    ? financialHighlights
+    : [];
+  const safeCashFlowAnalysis = Array.isArray(cashFlowAnalysis)
+    ? cashFlowAnalysis
+    : [];
+  const safeProfitLossProjection = Array.isArray(profitLossProjection)
+    ? profitLossProjection
+    : [];
   const safeBalanceSheet = Array.isArray(balanceSheet) ? balanceSheet : [];
   // Normalize balance sheet to common keys used across UI/PDF
   const normalizeBalanceSheetItem = (item: any) => {
@@ -385,9 +397,12 @@ export const generateWordDocument = async ({
       0;
     const net_equity = item.net_equity ?? item.total_equity ?? item.equity ?? 0;
     const net_financial_debt = item.net_financial_debt ?? item.liabilities ?? 0;
-    const net_fixed_assets = item.net_fixed_assets ?? item.total_fixed_assets ?? 0;
+    const net_fixed_assets =
+      item.net_fixed_assets ?? item.total_fixed_assets ?? 0;
     const net_operating_working_capital =
-      item.net_operating_working_capital ?? item.net_operating_current_assets ?? 0;
+      item.net_operating_working_capital ??
+      item.net_operating_current_assets ??
+      0;
     const cash_and_banks =
       item.cash_and_banks ?? item.cash_bank_accounts ?? item.cash_bank ?? 0;
 
@@ -408,11 +423,17 @@ export const generateWordDocument = async ({
       equity,
     };
   };
-  const normalizedBalanceSheet = safeBalanceSheet.map(normalizeBalanceSheetItem);
-  const safeNetFinancialPosition = Array.isArray(netFinancialPosition) ? netFinancialPosition : [];
+  const normalizedBalanceSheet = safeBalanceSheet.map(
+    normalizeBalanceSheetItem
+  );
+  const safeNetFinancialPosition = Array.isArray(netFinancialPosition)
+    ? netFinancialPosition
+    : [];
   const safeDebtStructure = Array.isArray(debtStructure) ? debtStructure : [];
   const safeKeyRatios = Array.isArray(keyRatios) ? keyRatios : [];
-  const safeOperatingCostBreakdown = Array.isArray(operatingCostBreakdown) ? operatingCostBreakdown : [];
+  const safeOperatingCostBreakdown = Array.isArray(operatingCostBreakdown)
+    ? operatingCostBreakdown
+    : [];
   // Helper function to convert data for charts
   const convertDataForChart = (data: any[], chartType: string = "bar") => {
     if (!data || data.length === 0) return [];
@@ -436,7 +457,9 @@ export const generateWordDocument = async ({
             netIncome,
           } as any;
         })
-        .filter((row: any) => (row.value || 0) !== 0 || (row.netIncome || 0) !== 0);
+        .filter(
+          (row: any) => (row.value || 0) !== 0 || (row.netIncome || 0) !== 0
+        );
     }
 
     if (chartType === "operating_cost") {
@@ -454,7 +477,7 @@ export const generateWordDocument = async ({
         return costComponents
           .filter((comp) => comp.value > 0)
           .sort((a, b) => b.value - a.value)
-          .slice(0, 5); // Top 5 cost components
+          ?.slice(0, 5); // Top 5 cost components
       }
     }
 
@@ -463,7 +486,12 @@ export const generateWordDocument = async ({
       if (data.length > 0) {
         const item = data[0]; // Use first year's data
         // Support multiple possible input shapes
-        const investedCap = item.invested_capital ?? item.total_invested_capital ?? item.net_invested_capital ?? item.sources_of_financing ?? 0;
+        const investedCap =
+          item.invested_capital ??
+          item.total_invested_capital ??
+          item.net_invested_capital ??
+          item.sources_of_financing ??
+          0;
         const equity = item.net_equity ?? item.total_equity ?? item.equity ?? 0;
         const liabilities = item.net_financial_debt ?? item.liabilities ?? 0;
         const assets = item.assets ?? investedCap;
@@ -559,54 +587,54 @@ export const generateWordDocument = async ({
   const financialChart =
     safeFinancialHighlights.length > 0
       ? await generateChartImage(
-        "bar",
-        convertDataForChart(safeFinancialHighlights, "financial"),
-        "Grafico a barre punti salienti finanziari"
-      )
+          "bar",
+          convertDataForChart(safeFinancialHighlights, "financial"),
+          "Grafico a barre punti salienti finanziari"
+        )
       : "";
 
   const profitLossChart =
     safeProfitLossProjection.length > 0
       ? await generateChartImage(
-        "line",
-        convertDataForChart(safeProfitLossProjection, "financial"),
-        "Grafico tendenza profitti e perdite"
-      )
+          "line",
+          convertDataForChart(safeProfitLossProjection, "financial"),
+          "Grafico tendenza profitti e perdite"
+        )
       : "";
   const netFinancialPositionChart =
     safeNetFinancialPosition.length > 0
       ? await generateChartImage(
-        "line",
-        convertDataForChart(safeNetFinancialPosition, "net_financial"),
-        "Grafico posizione finanziaria netta"
-      )
+          "line",
+          convertDataForChart(safeNetFinancialPosition, "net_financial"),
+          "Grafico posizione finanziaria netta"
+        )
       : "";
 
   const balanceSheetChart =
     normalizedBalanceSheet.length > 0
       ? await generateChartImage(
-        "pie",
-        convertDataForChart(normalizedBalanceSheet, "balance_sheet"),
-        "Grafico distribuzione stato patrimoniale"
-      )
+          "pie",
+          convertDataForChart(normalizedBalanceSheet, "balance_sheet"),
+          "Grafico distribuzione stato patrimoniale"
+        )
       : "";
 
   const keyRatiosChart =
     safeKeyRatios.length > 0
       ? await generateChartImage(
-        "bar",
-        convertDataForChart(safeKeyRatios),
-        "Grafico a barre rapporti chiave"
-      )
+          "bar",
+          convertDataForChart(safeKeyRatios),
+          "Grafico a barre rapporti chiave"
+        )
       : "";
 
   const operatingCostChart =
     safeOperatingCostBreakdown.length > 0
       ? await generateChartImage(
-        "pie",
-        convertDataForChart(safeOperatingCostBreakdown, "operating_cost"),
-        "Grafico distribuzione costi operativi"
-      )
+          "pie",
+          convertDataForChart(safeOperatingCostBreakdown, "operating_cost"),
+          "Grafico distribuzione costi operativi"
+        )
       : "";
 
   // Helper function to check if a value is likely a year
@@ -639,7 +667,9 @@ export const generateWordDocument = async ({
     if (!data || data.length === 0) return "";
 
     // Find the first valid object in the array
-    const firstValidItem = data.find(item => item && typeof item === 'object' && item !== null);
+    const firstValidItem = data.find(
+      (item) => item && typeof item === "object" && item !== null
+    );
 
     if (!firstValidItem) return ""; // No valid objects found
 
@@ -654,7 +684,7 @@ export const generateWordDocument = async ({
         const cellValue = item[header];
         const formattedValue =
           typeof cellValue === "number" ||
-            (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
+          (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
             ? formatNumber(cellValue, header)
             : String(cellValue || "");
         row.push(formattedValue);
@@ -668,17 +698,17 @@ export const generateWordDocument = async ({
         (row, rowIndex) =>
           `<tr>
             ${row
-            .map((cell, cellIndex) => {
-              const isHeader = cellIndex === 0;
-              const cellStyle = isHeader
-                ? "background-color: #f5f5f5; font-weight: bold; font-size: 12px; padding: 8px 6px; text-align: left; white-space: nowrap;"
-                : "font-size: 11px; padding: 6px 4px; text-align: center; white-space: nowrap;";
+              .map((cell, cellIndex) => {
+                const isHeader = cellIndex === 0;
+                const cellStyle = isHeader
+                  ? "background-color: #f5f5f5; font-weight: bold; font-size: 12px; padding: 8px 6px; text-align: left; white-space: nowrap;"
+                  : "font-size: 11px; padding: 6px 4px; text-align: center; white-space: nowrap;";
 
-              return isHeader
-                ? `<th style="${cellStyle}">${cell}</th>`
-                : `<td style="${cellStyle}">${cell}</td>`;
-            })
-            .join("")}
+                return isHeader
+                  ? `<th style="${cellStyle}">${cell}</th>`
+                  : `<td style="${cellStyle}">${cell}</td>`;
+              })
+              .join("")}
           </tr>`
       )
       .join("");
@@ -727,14 +757,14 @@ export const generateWordDocument = async ({
           const cellValue = item ? item[header] : "";
           const formattedValue =
             typeof cellValue === "number" ||
-              (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
+            (!isNaN(parseFloat(cellValue)) && isFinite(parseFloat(cellValue)))
               ? formatNumber(cellValue, header)
               : String(cellValue || "");
 
           // Abbreviate long numbers for better fit
           let displayValue = formattedValue;
           if (displayValue.length > 8) {
-            displayValue = displayValue.replace(/,/g, "").slice(0, 8) + "...";
+            displayValue = displayValue.replace(/,/g, "")?.slice(0, 8) + "...";
           }
 
           return `<td style="font-size: 9px; padding: 2px 1px; text-align: center; white-space: nowrap; border: 1px solid #333; width: ${yearWidth};">${displayValue}</td>`;
@@ -808,8 +838,10 @@ export const generateWordDocument = async ({
     const headerRow = headers
       .map(
         (header, index) =>
-          `<th style="width: ${columnWidths[index]
-          }; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${columnWidths[index]
+          `<th style="width: ${
+            columnWidths[index]
+          }; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${
+            columnWidths[index]
           };">${header
             .replace(/_/g, " ")
             .replace(/\b\w/g, (l) => l.toUpperCase())}</th>`
@@ -826,8 +858,8 @@ export const generateWordDocument = async ({
               const cellValue = row[header];
               const formattedValue =
                 typeof cellValue === "number" ||
-                  (!isNaN(parseFloat(cellValue)) &&
-                    isFinite(parseFloat(cellValue)))
+                (!isNaN(parseFloat(cellValue)) &&
+                  isFinite(parseFloat(cellValue)))
                   ? formatNumber(cellValue, header)
                   : String(cellValue || "");
 
@@ -856,6 +888,89 @@ export const generateWordDocument = async ({
         </div>
       </div>
     `;
+  };
+
+  // Helper function to generate funding sources HTML
+  const generateFundingSourcesHTML = (fundingSources: any) => {
+    if (typeof fundingSources === "string") {
+      return `<p>${fundingSources.replace(/\n/g, "</p><p>")}</p>`;
+    }
+
+    if (typeof fundingSources !== "object" || fundingSources === null) {
+      return `<p>No funding information available</p>`;
+    }
+
+    let html = "";
+
+    // Summary cards
+    if (fundingSources.initialInvestment || fundingSources.fromHome || fundingSources.bankLoan || fundingSources.totalInvestment) {
+      html += `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+          ${fundingSources.initialInvestment ? `
+            <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 15px;">
+              <p style="margin: 0 0 5px 0; font-size: 12px; color: #1E40AF; font-weight: 600;">Investimento iniziale</p>
+              <p style="margin: 0; font-size: 18px; font-weight: bold; color: #1E3A8A;">€${fundingSources.initialInvestment.toLocaleString()}</p>
+            </div>
+          ` : ""}
+          ${fundingSources.fromHome ? `
+            <div style="background: #F0FDF4; border: 1px solid: #BBF7D0; border-radius: 8px; padding: 15px;">
+              <p style="margin: 0 0 5px 0; font-size: 12px; color: #15803D; font-weight: 600;">Capitale proprio</p>
+              <p style="margin: 0; font-size: 18px; font-weight: bold; color: #14532D;">€${fundingSources.fromHome.toLocaleString()}</p>
+            </div>
+          ` : ""}
+          ${fundingSources.bankLoan ? `
+            <div style="background: #FAF5FF; border: 1px solid #E9D5FF; border-radius: 8px; padding: 15px;">
+              <p style="margin: 0 0 5px 0; font-size: 12px; color: #7C3AED; font-weight: 600;">Prestito bancario</p>
+              <p style="margin: 0; font-size: 18px; font-weight: bold; color: #5B21B6;">€${fundingSources.bankLoan.toLocaleString()}</p>
+            </div>
+          ` : ""}
+          ${fundingSources.totalInvestment ? `
+            <div style="background: #F9FAFB; border: 1px solid #D1D5DB; border-radius: 8px; padding: 15px;">
+              <p style="margin: 0 0 5px 0; font-size: 12px; color: #374151; font-weight: 600;">Investimento totale</p>
+              <p style="margin: 0; font-size: 18px; font-weight: bold; color: #111827;">€${fundingSources.totalInvestment.toLocaleString()}</p>
+            </div>
+          ` : ""}
+        </div>
+      `;
+    }
+
+    // Fixed Investments Table
+    if (fundingSources.fixedInvestments && fundingSources.fixedInvestments.length > 0) {
+      html += `
+        <h3 style="margin: 20px 0 10px 0; font-size: 16px; color: #34495e;">6.1 Investimenti fissi</h3>
+        <table border="1" cellpadding="6" cellspacing="0" style="width: 100%; border-collapse: collapse; font-family: 'Times New Roman', serif; font-size: 11px; margin-bottom: 15px;">
+          <thead>
+            <tr style="background-color: #E6D8FF;">
+              <th style="padding: 8px; text-align: left; font-size: 12px; color: #121417;">Descrizione</th>
+              <th style="padding: 8px; text-align: center; font-size: 12px; color: #121417;">Categoria</th>
+              <th style="padding: 8px; text-align: center; font-size: 12px; color: #121417;">Importo</th>
+              <th style="padding: 8px; text-align: center; font-size: 12px; color: #121417;">Tasso ammortamento</th>
+              <th style="padding: 8px; text-align: center; font-size: 12px; color: #121417;">Ammortamento annuale</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${fundingSources.fixedInvestments.map((inv: any, index: number) => `
+              <tr style="background-color: ${index % 2 === 0 ? "#F9FAFB" : "#FFFFFF"};">
+                <td style="padding: 6px; font-size: 11px; color: #61758A;">${inv.label}</td>
+                <td style="padding: 6px; text-align: center; font-size: 11px; color: #61758A; text-transform: capitalize;">${inv.category || "-"}</td>
+                <td style="padding: 6px; text-align: center; font-size: 11px; color: #61758A; font-weight: 500;">€${inv.amount.toLocaleString()}</td>
+                <td style="padding: 6px; text-align: center; font-size: 11px; color: #61758A;">${(inv.amortizationRate * 100).toFixed(1)}%</td>
+                <td style="padding: 6px; text-align: center; font-size: 11px; color: #61758A; font-weight: 600;">€${inv.annualAmortization.toLocaleString()}</td>
+              </tr>
+            `).join("")}
+            <tr style="background-color: #E5E7EB; font-weight: bold; border-top: 2px solid #9CA3AF;">
+              <td style="padding: 8px; font-size: 12px; color: #111827;">TOTALE</td>
+              <td style="padding: 8px; text-align: center; font-size: 12px; color: #111827;">-</td>
+              <td style="padding: 8px; text-align: center; font-size: 12px; color: #111827;">€${fundingSources.fixedInvestments.reduce((sum: number, inv: any) => sum + inv.amount, 0).toLocaleString()}</td>
+              <td style="padding: 8px; text-align: center; font-size: 12px; color: #111827;">-</td>
+              <td style="padding: 8px; text-align: center; font-size: 12px; color: #111827;">€${fundingSources.fixedInvestments.reduce((sum: number, inv: any) => sum + inv.annualAmortization, 0).toLocaleString()}</td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+    }
+
+    return html;
   };
 
   // Create comprehensive HTML content for the business plan
@@ -1085,6 +1200,8 @@ export const generateWordDocument = async ({
             <p style="margin: 10px 0;">8. Stato Patrimoniale</p>
             <p style="margin: 10px 0;">9. Posizione finanziaria netta</p>
             <p style="margin: 10px 0;">10. Struttura del debito</p>
+            <p style="margin: 10px 0;">11. Ratios Analysis</p>
+            <p style="margin: 10px 0;">10. Struttura del debito</p>
             <p style="margin: 10px 0;">12. Analisi rapporti</p>
           </div>
         </div>
@@ -1172,24 +1289,7 @@ export const generateWordDocument = async ({
           <h2>6. Fonti di finanziamento</h2>
         </div>
         <div class="section-content">
-          <p>${
-            typeof fundingSources === "string"
-              ? fundingSources.replace(/\n/g, "</p><p>")
-              : typeof fundingSources === "object" && fundingSources !== null
-              ? Object.entries(fundingSources)
-                  .map(
-                    ([key, value]) =>
-                      `${key
-                        .replace(/\n/g, " ")
-                        .replace(/^./, (str) => str.toUpperCase())}: ${
-                        typeof value === "number"
-                          ? `€${value.toLocaleString()}`
-                          : value
-                      }`
-                  )
-                  .join(", ")
-              : "No funding information available"
-          }</p>
+          ${generateFundingSourcesHTML(fundingSources)}
         </div>
       </div>
       `
@@ -1197,17 +1297,26 @@ export const generateWordDocument = async ({
       }
 
       ${
-        safeProductionSalesForecast.length > 0
+        safeProfitLossProjection.length > 0
           ? `
       <div class="section">
         <div class="section-title">
-          <h2>7. Previsione vendite produzione</h2>
+          <h2>7. Conto economico a valore aggiunto</h2>
         </div>
         <div class="section-content">
-          ${generateTableHTML(
-            safeProductionSalesForecast,
-            "Tabella previsione vendite produzione"
+          ${generateTransposedTableHTML(
+            safeProfitLossProjection,
+            "Tabella Conto economico a valore aggiunto"
           )}
+          ${
+            profitLossChart
+              ? `
+            <div style="text-align: center;">
+              <img src="${profitLossChart}" alt="Grafico tendenza profitti e perdite" />
+            </div>
+          `
+              : ""
+          }
         </div>
       </div>
       `

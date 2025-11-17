@@ -4,6 +4,7 @@ import { GoDownload } from "react-icons/go";
 import { generateEmpathyPDF } from "../generated-plans-graph/pdf-downloader/PdfDownload";
 import { generateWordDocument } from "./DocDownload";
 import DownloadOptionsModal from "./DownloadOptionsModal";
+import FundingSources from "../generated-plans-graph/FundingSources";
 
 interface GeneratedBusinessPlanforUserProps {
   executiveSummary: string;
@@ -12,7 +13,7 @@ interface GeneratedBusinessPlanforUserProps {
   businessModel?: string;
   marketingSalesStrategy?: string;
   sectorStrategy?: string;
-  fundingSources?: string;
+  fundingSources?: any;
   operationsPlan?: string;
   managementTeam?: string;
   financialHighlights?: any[];
@@ -36,7 +37,7 @@ const GeneratedBusinessPlanforUser = ({
   businessModel = "",
   marketingSalesStrategy = "",
   sectorStrategy = "",
-  fundingSources = "",
+  fundingSources = {} as any,
   operationsPlan = "",
   managementTeam = "",
   financialHighlights = [],
@@ -152,32 +153,7 @@ const GeneratedBusinessPlanforUser = ({
           </section>
 
           {/* Funding Sources */}
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-            6. Fonti di finanziamento
-          </h2>
-          <div className="">
-            <div className="prose max-w-none">
-              <p className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl text-justify">
-                {typeof fundingSources === "string"
-                  ? fundingSources
-                  : typeof fundingSources === "object" &&
-                    fundingSources !== null
-                  ? Object.entries(fundingSources)
-                      .map(
-                        ([key, value]) =>
-                          `${key
-                            .replace(/([A-Z])/g, " $1")
-                            .replace(/^./, (str) => str.toUpperCase())}: ${
-                            typeof value === "number"
-                              ? `$${value.toLocaleString()}`
-                              : value
-                          }`
-                      )
-                      .join(", ")
-                  : "No funding information available"}
-              </p>
-            </div>
-          </div>
+          <FundingSources fundingSources={fundingSources} />
         </div>
       </main>
 

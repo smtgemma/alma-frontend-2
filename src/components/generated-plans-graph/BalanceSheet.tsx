@@ -1,42 +1,34 @@
 "use client";
 
 import { IBalanceSheet } from "@/redux/types";
-import { useSmartForm } from "@/components/ai-smart-form/SmartFormContext";
 import { useMemo } from "react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
+  ResponsiveContainer,
+  Tooltip,
   LineChart,
   Line,
-  Label,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from "recharts";
-// src/components/generated-plans-graph/BalanceSheet.tsx
-// Default pie chart data (fallback)
-const defaultPieChartData = [
-  { name: "Attività", value: 40, fill: "#8B5CF6" },
-  { name: "Passività", value: 40, fill: "#1E1B4B" },
-  { name: "Patrimonio netto", value: 20, fill: "#EF4444" },
-];
 
-import { formatEuro } from "@/utils/euFormat";
 // Format currency for display (EU)
 const formatCurrency = (value: number) => {
-  if (value === undefined || value === null || isNaN(value)) return "€ 0,00";
-  return formatEuro(Number(value), { decimals: 2, withSymbol: true });
+  if (value === undefined || value === null || isNaN(value)) return "€0,00";
+  return new Intl.NumberFormat("it-IT", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
 };
 
-// Custom label component for pie chart - values inside segments with names
+// Custom label component for pie chart
 const CustomLabel = (props: any) => {
   const { cx, cy, midAngle, innerRadius, outerRadius, percent, name } = props;
-
   if (!percent || percent < 0.01) return null;
 
   const RADIAN = Math.PI / 180;
@@ -54,10 +46,7 @@ const CustomLabel = (props: any) => {
         dominantBaseline="central"
         fontSize="16"
         fontWeight="bold"
-        style={{
-          textShadow: "2px 2px 4px rgba(0,0,0,0.9)",
-          pointerEvents: "none",
-        }}
+        style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.9)" }}
       >
         {`${(percent * 100).toFixed(0)}%`}
       </text>
@@ -68,11 +57,7 @@ const CustomLabel = (props: any) => {
         textAnchor="middle"
         dominantBaseline="central"
         fontSize="12"
-        fontWeight="normal"
-        style={{
-          textShadow: "2px 2px 4px rgba(0,0,0,0.9)",
-          pointerEvents: "none",
-        }}
+        style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.9)" }}
       >
         {name}
       </text>
@@ -80,231 +65,189 @@ const CustomLabel = (props: any) => {
   );
 };
 
-// Extract balance sheet components from your exact data structure
-const extractBalanceSheetComponents = (item: any) => {
-  if (!item || typeof item !== "object") {
-    return { assets: 0, liabilities: 0, equity: 0 };
-  }
-
-  // Use your exact data structure fields
-  // Assets: Use invested_capital (represents total capital invested)
-  const assets = item.invested_capital || item.sources_of_financing || 0;
-
-  // Equity: Use net_equity (represents shareholders' equity)
-  const equity = item.net_equity || 0;
-
-  // Liabilities: For balance sheet visualization, we can use net_financial_debt
-  // as it represents the debt/liability portion, or calculate as Assets - Equity
-  const netFinancialDebt = item.net_financial_debt || 0;
-  const calculatedLiabilities = Math.max(0, assets - equity);
-
-  // Use the larger of the two liability calculations
-  const liabilities = Math.max(netFinancialDebt, calculatedLiabilities);
-
-  // Debug: Log extracted values for verification
-  if (assets > 0 || liabilities > 0 || equity > 0) {
-    console.log("✅ Successfully extracted:", {
-      year: item.year,
-      assets,
-      liabilities,
-      equity,
-      source_invested_capital: item.invested_capital,
-      source_net_equity: item.net_equity,
-      source_net_financial_debt: item.net_financial_debt,
-    });
-  }
-
-  return { assets, liabilities, equity };
-};
+interface BalanceSheetItem {
+  year: number;
+  // ATTIVO (Assets)
+  immobilizzazioni_immateriali?: number;
+  tot_immob_immateriali_nette?: number;
+  terreni_e_fabbricati?: number;
+  impianti_e_macchinari?: number;
+  attrezzature_arredi_altri_beni?: number;
+  tot_immob_materiali_nette?: number;
+  tot_immob_finanziarie?: number;
+  totale_attivo_fisso?: number;
+  crediti_commerciali?: number;
+  disponibilita_liquide?: number;
+  ratei_risconti_attivi?: number;
+  totale_attivo_circolante?: number;
+  totale_attivo?: number;
+  // PASSIVO E PATRIMONIO NETTO (Liabilities & Equity)
+  capitale_sociale?: number;
+  riserve_utili_accantonati?: number;
+  utile_perdita_esercizio?: number;
+  patrimonio_netto?: number;
+  fondo_tfr?: number;
+  fondi?: number;
+  debiti_ml_termine_mutuo?: number;
+  passivita_consolidate?: number;
+  debiti_vs_fornitori?: number;
+  debiti_vs_soci?: number;
+  debiti_vs_erario?: number;
+  debiti_vs_banche?: number;
+  totale_debiti_breve_termine?: number;
+  ratei_risconti_passivi?: number;
+  passivita_correnti?: number;
+  totale_passivo?: number;
+}
 
 export default function BalanceSheet({
   balanceSheet,
   netFinancialPosition,
   balanceSheetAnalysis,
 }: IBalanceSheet) {
-  // Debug: Log the incoming data and test extraction (only once)
-  if (balanceSheet?.length > 0) {
-    console.log("📊 BalanceSheet received:", balanceSheetAnalysis, "items");
-
-    const testItem = balanceSheet[balanceSheet.length - 1];
-    const testExtraction = extractBalanceSheetComponents(testItem);
-    console.log("🎯 Test extraction result:", testExtraction);
-  }
-  // Inject Year 0 from Balance Sheet extractions (if available)
-  let step1: any = null;
-  try {
-    const { getFormData } = useSmartForm();
-    step1 = getFormData("step1") as any;
-  } catch (e) {
-    // If SmartFormProvider is not present, gracefully skip using step1 context
-    step1 = null;
-  }
-
-  let enhancedBalanceSheet = balanceSheet;
-  try {
-    const bsExtra = (step1?.balanceSheetExtractions || [])[0];
-    const fin = bsExtra?.financial_data || {};
-    // Try to derive assets/liabilities/equity from financial_data keys if present
-    const year0: any = { year: 0 };
-
-    // Map extracted financial data to your balance sheet structure if available
-    if (fin.assets || fin.current_assets || fin.non_current_assets) {
-      const assets =
-        fin.assets ?? (fin.current_assets || 0) + (fin.non_current_assets || 0);
-      const liabilities =
-        fin.liabilities ??
-        (fin.current_liabilities || 0) + (fin.non_current_liabilities || 0);
-      const equity =
-        fin.equity ??
-        fin.net_equity ??
-        (typeof assets === "number" && typeof liabilities === "number"
-          ? assets - liabilities
-          : undefined);
-
-      // Map to your structure
-      if (typeof assets === "number") year0.invested_capital = assets;
-      if (typeof equity === "number") year0.net_equity = equity;
-      if (typeof liabilities === "number")
-        year0.net_financial_debt = liabilities;
-      year0.sources_of_financing = assets;
-    }
-
-    if (
-      year0.invested_capital ||
-      year0.net_equity ||
-      year0.net_financial_debt
-    ) {
-      enhancedBalanceSheet = [year0, ...balanceSheet];
-    }
-  } catch (e) {
-    // fail-safe: do nothing
-  }
-  // Helper: safely extract possible fields from API item (supports legacy and new backend keys)
-  const getFieldValue = (item: any, key: string) => {
-    if (!item) {
-      return 0;
-    }
-
-    // Support alternative backend field names
-    const fieldAliases: Record<string, string[]> = {
-      invested_capital: [
-        "total_invested_capital",
-        "net_invested_capital",
-        "total_funding_sources",
-        "total_funding_sources_eur",
-        "total_funding_sources_amount",
-        "total_funding_sources_value",
-        "total_funding_sources",
-      ],
-      net_equity: ["total_equity", "equity"],
-      net_fixed_assets: ["total_fixed_assets", "fixed_assets"],
-      net_operating_working_capital: [
-        "net_operating_current_assets",
-        "net_working_capital",
-      ],
-      cash_and_banks: ["cash_bank_accounts", "cash_bank", "cash_and_bank"],
-      net_financial_debt: ["net_financial_debt"],
-    };
-
-    let value = item[key];
-    if (value === undefined && fieldAliases[key]) {
-      for (const alias of fieldAliases[key]) {
-        if (item[alias] !== undefined && item[alias] !== null) {
-          value = item[alias];
-          break;
-        }
-      }
-    }
-
-    // Handle numeric values
-    if (typeof value === "number") {
-      return value;
-    }
-
-    // Handle string values
-    if (typeof value === "string") {
-      const parsed = parseFloat(value);
-      if (!isNaN(parsed)) {
-        return parsed;
-      }
-    }
-
-    // Return 0 for undefined, null, or invalid values
-    return 0;
-  };
-
-  // Determine which columns to show in the table: pick two fields that actually have values
-  const italianLabels: Record<string, string> = {
-    // Computed fields
-    assets: "Attività Totali",
-    liabilities: "Passività Totali",
-    equity: "Patrimonio Netto",
-    // Italian field names (from your console logs)
-    totale_attivita: "Totale Attività",
-    attivita_correnti: "Attività Correnti",
-    attivita_non_correnti: "Attività Non Correnti",
-    passivita_correnti: "Passività Correnti",
-    // English field names (original structure)
-    net_equity: "Patrimonio Netto",
-    invested_capital: "Capitale Investito",
-    net_fixed_assets: "Attività Fisse Nette",
-    net_operating_working_capital: "Capitale Circolante Netto Operativo",
-    net_financial_debt: "Indebitamento Finanziario Netto",
-    share_capital: "Capitale Sociale",
-    reserves: "Riserve",
-    profit_loss: "Utile/Perdita",
-    sources_of_financing: "Fonti di Finanziamento",
-    intangible_assets: "Attività Immateriali",
-    tangible_assets: "Attività Materiali",
-    financial_assets: "Attività Finanziarie",
-    inventories: "Rimanenze",
-    net_receivables_from_customers: "Crediti Netti verso Clienti",
-    cash_and_banks: "Cassa e Banche",
-    current_assets: "Attività Correnti",
-    non_current_assets: "Attività Non Correnti",
-    current_liabilities: "Passività Correnti",
-    non_current_liabilities: "Passività Non Correnti",
-    short_term_bank_debts: "Debiti Bancari a Breve Termine",
-    long_term_bank_debts: "Debiti Bancari a Lungo Termine",
-    payables_to_suppliers: "Debiti verso Fornitori",
-    other_operating_payables: "Altri Debiti Operativi",
-  };
-
-  const priorityKeys = [
-    "invested_capital",
-    "net_equity",
-    "net_financial_debt",
-    "net_fixed_assets",
-    "net_operating_working_capital",
-    "cash_and_banks",
-    "share_capital",
-    "reserves",
-    "profit_loss",
-    "assets",
-    "liabilities",
-    "equity",
+  // Define the structure for ATTIVO (Assets) section
+  const attivoMetrics = [
+    {
+      key: "immobilizzazioni_immateriali",
+      label: "Immobilizzazioni immateriali (Software)",
+      isSubItem: true,
+    },
+    {
+      key: "tot_immob_immateriali_nette",
+      label: "Tot. Immob. Immateriali nette",
+      isBold: true,
+    },
+    {
+      key: "terreni_e_fabbricati",
+      label: "Terreni e fabbricati",
+      isSubItem: true,
+    },
+    {
+      key: "impianti_e_macchinari",
+      label: "Impianti e macchinari",
+      isSubItem: true,
+    },
+    {
+      key: "attrezzature_arredi_altri_beni",
+      label: "Attrezzature e arredi e altri beni",
+      isSubItem: true,
+    },
+    {
+      key: "tot_immob_materiali_nette",
+      label: "Tot. Immob. materiali nette",
+      isBold: true,
+    },
+    {
+      key: "tot_immob_finanziarie",
+      label: "Tot. Immob. finanziarie",
+      isBold: true,
+    },
+    {
+      key: "totale_attivo_fisso",
+      label: "TOTALE ATTIVO FISSO",
+      isBold: true,
+      isTotal: true,
+    },
+    {
+      key: "crediti_commerciali",
+      label: "Crediti commerciali",
+      isSubItem: true,
+    },
+    {
+      key: "disponibilita_liquide",
+      label: "Disponibilità liquide",
+      isSubItem: true,
+    },
+    {
+      key: "ratei_risconti_attivi",
+      label: "Ratei e risconti attivi",
+      isSubItem: true,
+    },
+    {
+      key: "totale_attivo_circolante",
+      label: "TOTALE ATTIVO CIRCOLANTE",
+      isBold: true,
+      isTotal: true,
+    },
+    {
+      key: "totale_attivo",
+      label: "TOTALE ATTIVO",
+      isBold: true,
+      isTotal: true,
+      isGrandTotal: true,
+    },
   ];
 
-  const activeKeys = priorityKeys.filter((k) => {
-    return balanceSheet?.some((row: any) => {
-      if (k === "assets" || k === "liabilities" || k === "equity") {
-        const buckets = extractBalanceSheetComponents(row);
-        return (buckets as any)[k] !== 0;
-      }
-      return getFieldValue(row, k) !== 0;
-    });
-  });
-
-  // Use the actual keys from your data structure
-  const combinedKeys = [
-    "invested_capital",
-    "net_equity",
-    "net_financial_debt",
-    "net_fixed_assets",
-    "net_operating_working_capital",
-    "cash_and_banks",
+  // Define the structure for PASSIVO E PATRIMONIO NETTO (Liabilities & Equity) section
+  const passivoMetrics = [
+    {
+      key: "capitale_sociale",
+      label: "Capitale sociale",
+      isSubItem: true,
+    },
+    {
+      key: "riserve_utili_accantonati",
+      label: "Riserve / Utili accantonati",
+      isSubItem: true,
+    },
+    {
+      key: "utile_perdita_esercizio",
+      label: "Utile (perdita) dell'esercizio",
+      isSubItem: true,
+    },
+    {
+      key: "patrimonio_netto",
+      label: "PATRIMONIO NETTO",
+      isBold: true,
+      isTotal: true,
+    },
+    { key: "fondo_tfr", label: "Fondo TFR", isSubItem: true },
+    { key: "fondi", label: "FONDI", isBold: true },
+    {
+      key: "debiti_ml_termine_mutuo",
+      label: "Debiti m/l termine (mutuo residuo)",
+      isSubItem: true,
+    },
+    {
+      key: "passivita_consolidate",
+      label: "PASSIVITÀ CONSOLIDATE",
+      isBold: true,
+      isTotal: true,
+    },
+    {
+      key: "debiti_vs_fornitori",
+      label: "Debiti vs. fornitori",
+      isSubItem: true,
+    },
+    { key: "debiti_vs_soci", label: "Debiti vs. soci", isSubItem: true },
+    { key: "debiti_vs_erario", label: "Debiti vs. erario", isSubItem: true },
+    { key: "debiti_vs_banche", label: "Debiti vs. banche", isSubItem: true },
+    {
+      key: "totale_debiti_breve_termine",
+      label: "Totale debiti a breve termine",
+      isBold: true,
+    },
+    {
+      key: "ratei_risconti_passivi",
+      label: "Ratei e risconti passivi",
+      isSubItem: true,
+    },
+    {
+      key: "passivita_correnti",
+      label: "PASSIVITÀ CORRENTI",
+      isBold: true,
+      isTotal: true,
+    },
+    {
+      key: "totale_passivo",
+      label: "TOTALE PASSIVO",
+      isBold: true,
+      isTotal: true,
+      isGrandTotal: true,
+    },
   ];
-  // Generate dynamic pie chart data from balanceSheet - Balance Sheet Components
+
+  // Generate pie chart data from the latest year
   const pieChartData = useMemo(() => {
     if (!balanceSheet || balanceSheet.length === 0) {
       return [
@@ -313,170 +256,298 @@ export default function BalanceSheet({
           value: 0,
           fill: "#8B5CF6",
           actualValue: 0,
-          formattedValue: formatCurrency(0),
         },
         {
           name: "Passività",
           value: 0,
           fill: "#1E1B4B",
           actualValue: 0,
-          formattedValue: formatCurrency(0),
         },
         {
           name: "Patrimonio netto",
           value: 0,
           fill: "#EF4444",
           actualValue: 0,
-          formattedValue: formatCurrency(0),
         },
       ];
     }
 
-    // Use the latest year item from balanceSheet for pie chart data (last item usually has the most recent data)
-    const item = balanceSheet[balanceSheet.length - 1] as any;
+    const latestYear = balanceSheet[balanceSheet.length - 1] as BalanceSheetItem;
+    const assets = latestYear.totale_attivo || 0;
+    const equity = latestYear.patrimonio_netto || 0;
+    const liabilities = (latestYear.totale_passivo || 0) - equity;
 
-    // Use the robust extraction function
-    const { assets, liabilities, equity } = extractBalanceSheetComponents(item);
-
-    // Calculate total for percentage calculation using absolute values
-    const absAssets = Math.abs(assets);
-    const absLiabilities = Math.abs(liabilities);
-    const absEquity = Math.abs(equity);
-    const total = absAssets + absLiabilities + absEquity;
+    const total = Math.abs(assets) + Math.abs(liabilities) + Math.abs(equity);
 
     if (total === 0) {
       return [
-        {
-          name: "Attività",
-          value: 0,
-          fill: "#8B5CF6",
-          actualValue: 0,
-          formattedValue: formatCurrency(0),
-        },
-        {
-          name: "Passività",
-          value: 0,
-          fill: "#1E1B4B",
-          actualValue: 0,
-          formattedValue: formatCurrency(0),
-        },
-        {
-          name: "Patrimonio netto",
-          value: 0,
-          fill: "#EF4444",
-          actualValue: 0,
-          formattedValue: formatCurrency(0),
-        },
+        { name: "Attività", value: 0, fill: "#8B5CF6", actualValue: 0 },
+        { name: "Passività", value: 0, fill: "#1E1B4B", actualValue: 0 },
+        { name: "Patrimonio netto", value: 0, fill: "#EF4444", actualValue: 0 },
       ];
     }
 
-    const assetsPercentage = (absAssets / total) * 100;
-    const liabilitiesPercentage = (absLiabilities / total) * 100;
-    const equityPercentage = (absEquity / total) * 100;
-
-    // Create segments for all three components
-    const segments = [
+    return [
       {
         name: "Attività",
-        value: Math.round(assetsPercentage),
+        value: Math.round((Math.abs(assets) / total) * 100),
         fill: "#8B5CF6",
         actualValue: assets,
-        formattedValue: formatCurrency(assets),
       },
       {
         name: "Passività",
-        value: Math.round(liabilitiesPercentage),
+        value: Math.round((Math.abs(liabilities) / total) * 100),
         fill: "#1E1B4B",
         actualValue: liabilities,
-        formattedValue: formatCurrency(liabilities),
       },
       {
         name: "Patrimonio netto",
-        value: Math.round(equityPercentage),
+        value: Math.round((Math.abs(equity) / total) * 100),
         fill: "#EF4444",
         actualValue: equity,
-        formattedValue: formatCurrency(equity),
       },
     ];
-
-    return segments;
-  }, [balanceSheet]); // Add dependency array to prevent continuous recalculation
+  }, [balanceSheet]);
 
   return (
-    <div className="mt-10 mx-auto space-y-8">
-      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+    <div className="mt-10 mx-auto space-y-8 px-2 sm:px-4">
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
         8. Stato Patrimoniale
       </h2>
-      {/* Balance Sheet Table */}
-      <div className="pdf-no-break">
-        <div className="overflow-x-auto">
-          <table className="w-full pdf-table">
-            <thead>
-              <tr className="bg-purple-100">
-                <th className="px-4 py-3 text-left text-sm font-medium text-[#121417]">
-                  {/* Year */}
-                  Anno
-                </th>
-                {combinedKeys.map((key) => (
-                  <th
-                    key={key}
-                    className="px-4 py-3 text-left text-sm font-medium text-[#121417]"
-                  >
-                    {italianLabels[key] || key}
+
+      {/* ATTIVO Section - Desktop/Tablet */}
+      <div className="hidden md:block">
+        <div className="rounded-lg border border-gray-300 shadow-sm overflow-hidden">
+          <div className="bg-gray-200 px-4 py-2 border-b border-gray-300">
+            <h3 className="text-sm font-bold text-gray-800">ATTIVO</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-full">
+              <thead>
+                <tr className="bg-gray-100 border-b border-gray-300">
+                  <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 sticky left-0 bg-gray-100 z-10 min-w-[200px]">
+                    Voci
                   </th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody>
-              {balanceSheet?.map((item: any, index) => (
-                <tr
-                  key={item.year}
-                  className={index % 2 === 0 ? "bg-gray-50" : "bg-gray-50"}
-                >
-                  <td className="px-4 py-3 text-sm font-normal text-[#61758A]">
-                    Anno {item.year}
-                  </td>
-                  {combinedKeys.map((key) => {
-                    // compute value per selected key
-                    let value = 0;
-                    if (
-                      key === "assets" ||
-                      key === "liabilities" ||
-                      key === "equity"
-                    ) {
-                      const buckets = extractBalanceSheetComponents(item);
-                      value = (buckets as any)[key] || 0;
-                    } else {
-                      value = getFieldValue(item, key);
-                    }
-
-                    // Debug: Log the first item's values to verify extraction
-                    if (index === 0) {
-                      console.log(
-                        `🔍 Year ${item.year}, Key: ${key}, Raw value: ${item[key]}, Processed value: ${value}`
-                      );
-                    }
-
-                    return (
-                      <td
-                        key={key}
-                        className="px-4 py-3 text-sm font-normal text-[#61758A]"
-                      >
-                        {formatCurrency(value)}
-                      </td>
-                    );
-                  })}
+                  {balanceSheet?.map((item: BalanceSheetItem) => (
+                    <th
+                      key={item.year}
+                      className="px-3 py-2 text-center text-xs font-semibold text-gray-700 whitespace-nowrap"
+                    >
+                      Anno {item.year} (€)
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {attivoMetrics.map((metric, index) => {
+                  const rowClass = metric.isGrandTotal
+                    ? "bg-gray-200 border-t-2 border-gray-400"
+                    : metric.isTotal
+                    ? "bg-gray-100 border-t border-gray-300"
+                    : index % 2 === 0
+                    ? "bg-white"
+                    : "bg-gray-50";
+
+                  return (
+                    <tr key={metric.key} className={`${rowClass} border-b border-gray-200`}>
+                      <td
+                        className={`px-3 py-2 text-xs sticky left-0 z-10 ${rowClass} ${
+                          metric.isBold ? "font-bold text-gray-900" : "text-gray-700"
+                        } ${metric.isSubItem ? "pl-6" : ""}`}
+                      >
+                        {metric.label}
+                      </td>
+                      {balanceSheet?.map((item: BalanceSheetItem) => (
+                        <td
+                          key={`${item.year}-${metric.key}`}
+                          className={`px-3 py-2 text-xs text-center whitespace-nowrap ${
+                            metric.isBold ? "font-bold text-gray-900" : "text-gray-700"
+                          }`}
+                        >
+                          {formatCurrency(
+                            (item as any)[metric.key] || 0
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      {/* Balance Sheet Analysis (replaces graph if provided) */}
-      <div className="">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+      {/* PASSIVO E PATRIMONIO NETTO Section - Desktop/Tablet */}
+      <div className="hidden md:block">
+        <div className="rounded-lg border border-gray-300 shadow-sm overflow-hidden">
+          <div className="bg-gray-200 px-4 py-2 border-b border-gray-300">
+            <h3 className="text-sm font-bold text-gray-800">
+              PASSIVO E PATRIMONIO NETTO
+            </h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-full">
+              <thead>
+                <tr className="bg-gray-100 border-b border-gray-300">
+                  <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 sticky left-0 bg-gray-100 z-10 min-w-[200px]">
+                    Voci
+                  </th>
+                  {balanceSheet?.map((item: BalanceSheetItem) => (
+                    <th
+                      key={item.year}
+                      className="px-3 py-2 text-center text-xs font-semibold text-gray-700 whitespace-nowrap"
+                    >
+                      Anno {item.year} (€)
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {passivoMetrics.map((metric, index) => {
+                  const rowClass = metric.isGrandTotal
+                    ? "bg-gray-200 border-t-2 border-gray-400"
+                    : metric.isTotal
+                    ? "bg-gray-100 border-t border-gray-300"
+                    : index % 2 === 0
+                    ? "bg-white"
+                    : "bg-gray-50";
+
+                  return (
+                    <tr key={metric.key} className={`${rowClass} border-b border-gray-200`}>
+                      <td
+                        className={`px-3 py-2 text-xs sticky left-0 z-10 ${rowClass} ${
+                          metric.isBold ? "font-bold text-gray-900" : "text-gray-700"
+                        } ${metric.isSubItem ? "pl-6" : ""}`}
+                      >
+                        {metric.label}
+                      </td>
+                      {balanceSheet?.map((item: BalanceSheetItem) => (
+                        <td
+                          key={`${item.year}-${metric.key}`}
+                          className={`px-3 py-2 text-xs text-center whitespace-nowrap ${
+                            metric.isBold ? "font-bold text-gray-900" : "text-gray-700"
+                          }`}
+                        >
+                          {formatCurrency(
+                            (item as any)[metric.key] || 0
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile View - Card Layout */}
+      <div className="md:hidden space-y-6">
+        {balanceSheet?.map((yearData: BalanceSheetItem) => (
+          <div key={yearData.year} className="space-y-4">
+            <div className="bg-white rounded-lg border border-gray-300 shadow-sm overflow-hidden">
+              <div className="bg-[#E6D8FF] px-4 py-3 border-b border-gray-200">
+                <h3 className="text-base font-semibold text-[#121417]">
+                  Anno {yearData.year}
+                </h3>
+              </div>
+
+              {/* ATTIVO Section */}
+              <div className="bg-gray-100 px-4 py-2">
+                <h4 className="text-sm font-bold text-gray-800">ATTIVO</h4>
+              </div>
+              <div className="divide-y divide-gray-200">
+                {attivoMetrics.map((metric) => {
+                  const value = (yearData as any)[metric.key] || 0;
+                  return (
+                    <div
+                      key={metric.key}
+                      className={`px-4 py-2 flex justify-between items-start gap-3 ${
+                        metric.isGrandTotal || metric.isTotal
+                          ? "bg-gray-100"
+                          : "bg-white"
+                      }`}
+                    >
+                      <span
+                        className={`text-xs flex-1 ${
+                          metric.isBold
+                            ? "font-bold text-gray-900"
+                            : "text-gray-700"
+                        } ${metric.isSubItem ? "pl-4" : ""}`}
+                      >
+                        {metric.label}
+                      </span>
+                      <span
+                        className={`text-xs whitespace-nowrap ${
+                          metric.isBold
+                            ? "font-bold text-gray-900"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        {formatCurrency(value)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* PASSIVO Section */}
+              <div className="bg-gray-100 px-4 py-2 mt-4">
+                <h4 className="text-sm font-bold text-gray-800">
+                  PASSIVO E PATRIMONIO NETTO
+                </h4>
+              </div>
+              <div className="divide-y divide-gray-200">
+                {passivoMetrics.map((metric) => {
+                  const value = (yearData as any)[metric.key] || 0;
+                  return (
+                    <div
+                      key={metric.key}
+                      className={`px-4 py-2 flex justify-between items-start gap-3 ${
+                        metric.isGrandTotal || metric.isTotal
+                          ? "bg-gray-100"
+                          : "bg-white"
+                      }`}
+                    >
+                      <span
+                        className={`text-xs flex-1 ${
+                          metric.isBold
+                            ? "font-bold text-gray-900"
+                            : "text-gray-700"
+                        } ${metric.isSubItem ? "pl-4" : ""}`}
+                      >
+                        {metric.label}
+                      </span>
+                      <span
+                        className={`text-xs whitespace-nowrap ${
+                          metric.isBold
+                            ? "font-bold text-gray-900"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        {formatCurrency(value)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Scroll hint */}
+      {/* {balanceSheet && balanceSheet.length > 3 && (
+        <p className="hidden md:block text-xs text-gray-500 text-center mt-2">
+          💡 Scorri orizzontalmente per visualizzare tutti gli anni
+        </p>
+      )} */}
+
+      {/* Balance Sheet Analysis */}
+      <div className="mt-8">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
           8.1 Analisi dello stato patrimoniale
         </h2>
         {balanceSheetAnalysis && balanceSheetAnalysis.trim().length > 0 ? (
@@ -489,7 +560,7 @@ export default function BalanceSheet({
           <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8">
             <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg h-80 sm:h-96 bg-white rounded-lg shadow-sm">
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart style={{ backgroundColor: "white" }}>
+                <PieChart>
                   <Pie
                     data={pieChartData}
                     cx="50%"
@@ -507,10 +578,7 @@ export default function BalanceSheet({
                   </Pie>
                   <Tooltip
                     formatter={(value: number, name: string, props: any) => [
-                      `${value}% (${
-                        props.payload.formattedValue ||
-                        formatCurrency(props.payload.actualValue || 0)
-                      })`,
+                      `${value}% (${formatCurrency(props.payload.actualValue || 0)})`,
                       name,
                     ]}
                     contentStyle={{
@@ -522,7 +590,7 @@ export default function BalanceSheet({
                   />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="absolute inset-0 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="text-center">
                   <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800">
                     Bilancio
@@ -534,7 +602,6 @@ export default function BalanceSheet({
               </div>
             </div>
 
-            {/* Enhanced Legend with actual values */}
             <div className="flex flex-col gap-4 mt-4 lg:mt-8 w-full lg:w-auto">
               <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 text-center lg:text-left">
                 Componenti dello stato patrimoniale
@@ -559,8 +626,7 @@ export default function BalanceSheet({
                         {item.value}%
                       </span>
                       <span className="text-xs text-gray-600">
-                        {item.formattedValue ||
-                          formatCurrency(item.actualValue || 0)}
+                        {formatCurrency(item.actualValue || 0)}
                       </span>
                     </div>
                   </div>
@@ -572,91 +638,70 @@ export default function BalanceSheet({
       </div>
 
       {/* Net Financial Position Chart */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        9. Posizione Finanziaria Netta
-      </h2>
-      <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6 pdf-no-break pdf-chart-container">
-        <div className="bg-purple-500 text-white px-4 py-2 rounded-t-lg mb-4">
-          <h2 className="text-lg font-semibold">
-            {/* Net Financial Position */}
-            Posizione Finanziaria Netta
+      {netFinancialPosition && netFinancialPosition.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
+            9. Posizione Finanziaria Netta
           </h2>
-        </div>
-        <div className="flex justify-end mb-4">
-          <div className="flex items-center space-x-2 text-sm">
-            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span className="text-gray-600">
-              {/* Net Position */}
-              Posizione netta
-            </span>
+          <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+            <div className="bg-purple-500 text-white px-4 py-2 rounded-t-lg mb-4">
+              <h3 className="text-base sm:text-lg font-semibold">
+                Posizione Finanziaria Netta
+              </h3>
+            </div>
+            <div className="flex justify-end mb-4">
+              <div className="flex items-center space-x-2 text-sm">
+                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                <span className="text-gray-600">Posizione netta</span>
+              </div>
+            </div>
+            <div className="h-64 sm:h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={netFinancialPosition}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis
+                    dataKey="year"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 12, fill: "#666" }}
+                    tickFormatter={(value) => `Anno ${value}`}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 12, fill: "#666" }}
+                    tickFormatter={(value) => formatCurrency(value)}
+                  />
+                  <Tooltip
+                    formatter={(value: number) => [
+                      formatCurrency(value),
+                      "Posizione netta",
+                    ]}
+                    labelFormatter={(label) => `Anno ${label}`}
+                    contentStyle={{
+                      backgroundColor: "#3B82F6",
+                      border: "none",
+                      borderRadius: "8px",
+                      color: "white",
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="net_position"
+                    stroke="#3B82F6"
+                    strokeWidth={3}
+                    dot={{ fill: "#3B82F6", strokeWidth: 2, r: 6 }}
+                    activeDot={{ r: 8, fill: "#3B82F6" }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
-        <div className="h-80 pdf-no-break">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={netFinancialPosition}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis
-                dataKey="year"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 12, fill: "#666" }}
-                tickFormatter={(value) =>
-                  `${value}${
-                    value === 1
-                      ? "st"
-                      : value === 2
-                      ? "nd"
-                      : value === 3
-                      ? "rd"
-                      : "th"
-                  } Year`
-                }
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 12, fill: "#666" }}
-                tickFormatter={(value) => formatCurrency(value)}
-                domain={[0, 200000]}
-              />
-              <Tooltip
-                formatter={(value: number) => [
-                  formatCurrency(value),
-                  "Posizione netta",
-                ]}
-                labelFormatter={(label) =>
-                  `${label}${
-                    label === 1
-                      ? "st"
-                      : label === 2
-                      ? "nd"
-                      : label === 3
-                      ? "rd"
-                      : "th"
-                  } Year`
-                }
-                contentStyle={{
-                  backgroundColor: "#3B82F6",
-                  border: "none",
-                  borderRadius: "8px",
-                  color: "white",
-                }}
-              />
-              <Line
-                type="monotone"
-                dataKey="net_position"
-                stroke="#3B82F6"
-                strokeWidth={3}
-                dot={{ fill: "#3B82F6", strokeWidth: 2, r: 6 }}
-                activeDot={{ r: 8, fill: "#3B82F6" }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
