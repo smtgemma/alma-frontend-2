@@ -272,7 +272,9 @@ export default function BalanceSheet({
       ];
     }
 
-    const latestYear = balanceSheet[balanceSheet.length - 1] as BalanceSheetItem;
+    const latestYear = balanceSheet[
+      balanceSheet.length - 1
+    ] as BalanceSheetItem;
     const assets = latestYear.totale_attivo || 0;
     const equity = latestYear.patrimonio_netto || 0;
     const liabilities = (latestYear.totale_passivo || 0) - equity;
@@ -343,16 +345,21 @@ export default function BalanceSheet({
                   const rowClass = metric.isGrandTotal
                     ? "bg-gray-200 border-t-2 border-gray-400"
                     : metric.isTotal
-                    ? "bg-gray-100 border-t border-gray-300"
-                    : index % 2 === 0
-                    ? "bg-white"
-                    : "bg-gray-50";
+                      ? "bg-gray-100 border-t border-gray-300"
+                      : index % 2 === 0
+                        ? "bg-white"
+                        : "bg-gray-50";
 
                   return (
-                    <tr key={metric.key} className={`${rowClass} border-b border-gray-200`}>
+                    <tr
+                      key={metric.key}
+                      className={`${rowClass} border-b border-gray-200`}
+                    >
                       <td
                         className={`px-3 py-2 text-xs sticky left-0 z-10 ${rowClass} ${
-                          metric.isBold ? "font-bold text-gray-900" : "text-gray-700"
+                          metric.isBold
+                            ? "font-bold text-gray-900"
+                            : "text-gray-700"
                         } ${metric.isSubItem ? "pl-6" : ""}`}
                       >
                         {metric.label}
@@ -361,12 +368,12 @@ export default function BalanceSheet({
                         <td
                           key={`${item.year}-${metric.key}`}
                           className={`px-3 py-2 text-xs text-center whitespace-nowrap ${
-                            metric.isBold ? "font-bold text-gray-900" : "text-gray-700"
+                            metric.isBold
+                              ? "font-bold text-gray-900"
+                              : "text-gray-700"
                           }`}
                         >
-                          {formatCurrency(
-                            (item as any)[metric.key] || 0
-                          )}
+                          {formatCurrency((item as any)[metric.key] || 0)}
                         </td>
                       ))}
                     </tr>
@@ -408,16 +415,21 @@ export default function BalanceSheet({
                   const rowClass = metric.isGrandTotal
                     ? "bg-gray-200 border-t-2 border-gray-400"
                     : metric.isTotal
-                    ? "bg-gray-100 border-t border-gray-300"
-                    : index % 2 === 0
-                    ? "bg-white"
-                    : "bg-gray-50";
+                      ? "bg-gray-100 border-t border-gray-300"
+                      : index % 2 === 0
+                        ? "bg-white"
+                        : "bg-gray-50";
 
                   return (
-                    <tr key={metric.key} className={`${rowClass} border-b border-gray-200`}>
+                    <tr
+                      key={metric.key}
+                      className={`${rowClass} border-b border-gray-200`}
+                    >
                       <td
                         className={`px-3 py-2 text-xs sticky left-0 z-10 ${rowClass} ${
-                          metric.isBold ? "font-bold text-gray-900" : "text-gray-700"
+                          metric.isBold
+                            ? "font-bold text-gray-900"
+                            : "text-gray-700"
                         } ${metric.isSubItem ? "pl-6" : ""}`}
                       >
                         {metric.label}
@@ -426,12 +438,12 @@ export default function BalanceSheet({
                         <td
                           key={`${item.year}-${metric.key}`}
                           className={`px-3 py-2 text-xs text-center whitespace-nowrap ${
-                            metric.isBold ? "font-bold text-gray-900" : "text-gray-700"
+                            metric.isBold
+                              ? "font-bold text-gray-900"
+                              : "text-gray-700"
                           }`}
                         >
-                          {formatCurrency(
-                            (item as any)[metric.key] || 0
-                          )}
+                          {formatCurrency((item as any)[metric.key] || 0)}
                         </td>
                       ))}
                     </tr>
@@ -577,9 +589,13 @@ export default function BalanceSheet({
                     ))}
                   </Pie>
                   <Tooltip
-                    formatter={(value: number, name: string, props: any) => [
-                      `${value}% (${formatCurrency(props.payload.actualValue || 0)})`,
-                      name,
+                    formatter={(
+                      value: number | undefined,
+                      name: string | undefined,
+                      props: any,
+                    ) => [
+                      `${value || 0}% (${formatCurrency(props.payload.actualValue || 0)})`,
+                      name || "",
                     ]}
                     contentStyle={{
                       backgroundColor: "#333",
@@ -676,8 +692,8 @@ export default function BalanceSheet({
                     tickFormatter={(value) => formatCurrency(value)}
                   />
                   <Tooltip
-                    formatter={(value: number) => [
-                      formatCurrency(value),
+                    formatter={(value: number | undefined) => [
+                      formatCurrency(value || 0),
                       "Posizione netta",
                     ]}
                     labelFormatter={(label) => `Anno ${label}`}

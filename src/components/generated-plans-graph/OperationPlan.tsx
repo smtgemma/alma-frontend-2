@@ -275,12 +275,12 @@ export default function OperationsDashboard({
                   ))}
                 </Pie>
                 <Tooltip
-                  formatter={(value: number, name: string, props: any) => [
-                    `${value}% (${
+                  formatter={(value: number | undefined, name: string | undefined, props: any) => [
+                    `${value || 0}% (${
                       props.payload.formattedValue ||
                       formatCurrency(props.payload.actualValue || 0)
                     })`,
-                    name,
+                    name || '',
                   ]}
                   contentStyle={{
                     backgroundColor: "#333",
