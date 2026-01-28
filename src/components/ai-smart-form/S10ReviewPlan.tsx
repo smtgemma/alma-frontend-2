@@ -1,4 +1,5 @@
 "use client";
+
 import SmartNavbar from "./SmartNavbar";
 import { useSmartForm } from "./SmartFormContext";
 import { useGeneratePlanMutation } from "@/redux/api/plans/generatePlanApi";
@@ -14,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import Loading from "../Others/Loading";
 import { useGetUserProfileQuery } from "@/redux/api/auth/authApi";
+import { BusinessPlanGeneratingModal } from "../businessPlan/BusinessPlanGeneratingModal";
 //
 import { computeIncomeStatementPreview, computeCashFlowPreview, parseYear0Balance, parseYear0Income, computeYear1Balance } from "@/utils/italianAccounting";
 
@@ -219,6 +221,10 @@ export default function S10ReviewPlan() {
     useBusinessGenerateMutation();
   const [businessDraft, { isLoading: isBusinessDrafting }] =
     useBusinessDraftMutation();
+  
+  // Modal state for showing success message
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  
   // Get all form data in the required format
   const data = getAggregatedData();
 
@@ -237,9 +243,12 @@ export default function S10ReviewPlan() {
       console.log("Business plan generated:", result);
 
       if (result?.data?.success) {
-        toast.success(
-          result?.data?.message || "Business plan generated successfully!"
-        );
+        // Show success modal instead of toast
+        setIsSuccessModalOpen(true);
+        
+        // Optional: Still show a brief toast for immediate feedback
+        toast.success("Business plan submitted successfully!");
+        
         // Navigate to S13UnderExpertReview on success (step index 12)
         goToStep(12);
       } else {
@@ -451,6 +460,11 @@ export default function S10ReviewPlan() {
           </div>
         </div>
       </div>
+      {/* Success Modal */}
+      <BusinessPlanGeneratingModal 
+        isOpen={isSuccessModalOpen} 
+        onClose={() => setIsSuccessModalOpen(false)} 
+      />
     </div>
   );
 }

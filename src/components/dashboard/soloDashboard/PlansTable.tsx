@@ -31,9 +31,9 @@ const getStatusBadge = (status: string) => {
   const config = statusConfig[status as keyof typeof statusConfig];
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${config.color}`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${config?.color}`}
     >
-      {config.text}
+      {config?.text}
     </span>
   );
 };
@@ -45,27 +45,6 @@ export default function PlansTable() {
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [isSlideModalOpen, setIsSlideModalOpen] = useState(false);
   const { data, isLoading, error } = useGetMyBusinessPlanQuery({});
-
-  const filteredPlans = data?.data?.data?.filter((plan: any) =>
-    plan.executiveSummary.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleViewPresentation = (plan: any) => {
-    console.log("User Dashboard Plan Data:", plan);
-    setSelectedPlan(plan);
-    setIsSlideModalOpen(true);
-  };
-
-  const handleCloseSlideModal = () => {
-    setIsSlideModalOpen(false);
-    setSelectedPlan(null);
-  };
-
-  const totalPages = data?.data?.meta.totalPage;
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const endIndex = startIndex + itemsPerPage;
-  // const currentPlans = filteredPlans.slice(startIndex, endIndex);
-
   // Show loading state
   if (isLoading) {
     return (
@@ -111,6 +90,30 @@ export default function PlansTable() {
       </div>
     );
   }
+  console.log(
+    "data business",
+    data?.data?.data?.map((plan: any) => plan?.executiveSummary?.slice(0, 20)),
+  );
+
+  // const filteredPlans = data?.data?.data?.filter((plan: any) =>
+  //   plan?.executiveSummary.toLowerCase().includes(searchTerm.toLowerCase()),
+  // );
+
+  const handleViewPresentation = (plan: any) => {
+    console.log("User Dashboard Plan Data:", plan);
+    setSelectedPlan(plan);
+    setIsSlideModalOpen(true);
+  };
+
+  const handleCloseSlideModal = () => {
+    setIsSlideModalOpen(false);
+    setSelectedPlan(null);
+  };
+
+  const totalPages = data?.data?.meta.totalPage;
+  // const startIndex = (currentPage - 1) * itemsPerPage;
+  // const endIndex = startIndex + itemsPerPage;
+  // const currentPlans = filteredPlans.slice(startIndex, endIndex);
 
   // Show error state only for account not accepted
   if (
@@ -203,14 +206,14 @@ export default function PlansTable() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data?.data?.data && data?.data?.data.length > 0 ? (
-              data?.data?.data.map((plan: any) => (
+            {data?.data?.data && data?.data?.data?.length > 0 ? (
+              data?.data?.data?.map((plan: any) => (
                 <tr key={plan.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-accent text-[16px] font-normal">
                     {format(new Date(plan.createdAt), "hh:mm a - MMM dd, yyyy")}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-accent text-[16px] font-normal">
-                    {plan.executiveSummary.slice(0, 60) + "..."}
+                    {plan?.executiveSummary?.slice(0, 60) + "..."}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex gap-2">

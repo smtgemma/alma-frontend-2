@@ -6,7 +6,7 @@ export const aiApi = createApi({
   baseQuery: fetchBaseQuery({
     //http://206.162.244.131:2002/extract-pdf?document_type=balance_sheet
     // baseUrl: "http://172.252.13.69:2002",
-    baseUrl: "https://ai.pianificosuite.it",
+    baseUrl: "http://206.162.244.131:2002",
     credentials: "omit",
     prepareHeaders: (headers, { endpoint }) => {
       // Don't set Content-Type for FormData requests (file uploads)
