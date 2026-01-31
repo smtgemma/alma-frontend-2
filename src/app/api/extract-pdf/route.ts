@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
 
     // First, test if the AI service is reachable at all
     try {
-      const testResponse = await fetch("http://206.162.244.131:2002", {
+      const testResponse = await fetch("https://ai.pianificosuite.it", {
         method: "GET",
         signal: AbortSignal.timeout(10000), // 10 second timeout
       });
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     for (const endpoint of possibleEndpoints) {
       try {
         console.log(
-          `🔄 Next.js API - Trying endpoint: http://206.162.244.131:2002${endpoint}`,
+          `🔄 Next.js API - Trying endpoint: https://ai.pianificosuite.it${endpoint}`,
         );
 
         // Create fresh FormData for each request to avoid any issues
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 seconds timeout
 
-        aiResponse = await fetch(`http://206.162.244.131:2002${endpoint}`, {
+        aiResponse = await fetch(`https://ai.pianificosuite.it${endpoint}`, {
           method: "POST",
           body: freshFormData,
           signal: controller.signal,

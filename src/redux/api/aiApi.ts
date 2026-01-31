@@ -4,9 +4,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const aiApi = createApi({
   reducerPath: "aiApi",
   baseQuery: fetchBaseQuery({
-    //http://206.162.244.131:2002/extract-pdf?document_type=balance_sheet
+    //https://ai.pianificosuite.it/extract-pdf?document_type=balance_sheet
     // baseUrl: "http://172.252.13.69:2002",
-    baseUrl: "http://206.162.244.131:2002",
+    baseUrl: "https://ai.pianificosuite.it",
     credentials: "omit",
     prepareHeaders: (headers, { endpoint }) => {
       // Don't set Content-Type for FormData requests (file uploads)
