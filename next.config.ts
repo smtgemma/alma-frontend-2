@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://172.252.13.71:1002/api/:path*", // your backend
+        destination: "https://api.pianificosuite.it/api/:path*", // your backend
       },
     ];
   },
