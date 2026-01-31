@@ -52,7 +52,7 @@ export default function ProductionSalesForecast({
     <div className="mx-auto space-y-6 mt-10 px-2 sm:px-4">
       {/* Profit Loss Projection Table */}
       <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-        7. Conto economico a valore aggiunto
+        5. Conto economico a valore aggiunto
       </h2>
       
       {/* Desktop/Tablet View */}

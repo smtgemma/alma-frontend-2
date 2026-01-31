@@ -24,18 +24,23 @@ const formatPercentage = (value: number) => {
 
 interface DebtStructureItem {
   year: number;
-  repayment: number;
-  interest_rate: number;
-  outstanding_debt: number;
+  short_term_debt?: number;
+  long_term_debt?: number;
+  total_debt?: number;
+  debt_to_equity?: number;
+  repayment?: number;
+  interest_rate?: number;
+  outstanding_debt?: number;
 }
 
 export default function DebtDashboard({ debtStructure }: IDebt) {
   // Define metrics with Italian labels
   const metrics = [
     { key: "year", label: "Anno", format: "year" },
-    { key: "repayment", label: "Rimborso", format: "currency" },
-    { key: "interest_rate", label: "Tasso di interesse", format: "percentage" },
-    { key: "outstanding_debt", label: "Debito residuo", format: "currency" },
+    { key: "short_term_debt", label: "Debito a breve termine", format: "currency" },
+    { key: "long_term_debt", label: "Debito a lungo termine", format: "currency" },
+    { key: "total_debt", label: "Debito totale", format: "currency" },
+    { key: "debt_to_equity", label: "Debt to equity", format: "ratio" },
   ];
 
   const formatValue = (value: any, format: string) => {
@@ -46,6 +51,8 @@ export default function DebtDashboard({ debtStructure }: IDebt) {
         return formatPercentage(value);
       case "currency":
         return formatCurrency(value);
+      case "ratio":
+        return value !== undefined ? value.toFixed(4) : "0.0000";
       default:
         return value?.toString() || "0";
     }
@@ -54,7 +61,7 @@ export default function DebtDashboard({ debtStructure }: IDebt) {
   return (
     <div className="mt-10 mx-auto space-y-6 px-2 sm:px-4">
       <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-        10. Struttura del debito
+        8. Struttura del debito
       </h2>
 
       {/* Desktop/Tablet View */}
@@ -67,13 +74,16 @@ export default function DebtDashboard({ debtStructure }: IDebt) {
                   Anno
                 </th>
                 <th className="px-3 lg:px-4 py-3 text-center text-xs lg:text-sm font-medium text-[#121417] whitespace-nowrap">
-                  Rimborso
+                  Debito a breve termine
                 </th>
                 <th className="px-3 lg:px-4 py-3 text-center text-xs lg:text-sm font-medium text-[#121417] whitespace-nowrap">
-                  Tasso di interesse
+                  Debito a lungo termine
                 </th>
                 <th className="px-3 lg:px-4 py-3 text-center text-xs lg:text-sm font-medium text-[#121417] whitespace-nowrap">
-                  Debito residuo
+                  Debito totale
+                </th>
+                <th className="px-3 lg:px-4 py-3 text-center text-xs lg:text-sm font-medium text-[#121417] whitespace-nowrap">
+                  Debt to equity
                 </th>
               </tr>
             </thead>
@@ -91,13 +101,16 @@ export default function DebtDashboard({ debtStructure }: IDebt) {
                     Anno {item.year}
                   </td>
                   <td className="px-3 lg:px-4 py-2 lg:py-3 text-xs lg:text-sm text-center text-[#61758A] whitespace-nowrap">
-                    {formatCurrency(item.repayment)}
+                    {formatCurrency(item.short_term_debt || 0)}
                   </td>
                   <td className="px-3 lg:px-4 py-2 lg:py-3 text-xs lg:text-sm text-center text-[#61758A] whitespace-nowrap">
-                    {formatPercentage(item.interest_rate)}
+                    {formatCurrency(item.long_term_debt || 0)}
                   </td>
                   <td className="px-3 lg:px-4 py-2 lg:py-3 text-xs lg:text-sm text-center text-[#61758A] whitespace-nowrap font-semibold">
-                    {formatCurrency(item.outstanding_debt)}
+                    {formatCurrency(item.total_debt || 0)}
+                  </td>
+                  <td className="px-3 lg:px-4 py-2 lg:py-3 text-xs lg:text-sm text-center text-[#61758A] whitespace-nowrap">
+                    {item.debt_to_equity !== undefined ? item.debt_to_equity.toFixed(4) : "0.0000"}
                   </td>
                 </tr>
               ))}
@@ -121,26 +134,34 @@ export default function DebtDashboard({ debtStructure }: IDebt) {
             <div className="divide-y divide-gray-200">
               <div className="px-4 py-3 flex justify-between items-center gap-3">
                 <span className="text-xs text-[#61758A] font-normal">
-                  Rimborso
+                  Debito a breve termine
                 </span>
                 <span className="text-xs text-[#121417] font-medium whitespace-nowrap">
-                  {formatCurrency(item.repayment)}
+                  {formatCurrency(item.short_term_debt || 0)}
                 </span>
               </div>
               <div className="px-4 py-3 flex justify-between items-center gap-3">
                 <span className="text-xs text-[#61758A] font-normal">
-                  Tasso di interesse
+                  Debito a lungo termine
                 </span>
                 <span className="text-xs text-[#121417] font-medium whitespace-nowrap">
-                  {formatPercentage(item.interest_rate)}
+                  {formatCurrency(item.long_term_debt || 0)}
                 </span>
               </div>
               <div className="px-4 py-3 flex justify-between items-center gap-3 bg-gray-50">
                 <span className="text-xs text-[#61758A] font-semibold">
-                  Debito residuo
+                  Debito totale
                 </span>
                 <span className="text-xs text-[#121417] font-bold whitespace-nowrap">
-                  {formatCurrency(item.outstanding_debt)}
+                  {formatCurrency(item.total_debt || 0)}
+                </span>
+              </div>
+              <div className="px-4 py-3 flex justify-between items-center gap-3">
+                <span className="text-xs text-[#61758A] font-normal">
+                  Debt to equity
+                </span>
+                <span className="text-xs text-[#121417] font-medium whitespace-nowrap">
+                  {item.debt_to_equity !== undefined ? item.debt_to_equity.toFixed(4) : "0.0000"}
                 </span>
               </div>
             </div>

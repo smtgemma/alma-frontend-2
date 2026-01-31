@@ -65,216 +65,44 @@ const CustomLabel = (props: any) => {
   );
 };
 
-interface BalanceSheetItem {
-  year: number;
-  // ATTIVO (Assets)
-  immobilizzazioni_immateriali?: number;
-  tot_immob_immateriali_nette?: number;
-  terreni_e_fabbricati?: number;
-  impianti_e_macchinari?: number;
-  attrezzature_arredi_altri_beni?: number;
-  tot_immob_materiali_nette?: number;
-  tot_immob_finanziarie?: number;
-  totale_attivo_fisso?: number;
-  crediti_commerciali?: number;
-  disponibilita_liquide?: number;
-  ratei_risconti_attivi?: number;
-  totale_attivo_circolante?: number;
-  totale_attivo?: number;
-  // PASSIVO E PATRIMONIO NETTO (Liabilities & Equity)
-  capitale_sociale?: number;
-  riserve_utili_accantonati?: number;
-  utile_perdita_esercizio?: number;
-  patrimonio_netto?: number;
-  fondo_tfr?: number;
-  fondi?: number;
-  debiti_ml_termine_mutuo?: number;
-  passivita_consolidate?: number;
-  debiti_vs_fornitori?: number;
-  debiti_vs_soci?: number;
-  debiti_vs_erario?: number;
-  debiti_vs_banche?: number;
-  totale_debiti_breve_termine?: number;
-  ratei_risconti_passivi?: number;
-  passivita_correnti?: number;
-  totale_passivo?: number;
-}
-
 export default function BalanceSheet({
   balanceSheet,
   netFinancialPosition,
   balanceSheetAnalysis,
 }: IBalanceSheet) {
-  // Define the structure for ATTIVO (Assets) section
-  const attivoMetrics = [
-    {
-      key: "immobilizzazioni_immateriali",
-      label: "Immobilizzazioni immateriali (Software)",
-      isSubItem: true,
-    },
-    {
-      key: "tot_immob_immateriali_nette",
-      label: "Tot. Immob. Immateriali nette",
-      isBold: true,
-    },
-    {
-      key: "terreni_e_fabbricati",
-      label: "Terreni e fabbricati",
-      isSubItem: true,
-    },
-    {
-      key: "impianti_e_macchinari",
-      label: "Impianti e macchinari",
-      isSubItem: true,
-    },
-    {
-      key: "attrezzature_arredi_altri_beni",
-      label: "Attrezzature e arredi e altri beni",
-      isSubItem: true,
-    },
-    {
-      key: "tot_immob_materiali_nette",
-      label: "Tot. Immob. materiali nette",
-      isBold: true,
-    },
-    {
-      key: "tot_immob_finanziarie",
-      label: "Tot. Immob. finanziarie",
-      isBold: true,
-    },
-    {
-      key: "totale_attivo_fisso",
-      label: "TOTALE ATTIVO FISSO",
-      isBold: true,
-      isTotal: true,
-    },
-    {
-      key: "crediti_commerciali",
-      label: "Crediti commerciali",
-      isSubItem: true,
-    },
-    {
-      key: "disponibilita_liquide",
-      label: "Disponibilità liquide",
-      isSubItem: true,
-    },
-    {
-      key: "ratei_risconti_attivi",
-      label: "Ratei e risconti attivi",
-      isSubItem: true,
-    },
-    {
-      key: "totale_attivo_circolante",
-      label: "TOTALE ATTIVO CIRCOLANTE",
-      isBold: true,
-      isTotal: true,
-    },
-    {
-      key: "totale_attivo",
-      label: "TOTALE ATTIVO",
-      isBold: true,
-      isTotal: true,
-      isGrandTotal: true,
-    },
+  // Define metrics for the new simplified structure
+  const metrics = [
+    { key: "attivo_immobilizzato", label: "Attivo immobilizzato" },
+    { key: "attivo_circolante", label: "Attivo circolante" },
+    { key: "totale_attivo", label: "Totale attivo", isTotal: true },
+    { key: "patrimonio_netto", label: "Patrimonio netto" },
+    { key: "passivita_consolidate", label: "Passivo finanziario" }, // Mapping passivo_finanziario to passivita_consolidate label if needed, or just use the keys
+    { key: "passivita_correnti", label: "Passivo corrente" },
+    { key: "totale_passivo", label: "Totale passivo", isTotal: true },
   ];
 
-  // Define the structure for PASSIVO E PATRIMONIO NETTO (Liabilities & Equity) section
-  const passivoMetrics = [
-    {
-      key: "capitale_sociale",
-      label: "Capitale sociale",
-      isSubItem: true,
-    },
-    {
-      key: "riserve_utili_accantonati",
-      label: "Riserve / Utili accantonati",
-      isSubItem: true,
-    },
-    {
-      key: "utile_perdita_esercizio",
-      label: "Utile (perdita) dell'esercizio",
-      isSubItem: true,
-    },
-    {
-      key: "patrimonio_netto",
-      label: "PATRIMONIO NETTO",
-      isBold: true,
-      isTotal: true,
-    },
-    { key: "fondo_tfr", label: "Fondo TFR", isSubItem: true },
-    { key: "fondi", label: "FONDI", isBold: true },
-    {
-      key: "debiti_ml_termine_mutuo",
-      label: "Debiti m/l termine (mutuo residuo)",
-      isSubItem: true,
-    },
-    {
-      key: "passivita_consolidate",
-      label: "PASSIVITÀ CONSOLIDATE",
-      isBold: true,
-      isTotal: true,
-    },
-    {
-      key: "debiti_vs_fornitori",
-      label: "Debiti vs. fornitori",
-      isSubItem: true,
-    },
-    { key: "debiti_vs_soci", label: "Debiti vs. soci", isSubItem: true },
-    { key: "debiti_vs_erario", label: "Debiti vs. erario", isSubItem: true },
-    { key: "debiti_vs_banche", label: "Debiti vs. banche", isSubItem: true },
-    {
-      key: "totale_debiti_breve_termine",
-      label: "Totale debiti a breve termine",
-      isBold: true,
-    },
-    {
-      key: "ratei_risconti_passivi",
-      label: "Ratei e risconti passivi",
-      isSubItem: true,
-    },
-    {
-      key: "passivita_correnti",
-      label: "PASSIVITÀ CORRENTI",
-      isBold: true,
-      isTotal: true,
-    },
-    {
-      key: "totale_passivo",
-      label: "TOTALE PASSIVO",
-      isBold: true,
-      isTotal: true,
-      isGrandTotal: true,
-    },
+  // Map user provided JSON keys to component metric keys
+  const displayMetrics = [
+    { key: "attivo_immobilizzato", label: "Attivo immobilizzato" },
+    { key: "attivo_circolante", label: "Attivo circolante" },
+    { key: "totale_attivo", label: "Totale attivo", isTotal: true },
+    { key: "patrimonio_netto", label: "Patrimonio netto" },
+    { key: "passivo_finanziario", label: "Passivo finanziario" },
+    { key: "passivo_corrente", label: "Passivo corrente" },
+    { key: "totale_passivo", label: "Totale passivo", isTotal: true },
   ];
 
   // Generate pie chart data from the latest year
   const pieChartData = useMemo(() => {
     if (!balanceSheet || balanceSheet.length === 0) {
       return [
-        {
-          name: "Attività",
-          value: 0,
-          fill: "#8B5CF6",
-          actualValue: 0,
-        },
-        {
-          name: "Passività",
-          value: 0,
-          fill: "#1E1B4B",
-          actualValue: 0,
-        },
-        {
-          name: "Patrimonio netto",
-          value: 0,
-          fill: "#EF4444",
-          actualValue: 0,
-        },
+        { name: "Attività", value: 0, fill: "#8B5CF6", actualValue: 0 },
+        { name: "Passività", value: 0, fill: "#1E1B4B", actualValue: 0 },
+        { name: "Patrimonio netto", value: 0, fill: "#EF4444", actualValue: 0 },
       ];
     }
 
-    const latestYear = balanceSheet[
-      balanceSheet.length - 1
-    ] as BalanceSheetItem;
+    const latestYear = balanceSheet[balanceSheet.length - 1];
     const assets = latestYear.totale_attivo || 0;
     const equity = latestYear.patrimonio_netto || 0;
     const liabilities = (latestYear.totale_passivo || 0) - equity;
@@ -314,257 +142,94 @@ export default function BalanceSheet({
   return (
     <div className="mt-10 mx-auto space-y-8 px-2 sm:px-4">
       <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-        8. Stato Patrimoniale
+        6. Stato Patrimoniale
       </h2>
 
-      {/* ATTIVO Section - Desktop/Tablet */}
-      <div className="hidden md:block">
-        <div className="rounded-lg border border-gray-300 shadow-sm overflow-hidden">
-          <div className="bg-gray-200 px-4 py-2 border-b border-gray-300">
-            <h3 className="text-sm font-bold text-gray-800">ATTIVO</h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-full">
-              <thead>
-                <tr className="bg-gray-100 border-b border-gray-300">
-                  <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 sticky left-0 bg-gray-100 z-10 min-w-[200px]">
-                    Voci
+      {/* Desktop/Tablet View */}
+      <div className="hidden md:block rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-full">
+            <thead>
+              <tr className="bg-[#E6D8FF]">
+                <th className="px-3 lg:px-4 py-3 text-left text-xs lg:text-sm font-medium text-[#121417] sticky left-0 bg-[#E6D8FF] z-10">
+                  Voci
+                </th>
+                {balanceSheet?.map((item) => (
+                  <th
+                    key={item.year}
+                    className="px-3 lg:px-4 py-3 text-center text-xs lg:text-sm font-medium text-[#121417] whitespace-nowrap"
+                  >
+                    Anno {item.year}
                   </th>
-                  {balanceSheet?.map((item: BalanceSheetItem) => (
-                    <th
-                      key={item.year}
-                      className="px-3 py-2 text-center text-xs font-semibold text-gray-700 whitespace-nowrap"
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {displayMetrics.map((metric, idx) => (
+                <tr
+                  key={metric.key}
+                  className={`${
+                    metric.isTotal ? "bg-gray-100 font-bold" : idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  } border-b border-gray-200 hover:bg-purple-50 transition-colors`}
+                >
+                  <td className={`px-3 lg:px-4 py-3 text-xs lg:text-sm text-gray-800 sticky left-0 ${
+                    metric.isTotal ? "bg-gray-100" : idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  }`}>
+                    {metric.label}
+                  </td>
+                  {balanceSheet?.map((item) => (
+                    <td
+                      key={`${item.year}-${metric.key}`}
+                      className="px-3 lg:px-4 py-3 text-xs lg:text-sm text-center text-gray-700 whitespace-nowrap"
                     >
-                      Anno {item.year} (€)
-                    </th>
+                      {formatCurrency((item as any)[metric.key] || 0)}
+                    </td>
                   ))}
                 </tr>
-              </thead>
-              <tbody>
-                {attivoMetrics.map((metric, index) => {
-                  const rowClass = metric.isGrandTotal
-                    ? "bg-gray-200 border-t-2 border-gray-400"
-                    : metric.isTotal
-                      ? "bg-gray-100 border-t border-gray-300"
-                      : index % 2 === 0
-                        ? "bg-white"
-                        : "bg-gray-50";
-
-                  return (
-                    <tr
-                      key={metric.key}
-                      className={`${rowClass} border-b border-gray-200`}
-                    >
-                      <td
-                        className={`px-3 py-2 text-xs sticky left-0 z-10 ${rowClass} ${
-                          metric.isBold
-                            ? "font-bold text-gray-900"
-                            : "text-gray-700"
-                        } ${metric.isSubItem ? "pl-6" : ""}`}
-                      >
-                        {metric.label}
-                      </td>
-                      {balanceSheet?.map((item: BalanceSheetItem) => (
-                        <td
-                          key={`${item.year}-${metric.key}`}
-                          className={`px-3 py-2 text-xs text-center whitespace-nowrap ${
-                            metric.isBold
-                              ? "font-bold text-gray-900"
-                              : "text-gray-700"
-                          }`}
-                        >
-                          {formatCurrency((item as any)[metric.key] || 0)}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* PASSIVO E PATRIMONIO NETTO Section - Desktop/Tablet */}
-      <div className="hidden md:block">
-        <div className="rounded-lg border border-gray-300 shadow-sm overflow-hidden">
-          <div className="bg-gray-200 px-4 py-2 border-b border-gray-300">
-            <h3 className="text-sm font-bold text-gray-800">
-              PASSIVO E PATRIMONIO NETTO
-            </h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-full">
-              <thead>
-                <tr className="bg-gray-100 border-b border-gray-300">
-                  <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 sticky left-0 bg-gray-100 z-10 min-w-[200px]">
-                    Voci
-                  </th>
-                  {balanceSheet?.map((item: BalanceSheetItem) => (
-                    <th
-                      key={item.year}
-                      className="px-3 py-2 text-center text-xs font-semibold text-gray-700 whitespace-nowrap"
-                    >
-                      Anno {item.year} (€)
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {passivoMetrics.map((metric, index) => {
-                  const rowClass = metric.isGrandTotal
-                    ? "bg-gray-200 border-t-2 border-gray-400"
-                    : metric.isTotal
-                      ? "bg-gray-100 border-t border-gray-300"
-                      : index % 2 === 0
-                        ? "bg-white"
-                        : "bg-gray-50";
-
-                  return (
-                    <tr
-                      key={metric.key}
-                      className={`${rowClass} border-b border-gray-200`}
-                    >
-                      <td
-                        className={`px-3 py-2 text-xs sticky left-0 z-10 ${rowClass} ${
-                          metric.isBold
-                            ? "font-bold text-gray-900"
-                            : "text-gray-700"
-                        } ${metric.isSubItem ? "pl-6" : ""}`}
-                      >
-                        {metric.label}
-                      </td>
-                      {balanceSheet?.map((item: BalanceSheetItem) => (
-                        <td
-                          key={`${item.year}-${metric.key}`}
-                          className={`px-3 py-2 text-xs text-center whitespace-nowrap ${
-                            metric.isBold
-                              ? "font-bold text-gray-900"
-                              : "text-gray-700"
-                          }`}
-                        >
-                          {formatCurrency((item as any)[metric.key] || 0)}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
       {/* Mobile View - Card Layout */}
       <div className="md:hidden space-y-6">
-        {balanceSheet?.map((yearData: BalanceSheetItem) => (
-          <div key={yearData.year} className="space-y-4">
-            <div className="bg-white rounded-lg border border-gray-300 shadow-sm overflow-hidden">
-              <div className="bg-[#E6D8FF] px-4 py-3 border-b border-gray-200">
-                <h3 className="text-base font-semibold text-[#121417]">
-                  Anno {yearData.year}
-                </h3>
-              </div>
-
-              {/* ATTIVO Section */}
-              <div className="bg-gray-100 px-4 py-2">
-                <h4 className="text-sm font-bold text-gray-800">ATTIVO</h4>
-              </div>
-              <div className="divide-y divide-gray-200">
-                {attivoMetrics.map((metric) => {
-                  const value = (yearData as any)[metric.key] || 0;
-                  return (
-                    <div
-                      key={metric.key}
-                      className={`px-4 py-2 flex justify-between items-start gap-3 ${
-                        metric.isGrandTotal || metric.isTotal
-                          ? "bg-gray-100"
-                          : "bg-white"
-                      }`}
-                    >
-                      <span
-                        className={`text-xs flex-1 ${
-                          metric.isBold
-                            ? "font-bold text-gray-900"
-                            : "text-gray-700"
-                        } ${metric.isSubItem ? "pl-4" : ""}`}
-                      >
-                        {metric.label}
-                      </span>
-                      <span
-                        className={`text-xs whitespace-nowrap ${
-                          metric.isBold
-                            ? "font-bold text-gray-900"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {formatCurrency(value)}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* PASSIVO Section */}
-              <div className="bg-gray-100 px-4 py-2 mt-4">
-                <h4 className="text-sm font-bold text-gray-800">
-                  PASSIVO E PATRIMONIO NETTO
-                </h4>
-              </div>
-              <div className="divide-y divide-gray-200">
-                {passivoMetrics.map((metric) => {
-                  const value = (yearData as any)[metric.key] || 0;
-                  return (
-                    <div
-                      key={metric.key}
-                      className={`px-4 py-2 flex justify-between items-start gap-3 ${
-                        metric.isGrandTotal || metric.isTotal
-                          ? "bg-gray-100"
-                          : "bg-white"
-                      }`}
-                    >
-                      <span
-                        className={`text-xs flex-1 ${
-                          metric.isBold
-                            ? "font-bold text-gray-900"
-                            : "text-gray-700"
-                        } ${metric.isSubItem ? "pl-4" : ""}`}
-                      >
-                        {metric.label}
-                      </span>
-                      <span
-                        className={`text-xs whitespace-nowrap ${
-                          metric.isBold
-                            ? "font-bold text-gray-900"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {formatCurrency(value)}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+        {balanceSheet?.map((yearData) => (
+          <div key={yearData.year} className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-[#E6D8FF] px-4 py-3 border-b border-gray-200">
+              <h3 className="text-base font-semibold text-[#121417]">
+                Anno {yearData.year}
+              </h3>
+            </div>
+            <div className="divide-y divide-gray-200">
+              {displayMetrics.map((metric) => (
+                <div
+                  key={metric.key}
+                  className={`px-4 py-3 flex justify-between items-center gap-3 ${
+                    metric.isTotal ? "bg-gray-50 font-bold" : ""
+                  }`}
+                >
+                  <span className="text-xs text-gray-600">
+                    {metric.label}
+                  </span>
+                  <span className="text-xs text-gray-900 whitespace-nowrap">
+                    {formatCurrency((yearData as any)[metric.key] || 0)}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         ))}
       </div>
 
-      {/* Scroll hint */}
-      {/* {balanceSheet && balanceSheet.length > 3 && (
-        <p className="hidden md:block text-xs text-gray-500 text-center mt-2">
-          💡 Scorri orizzontalmente per visualizzare tutti gli anni
-        </p>
-      )} */}
-
       {/* Balance Sheet Analysis */}
       <div className="mt-8">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-          8.1 Analisi dello stato patrimoniale
+          6.1 Analisi dello stato patrimoniale
         </h2>
         {balanceSheetAnalysis && balanceSheetAnalysis.trim().length > 0 ? (
-          <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6">
-            <p className="text-base md:text-lg text-gray-700 leading-relaxed whitespace-pre-line text-justify">
+          <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-6 text-justify">
+            <p className="text-base md:text-lg text-gray-700 leading-relaxed whitespace-pre-line">
               {balanceSheetAnalysis}
             </p>
           </div>
@@ -657,7 +322,7 @@ export default function BalanceSheet({
       {netFinancialPosition && netFinancialPosition.length > 0 && (
         <div className="mt-8">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-            9. Posizione Finanziaria Netta
+            7. Posizione Finanziaria Netta
           </h2>
           <div className="bg-gray-50 rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
             <div className="bg-purple-500 text-white px-4 py-2 rounded-t-lg mb-4">

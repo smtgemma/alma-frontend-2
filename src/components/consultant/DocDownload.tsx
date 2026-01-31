@@ -370,9 +370,16 @@ export const generateWordDocument = async ({
   const safeFinancialAnalysis = Array.isArray(financialAnalysis)
     ? financialAnalysis
     : [];
-  const safeRatiosAnalysis = Array.isArray(ratiosAnalysis)
+  const safeRatiosAnalysisRaw = Array.isArray(ratiosAnalysis)
     ? ratiosAnalysis
     : [];
+  const normalizedRatiosAnalysis = safeRatiosAnalysisRaw.map((item: any) => ({
+    year: item.year,
+    "ROI (Ritorno sull'investimento)": item.roi || 0,
+    "ROA (Ritorno sugli attivi)": item.roa || 0,
+    "Rapporto corrente": item.current_ratio || 0,
+    "Rapporto rapido": item.quick_ratio || 0,
+  }));
   const safeProductionSalesForecast = Array.isArray(productionSalesForecast)
     ? productionSalesForecast
     : [];
@@ -385,51 +392,28 @@ export const generateWordDocument = async ({
   const safeProfitLossProjection = Array.isArray(profitLossProjection)
     ? profitLossProjection
     : [];
-  const safeBalanceSheet = Array.isArray(balanceSheet) ? balanceSheet : [];
-  // Normalize balance sheet to common keys used across UI/PDF
-  const normalizeBalanceSheetItem = (item: any) => {
-    if (!item || typeof item !== "object") return item;
-    const invested_capital =
-      item.invested_capital ??
-      item.total_invested_capital ??
-      item.net_invested_capital ??
-      item.sources_of_financing ??
-      0;
-    const net_equity = item.net_equity ?? item.total_equity ?? item.equity ?? 0;
-    const net_financial_debt = item.net_financial_debt ?? item.liabilities ?? 0;
-    const net_fixed_assets =
-      item.net_fixed_assets ?? item.total_fixed_assets ?? 0;
-    const net_operating_working_capital =
-      item.net_operating_working_capital ??
-      item.net_operating_current_assets ??
-      0;
-    const cash_and_banks =
-      item.cash_and_banks ?? item.cash_bank_accounts ?? item.cash_bank ?? 0;
-
-    const assets = item.assets ?? invested_capital;
-    const liabilities = item.liabilities ?? net_financial_debt;
-    const equity = item.equity ?? net_equity;
-
-    return {
-      year: item.year,
-      invested_capital,
-      net_equity,
-      net_financial_debt,
-      net_fixed_assets,
-      net_operating_working_capital,
-      cash_and_banks,
-      assets,
-      liabilities,
-      equity,
-    };
-  };
-  const normalizedBalanceSheet = safeBalanceSheet.map(
-    normalizeBalanceSheetItem
-  );
+  const safeBalanceSheetRaw = Array.isArray(balanceSheet) ? balanceSheet : [];
+  const normalizedBalanceSheet = safeBalanceSheetRaw.map((item: any) => ({
+    year: item.year,
+    "Attivo immobilizzato": item.attivo_immobilizzato || 0,
+    "Attivo circolante": item.attivo_circolante || 0,
+    "Totale attivo": item.totale_attivo || 0,
+    "Patrimonio netto": item.patrimonio_netto || 0,
+    "Passivo finanziario": item.passivo_finanziario || 0,
+    "Passivo corrente": item.passivo_corrente || 0,
+    "Totale passivo": item.totale_passivo || 0,
+  }));
   const safeNetFinancialPosition = Array.isArray(netFinancialPosition)
     ? netFinancialPosition
     : [];
-  const safeDebtStructure = Array.isArray(debtStructure) ? debtStructure : [];
+  const safeDebtStructureRaw = Array.isArray(debtStructure) ? debtStructure : [];
+  const safeDebtStructure = safeDebtStructureRaw.map((item) => ({
+    year: item.year,
+    "Debito a breve termine": item.short_term_debt || 0,
+    "Debito a lungo termine": item.long_term_debt || 0,
+    "Debito totale": item.total_debt || 0,
+    "Debt to equity": item.debt_to_equity || 0,
+  }));
   const safeKeyRatios = Array.isArray(keyRatios) ? keyRatios : [];
   const safeOperatingCostBreakdown = Array.isArray(operatingCostBreakdown)
     ? operatingCostBreakdown
@@ -486,15 +470,11 @@ export const generateWordDocument = async ({
       if (data.length > 0) {
         const item = data[0]; // Use first year's data
         // Support multiple possible input shapes
-        const investedCap =
-          item.invested_capital ??
-          item.total_invested_capital ??
-          item.net_invested_capital ??
-          item.sources_of_financing ??
-          0;
-        const equity = item.net_equity ?? item.total_equity ?? item.equity ?? 0;
-        const liabilities = item.net_financial_debt ?? item.liabilities ?? 0;
-        const assets = item.assets ?? investedCap;
+        const assets = item.totale_attivo ?? item.assets ?? item.invested_capital ?? 0;
+        const equity = item.patrimonio_netto ?? item.net_equity ?? item.equity ?? 0;
+        const totalPassivo = item.totale_passivo || 0;
+        const liabilities = totalPassivo > 0 ? (totalPassivo - equity) : (item.passivo_finanziario ?? item.net_financial_debt ?? item.liabilities ?? 0);
+        
         const chartData = [
           { name: "Attività", value: assets || 0 },
           { name: "Passività", value: liabilities || 0 },
@@ -654,6 +634,16 @@ export const generateWordDocument = async ({
       (columnName && columnName.toLowerCase().includes("year"))
     ) {
       return num.toString();
+    }
+
+    if (
+      columnName &&
+      (columnName.toLowerCase().includes("ratio") ||
+        columnName.toLowerCase().includes("debt to equity") ||
+        columnName.toLowerCase().includes("ritorno sugli attivi") ||
+        columnName.toLowerCase().includes("roa"))
+    ) {
+      return num.toFixed(4);
     }
 
     return `€${num.toLocaleString()}`;
@@ -1192,17 +1182,17 @@ export const generateWordDocument = async ({
             <p style="margin: 10px 0;"><strong>Sommario</strong></p>
             <p style="margin: 10px 0;">1. Sintesi esecutiva</p>
             <p style="margin: 10px 0;">2. Panoramica aziendale</p>
-            <p style="margin: 10px 0;">3. Team di gestione</p>
-            <p style="margin: 10px 0;">4. Modello di business</p>
-            <p style="margin: 10px 0;">5. Analisi di mercato</p>
-            <p style="margin: 10px 0;">6. Fonti di finanziamento</p>
-            <p style="margin: 10px 0;">7. Conto economico a valore aggiunto</p>
-            <p style="margin: 10px 0;">8. Stato Patrimoniale</p>
-            <p style="margin: 10px 0;">9. Posizione finanziaria netta</p>
-            <p style="margin: 10px 0;">10. Struttura del debito</p>
-            <p style="margin: 10px 0;">11. Ratios Analysis</p>
-            <p style="margin: 10px 0;">10. Struttura del debito</p>
-            <p style="margin: 10px 0;">12. Analisi rapporti</p>
+            <!-- <p style="margin: 10px 0;">3. Team di gestione</p> 
+            <p style="margin: 10px 0;">4. Modello di business</p> -->
+            <p style="margin: 10px 0;">3. Analisi di mercato</p>
+            <p style="margin: 10px 0;">4. Fonti di finanziamento</p>
+            <p style="margin: 10px 0;">5. Conto economico a valore aggiunto</p>
+            <p style="margin: 10px 0;">6. Strategia marketing e vendite</p>
+            <p style="margin: 10px 0;">7. Stato patrimoniale</p>
+            <p style="margin: 10px 0;">8. Posizione finanziaria netta</p>
+            <p style="margin: 10px 0;">9. Struttura del debito</p>
+            <p style="margin: 10px 0;">10. Analisi del flusso di cassa</p>
+            <p style="margin: 10px 0;">11. Analisi rapporti</p>
           </div>
         </div>
       </div>
@@ -1243,14 +1233,14 @@ export const generateWordDocument = async ({
        ${
          managementTeam
            ? `
-      <div class="section">
+      <!-- <div class="section">
         <div class="section-title">
           <h2>3. Team di gestione</h2>
         </div>
         <div class="section-content">
           <p>${managementTeam.replace(/\n/g, "</p><p>")}</p>
         </div>
-      </div>
+      </div> -->
       `
            : ""
        }
@@ -1258,14 +1248,14 @@ export const generateWordDocument = async ({
         ${
           businessModel
             ? `
-      <div class="section">
+      <!-- <div class="section">
         <div class="section-title">
           <h2>4. Modello di business</h2>
         </div>
         <div class="section-content">
           <p>${businessModel.replace(/\n/g, "</p><p>")}</p>
         </div>
-      </div>
+      </div> -->
       `
             : ""
         }
@@ -1274,7 +1264,7 @@ export const generateWordDocument = async ({
       <!-- Market Analysis - New page -->
       <div class="section">
         <div class="section-title">
-          <h2>5. Analisi di mercato</h2>
+          <h2>3. Analisi di mercato</h2>
         </div>
         <div class="section-content">
           <p>${marketAnalysis.replace(/\n/g, "</p><p>")}</p>
@@ -1286,7 +1276,7 @@ export const generateWordDocument = async ({
           ? `
       <div class="section">
         <div class="section-title">
-          <h2>6. Fonti di finanziamento</h2>
+          <h2>4. Fonti di finanziamento</h2>
         </div>
         <div class="section-content">
           ${generateFundingSourcesHTML(fundingSources)}
@@ -1301,7 +1291,7 @@ export const generateWordDocument = async ({
           ? `
       <div class="section">
         <div class="section-title">
-          <h2>7. Conto economico a valore aggiunto</h2>
+          <h2>5. Conto economico a valore aggiunto</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
@@ -1328,7 +1318,7 @@ export const generateWordDocument = async ({
            ? `
       <div class="section">
         <div class="section-title">
-          <h2>7.1 Ripartizione costi operativi</h2>
+          <h2>5.1 Ripartizione costi operativi</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
@@ -1358,7 +1348,7 @@ export const generateWordDocument = async ({
             ? `
       <div class="section">
         <div class="section-title">
-          <h2>8. Strategia marketing e vendite</h2>
+          <h2>6. Strategia marketing e vendite</h2>
         </div>
         <div class="section-content">
           <p>${marketingSalesStrategy.replace(/\n/g, "</p><p>")}</p>
@@ -1374,7 +1364,7 @@ export const generateWordDocument = async ({
             ? `
           <div class="section">
             <div class="section-title">
-              <h2>8. Stato patrimoniale</h2>
+              <h2>7. Stato patrimoniale</h2>
             </div>
             <div class="section-content">
               ${generateTransposedTableHTML(
@@ -1409,7 +1399,7 @@ export const generateWordDocument = async ({
         ? `
       <div class="section">
         <div class="section-title">
-          <h2>9. Posizione finanziaria netta</h2>
+          <h2>8. Posizione finanziaria netta</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
@@ -1438,7 +1428,7 @@ export const generateWordDocument = async ({
         ? `
       <div class="section">
         <div class="section-title">
-          <h2>10. Struttura del debito</h2>
+          <h2>9. Struttura del debito</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(safeDebtStructure, "Tabella struttura debito")}
@@ -1456,7 +1446,7 @@ export const generateWordDocument = async ({
            ? `
       <div class="section">
         <div class="section-title">
-          <h2>14. Analisi del flusso di cassa</h2>
+          <h2>10. Analisi del flusso di cassa</h2>
         </div>
         <div class="section-content">
           ${generateTableHTML(
@@ -1470,15 +1460,15 @@ export const generateWordDocument = async ({
        }
 
       ${
-        safeRatiosAnalysis.length > 0
+        normalizedRatiosAnalysis.length > 0
           ? `
       <div class="section">
         <div class="section-title">
-          <h2>13. Analisi rapporti</h2>
+          <h2>11. Analisi rapporti</h2>
         </div>
         <div class="section-content">
           ${generateTransposedTableHTML(
-            safeRatiosAnalysis,
+            normalizedRatiosAnalysis,
             "Tabella analisi rapporti"
           )}
         </div>

@@ -238,7 +238,27 @@ export default function S10ReviewPlan() {
   const handleGeneratePlan = async () => {
     try {
       console.log("Generating business plan with data:", data);
-      const result = await businessGenerate(data);
+
+      const formDataPayload = new FormData();
+
+      // Append files from step 1
+      const balanceSheetFiles = formData?.step1?.balanceSheetFiles || [];
+      const visuraCameraleFiles = formData?.step1?.visuraCameraleFiles || [];
+
+      [...balanceSheetFiles, ...visuraCameraleFiles].forEach((file) => {
+        formDataPayload.append("files", file);
+      });
+
+      // Append data fields
+      // We pass user_input and fundingSources as stringified JSON because the backend expects them that way for FormData
+      formDataPayload.append("user_input", JSON.stringify(data.user_input || []));
+      formDataPayload.append("fundingSources", JSON.stringify(data.fundingSources || {}));
+      
+      // If language or currency are needed at top level
+      if (data.language) formDataPayload.append("language", data.language);
+      if (data.currency) formDataPayload.append("currency", data.currency);
+
+      const result = await businessGenerate(formDataPayload);
 
       console.log("Business plan generated:", result);
 

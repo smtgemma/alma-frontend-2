@@ -590,6 +590,19 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
           box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
         }
         
+        /* Ensure tables are always shown and cards are hidden in PDF */
+        .hidden.md\:block {
+          display: block !important;
+        }
+        .md\:hidden {
+          display: none !important;
+        }
+        
+        /* Specific for Debt Structure and other tables */
+        .overflow-x-auto {
+          overflow-x: visible !important;
+        }
+        
         /* Hide Expert's Review section in PDF (multiple language variations) */
         section:has(h3:contains("Expert's Review")),
         section:has(h3:contains("Revisione dell'Esperto")),
@@ -712,17 +725,16 @@ export const generateEmpathyPDF = async (elementToPrintId: string) => {
           <p><strong>Disclaimer</strong> (Insert this section to be standard for all generated plans)</p>
           <p>1. Sintesi esecutiva</p>
           <p>2. Panoramica aziendale</p>
-          <p>3. Team di gestione</p>
-          <p>4. Modello di business</p>
-          <p>5. Analisi di mercato</p>
-          <p>6. Fonti di finanziamento</p>
-          <p>7. Conto economico a valore aggiunto</p>
-          <p>8. Stato Patrimoniale</p>
-          <p>9. Posizione finanziaria netta</p>
-          <p>10. Struttura del debito</p>
-          <p>11. Ratios Analysis</p>
-          <p>10. Struttura del debito</p>
-          <p>11. Ratios Analysi</p>
+          <!-- <p>3. Team di gestione</p>
+          <p>4. Modello di business</p> -->
+          <p>3. Analisi di mercato</p>
+          <p>4. Fonti di finanziamento</p>
+          <p>5. Conto economico a valore aggiunto</p>
+          <p>6. Stato Patrimoniale</p>
+          <p>7. Posizione finanziaria netta</p>
+          <p>8. Struttura del debito</p>
+          <p>9. Analisi del flusso di cassa</p>
+          <p>10. Analisi rapporti</p>
         </div>
       </div>
 

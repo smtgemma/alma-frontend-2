@@ -50,7 +50,7 @@ export default function S2BusinessIdea() {
       customServiceCategories: [],
       selectedProductCategoriesOptions: [],
       selectedServiceCategoriesOptions: [],
-    }
+    },
   );
 
   // Sync form changes with context
@@ -68,10 +68,10 @@ export default function S2BusinessIdea() {
 
   // AI Suggestions state
   const [productAiSuggestions, setProductAiSuggestions] = useState<string[]>(
-    []
+    [],
   );
   const [serviceAiSuggestions, setServiceAiSuggestions] = useState<string[]>(
-    []
+    [],
   );
   const [isLoadingProductSuggestions, setIsLoadingProductSuggestions] =
     useState(false);
@@ -174,7 +174,7 @@ export default function S2BusinessIdea() {
     } else {
       console.log(
         "❌ S2BusinessIdea - Validation failed, showing errors:",
-        errors
+        errors,
       );
       // Errors are already set by validateStep, they will be displayed automatically
     }
@@ -415,7 +415,7 @@ export default function S2BusinessIdea() {
                                 </p>
                               )}
 
-{/* Selected Options Display */}
+                              {/* Selected Options Display */}
                               {form.selectedProductCategoriesOptions.length >
                                 0 && (
                                 <div className="mt-3 hidden md:block">
@@ -435,14 +435,14 @@ export default function S2BusinessIdea() {
                                             onClick={() => {
                                               const newOptions =
                                                 form.selectedProductCategoriesOptions.filter(
-                                                  (opt) => opt !== option
+                                                  (opt) => opt !== option,
                                                 );
 
                                               // Update input field using utility function
                                               const updatedInput =
                                                 removeSuggestionFromInput(
                                                   form.selectedProductCategory,
-                                                  option
+                                                  option,
                                                 );
 
                                               setForm({
@@ -458,7 +458,7 @@ export default function S2BusinessIdea() {
                                             ×
                                           </button>
                                         </div>
-                                      )
+                                      ),
                                     )}
                                   </div>
                                 </div>
@@ -488,7 +488,7 @@ export default function S2BusinessIdea() {
                                           (suggestion, index) => {
                                             const isSelected =
                                               form.selectedProductCategoriesOptions.includes(
-                                                suggestion
+                                                suggestion,
                                               );
                                             return (
                                               <button
@@ -504,7 +504,7 @@ export default function S2BusinessIdea() {
                                                     form.selectedProductCategoriesOptions;
                                                   const isAlreadySelected =
                                                     currentOptions.includes(
-                                                      suggestion
+                                                      suggestion,
                                                     );
 
                                                   let newOptions;
@@ -513,7 +513,7 @@ export default function S2BusinessIdea() {
                                                     newOptions =
                                                       currentOptions.filter(
                                                         (opt) =>
-                                                          opt !== suggestion
+                                                          opt !== suggestion,
                                                       );
                                                   } else {
                                                     // Add if not selected
@@ -528,7 +528,7 @@ export default function S2BusinessIdea() {
                                                     toggleSuggestionInInput(
                                                       form.selectedProductCategory,
                                                       suggestion,
-                                                      isAlreadySelected
+                                                      isAlreadySelected,
                                                     );
 
                                                   setForm({
@@ -566,7 +566,7 @@ export default function S2BusinessIdea() {
                                                 </span>
                                               </button>
                                             );
-                                          }
+                                          },
                                         )}
                                         {/* <div className="border-t border-gray-200 my-2"></div> */}
                                         {/* <div className="text-xs text-gray-500 font-medium mb-1 px-2">Other Options:</div> */}
@@ -636,7 +636,7 @@ export default function S2BusinessIdea() {
                                 </p>
                               )}
 
-{/* Selected Options Display */}
+                              {/* Selected Options Display */}
                               {form.selectedServiceCategoriesOptions.length >
                                 0 && (
                                 <div className="mt-3 hidden md:block">
@@ -656,14 +656,14 @@ export default function S2BusinessIdea() {
                                             onClick={() => {
                                               const newOptions =
                                                 form.selectedServiceCategoriesOptions.filter(
-                                                  (opt) => opt !== option
+                                                  (opt) => opt !== option,
                                                 );
 
                                               // Update input field using utility function
                                               const updatedInput =
                                                 removeSuggestionFromInput(
                                                   form.selectedServiceCategory,
-                                                  option
+                                                  option,
                                                 );
 
                                               setForm({
@@ -679,7 +679,7 @@ export default function S2BusinessIdea() {
                                             ×
                                           </button>
                                         </div>
-                                      )
+                                      ),
                                     )}
                                   </div>
                                 </div>
@@ -709,7 +709,7 @@ export default function S2BusinessIdea() {
                                           (suggestion, index) => {
                                             const isSelected =
                                               form.selectedServiceCategoriesOptions.includes(
-                                                suggestion
+                                                suggestion,
                                               );
                                             return (
                                               <button
@@ -725,7 +725,7 @@ export default function S2BusinessIdea() {
                                                     form.selectedServiceCategoriesOptions;
                                                   const isAlreadySelected =
                                                     currentOptions.includes(
-                                                      suggestion
+                                                      suggestion,
                                                     );
 
                                                   let newOptions;
@@ -734,7 +734,7 @@ export default function S2BusinessIdea() {
                                                     newOptions =
                                                       currentOptions.filter(
                                                         (opt) =>
-                                                          opt !== suggestion
+                                                          opt !== suggestion,
                                                       );
                                                   } else {
                                                     // Add if not selected
@@ -749,7 +749,7 @@ export default function S2BusinessIdea() {
                                                     toggleSuggestionInInput(
                                                       form.selectedServiceCategory,
                                                       suggestion,
-                                                      isAlreadySelected
+                                                      isAlreadySelected,
                                                     );
 
                                                   setForm({
@@ -787,7 +787,7 @@ export default function S2BusinessIdea() {
                                                 </span>
                                               </button>
                                             );
-                                          }
+                                          },
                                         )}
                                         {/* <div className="border-t border-gray-200 my-2"></div> */}
                                         {/* <div className="text-xs text-gray-500 font-medium mb-1 px-2">Other Options:</div> */}
@@ -799,7 +799,7 @@ export default function S2BusinessIdea() {
                                     (category, index) => {
                                       const isSelected =
                                         form.selectedServiceCategoriesOptions.includes(
-                                          category
+                                          category,
                                         );
                                       return (
                                         <button
@@ -821,7 +821,7 @@ export default function S2BusinessIdea() {
                                               // Remove if already selected
                                               newOptions =
                                                 currentOptions.filter(
-                                                  (opt) => opt !== category
+                                                  (opt) => opt !== category,
                                                 );
                                             } else {
                                               // Add if not selected
@@ -836,7 +836,7 @@ export default function S2BusinessIdea() {
                                               toggleSuggestionInInput(
                                                 form.selectedServiceCategory,
                                                 category,
-                                                isAlreadySelected
+                                                isAlreadySelected,
                                               );
 
                                             setForm({
@@ -874,7 +874,7 @@ export default function S2BusinessIdea() {
                                           </span>
                                         </button>
                                       );
-                                    }
+                                    },
                                   )}
                                 </div>
                               </div>

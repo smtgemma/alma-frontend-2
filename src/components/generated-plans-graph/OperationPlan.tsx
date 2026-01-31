@@ -250,7 +250,7 @@ export default function OperationsDashboard({
       {/* Operating Cost Breakdown Pie Chart */}
       <div className="">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-          7.1 Ripartizione dei costi operativi
+          5.1 Ripartizione dei costi operativi
         </h2>
         <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8">
           <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg h-80 sm:h-96">

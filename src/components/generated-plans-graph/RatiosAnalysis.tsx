@@ -31,50 +31,12 @@ export default function RatiosAnalysis({ ratiosAnalysis }: IRatiosAnalysis) {
       format: "percentage",
     },
     {
-      key: "roe",
-      label: "ROE (Ritorno sul capitale proprio)",
+      key: "roa",
+      label: "ROA (Ritorno sugli attivi)",
       format: "percentage",
     },
-    { key: "ros", label: "ROS (Ritorno sulle vendite)", format: "percentage" },
-    { key: "ebit_margin", label: "Margine EBIT", format: "currency" },
-    {
-      key: "net_debt_to_ebitda",
-      label: "Debito netto su EBITDA",
-      format: "ratio",
-    },
-    {
-      key: "net_debt_to_equity",
-      label: "Debito netto su patrimonio netto",
-      format: "ratio",
-    },
-    {
-      key: "net_debt_to_revenue",
-      label: "Debito netto su ricavi",
-      format: "ratio",
-    },
     { key: "current_ratio", label: "Rapporto corrente", format: "ratio" },
-    { key: "quick_ratio", label: "Rapporto rapido", format: "number" },
-    {
-      key: "debt_to_equity",
-      label: "Debito su patrimonio netto",
-      format: "ratio",
-    },
-    {
-      key: "treasury_margin",
-      label: "Margine di tesoreria",
-      format: "currency",
-    },
-    {
-      key: "structural_margin",
-      label: "Margine strutturale",
-      format: "currency",
-    },
-    {
-      key: "net_working_capital",
-      label: "Capitale circolante netto",
-      format: "currency",
-    },
-    { key: "altman_z_score", label: "Punteggio Altman Z", format: "ratio" },
+    { key: "quick_ratio", label: "Rapporto rapido", format: "ratio" },
   ];
 
   const formatValue = (value: number, format: string) => {
@@ -96,7 +58,7 @@ export default function RatiosAnalysis({ ratiosAnalysis }: IRatiosAnalysis) {
     <div className="mx-auto space-y-10 mt-10">
       {/* Comprehensive Ratios Analysis Table */}
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-        12. Analisi dei rapporti
+        11. Analisi dei rapporti
       </h2>
       <div className="rounded-lg border border-gray-200">
         <div className="overflow-x-auto">

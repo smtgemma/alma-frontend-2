@@ -44,7 +44,7 @@ export default function FundingSources({
     return (
       <div className="mt-10 mx-auto space-y-6 px-2 sm:px-4">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-          6. Fonti di finanziamento
+          4. Fonti di finanziamento
         </h2>
         <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
           <p className="text-sm sm:text-base text-gray-700 leading-relaxed text-justify">
@@ -60,7 +60,7 @@ export default function FundingSources({
     return (
       <div className="mt-10 mx-auto space-y-6 px-2 sm:px-4">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-          6. Fonti di finanziamento
+          4. Fonti di finanziamento
         </h2>
         <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
           <p className="text-sm sm:text-base text-gray-500 text-center">
@@ -76,7 +76,7 @@ export default function FundingSources({
   return (
     <div className="mt-10 mx-auto space-y-8 px-2 sm:px-4">
       <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-        6. Fonti di finanziamento
+        4. Fonti di finanziamento
       </h2>
 
       {/* Summary Section */}
@@ -127,7 +127,7 @@ export default function FundingSources({
       {data.fixedInvestments && data.fixedInvestments.length > 0 && (
         <>
           <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mt-8 mb-4">
-            6.1 Investimenti fissi
+            4.1 Investimenti fissi
           </h3>
 
           {/* Desktop/Tablet View */}

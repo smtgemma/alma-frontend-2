@@ -121,29 +121,29 @@ const GeneratedBusinessPlanforUser = ({
           </section>
 
           {/* Management Team */}
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+          {/* <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
             3. Team di gestione
           </h2>
           <div className="">
             <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-justify">
               {managementTeam}
             </p>
-          </div>
+          </div> */}
 
           {/* Business Model */}
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
+          {/* <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
             4. Modello di business
           </h2>
           <div className="">
             <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-justify">
               {businessModel}
             </p>
-          </div>
+          </div> */}
 
           {/* Competitive Advantage Section */}
           <section className="">
             <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
-              5. Analisi di mercato
+              3. Analisi di mercato
             </h3>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl text-justify">

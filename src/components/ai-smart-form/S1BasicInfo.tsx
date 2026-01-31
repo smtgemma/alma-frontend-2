@@ -98,7 +98,7 @@ export default function S1BasicInfo() {
       extractedCompanyName: "",
       extractedFounders: "",
       extractedEstablishmentDate: "",
-    }
+    },
   );
 
   // Sync form changes with context
@@ -152,7 +152,7 @@ export default function S1BasicInfo() {
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -162,13 +162,14 @@ export default function S1BasicInfo() {
   const handleTeamMemberChange = (
     index: number,
     field: keyof TeamMember,
-    value: string
+    value: string,
   ) => {
     setForm((prev) => ({
       ...prev,
-      teamMembers: prev.teamMembers?.map((member, i) =>
-        i === index ? { ...member, [field]: value } : member
-      ) || [],
+      teamMembers:
+        prev.teamMembers?.map((member, i) =>
+          i === index ? { ...member, [field]: value } : member,
+        ) || [],
     }));
   };
 
@@ -195,7 +196,7 @@ export default function S1BasicInfo() {
   const handleAISuggestionInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldName: keyof BusinessInfoForm,
-    selectedOptionsField: keyof BusinessInfoForm
+    selectedOptionsField: keyof BusinessInfoForm,
   ) => {
     const { value } = e.target;
 
@@ -220,7 +221,7 @@ export default function S1BasicInfo() {
 
     // Filter selected options to only include those still present in the input
     const updatedSelectedOptions = currentSelectedOptions.filter((option) =>
-      inputItems.includes(option)
+      inputItems.includes(option),
     );
 
     // Update selected options if they've changed
@@ -249,10 +250,10 @@ export default function S1BasicInfo() {
             () =>
               reject(
                 new Error(
-                  "Request timeout - AI service is taking too long to respond"
-                )
+                  "Request timeout - AI service is taking too long to respond",
+                ),
               ),
-            30000
+            30000,
           ); // 30 seconds timeout
         });
 
@@ -271,7 +272,7 @@ export default function S1BasicInfo() {
         console.log("📊 Single file page_count:", response.page_count);
         console.log(
           "📊 Single file page_count type:",
-          typeof response.page_count
+          typeof response.page_count,
         );
 
         mappedResponse = {
@@ -280,8 +281,8 @@ export default function S1BasicInfo() {
             typeof (response as any).page_count === "number"
               ? (response as any).page_count
               : typeof (response as any).page_count === "string"
-              ? parseInt((response as any).page_count) || 1
-              : 1, // Default to 1 if no page count
+                ? parseInt((response as any).page_count) || 1
+                : 1, // Default to 1 if no page count
           metadata: "metadata" in response ? (response as any).metadata : {},
           financial_data:
             "financial_data" in response
@@ -408,7 +409,7 @@ export default function S1BasicInfo() {
           success: false,
         });
         console.warn(
-          "AI extraction service unavailable, file uploaded without processing"
+          "AI extraction service unavailable, file uploaded without processing",
         );
       } else {
         // Other errors
@@ -423,9 +424,9 @@ export default function S1BasicInfo() {
   // Handle multiple PDF uploads
   const handleMultipleFileUpload = async (files: FileList) => {
     console.log("🚀 S1BasicInfo - Multiple PDF upload started");
-  
+
     const pdfFiles = Array.from(files).filter((file) =>
-      file.type.includes("pdf")
+      file.type.includes("pdf"),
     );
 
     if (pdfFiles.length === 0) {
@@ -443,7 +444,7 @@ export default function S1BasicInfo() {
     try {
       const uploadPromises = pdfFiles.map(async (file, index) => {
         console.log(
-          `📄 Processing file ${index + 1}/${pdfFiles.length}: ${file.name}`
+          `📄 Processing file ${index + 1}/${pdfFiles.length}: ${file.name}`,
         );
 
         // Set a timeout for each PDF extraction request
@@ -452,10 +453,10 @@ export default function S1BasicInfo() {
             () =>
               reject(
                 new Error(
-                  `Request timeout for ${file.name} - AI service is taking too long to respond`
-                )
+                  `Request timeout for ${file.name} - AI service is taking too long to respond`,
+                ),
               ),
-            30000
+            30000,
           ); // 30 seconds timeout per file
         });
 
@@ -474,7 +475,7 @@ export default function S1BasicInfo() {
         console.log(`📊 File ${index + 1} page_count:`, response.page_count);
         console.log(
           `📊 File ${index + 1} page_count type:`,
-          typeof response.page_count
+          typeof response.page_count,
         );
 
         return {
@@ -483,8 +484,8 @@ export default function S1BasicInfo() {
             typeof (response as any).page_count === "number"
               ? (response as any).page_count
               : typeof (response as any).page_count === "string"
-              ? parseInt((response as any).page_count) || 1
-              : 1, // Default to 1 if no page count
+                ? parseInt((response as any).page_count) || 1
+                : 1, // Default to 1 if no page count
           metadata: "metadata" in response ? (response as any).metadata : {},
           financial_data:
             "financial_data" in response
@@ -509,15 +510,15 @@ export default function S1BasicInfo() {
 
         console.log(
           "📁 Existing files:",
-          existingFiles.map((f) => f.name)
+          existingFiles.map((f) => f.name),
         );
         console.log(
           "📁 New files:",
-          pdfFiles.map((f) => f.name)
+          pdfFiles.map((f) => f.name),
         );
         console.log(
           "📁 Existing uploaded files:",
-          existingUploadedFiles.length
+          existingUploadedFiles.length,
         );
 
         const mergedFiles = [...existingFiles, ...pdfFiles];
@@ -528,7 +529,7 @@ export default function S1BasicInfo() {
 
         console.log(
           "📁 Merged files:",
-          mergedFiles.map((f) => f.name)
+          mergedFiles.map((f) => f.name),
         );
         console.log("📁 Merged uploaded files:", mergedUploadedFiles.length);
 
@@ -541,13 +542,13 @@ export default function S1BasicInfo() {
 
       setUploadSuccess(true);
       console.log(
-        `✅ ${pdfFiles.length} PDFs uploaded and extracted successfully`
+        `✅ ${pdfFiles.length} PDFs uploaded and extracted successfully`,
       );
     } catch (error: any) {
       console.error("❌ Multiple PDF upload/extraction failed:", error);
       alert(
         error?.message ||
-          "Failed to upload PDFs. Please try again or contact support."
+          "Failed to upload PDFs. Please try again or contact support.",
       );
     } finally {
       setIsUploading(false);
@@ -597,35 +598,24 @@ export default function S1BasicInfo() {
   // Handle balance sheet file uploads
   const handleBalanceSheetUpload = async (files: FileList) => {
     const fileArr = Array.from(files);
-    console.log("🚀 BALANCE SHEET - Starting file upload process");
-    console.log(
-      "📁 BALANCE SHEET - Files to upload:",
-      fileArr.map((f) => ({ name: f.name, type: f.type, size: f.size }))
-    );
 
     if (fileArr.length === 0) {
       console.log("❌ BALANCE SHEET - No files provided");
       return;
     }
 
-    console.log(`📊 BALANCE SHEET - Processing ${fileArr.length} file(s)`);
     setIsUploading(true);
     setUploadSuccess(false);
 
     try {
       const results = await Promise.all(
         fileArr.map(async (file, index) => {
-          console.log(`\n📄 BALANCE SHEET [${index + 1}/${fileArr.length}] - Processing: ${file.name}`);
-          console.log(`📄 File type: ${file.type}, Size: ${(file.size / 1024).toFixed(2)} KB`);
-          
-          // AI service accepts all file types, so always try extraction
-          console.log(`🔄 BALANCE SHEET [${index + 1}] - Starting AI extraction for: ${file.name}`);
-          console.log(`📊 BALANCE SHEET [${index + 1}] - Document type: balance_sheet`);
-          
           try {
             const timeoutPromise = new Promise((_, reject) => {
               setTimeout(() => {
-                console.log(`⏰ BALANCE SHEET [${index + 1}] - Timeout reached for: ${file.name}`);
+                console.log(
+                  `⏰ BALANCE SHEET [${index + 1}] - Timeout reached for: ${file.name}`,
+                );
                 reject(new Error(`Request timeout for ${file.name}`));
               }, 30000);
             });
@@ -634,39 +624,60 @@ export default function S1BasicInfo() {
               file,
               document_type: "balance_sheet",
             }).unwrap();
-            
+
             const response = (await Promise.race([
               extractionPromise,
               timeoutPromise,
             ])) as any;
 
-            console.log(`✅ BALANCE SHEET [${index + 1}] - AI extraction completed for: ${file.name}`);
-            console.log(`📊 BALANCE SHEET [${index + 1}] - Extraction response:`, {
-              text_content_length: response.text_content ? response.text_content.length : 0,
-              page_count: response.page_count,
-              has_metadata: !!response.metadata,
-              has_financial_data: !!response.financial_data,
-              document_type: response.document_type
-            });
-            console.log(`📝 BALANCE SHEET [${index + 1}] - Full extraction data:`, response);
+            console.log(
+              `✅ BALANCE SHEET [${index + 1}] - AI extraction completed for: ${file.name}`,
+            );
+            console.log(
+              `📊 BALANCE SHEET [${index + 1}] - Extraction response:`,
+              {
+                text_content_length: response.text_content
+                  ? response.text_content.length
+                  : 0,
+                page_count: response.page_count,
+                has_metadata: !!response.metadata,
+                has_financial_data: !!response.financial_data,
+                document_type: response.document_type,
+              },
+            );
+            console.log(
+              `📝 BALANCE SHEET [${index + 1}] - Full extraction data:`,
+              response,
+            );
 
             const result = {
               text_content: response.text_content ?? "",
-              page_count: typeof response.page_count === "number" ? response.page_count : parseInt(response.page_count) || 1,
+              page_count:
+                typeof response.page_count === "number"
+                  ? response.page_count
+                  : parseInt(response.page_count) || 1,
               metadata: "metadata" in response ? response.metadata : {},
-              financial_data: "financial_data" in response ? response.financial_data : null,
+              financial_data:
+                "financial_data" in response ? response.financial_data : null,
               document_type: "balance_sheet",
               file_name: file.name,
             };
 
-            console.log(`📋 BALANCE SHEET [${index + 1}] - Processed result:`, result);
+            console.log(
+              `📋 BALANCE SHEET [${index + 1}] - Processed result:`,
+              result,
+            );
             return result;
           } catch (error) {
-            console.log(`❌ BALANCE SHEET [${index + 1}] - Extraction failed for: ${file.name}`, error);
-            
+            console.log(
+              `❌ BALANCE SHEET [${index + 1}] - Extraction failed for: ${file.name}`,
+              error,
+            );
+
             // If extraction fails, still store the file but with error message
             const result = {
-              text_content: "Document uploaded successfully. AI extraction service encountered an error.",
+              text_content:
+                "Document uploaded successfully. AI extraction service encountered an error.",
               status: "extraction_error",
               success: false,
               document_type: "balance_sheet",
@@ -674,13 +685,16 @@ export default function S1BasicInfo() {
               page_count: 1,
               metadata: {},
               financial_data: null,
-              error: error instanceof Error ? error.message : "Unknown error"
+              error: error instanceof Error ? error.message : "Unknown error",
             };
 
-            console.log(`📋 BALANCE SHEET [${index + 1}] - Error result:`, result);
+            console.log(
+              `📋 BALANCE SHEET [${index + 1}] - Error result:`,
+              result,
+            );
             return result;
           }
-        })
+        }),
       );
 
       console.log("\n🎉 BALANCE SHEET - All files processed successfully!");
@@ -690,10 +704,10 @@ export default function S1BasicInfo() {
           (r: any) =>
             r.document_type === "balance_sheet" &&
             r.status !== "uploaded_no_extraction" &&
-            r.status !== "extraction_error"
+            r.status !== "extraction_error",
         ).length,
         extraction_errors: results.filter(
-          (r: any) => r.status === "extraction_error"
+          (r: any) => r.status === "extraction_error",
         ).length,
         total_pages: results.reduce((sum, r) => sum + (r.page_count || 0), 0),
       });
@@ -723,7 +737,7 @@ export default function S1BasicInfo() {
         console.log("\n📋 BALANCE SHEET - Complete extraction array:");
         console.log(
           "🔍 Balance Sheet Extractions:",
-          updatedForm.balanceSheetExtractions
+          updatedForm.balanceSheetExtractions,
         );
         console.log("🔍 All Uploaded Files Array:", updatedForm.uploaded_file);
 
@@ -754,7 +768,7 @@ export default function S1BasicInfo() {
       });
 
       console.log(
-        "\n🎆 BALANCE SHEET - Upload process completed successfully!"
+        "\n🎆 BALANCE SHEET - Upload process completed successfully!",
       );
       setUploadSuccess(true);
 
@@ -771,7 +785,7 @@ export default function S1BasicInfo() {
       console.error("🚨 BALANCE SHEET - Error type:", typeof error);
       console.error(
         "🚨 BALANCE SHEET - Error message:",
-        error instanceof Error ? error.message : String(error)
+        error instanceof Error ? error.message : String(error),
       );
 
       // Log additional error context if available
@@ -779,30 +793,30 @@ export default function S1BasicInfo() {
         if ("status" in error)
           console.error(
             "🚨 BALANCE SHEET - Error status:",
-            (error as any).status
+            (error as any).status,
           );
         if ("data" in error)
           console.error("🚨 BALANCE SHEET - Error data:", (error as any).data);
         if ("stack" in error)
           console.error(
             "🚨 BALANCE SHEET - Error stack:",
-            (error as any).stack
+            (error as any).stack,
           );
       }
 
       alert("Failed to upload Balance Sheet files. Please try again.");
     } finally {
       console.log(
-        "\n🏁 BALANCE SHEET - Finally block executed, cleaning up..."
+        "\n🏁 BALANCE SHEET - Finally block executed, cleaning up...",
       );
       setIsUploading(false);
       console.log(
-        "🔄 BALANCE SHEET - Upload state reset (isUploading = false)"
+        "🔄 BALANCE SHEET - Upload state reset (isUploading = false)",
       );
     }
 
     console.log(
-      "\n🏁 BALANCE SHEET - handleBalanceSheetUpload function completed"
+      "\n🏁 BALANCE SHEET - handleBalanceSheetUpload function completed",
     );
   };
 
@@ -812,7 +826,7 @@ export default function S1BasicInfo() {
     console.log("🚀 VISURA CAMERALE - Starting file upload process");
     console.log(
       "📁 VISURA CAMERALE - Files to upload:",
-      fileArr.map((f) => ({ name: f.name, type: f.type, size: f.size }))
+      fileArr.map((f) => ({ name: f.name, type: f.type, size: f.size })),
     );
 
     if (fileArr.length === 0) {
@@ -827,17 +841,27 @@ export default function S1BasicInfo() {
     try {
       const results = await Promise.all(
         fileArr.map(async (file, index) => {
-          console.log(`\n📄 VISURA CAMERALE [${index + 1}/${fileArr.length}] - Processing: ${file.name}`);
-          console.log(`📄 File type: ${file.type}, Size: ${(file.size / 1024).toFixed(2)} KB`);
-          
+          console.log(
+            `\n📄 VISURA CAMERALE [${index + 1}/${fileArr.length}] - Processing: ${file.name}`,
+          );
+          console.log(
+            `📄 File type: ${file.type}, Size: ${(file.size / 1024).toFixed(2)} KB`,
+          );
+
           // AI service accepts all file types, so always try extraction
-          console.log(`🔄 VISURA CAMERALE [${index + 1}] - Starting AI extraction for: ${file.name}`);
-          console.log(`📊 VISURA CAMERALE [${index + 1}] - Document type: visura_camerale`);
-          
+          console.log(
+            `🔄 VISURA CAMERALE [${index + 1}] - Starting AI extraction for: ${file.name}`,
+          );
+          console.log(
+            `📊 VISURA CAMERALE [${index + 1}] - Document type: visura_camerale`,
+          );
+
           try {
             const timeoutPromise = new Promise((_, reject) => {
               setTimeout(() => {
-                console.log(`⏰ VISURA CAMERALE [${index + 1}] - Timeout reached for: ${file.name}`);
+                console.log(
+                  `⏰ VISURA CAMERALE [${index + 1}] - Timeout reached for: ${file.name}`,
+                );
                 reject(new Error(`Request timeout for ${file.name}`));
               }, 30000);
             });
@@ -851,33 +875,54 @@ export default function S1BasicInfo() {
               timeoutPromise,
             ])) as any;
 
-            console.log(`✅ VISURA CAMERALE [${index + 1}] - AI extraction completed for: ${file.name}`);
-            console.log(`📊 VISURA CAMERALE [${index + 1}] - Extraction response:`, {
-              text_content_length: response.text_content ? response.text_content.length : 0,
-              page_count: response.page_count,
-              has_metadata: !!response.metadata,
-              has_financial_data: !!response.financial_data,
-              document_type: response.document_type,
-            });
-            console.log(`📝 VISURA CAMERALE [${index + 1}] - Full extraction data:`, response);
+            console.log(
+              `✅ VISURA CAMERALE [${index + 1}] - AI extraction completed for: ${file.name}`,
+            );
+            console.log(
+              `📊 VISURA CAMERALE [${index + 1}] - Extraction response:`,
+              {
+                text_content_length: response.text_content
+                  ? response.text_content.length
+                  : 0,
+                page_count: response.page_count,
+                has_metadata: !!response.metadata,
+                has_financial_data: !!response.financial_data,
+                document_type: response.document_type,
+              },
+            );
+            console.log(
+              `📝 VISURA CAMERALE [${index + 1}] - Full extraction data:`,
+              response,
+            );
 
             const result = {
               text_content: response.text_content ?? "",
-              page_count: typeof response.page_count === "number" ? response.page_count : parseInt(response.page_count) || 1,
+              page_count:
+                typeof response.page_count === "number"
+                  ? response.page_count
+                  : parseInt(response.page_count) || 1,
               metadata: "metadata" in response ? response.metadata : {},
-              financial_data: "financial_data" in response ? response.financial_data : null,
+              financial_data:
+                "financial_data" in response ? response.financial_data : null,
               document_type: "visura_camerale",
               file_name: file.name,
             };
 
-            console.log(`📋 VISURA CAMERALE [${index + 1}] - Processed result:`, result);
+            console.log(
+              `📋 VISURA CAMERALE [${index + 1}] - Processed result:`,
+              result,
+            );
             return result;
           } catch (error) {
-            console.log(`❌ VISURA CAMERALE [${index + 1}] - Extraction failed for: ${file.name}`, error);
-            
+            console.log(
+              `❌ VISURA CAMERALE [${index + 1}] - Extraction failed for: ${file.name}`,
+              error,
+            );
+
             // If extraction fails, still store the file but with error message
             const result = {
-              text_content: "Document uploaded successfully. AI extraction service encountered an error.",
+              text_content:
+                "Document uploaded successfully. AI extraction service encountered an error.",
               status: "extraction_error",
               success: false,
               document_type: "visura_camerale",
@@ -885,13 +930,16 @@ export default function S1BasicInfo() {
               page_count: 1,
               metadata: {},
               financial_data: null,
-              error: error instanceof Error ? error.message : "Unknown error"
+              error: error instanceof Error ? error.message : "Unknown error",
             };
 
-            console.log(`📋 VISURA CAMERALE [${index + 1}] - Error result:`, result);
+            console.log(
+              `📋 VISURA CAMERALE [${index + 1}] - Error result:`,
+              result,
+            );
             return result;
           }
-        })
+        }),
       );
 
       console.log("\n🎉 VISURA CAMERALE - All files processed successfully!");
@@ -901,10 +949,10 @@ export default function S1BasicInfo() {
           (r: any) =>
             r.document_type === "visura_camerale" &&
             r.status !== "uploaded_no_extraction" &&
-            r.status !== "extraction_error"
+            r.status !== "extraction_error",
         ).length,
         extraction_errors: results.filter(
-          (r: any) => r.status === "extraction_error"
+          (r: any) => r.status === "extraction_error",
         ).length,
         total_pages: results.reduce((sum, r) => sum + (r.page_count || 0), 0),
       });
@@ -916,13 +964,13 @@ export default function S1BasicInfo() {
         (r: any) =>
           r.document_type === "visura_camerale" &&
           r.status !== "uploaded_no_extraction" &&
-          r.status !== "extraction_error"
+          r.status !== "extraction_error",
       );
 
       if (firstPdfResult) {
         console.log(
           "📊 VISURA CAMERALE - Found PDF extraction data for autofill:",
-          firstPdfResult
+          firstPdfResult,
         );
         const md = firstPdfResult.metadata || {};
         console.log("🔍 VISURA CAMERALE - Metadata for autofill:", md);
@@ -948,7 +996,7 @@ export default function S1BasicInfo() {
         });
 
         console.log(
-          "\n💾 VISURA CAMERALE - Updating form state with autofill..."
+          "\n💾 VISURA CAMERALE - Updating form state with autofill...",
         );
         setForm((prev) => {
           const existingFiles = prev.visuraCameraleFiles || [];
@@ -988,11 +1036,11 @@ export default function S1BasicInfo() {
           console.log("\n📋 VISURA CAMERALE - Complete extraction array:");
           console.log(
             "🔍 Visura Camerale Extractions:",
-            updatedForm.visuraCameraleExtractions
+            updatedForm.visuraCameraleExtractions,
           );
           console.log(
             "🔍 All Uploaded Files Array:",
-            updatedForm.uploaded_file
+            updatedForm.uploaded_file,
           );
 
           // Verify array structure for each extraction
@@ -1016,7 +1064,7 @@ export default function S1BasicInfo() {
                     : [],
                   full_object: extraction,
                 });
-              }
+              },
             );
           }
 
@@ -1026,11 +1074,11 @@ export default function S1BasicInfo() {
         console.log("✅ VISURA CAMERALE - Form updated with autofill data");
       } else {
         console.log(
-          "⚠️ VISURA CAMERALE - No PDF extraction data found, adding files without autofill"
+          "⚠️ VISURA CAMERALE - No PDF extraction data found, adding files without autofill",
         );
 
         console.log(
-          "\n💾 VISURA CAMERALE - Updating form state without autofill..."
+          "\n💾 VISURA CAMERALE - Updating form state without autofill...",
         );
         setForm((prev) => {
           const existingFiles = prev.visuraCameraleFiles || [];
@@ -1052,20 +1100,20 @@ export default function S1BasicInfo() {
               total_business_documents:
                 updatedForm.businessDocuments?.length || 0,
               total_uploaded_files: updatedForm.uploaded_file?.length || 0,
-            }
+            },
           );
 
           // Log the complete extraction array structure (no autofill case)
           console.log(
-            "\n📋 VISURA CAMERALE - Complete extraction array (no autofill):"
+            "\n📋 VISURA CAMERALE - Complete extraction array (no autofill):",
           );
           console.log(
             "🔍 Visura Camerale Extractions:",
-            updatedForm.visuraCameraleExtractions
+            updatedForm.visuraCameraleExtractions,
           );
           console.log(
             "🔍 All Uploaded Files Array:",
-            updatedForm.uploaded_file
+            updatedForm.uploaded_file,
           );
 
           // Verify array structure for each extraction
@@ -1090,9 +1138,9 @@ export default function S1BasicInfo() {
                       ? Object.keys(extraction.metadata)
                       : [],
                     full_object: extraction,
-                  }
+                  },
                 );
-              }
+              },
             );
           }
 
@@ -1103,7 +1151,7 @@ export default function S1BasicInfo() {
       }
 
       console.log(
-        "\n🎆 VISURA CAMERALE - Upload process completed successfully!"
+        "\n🎆 VISURA CAMERALE - Upload process completed successfully!",
       );
       setUploadSuccess(true);
 
@@ -1119,7 +1167,7 @@ export default function S1BasicInfo() {
       console.error("🚨 VISURA CAMERALE - Error type:", typeof error);
       console.error(
         "🚨 VISURA CAMERALE - Error message:",
-        error instanceof Error ? error.message : String(error)
+        error instanceof Error ? error.message : String(error),
       );
 
       // Log additional error context if available
@@ -1127,33 +1175,33 @@ export default function S1BasicInfo() {
         if ("status" in error)
           console.error(
             "🚨 VISURA CAMERALE - Error status:",
-            (error as any).status
+            (error as any).status,
           );
         if ("data" in error)
           console.error(
             "🚨 VISURA CAMERALE - Error data:",
-            (error as any).data
+            (error as any).data,
           );
         if ("stack" in error)
           console.error(
             "🚨 VISURA CAMERALE - Error stack:",
-            (error as any).stack
+            (error as any).stack,
           );
       }
 
       alert("Failed to upload Visura Camerale files. Please try again.");
     } finally {
       console.log(
-        "\n🏁 VISURA CAMERALE - Finally block executed, cleaning up..."
+        "\n🏁 VISURA CAMERALE - Finally block executed, cleaning up...",
       );
       setIsUploading(false);
       console.log(
-        "🔄 VISURA CAMERALE - Upload state reset (isUploading = false)"
+        "🔄 VISURA CAMERALE - Upload state reset (isUploading = false)",
       );
     }
 
     console.log(
-      "\n🏁 VISURA CAMERALE - handleVisuraCameraleUpload function completed"
+      "\n🏁 VISURA CAMERALE - handleVisuraCameraleUpload function completed",
     );
   };
 
@@ -1163,7 +1211,7 @@ export default function S1BasicInfo() {
     console.log("🚀 UNIFIED UPLOAD - Starting file upload process");
     console.log(
       "📁 Files to upload:",
-      fileArr.map((f) => ({ name: f.name, type: f.type, size: f.size }))
+      fileArr.map((f) => ({ name: f.name, type: f.type, size: f.size })),
     );
 
     if (fileArr.length === 0) {
@@ -1181,19 +1229,19 @@ export default function S1BasicInfo() {
           console.log(
             `\n📄 UNIFIED UPLOAD [${index + 1}/${
               fileArr.length
-            }] - Processing: ${file.name}`
+            }] - Processing: ${file.name}`,
           );
           console.log(
             `📄 File type: ${file.type}, Size: ${(file.size / 1024).toFixed(
-              2
-            )} KB`
+              2,
+            )} KB`,
           );
 
           if (file.type.includes("pdf")) {
             console.log(
               `🔄 UNIFIED UPLOAD [${
                 index + 1
-              }] - Starting PDF extraction for: ${file.name}`
+              }] - Starting PDF extraction for: ${file.name}`,
             );
 
             const timeoutPromise = new Promise((_, reject) => {
@@ -1201,7 +1249,7 @@ export default function S1BasicInfo() {
                 console.log(
                   `⏰ UNIFIED UPLOAD [${index + 1}] - Timeout reached for: ${
                     file.name
-                  }`
+                  }`,
                 );
                 reject(new Error(`Request timeout for ${file.name}`));
               }, 30000);
@@ -1220,7 +1268,7 @@ export default function S1BasicInfo() {
             console.log(
               `✅ UNIFIED UPLOAD [${
                 index + 1
-              }] - PDF extraction completed for: ${file.name}`
+              }] - PDF extraction completed for: ${file.name}`,
             );
             console.log(
               `📊 UNIFIED UPLOAD [${index + 1}] - Extraction response:`,
@@ -1232,11 +1280,11 @@ export default function S1BasicInfo() {
                 has_metadata: !!response.metadata,
                 has_financial_data: !!response.financial_data,
                 document_type: response.document_type,
-              }
+              },
             );
             console.log(
               `📝 UNIFIED UPLOAD [${index + 1}] - Full extraction data:`,
-              response
+              response,
             );
 
             const result = {
@@ -1254,14 +1302,14 @@ export default function S1BasicInfo() {
 
             console.log(
               `📋 UNIFIED UPLOAD [${index + 1}] - Processed result:`,
-              result
+              result,
             );
             return result;
           } else {
             console.log(
               `📄 UNIFIED UPLOAD [${
                 index + 1
-              }] - Non-PDF file, skipping extraction: ${file.name}`
+              }] - Non-PDF file, skipping extraction: ${file.name}`,
             );
 
             const result = {
@@ -1278,11 +1326,11 @@ export default function S1BasicInfo() {
 
             console.log(
               `📋 UNIFIED UPLOAD [${index + 1}] - Non-PDF result:`,
-              result
+              result,
             );
             return result;
           }
-        })
+        }),
       );
 
       console.log("\n🎉 UNIFIED UPLOAD - All files processed successfully!");
@@ -1298,13 +1346,13 @@ export default function S1BasicInfo() {
       // Attempt to autofill company profile fields from the first extraction metadata
       console.log("\n🔍 UNIFIED UPLOAD - Checking for autofill data...");
       const firstPdfResult = results.find(
-        (r) => r.document_type === "company_extract"
+        (r) => r.document_type === "company_extract",
       );
 
       if (firstPdfResult) {
         console.log(
           "📊 UNIFIED UPLOAD - Found PDF extraction data for autofill:",
-          firstPdfResult
+          firstPdfResult,
         );
         const md = firstPdfResult.metadata || {};
         console.log("🔍 UNIFIED UPLOAD - Metadata for autofill:", md);
@@ -1363,7 +1411,7 @@ export default function S1BasicInfo() {
         console.log("✅ UNIFIED UPLOAD - Form updated with autofill data");
       } else {
         console.log(
-          "⚠️ UNIFIED UPLOAD - No PDF extraction data found, adding files without autofill"
+          "⚠️ UNIFIED UPLOAD - No PDF extraction data found, adding files without autofill",
         );
 
         // If no PDF extraction data, just add files
@@ -1387,7 +1435,7 @@ export default function S1BasicInfo() {
       }
 
       console.log(
-        "\n🎆 UNIFIED UPLOAD - Upload process completed successfully!"
+        "\n🎆 UNIFIED UPLOAD - Upload process completed successfully!",
       );
       setUploadSuccess(true);
 
@@ -1404,7 +1452,7 @@ export default function S1BasicInfo() {
       console.error("🚨 UNIFIED UPLOAD - Error type:", typeof error);
       console.error(
         "🚨 UNIFIED UPLOAD - Error message:",
-        error instanceof Error ? error.message : String(error)
+        error instanceof Error ? error.message : String(error),
       );
 
       // Log additional error context if available
@@ -1412,30 +1460,30 @@ export default function S1BasicInfo() {
         if ("status" in error)
           console.error(
             "🚨 UNIFIED UPLOAD - Error status:",
-            (error as any).status
+            (error as any).status,
           );
         if ("data" in error)
           console.error("🚨 UNIFIED UPLOAD - Error data:", (error as any).data);
         if ("stack" in error)
           console.error(
             "🚨 UNIFIED UPLOAD - Error stack:",
-            (error as any).stack
+            (error as any).stack,
           );
       }
 
       alert("Failed to upload files. Please try again.");
     } finally {
       console.log(
-        "\n🏁 UNIFIED UPLOAD - Finally block executed, cleaning up..."
+        "\n🏁 UNIFIED UPLOAD - Finally block executed, cleaning up...",
       );
       setIsUploading(false);
       console.log(
-        "🔄 UNIFIED UPLOAD - Upload state reset (isUploading = false)"
+        "🔄 UNIFIED UPLOAD - Upload state reset (isUploading = false)",
       );
     }
 
     console.log(
-      "\n🏁 UNIFIED UPLOAD - handleUnifiedFileUpload function completed"
+      "\n🏁 UNIFIED UPLOAD - handleUnifiedFileUpload function completed",
     );
   };
 
@@ -1526,7 +1574,7 @@ export default function S1BasicInfo() {
       console.log("\n📄 BALANCE SHEET EXTRACTIONS (Final Array):");
       console.log(
         "🔍 Complete Balance Sheet array:",
-        form.balanceSheetExtractions
+        form.balanceSheetExtractions,
       );
       form.balanceSheetExtractions.forEach((extraction, index) => {
         console.log(`📄 Balance Sheet [${index + 1}] Final Object:`, {
@@ -1556,7 +1604,7 @@ export default function S1BasicInfo() {
       console.log("\n📄 VISURA CAMERALE EXTRACTIONS (Final Array):");
       console.log(
         "🔍 Complete Visura Camerale array:",
-        form.visuraCameraleExtractions
+        form.visuraCameraleExtractions,
       );
       form.visuraCameraleExtractions.forEach((extraction, index) => {
         console.log(`📄 Visura Camerale [${index + 1}] Final Object:`, {
@@ -1612,7 +1660,7 @@ export default function S1BasicInfo() {
     } else {
       console.log(
         "❌ S1BasicInfo - Validation failed, showing errors:",
-        errors
+        errors,
       );
       // Errors are already set by validateStep, they will be displayed automatically
     }
@@ -1741,26 +1789,11 @@ export default function S1BasicInfo() {
                                   accept="application/pdf,image/*,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                                   multiple
                                   onChange={(e) => {
-                                    console.log(
-                                      "📁 BALANCE SHEET - File input changed"
-                                    );
-                                    console.log(
-                                      "📁 BALANCE SHEET - Files selected:",
-                                      e.target.files?.length || 0
-                                    );
                                     if (e.target.files) {
-                                      console.log(
-                                        "📝 BALANCE SHEET - File details:",
-                                        Array.from(e.target.files).map((f) => ({
-                                          name: f.name,
-                                          type: f.type,
-                                          size: f.size,
-                                        }))
-                                      );
                                       handleBalanceSheetUpload(e.target.files);
                                     } else {
                                       console.log(
-                                        "⚠️ BALANCE SHEET - No files selected"
+                                        "⚠️ BALANCE SHEET - No files selected",
                                       );
                                     }
                                   }}
@@ -1773,11 +1806,11 @@ export default function S1BasicInfo() {
                                     type="button"
                                     onClick={() => {
                                       console.log(
-                                        "🔄 BALANCE SHEET - 'Add more files' button clicked"
+                                        "🔄 BALANCE SHEET - 'Add more files' button clicked",
                                       );
                                       console.log(
                                         "📁 BALANCE SHEET - Current files count:",
-                                        form.balanceSheetFiles?.length || 0
+                                        form.balanceSheetFiles?.length || 0,
                                       );
                                       balanceInputRef.current?.click();
                                     }}
@@ -1807,8 +1840,8 @@ export default function S1BasicInfo() {
                                         {file.type.includes("pdf")
                                           ? "PDF"
                                           : file.type.includes("image")
-                                          ? "IMG"
-                                          : "DOC"}
+                                            ? "IMG"
+                                            : "DOC"}
                                       </span>
                                     </div>
                                   ))}
@@ -1836,11 +1869,11 @@ export default function S1BasicInfo() {
                                   multiple
                                   onChange={(e) => {
                                     console.log(
-                                      "📁 VISURA CAMERALE - File input changed"
+                                      "📁 VISURA CAMERALE - File input changed",
                                     );
                                     console.log(
                                       "📁 VISURA CAMERALE - Files selected:",
-                                      e.target.files?.length || 0
+                                      e.target.files?.length || 0,
                                     );
                                     if (e.target.files) {
                                       console.log(
@@ -1849,14 +1882,14 @@ export default function S1BasicInfo() {
                                           name: f.name,
                                           type: f.type,
                                           size: f.size,
-                                        }))
+                                        })),
                                       );
                                       handleVisuraCameraleUpload(
-                                        e.target.files
+                                        e.target.files,
                                       );
                                     } else {
                                       console.log(
-                                        "⚠️ VISURA CAMERALE - No files selected"
+                                        "⚠️ VISURA CAMERALE - No files selected",
                                       );
                                     }
                                   }}
@@ -1869,11 +1902,11 @@ export default function S1BasicInfo() {
                                     type="button"
                                     onClick={() => {
                                       console.log(
-                                        "🔄 VISURA CAMERALE - 'Add more files' button clicked"
+                                        "🔄 VISURA CAMERALE - 'Add more files' button clicked",
                                       );
                                       console.log(
                                         "📁 VISURA CAMERALE - Current files count:",
-                                        form.visuraCameraleFiles?.length || 0
+                                        form.visuraCameraleFiles?.length || 0,
                                       );
                                       visuraInputRef.current?.click();
                                     }}
@@ -1903,8 +1936,8 @@ export default function S1BasicInfo() {
                                         {file.type.includes("pdf")
                                           ? "PDF"
                                           : file.type.includes("image")
-                                          ? "IMG"
-                                          : "DOC"}
+                                            ? "IMG"
+                                            : "DOC"}
                                       </span>
                                     </div>
                                   ))}
@@ -1936,7 +1969,7 @@ export default function S1BasicInfo() {
                                   {form.uploaded_file.reduce(
                                     (total, file) =>
                                       total + (file.page_count || 1),
-                                    0
+                                    0,
                                   )}
                                 </div>
                               </div>
@@ -2103,7 +2136,7 @@ export default function S1BasicInfo() {
                                 handleAISuggestionInputChange(
                                   e,
                                   "businessStage",
-                                  "selectedBusinessStagesOptions"
+                                  "selectedBusinessStagesOptions",
                                 )
                               }
                               name="businessStage"
@@ -2113,7 +2146,7 @@ export default function S1BasicInfo() {
                             />
 
                             {/* Selected Options Display */}
-{form.selectedBusinessStagesOptions &&
+                            {form.selectedBusinessStagesOptions &&
                               form.selectedBusinessStagesOptions.length > 0 && (
                                 <div className="mt-3 hidden md:block">
                                   <div className="text-sm text-gray-600 mb-2">
@@ -2132,7 +2165,7 @@ export default function S1BasicInfo() {
                                             onClick={() => {
                                               const newOptions =
                                                 form.selectedBusinessStagesOptions?.filter(
-                                                  (opt) => opt !== option
+                                                  (opt) => opt !== option,
                                                 ) || [];
 
                                               // Simple approach: Remove the option from input field directly
@@ -2144,30 +2177,30 @@ export default function S1BasicInfo() {
                                                 new RegExp(
                                                   `, *${option.replace(
                                                     /[.*+?^${}()|[\]\\]/g,
-                                                    "\\$&"
+                                                    "\\$&",
                                                   )} *,`,
-                                                  "gi"
+                                                  "gi",
                                                 ), // middle: ", option,"
                                                 new RegExp(
                                                   `^${option.replace(
                                                     /[.*+?^${}()|[\]\\]/g,
-                                                    "\\$&"
+                                                    "\\$&",
                                                   )} *, *`,
-                                                  "gi"
+                                                  "gi",
                                                 ), // start: "option, "
                                                 new RegExp(
                                                   `, *${option.replace(
                                                     /[.*+?^${}()|[\]\\]/g,
-                                                    "\\$&"
+                                                    "\\$&",
                                                   )} *$`,
-                                                  "gi"
+                                                  "gi",
                                                 ), // end: ", option"
                                                 new RegExp(
                                                   `^${option.replace(
                                                     /[.*+?^${}()|[\]\\]/g,
-                                                    "\\$&"
+                                                    "\\$&",
                                                   )} *$`,
-                                                  "gi"
+                                                  "gi",
                                                 ), // only: "option"
                                               ];
 
@@ -2179,16 +2212,16 @@ export default function S1BasicInfo() {
                                                     updatedInput =
                                                       updatedInput.replace(
                                                         pattern,
-                                                        ", "
+                                                        ", ",
                                                       ); // Replace middle with single comma
                                                   } else {
                                                     updatedInput =
                                                       updatedInput.replace(
                                                         pattern,
-                                                        ""
+                                                        "",
                                                       ); // Remove start, end, or only
                                                   }
-                                                }
+                                                },
                                               );
 
                                               // Clean up any double commas or leading/trailing commas
@@ -2196,7 +2229,7 @@ export default function S1BasicInfo() {
                                                 .replace(/,\s*,/g, ",")
                                                 .replace(
                                                   /^\s*,\s*|\s*,\s*$/g,
-                                                  ""
+                                                  "",
                                                 )
                                                 .trim();
 
@@ -2212,7 +2245,7 @@ export default function S1BasicInfo() {
                                             ×
                                           </button>
                                         </div>
-                                      )
+                                      ),
                                     )}
                                   </div>
                                 </div>
@@ -2243,7 +2276,7 @@ export default function S1BasicInfo() {
                                         (suggestion, index) => {
                                           const isSelected =
                                             form.selectedBusinessStagesOptions?.includes(
-                                              suggestion
+                                              suggestion,
                                             ) || false;
                                           return (
                                             <button
@@ -2260,7 +2293,7 @@ export default function S1BasicInfo() {
                                                   [];
                                                 const isAlreadySelected =
                                                   currentOptions.includes(
-                                                    suggestion
+                                                    suggestion,
                                                   );
 
                                                 let newOptions;
@@ -2269,7 +2302,7 @@ export default function S1BasicInfo() {
                                                   newOptions =
                                                     currentOptions.filter(
                                                       (opt) =>
-                                                        opt !== suggestion
+                                                        opt !== suggestion,
                                                     );
                                                 } else {
                                                   // Add if not selected
@@ -2290,30 +2323,30 @@ export default function S1BasicInfo() {
                                                     new RegExp(
                                                       `, *${suggestion.replace(
                                                         /[.*+?^${}()|[\]\\]/g,
-                                                        "\\$&"
+                                                        "\\$&",
                                                       )} *,`,
-                                                      "gi"
+                                                      "gi",
                                                     ), // middle: ", suggestion,"
                                                     new RegExp(
                                                       `^${suggestion.replace(
                                                         /[.*+?^${}()|[\]\\]/g,
-                                                        "\\$&"
+                                                        "\\$&",
                                                       )} *, *`,
-                                                      "gi"
+                                                      "gi",
                                                     ), // start: "suggestion, "
                                                     new RegExp(
                                                       `, *${suggestion.replace(
                                                         /[.*+?^${}()|[\]\\]/g,
-                                                        "\\$&"
+                                                        "\\$&",
                                                       )} *$`,
-                                                      "gi"
+                                                      "gi",
                                                     ), // end: ", suggestion"
                                                     new RegExp(
                                                       `^${suggestion.replace(
                                                         /[.*+?^${}()|[\]\\]/g,
-                                                        "\\$&"
+                                                        "\\$&",
                                                       )} *$`,
-                                                      "gi"
+                                                      "gi",
                                                     ), // only: "suggestion"
                                                   ];
 
@@ -2324,16 +2357,16 @@ export default function S1BasicInfo() {
                                                         updatedInput =
                                                           updatedInput.replace(
                                                             pattern,
-                                                            ", "
+                                                            ", ",
                                                           ); // Replace middle with single comma
                                                       } else {
                                                         updatedInput =
                                                           updatedInput.replace(
                                                             pattern,
-                                                            ""
+                                                            "",
                                                           ); // Remove start, end, or only
                                                       }
-                                                    }
+                                                    },
                                                   );
 
                                                   // Clean up any double commas or leading/trailing commas
@@ -2341,7 +2374,7 @@ export default function S1BasicInfo() {
                                                     .replace(/,\s*,/g, ",")
                                                     .replace(
                                                       /^\s*,\s*|\s*,\s*$/g,
-                                                      ""
+                                                      "",
                                                     )
                                                     .trim();
                                                 } else {
@@ -2387,7 +2420,7 @@ export default function S1BasicInfo() {
                                               </span>
                                             </button>
                                           );
-                                        }
+                                        },
                                       )}
                                       {/* <div className="border-t border-gray-200 my-2"></div> */}
                                       {/* <div className="text-xs text-gray-500 font-medium mb-1 px-2">Other Options:</div> */}
@@ -2399,7 +2432,7 @@ export default function S1BasicInfo() {
                                   (stage, index) => {
                                     const isSelected =
                                       form.selectedBusinessStagesOptions?.includes(
-                                        stage
+                                        stage,
                                       ) || false;
                                     return (
                                       <button
@@ -2421,7 +2454,7 @@ export default function S1BasicInfo() {
                                           if (isAlreadySelected) {
                                             // Remove if already selected
                                             newOptions = currentOptions.filter(
-                                              (opt) => opt !== stage
+                                              (opt) => opt !== stage,
                                             );
                                           } else {
                                             // Add if not selected
@@ -2442,30 +2475,30 @@ export default function S1BasicInfo() {
                                               new RegExp(
                                                 `, *${stage.replace(
                                                   /[.*+?^${}()|[\]\\]/g,
-                                                  "\\$&"
+                                                  "\\$&",
                                                 )} *,`,
-                                                "gi"
+                                                "gi",
                                               ), // middle: ", stage,"
                                               new RegExp(
                                                 `^${stage.replace(
                                                   /[.*+?^${}()|[\]\\]/g,
-                                                  "\\$&"
+                                                  "\\$&",
                                                 )} *, *`,
-                                                "gi"
+                                                "gi",
                                               ), // start: "stage, "
                                               new RegExp(
                                                 `, *${stage.replace(
                                                   /[.*+?^${}()|[\]\\]/g,
-                                                  "\\$&"
+                                                  "\\$&",
                                                 )} *$`,
-                                                "gi"
+                                                "gi",
                                               ), // end: ", stage"
                                               new RegExp(
                                                 `^${stage.replace(
                                                   /[.*+?^${}()|[\]\\]/g,
-                                                  "\\$&"
+                                                  "\\$&",
                                                 )} *$`,
-                                                "gi"
+                                                "gi",
                                               ), // only: "stage"
                                             ];
 
@@ -2476,16 +2509,16 @@ export default function S1BasicInfo() {
                                                   updatedInput =
                                                     updatedInput.replace(
                                                       pattern,
-                                                      ", "
+                                                      ", ",
                                                     ); // Replace middle with single comma
                                                 } else {
                                                   updatedInput =
                                                     updatedInput.replace(
                                                       pattern,
-                                                      ""
+                                                      "",
                                                     ); // Remove start, end, or only
                                                 }
-                                              }
+                                              },
                                             );
 
                                             // Clean up any double commas or leading/trailing commas
@@ -2536,7 +2569,7 @@ export default function S1BasicInfo() {
                                         </span>
                                       </button>
                                     );
-                                  }
+                                  },
                                 )}
                               </div>
                             </div>
@@ -2664,7 +2697,10 @@ export default function S1BasicInfo() {
                   </label>
                   <div className="space-y-4 mt-4">
                     {form.teamMembers?.map((member, index) => (
-                      <div key={index} className="bg-gray-50 p-4 rounded-lg space-y-3">
+                      <div
+                        key={index}
+                        className="bg-gray-50 p-4 rounded-lg space-y-3"
+                      >
                         <div className="flex items-center justify-between">
                           <h4 className="text-sm font-medium text-accent">
                             Membro del Team {index + 1}
@@ -2688,7 +2724,11 @@ export default function S1BasicInfo() {
                               type="text"
                               value={member.name}
                               onChange={(e) =>
-                                handleTeamMemberChange(index, 'name', e.target.value)
+                                handleTeamMemberChange(
+                                  index,
+                                  "name",
+                                  e.target.value,
+                                )
                               }
                               className="w-full px-3 py-2 border border-[#888888]/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                               placeholder="Nome completo"
@@ -2702,7 +2742,11 @@ export default function S1BasicInfo() {
                               type="text"
                               value={member.position}
                               onChange={(e) =>
-                                handleTeamMemberChange(index, 'position', e.target.value)
+                                handleTeamMemberChange(
+                                  index,
+                                  "position",
+                                  e.target.value,
+                                )
                               }
                               className="w-full px-3 py-2 border border-[#888888]/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                               placeholder="Es. CEO, CTO, Responsabile Vendite"
@@ -2716,7 +2760,11 @@ export default function S1BasicInfo() {
                               type="text"
                               value={member.background}
                               onChange={(e) =>
-                                handleTeamMemberChange(index, 'background', e.target.value)
+                                handleTeamMemberChange(
+                                  index,
+                                  "background",
+                                  e.target.value,
+                                )
                               }
                               className="w-full px-3 py-2 border border-[#888888]/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
                               placeholder="Esperienza e competenze"
@@ -2740,7 +2788,12 @@ export default function S1BasicInfo() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
                   {/* Language */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <label htmlFor="sourceLanguage" className="question-text min-w-[90px]">Lingua:</label>
+                    <label
+                      htmlFor="sourceLanguage"
+                      className="question-text min-w-[90px]"
+                    >
+                      Lingua:
+                    </label>
                     <div className="w-full sm:max-w-[260px]">
                       {languages.length > 1 ? (
                         <select
@@ -2751,7 +2804,9 @@ export default function S1BasicInfo() {
                           className="w-full px-4 py-3 bg-white text-accent border border-[#888888]/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary appearance-auto"
                         >
                           {languages.map((lang) => (
-                            <option key={lang} value={lang}>{lang}</option>
+                            <option key={lang} value={lang}>
+                              {lang}
+                            </option>
                           ))}
                         </select>
                       ) : (
@@ -2768,7 +2823,12 @@ export default function S1BasicInfo() {
 
                   {/* Currency */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <label htmlFor="targetLanguage" className="question-text min-w-[90px]">Valuta:</label>
+                    <label
+                      htmlFor="targetLanguage"
+                      className="question-text min-w-[90px]"
+                    >
+                      Valuta:
+                    </label>
                     <div className="w-full sm:max-w-[260px]">
                       {currency.length > 1 ? (
                         <select
@@ -2779,7 +2839,9 @@ export default function S1BasicInfo() {
                           className="w-full px-4 py-3 bg-white text-accent border border-[#888888]/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary appearance-auto"
                         >
                           {currency.map((currence) => (
-                            <option key={currence} value={currence}>{currence}</option>
+                            <option key={currence} value={currence}>
+                              {currence}
+                            </option>
                           ))}
                         </select>
                       ) : (

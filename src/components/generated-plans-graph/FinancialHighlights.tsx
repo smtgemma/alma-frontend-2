@@ -152,7 +152,7 @@ export default function FinancialDashboard({
 
       {/* Cash Flow Analysis */}
       <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-        11. Analisi del flusso di cassa
+        9. Analisi del flusso di cassa
       </h2>
       <div className="mb-6">
         <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed text-justify">
@@ -162,7 +162,7 @@ export default function FinancialDashboard({
 
       {/* Cash Flow Analysis Data */}
       <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-        11.1 Dati dell'Analisi del Flusso di Cassa
+        9.1 Dati dell'Analisi del Flusso di Cassa
       </h2>
 
       {/* Desktop/Tablet View */}

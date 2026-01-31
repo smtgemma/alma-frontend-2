@@ -49,6 +49,13 @@ interface ProfitLossProjection {
 
 interface BalanceSheet {
   year: number;
+  attivo_immobilizzato?: number;
+  attivo_circolante?: number;
+  totale_attivo?: number;
+  patrimonio_netto?: number;
+  passivo_finanziario?: number;
+  passivo_corrente?: number;
+  totale_passivo?: number;
   // Assets
   intangible_assets?: number;
   tangible_assets?: number;
@@ -97,22 +104,27 @@ interface NetFinancialPosition {
 
 interface DebtStructure {
   year: number;
-  repayment: number;
-  interest_rate: number;
-  outstanding_debt: number;
+  short_term_debt?: number;
+  long_term_debt?: number;
+  total_debt?: number;
+  debt_to_equity?: number;
+  repayment?: number;
+  interest_rate?: number;
+  outstanding_debt?: number;
 }
 
 interface KeyRatios {
   year: number;
   roi: number;
-  roe: number;
-  debt_to_equity: number;
-  gross_margin: number;
-  ebitda_margin: number;
-  net_margin: number;
+  roa?: number;
+  roe?: number;
+  debt_to_equity?: number;
+  gross_margin?: number;
+  ebitda_margin?: number;
+  net_margin?: number;
   current_ratio: number;
   quick_ratio: number;
-  asset_turnover: number;
+  asset_turnover?: number;
 }
 
 interface OperatingCostBreakdown {
