@@ -244,8 +244,13 @@ export default function S10ReviewPlan() {
       // Append files from step 1
       const balanceSheetFiles = formData?.step1?.balanceSheetFiles || [];
       const visuraCameraleFiles = formData?.step1?.visuraCameraleFiles || [];
+      const businessDocuments = formData?.step1?.businessDocuments || [];
 
-      [...balanceSheetFiles, ...visuraCameraleFiles].forEach((file) => {
+      [
+        ...balanceSheetFiles,
+        ...visuraCameraleFiles,
+        ...businessDocuments,
+      ].forEach((file) => {
         formDataPayload.append("files", file);
       });
 

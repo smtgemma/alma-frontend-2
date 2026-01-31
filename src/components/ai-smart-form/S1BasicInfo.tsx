@@ -234,130 +234,25 @@ export default function S1BasicInfo() {
   };
 
   const handleFileUpload = async (file: File) => {
-    // Allow images/docs/pdfs; only run extraction for PDFs, otherwise store file info
-    const isPdf = file.type.includes("pdf");
-
+    // No longer run extraction, just store file info
     setIsUploading(true);
     setUploadSuccess(false);
 
     try {
-      let mappedResponse: any = null;
+      console.log("📄 Storing file:", file.name);
 
-      if (isPdf) {
-        // Set a timeout for the PDF extraction request
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(
-            () =>
-              reject(
-                new Error(
-                  "Request timeout - AI service is taking too long to respond",
-                ),
-              ),
-            30000,
-          ); // 30 seconds timeout
-        });
+      const mappedResponse = {
+        text_content: "Document uploaded successfully. Backend will process this during generation.",
+        status: "pending_backend_extraction",
+        success: true,
+        document_type: "company_extract",
+        file_name: file.name,
+        page_count: 1,
+        metadata: {},
+        financial_data: null,
+      };
 
-        const extractionPromise = extractPdf({
-          file: file,
-          document_type: "company_extract",
-        }).unwrap();
-
-        const response = (await Promise.race([
-          extractionPromise,
-          timeoutPromise,
-        ])) as any;
-
-        setExtractedData(response);
-        console.log("📄 Single file response data:", response);
-        console.log("📊 Single file page_count:", response.page_count);
-        console.log(
-          "📊 Single file page_count type:",
-          typeof response.page_count,
-        );
-
-        mappedResponse = {
-          text_content: response.text_content ?? "",
-          page_count:
-            typeof (response as any).page_count === "number"
-              ? (response as any).page_count
-              : typeof (response as any).page_count === "string"
-                ? parseInt((response as any).page_count) || 1
-                : 1, // Default to 1 if no page count
-          metadata: "metadata" in response ? (response as any).metadata : {},
-          financial_data:
-            "financial_data" in response
-              ? (response as any).financial_data
-              : null,
-          document_type:
-            typeof (response as any).document_type === "string"
-              ? (response as any).document_type
-              : "company_extract",
-          file_name: file.name,
-        };
-
-        // Auto-fill form fields if data is extracted (PDF only)
-        if (
-          response.text_content &&
-          response.text_content !==
-            "Document uploaded successfully. AI extraction service is currently unavailable."
-        ) {
-          console.log("Extracted data:", response);
-
-          // Attempt to map known metadata fields
-          const meta = (response as any).metadata || {};
-          const business_name =
-            (response as any).business_name ||
-            meta.business_name ||
-            meta.denominazione ||
-            "";
-          const location =
-            (response as any).location ||
-            meta.address ||
-            meta.sede_legale ||
-            "";
-          const company_id =
-            meta.vat_number ||
-            meta.piva ||
-            meta.codice_fiscale ||
-            meta.company_id ||
-            "";
-          const founders = Array.isArray(meta.founders)
-            ? meta.founders.join(", ")
-            : meta.founders || meta.soci || meta.amministratori || "";
-          const establishment_date =
-            meta.establishment_date ||
-            meta.data_costituzione ||
-            meta.data_iscrizione ||
-            "";
-
-          // Auto-fill form fields based on extracted data
-          setForm((prev) => ({
-            ...prev,
-            businessName: business_name || prev.businessName,
-            location: location || prev.location,
-            extractedCompanyId: company_id || prev.extractedCompanyId,
-            extractedCompanyName: business_name || prev.extractedCompanyName,
-            extractedFounders: founders || prev.extractedFounders,
-            extractedEstablishmentDate:
-              establishment_date || prev.extractedEstablishmentDate,
-          }));
-        }
-      } else {
-        // Non-PDF: just store basic metadata
-        mappedResponse = {
-          text_content:
-            "Document uploaded successfully. AI extraction not available for this file type.",
-          status: "uploaded_no_extraction",
-          success: false,
-          document_type: "other",
-          file_name: file.name,
-          page_count: 1,
-          metadata: {},
-          financial_data: null,
-        };
-      }
-
-      // Update lists (common for both PDF and non-PDF)
+      // Update lists
       setForm((prev) => {
         const existingFiles = prev.businessDocuments || [];
         const existingUploadedFiles = prev.uploaded_file || [];
@@ -373,49 +268,8 @@ export default function S1BasicInfo() {
 
       setUploadSuccess(true);
     } catch (error: any) {
-      console.error("Error uploading file:", error);
-
-      // Handle RTK Query errors
-      let errorMessage = "Failed to upload and process the document.";
-
-      if (error?.data) {
-        // RTK Query error with response data
-        errorMessage = error.data.message || error.data.detail || errorMessage;
-        console.error("API Error:", error.data);
-      } else if (error?.error) {
-        // RTK Query network error
-        errorMessage = error.error;
-        console.error("Network Error:", error.error);
-      } else if (error?.message) {
-        // Standard error
-        errorMessage = error.message;
-        console.error("Error message:", error.message);
-      }
-
-      // Check if it's a network error, timeout, or API not accessible
-      if (
-        error?.status === "FETCH_ERROR" ||
-        (error instanceof TypeError && error.message === "Failed to fetch") ||
-        error?.message?.includes("timeout") ||
-        error?.message?.includes("Request timeout")
-      ) {
-        // Network error - API proxy or external service unavailable
-        setForm((prev) => ({ ...prev, businessDocument: file }));
-        setUploadSuccess(true);
-        setExtractedData({
-          text_content:
-            "Document uploaded successfully. AI extraction service is currently unavailable.",
-          status: "uploaded_no_extraction",
-          success: false,
-        });
-        console.warn(
-          "AI extraction service unavailable, file uploaded without processing",
-        );
-      } else {
-        // Other errors
-        setUploadSuccess(false);
-        alert(`${errorMessage} Please try again.`);
-      }
+      console.error("Error storing file:", error);
+      alert(`Failed to store the document. Please try again.`);
     } finally {
       setIsUploading(false);
     }
@@ -442,96 +296,30 @@ export default function S1BasicInfo() {
     setUploadSuccess(false);
 
     try {
-      const uploadPromises = pdfFiles.map(async (file, index) => {
-        console.log(
-          `📄 Processing file ${index + 1}/${pdfFiles.length}: ${file.name}`,
-        );
-
-        // Set a timeout for each PDF extraction request
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(
-            () =>
-              reject(
-                new Error(
-                  `Request timeout for ${file.name} - AI service is taking too long to respond`,
-                ),
-              ),
-            30000,
-          ); // 30 seconds timeout per file
-        });
-
-        const extractionPromise = extractPdf({
-          file: file,
-          document_type: "company_extract",
-        }).unwrap();
-
-        const response = (await Promise.race([
-          extractionPromise,
-          timeoutPromise,
-        ])) as any;
-
-        console.log(`✅ File ${index + 1} extracted successfully:`, file.name);
-        console.log(`📄 File ${index + 1} response data:`, response);
-        console.log(`📊 File ${index + 1} page_count:`, response.page_count);
-        console.log(
-          `📊 File ${index + 1} page_count type:`,
-          typeof response.page_count,
-        );
+      const results = pdfFiles.map((file) => {
+        console.log(`📄 Storing file: ${file.name}`);
 
         return {
-          text_content: response.text_content ?? "",
-          page_count:
-            typeof (response as any).page_count === "number"
-              ? (response as any).page_count
-              : typeof (response as any).page_count === "string"
-                ? parseInt((response as any).page_count) || 1
-                : 1, // Default to 1 if no page count
-          metadata: "metadata" in response ? (response as any).metadata : {},
-          financial_data:
-            "financial_data" in response
-              ? (response as any).financial_data
-              : null,
-          document_type:
-            typeof (response as any).document_type === "string"
-              ? (response as any).document_type
-              : "company_extract",
-          file_name: file.name, // Add file name for reference
+          text_content: "Document uploaded successfully. Backend will process this during generation.",
+          status: "pending_backend_extraction",
+          success: true,
+          document_type: "company_extract",
+          file_name: file.name,
+          page_count: 1,
+          metadata: {},
+          financial_data: null,
         };
       });
 
-      const extractedResults = await Promise.all(uploadPromises);
-
-      console.log("🎉 All PDFs extracted successfully:", extractedResults);
-
       setForm((prev) => {
-        // Merge with existing files if any
         const existingFiles = prev.businessDocuments || [];
         const existingUploadedFiles = prev.uploaded_file || [];
-
-        console.log(
-          "📁 Existing files:",
-          existingFiles.map((f) => f.name),
-        );
-        console.log(
-          "📁 New files:",
-          pdfFiles.map((f) => f.name),
-        );
-        console.log(
-          "📁 Existing uploaded files:",
-          existingUploadedFiles.length,
-        );
 
         const mergedFiles = [...existingFiles, ...pdfFiles];
         const mergedUploadedFiles = [
           ...existingUploadedFiles,
-          ...extractedResults,
+          ...results,
         ];
-
-        console.log(
-          "📁 Merged files:",
-          mergedFiles.map((f) => f.name),
-        );
-        console.log("📁 Merged uploaded files:", mergedUploadedFiles.length);
 
         return {
           ...prev,
@@ -541,15 +329,10 @@ export default function S1BasicInfo() {
       });
 
       setUploadSuccess(true);
-      console.log(
-        `✅ ${pdfFiles.length} PDFs uploaded and extracted successfully`,
-      );
+      console.log(`✅ ${pdfFiles.length} PDFs stored successfully`);
     } catch (error: any) {
-      console.error("❌ Multiple PDF upload/extraction failed:", error);
-      alert(
-        error?.message ||
-          "Failed to upload PDFs. Please try again or contact support.",
-      );
+      console.error("❌ Multiple PDF storage failed:", error);
+      alert("Failed to store PDFs. Please try again.");
     } finally {
       setIsUploading(false);
     }
@@ -608,883 +391,131 @@ export default function S1BasicInfo() {
     setUploadSuccess(false);
 
     try {
-      const results = await Promise.all(
-        fileArr.map(async (file, index) => {
-          try {
-            const timeoutPromise = new Promise((_, reject) => {
-              setTimeout(() => {
-                console.log(
-                  `⏰ BALANCE SHEET [${index + 1}] - Timeout reached for: ${file.name}`,
-                );
-                reject(new Error(`Request timeout for ${file.name}`));
-              }, 30000);
-            });
-
-            const extractionPromise = extractPdf({
-              file,
-              document_type: "balance_sheet",
-            }).unwrap();
-
-            const response = (await Promise.race([
-              extractionPromise,
-              timeoutPromise,
-            ])) as any;
-
-            console.log(
-              `✅ BALANCE SHEET [${index + 1}] - AI extraction completed for: ${file.name}`,
-            );
-            console.log(
-              `📊 BALANCE SHEET [${index + 1}] - Extraction response:`,
-              {
-                text_content_length: response.text_content
-                  ? response.text_content.length
-                  : 0,
-                page_count: response.page_count,
-                has_metadata: !!response.metadata,
-                has_financial_data: !!response.financial_data,
-                document_type: response.document_type,
-              },
-            );
-            console.log(
-              `📝 BALANCE SHEET [${index + 1}] - Full extraction data:`,
-              response,
-            );
-
-            const result = {
-              text_content: response.text_content ?? "",
-              page_count:
-                typeof response.page_count === "number"
-                  ? response.page_count
-                  : parseInt(response.page_count) || 1,
-              metadata: "metadata" in response ? response.metadata : {},
-              financial_data:
-                "financial_data" in response ? response.financial_data : null,
-              document_type: "balance_sheet",
-              file_name: file.name,
-            };
-
-            console.log(
-              `📋 BALANCE SHEET [${index + 1}] - Processed result:`,
-              result,
-            );
-            return result;
-          } catch (error) {
-            console.log(
-              `❌ BALANCE SHEET [${index + 1}] - Extraction failed for: ${file.name}`,
-              error,
-            );
-
-            // If extraction fails, still store the file but with error message
-            const result = {
-              text_content:
-                "Document uploaded successfully. AI extraction service encountered an error.",
-              status: "extraction_error",
-              success: false,
-              document_type: "balance_sheet",
-              file_name: file.name,
-              page_count: 1,
-              metadata: {},
-              financial_data: null,
-              error: error instanceof Error ? error.message : "Unknown error",
-            };
-
-            console.log(
-              `📋 BALANCE SHEET [${index + 1}] - Error result:`,
-              result,
-            );
-            return result;
-          }
-        }),
-      );
-
-      console.log("\n🎉 BALANCE SHEET - All files processed successfully!");
-      console.log("📊 BALANCE SHEET - Processing summary:", {
-        total_files: results.length,
-        successfully_extracted: results.filter(
-          (r: any) =>
-            r.document_type === "balance_sheet" &&
-            r.status !== "uploaded_no_extraction" &&
-            r.status !== "extraction_error",
-        ).length,
-        extraction_errors: results.filter(
-          (r: any) => r.status === "extraction_error",
-        ).length,
-        total_pages: results.reduce((sum, r) => sum + (r.page_count || 0), 0),
+      const results = fileArr.map((file) => {
+        return {
+          text_content: "Document uploaded successfully. Backend will process this during generation.",
+          status: "pending_backend_extraction",
+          success: true,
+          document_type: "balance_sheet",
+          file_name: file.name,
+          page_count: 1,
+          metadata: {},
+          financial_data: null,
+        };
       });
-      console.log("📋 BALANCE SHEET - All results:", results);
-      console.log("\n💾 BALANCE SHEET - Updating form state...");
+
       setForm((prev) => {
         const existingFiles = prev.balanceSheetFiles || [];
         const existingExtractions = prev.balanceSheetExtractions || [];
-        const updatedForm = {
+        return {
           ...prev,
           balanceSheetFiles: [...existingFiles, ...fileArr],
           balanceSheetExtractions: [...existingExtractions, ...results],
-          // backward-compatible containers
           businessDocuments: [...(prev.businessDocuments || []), ...fileArr],
           uploaded_file: [...(prev.uploaded_file || []), ...results],
         };
-
-        console.log("💾 BALANCE SHEET - Updated form state:", {
-          total_balance_sheet_files: updatedForm.balanceSheetFiles?.length || 0,
-          total_balance_sheet_extractions:
-            updatedForm.balanceSheetExtractions?.length || 0,
-          total_business_documents: updatedForm.businessDocuments?.length || 0,
-          total_uploaded_files: updatedForm.uploaded_file?.length || 0,
-        });
-
-        // Log the complete extraction array structure
-        console.log("\n📋 BALANCE SHEET - Complete extraction array:");
-        console.log(
-          "🔍 Balance Sheet Extractions:",
-          updatedForm.balanceSheetExtractions,
-        );
-        console.log("🔍 All Uploaded Files Array:", updatedForm.uploaded_file);
-
-        // Verify array structure for each extraction
-        if (
-          updatedForm.balanceSheetExtractions &&
-          updatedForm.balanceSheetExtractions.length > 0
-        ) {
-          updatedForm.balanceSheetExtractions.forEach((extraction, index) => {
-            console.log(`📄 Balance Sheet Extraction [${index + 1}]:`, {
-              file_name: extraction.file_name,
-              document_type: extraction.document_type,
-              text_content_length: extraction.text_content
-                ? extraction.text_content.length
-                : 0,
-              page_count: extraction.page_count,
-              has_metadata: !!extraction.metadata,
-              has_financial_data: !!extraction.financial_data,
-              metadata_keys: extraction.metadata
-                ? Object.keys(extraction.metadata)
-                : [],
-              full_object: extraction,
-            });
-          });
-        }
-
-        return updatedForm;
       });
 
-      console.log(
-        "\n🎆 BALANCE SHEET - Upload process completed successfully!",
-      );
       setUploadSuccess(true);
-
-      // reset input value so user can re-upload same file names if needed
-      if (balanceInputRef.current) {
-        balanceInputRef.current.value = "";
-        console.log("🔄 BALANCE SHEET - File input reset for future uploads");
-      }
-
-      console.log("✅ BALANCE SHEET - Process finished, UI updated");
+      if (balanceInputRef.current) balanceInputRef.current.value = "";
     } catch (error) {
-      console.error("\n❌ BALANCE SHEET - Upload process failed!");
-      console.error("🚨 BALANCE SHEET - Error details:", error);
-      console.error("🚨 BALANCE SHEET - Error type:", typeof error);
-      console.error(
-        "🚨 BALANCE SHEET - Error message:",
-        error instanceof Error ? error.message : String(error),
-      );
-
-      // Log additional error context if available
-      if (error && typeof error === "object") {
-        if ("status" in error)
-          console.error(
-            "🚨 BALANCE SHEET - Error status:",
-            (error as any).status,
-          );
-        if ("data" in error)
-          console.error("🚨 BALANCE SHEET - Error data:", (error as any).data);
-        if ("stack" in error)
-          console.error(
-            "🚨 BALANCE SHEET - Error stack:",
-            (error as any).stack,
-          );
-      }
-
-      alert("Failed to upload Balance Sheet files. Please try again.");
+      console.error("❌ BALANCE SHEET - Storage failed:", error);
+      alert("Failed to store balance sheet files. Please try again.");
     } finally {
-      console.log(
-        "\n🏁 BALANCE SHEET - Finally block executed, cleaning up...",
-      );
       setIsUploading(false);
-      console.log(
-        "🔄 BALANCE SHEET - Upload state reset (isUploading = false)",
-      );
     }
-
-    console.log(
-      "\n🏁 BALANCE SHEET - handleBalanceSheetUpload function completed",
-    );
   };
 
   // Handle visura camerale file uploads
   const handleVisuraCameraleUpload = async (files: FileList) => {
     const fileArr = Array.from(files);
-    console.log("🚀 VISURA CAMERALE - Starting file upload process");
-    console.log(
-      "📁 VISURA CAMERALE - Files to upload:",
-      fileArr.map((f) => ({ name: f.name, type: f.type, size: f.size })),
-    );
 
     if (fileArr.length === 0) {
       console.log("❌ VISURA CAMERALE - No files provided");
       return;
     }
 
-    console.log(`📊 VISURA CAMERALE - Processing ${fileArr.length} file(s)`);
     setIsUploading(true);
     setUploadSuccess(false);
 
     try {
-      const results = await Promise.all(
-        fileArr.map(async (file, index) => {
-          console.log(
-            `\n📄 VISURA CAMERALE [${index + 1}/${fileArr.length}] - Processing: ${file.name}`,
-          );
-          console.log(
-            `📄 File type: ${file.type}, Size: ${(file.size / 1024).toFixed(2)} KB`,
-          );
-
-          // AI service accepts all file types, so always try extraction
-          console.log(
-            `🔄 VISURA CAMERALE [${index + 1}] - Starting AI extraction for: ${file.name}`,
-          );
-          console.log(
-            `📊 VISURA CAMERALE [${index + 1}] - Document type: visura_camerale`,
-          );
-
-          try {
-            const timeoutPromise = new Promise((_, reject) => {
-              setTimeout(() => {
-                console.log(
-                  `⏰ VISURA CAMERALE [${index + 1}] - Timeout reached for: ${file.name}`,
-                );
-                reject(new Error(`Request timeout for ${file.name}`));
-              }, 30000);
-            });
-
-            const extractionPromise = extractPdf({
-              file,
-              document_type: "visura_camerale",
-            }).unwrap();
-            const response = (await Promise.race([
-              extractionPromise,
-              timeoutPromise,
-            ])) as any;
-
-            console.log(
-              `✅ VISURA CAMERALE [${index + 1}] - AI extraction completed for: ${file.name}`,
-            );
-            console.log(
-              `📊 VISURA CAMERALE [${index + 1}] - Extraction response:`,
-              {
-                text_content_length: response.text_content
-                  ? response.text_content.length
-                  : 0,
-                page_count: response.page_count,
-                has_metadata: !!response.metadata,
-                has_financial_data: !!response.financial_data,
-                document_type: response.document_type,
-              },
-            );
-            console.log(
-              `📝 VISURA CAMERALE [${index + 1}] - Full extraction data:`,
-              response,
-            );
-
-            const result = {
-              text_content: response.text_content ?? "",
-              page_count:
-                typeof response.page_count === "number"
-                  ? response.page_count
-                  : parseInt(response.page_count) || 1,
-              metadata: "metadata" in response ? response.metadata : {},
-              financial_data:
-                "financial_data" in response ? response.financial_data : null,
-              document_type: "visura_camerale",
-              file_name: file.name,
-            };
-
-            console.log(
-              `📋 VISURA CAMERALE [${index + 1}] - Processed result:`,
-              result,
-            );
-            return result;
-          } catch (error) {
-            console.log(
-              `❌ VISURA CAMERALE [${index + 1}] - Extraction failed for: ${file.name}`,
-              error,
-            );
-
-            // If extraction fails, still store the file but with error message
-            const result = {
-              text_content:
-                "Document uploaded successfully. AI extraction service encountered an error.",
-              status: "extraction_error",
-              success: false,
-              document_type: "visura_camerale",
-              file_name: file.name,
-              page_count: 1,
-              metadata: {},
-              financial_data: null,
-              error: error instanceof Error ? error.message : "Unknown error",
-            };
-
-            console.log(
-              `📋 VISURA CAMERALE [${index + 1}] - Error result:`,
-              result,
-            );
-            return result;
-          }
-        }),
-      );
-
-      console.log("\n🎉 VISURA CAMERALE - All files processed successfully!");
-      console.log("📊 VISURA CAMERALE - Processing summary:", {
-        total_files: results.length,
-        successfully_extracted: results.filter(
-          (r: any) =>
-            r.document_type === "visura_camerale" &&
-            r.status !== "uploaded_no_extraction" &&
-            r.status !== "extraction_error",
-        ).length,
-        extraction_errors: results.filter(
-          (r: any) => r.status === "extraction_error",
-        ).length,
-        total_pages: results.reduce((sum, r) => sum + (r.page_count || 0), 0),
+      const results = fileArr.map((file) => {
+        return {
+          text_content: "Document uploaded successfully. Backend will process this during generation.",
+          status: "pending_backend_extraction",
+          success: true,
+          document_type: "visura_camerale",
+          file_name: file.name,
+          page_count: 1,
+          metadata: {},
+          financial_data: null,
+        };
       });
-      console.log("📋 VISURA CAMERALE - All results:", results);
 
-      // Attempt to autofill company profile fields from the first extraction metadata
-      console.log("\n🔍 VISURA CAMERALE - Checking for autofill data...");
-      const firstPdfResult = results.find(
-        (r: any) =>
-          r.document_type === "visura_camerale" &&
-          r.status !== "uploaded_no_extraction" &&
-          r.status !== "extraction_error",
-      );
+      setForm((prev) => {
+        const existingFiles = prev.visuraCameraleFiles || [];
+        const existingExtractions = prev.visuraCameraleExtractions || [];
+        return {
+          ...prev,
+          visuraCameraleFiles: [...existingFiles, ...fileArr],
+          visuraCameraleExtractions: [...existingExtractions, ...results],
+          businessDocuments: [...(prev.businessDocuments || []), ...fileArr],
+          uploaded_file: [...(prev.uploaded_file || []), ...results],
+        };
+      });
 
-      if (firstPdfResult) {
-        console.log(
-          "📊 VISURA CAMERALE - Found PDF extraction data for autofill:",
-          firstPdfResult,
-        );
-        const md = firstPdfResult.metadata || {};
-        console.log("🔍 VISURA CAMERALE - Metadata for autofill:", md);
-
-        const business_name = md.business_name || md.denominazione || "";
-        const location = md.address || md.sede_legale || "";
-        const company_id = md.vat_number || md.piva || md.codice_fiscale || "";
-        const founders = Array.isArray(md.founders)
-          ? md.founders.join(", ")
-          : md.founders || md.soci || md.amministratori || "";
-        const establishment_date =
-          md.establishment_date ||
-          md.data_costituzione ||
-          md.data_iscrizione ||
-          "";
-
-        console.log("📝 VISURA CAMERALE - Extracted fields for autofill:", {
-          business_name,
-          location,
-          company_id,
-          founders,
-          establishment_date,
-        });
-
-        console.log(
-          "\n💾 VISURA CAMERALE - Updating form state with autofill...",
-        );
-        setForm((prev) => {
-          const existingFiles = prev.visuraCameraleFiles || [];
-          const existingExtractions = prev.visuraCameraleExtractions || [];
-          const updatedForm = {
-            ...prev,
-            visuraCameraleFiles: [...existingFiles, ...fileArr],
-            visuraCameraleExtractions: [...existingExtractions, ...results],
-            businessDocuments: [...(prev.businessDocuments || []), ...fileArr],
-            uploaded_file: [...(prev.uploaded_file || []), ...results],
-            // Profile autofill (non-destructive)
-            businessName: prev.businessName || business_name,
-            location: prev.location || location,
-            extractedCompanyId: prev.extractedCompanyId || company_id,
-            extractedCompanyName: prev.extractedCompanyName || business_name,
-            extractedFounders: prev.extractedFounders || founders,
-            extractedEstablishmentDate:
-              prev.extractedEstablishmentDate || establishment_date,
-          };
-
-          console.log("💾 VISURA CAMERALE - Updated form state:", {
-            total_visura_files: updatedForm.visuraCameraleFiles?.length || 0,
-            total_visura_extractions:
-              updatedForm.visuraCameraleExtractions?.length || 0,
-            total_business_documents:
-              updatedForm.businessDocuments?.length || 0,
-            total_uploaded_files: updatedForm.uploaded_file?.length || 0,
-            businessName: updatedForm.businessName,
-            location: updatedForm.location,
-            extractedCompanyId: updatedForm.extractedCompanyId,
-            extractedCompanyName: updatedForm.extractedCompanyName,
-            extractedFounders: updatedForm.extractedFounders,
-            extractedEstablishmentDate: updatedForm.extractedEstablishmentDate,
-          });
-
-          // Log the complete extraction array structure
-          console.log("\n📋 VISURA CAMERALE - Complete extraction array:");
-          console.log(
-            "🔍 Visura Camerale Extractions:",
-            updatedForm.visuraCameraleExtractions,
-          );
-          console.log(
-            "🔍 All Uploaded Files Array:",
-            updatedForm.uploaded_file,
-          );
-
-          // Verify array structure for each extraction
-          if (
-            updatedForm.visuraCameraleExtractions &&
-            updatedForm.visuraCameraleExtractions.length > 0
-          ) {
-            updatedForm.visuraCameraleExtractions.forEach(
-              (extraction, index) => {
-                console.log(`📄 Visura Camerale Extraction [${index + 1}]:`, {
-                  file_name: extraction.file_name,
-                  document_type: extraction.document_type,
-                  text_content_length: extraction.text_content
-                    ? extraction.text_content.length
-                    : 0,
-                  page_count: extraction.page_count,
-                  has_metadata: !!extraction.metadata,
-                  has_financial_data: !!extraction.financial_data,
-                  metadata_keys: extraction.metadata
-                    ? Object.keys(extraction.metadata)
-                    : [],
-                  full_object: extraction,
-                });
-              },
-            );
-          }
-
-          return updatedForm;
-        });
-
-        console.log("✅ VISURA CAMERALE - Form updated with autofill data");
-      } else {
-        console.log(
-          "⚠️ VISURA CAMERALE - No PDF extraction data found, adding files without autofill",
-        );
-
-        console.log(
-          "\n💾 VISURA CAMERALE - Updating form state without autofill...",
-        );
-        setForm((prev) => {
-          const existingFiles = prev.visuraCameraleFiles || [];
-          const existingExtractions = prev.visuraCameraleExtractions || [];
-          const updatedForm = {
-            ...prev,
-            visuraCameraleFiles: [...existingFiles, ...fileArr],
-            visuraCameraleExtractions: [...existingExtractions, ...results],
-            businessDocuments: [...(prev.businessDocuments || []), ...fileArr],
-            uploaded_file: [...(prev.uploaded_file || []), ...results],
-          };
-
-          console.log(
-            "💾 VISURA CAMERALE - Updated form state (no autofill):",
-            {
-              total_visura_files: updatedForm.visuraCameraleFiles?.length || 0,
-              total_visura_extractions:
-                updatedForm.visuraCameraleExtractions?.length || 0,
-              total_business_documents:
-                updatedForm.businessDocuments?.length || 0,
-              total_uploaded_files: updatedForm.uploaded_file?.length || 0,
-            },
-          );
-
-          // Log the complete extraction array structure (no autofill case)
-          console.log(
-            "\n📋 VISURA CAMERALE - Complete extraction array (no autofill):",
-          );
-          console.log(
-            "🔍 Visura Camerale Extractions:",
-            updatedForm.visuraCameraleExtractions,
-          );
-          console.log(
-            "🔍 All Uploaded Files Array:",
-            updatedForm.uploaded_file,
-          );
-
-          // Verify array structure for each extraction
-          if (
-            updatedForm.visuraCameraleExtractions &&
-            updatedForm.visuraCameraleExtractions.length > 0
-          ) {
-            updatedForm.visuraCameraleExtractions.forEach(
-              (extraction, index) => {
-                console.log(
-                  `📄 Visura Camerale Extraction [${index + 1}] (no autofill):`,
-                  {
-                    file_name: extraction.file_name,
-                    document_type: extraction.document_type,
-                    text_content_length: extraction.text_content
-                      ? extraction.text_content.length
-                      : 0,
-                    page_count: extraction.page_count,
-                    has_metadata: !!extraction.metadata,
-                    has_financial_data: !!extraction.financial_data,
-                    metadata_keys: extraction.metadata
-                      ? Object.keys(extraction.metadata)
-                      : [],
-                    full_object: extraction,
-                  },
-                );
-              },
-            );
-          }
-
-          return updatedForm;
-        });
-
-        console.log("✅ VISURA CAMERALE - Form updated without autofill");
-      }
-
-      console.log(
-        "\n🎆 VISURA CAMERALE - Upload process completed successfully!",
-      );
       setUploadSuccess(true);
-
-      if (visuraInputRef.current) {
-        visuraInputRef.current.value = "";
-        console.log("🔄 VISURA CAMERALE - File input reset for future uploads");
-      }
-
-      console.log("✅ VISURA CAMERALE - Process finished, UI updated");
+      if (visuraInputRef.current) visuraInputRef.current.value = "";
     } catch (error) {
-      console.error("\n❌ VISURA CAMERALE - Upload process failed!");
-      console.error("🚨 VISURA CAMERALE - Error details:", error);
-      console.error("🚨 VISURA CAMERALE - Error type:", typeof error);
-      console.error(
-        "🚨 VISURA CAMERALE - Error message:",
-        error instanceof Error ? error.message : String(error),
-      );
-
-      // Log additional error context if available
-      if (error && typeof error === "object") {
-        if ("status" in error)
-          console.error(
-            "🚨 VISURA CAMERALE - Error status:",
-            (error as any).status,
-          );
-        if ("data" in error)
-          console.error(
-            "🚨 VISURA CAMERALE - Error data:",
-            (error as any).data,
-          );
-        if ("stack" in error)
-          console.error(
-            "🚨 VISURA CAMERALE - Error stack:",
-            (error as any).stack,
-          );
-      }
-
-      alert("Failed to upload Visura Camerale files. Please try again.");
+      console.error("❌ VISURA CAMERALE - Storage failed:", error);
+      alert("Failed to store visura camerale files. Please try again.");
     } finally {
-      console.log(
-        "\n🏁 VISURA CAMERALE - Finally block executed, cleaning up...",
-      );
       setIsUploading(false);
-      console.log(
-        "🔄 VISURA CAMERALE - Upload state reset (isUploading = false)",
-      );
     }
-
-    console.log(
-      "\n🏁 VISURA CAMERALE - handleVisuraCameraleUpload function completed",
-    );
   };
 
   // Handle unified file upload (combines balance sheet and visura camerale functionality)
   const handleUnifiedFileUpload = async (files: FileList) => {
     const fileArr = Array.from(files);
-    console.log("🚀 UNIFIED UPLOAD - Starting file upload process");
-    console.log(
-      "📁 Files to upload:",
-      fileArr.map((f) => ({ name: f.name, type: f.type, size: f.size })),
-    );
 
     if (fileArr.length === 0) {
       console.log("❌ UNIFIED UPLOAD - No files provided");
       return;
     }
 
-    console.log(`📊 UNIFIED UPLOAD - Processing ${fileArr.length} file(s)`);
     setIsUploading(true);
     setUploadSuccess(false);
 
     try {
-      const results = await Promise.all(
-        fileArr.map(async (file, index) => {
-          console.log(
-            `\n📄 UNIFIED UPLOAD [${index + 1}/${
-              fileArr.length
-            }] - Processing: ${file.name}`,
-          );
-          console.log(
-            `📄 File type: ${file.type}, Size: ${(file.size / 1024).toFixed(
-              2,
-            )} KB`,
-          );
-
-          if (file.type.includes("pdf")) {
-            console.log(
-              `🔄 UNIFIED UPLOAD [${
-                index + 1
-              }] - Starting PDF extraction for: ${file.name}`,
-            );
-
-            const timeoutPromise = new Promise((_, reject) => {
-              setTimeout(() => {
-                console.log(
-                  `⏰ UNIFIED UPLOAD [${index + 1}] - Timeout reached for: ${
-                    file.name
-                  }`,
-                );
-                reject(new Error(`Request timeout for ${file.name}`));
-              }, 30000);
-            });
-
-            // Use general document extraction for unified upload
-            const extractionPromise = extractPdf({
-              file,
-              document_type: "company_extract",
-            }).unwrap();
-            const response = (await Promise.race([
-              extractionPromise,
-              timeoutPromise,
-            ])) as any;
-
-            console.log(
-              `✅ UNIFIED UPLOAD [${
-                index + 1
-              }] - PDF extraction completed for: ${file.name}`,
-            );
-            console.log(
-              `📊 UNIFIED UPLOAD [${index + 1}] - Extraction response:`,
-              {
-                text_content_length: response.text_content
-                  ? response.text_content.length
-                  : 0,
-                page_count: response.page_count,
-                has_metadata: !!response.metadata,
-                has_financial_data: !!response.financial_data,
-                document_type: response.document_type,
-              },
-            );
-            console.log(
-              `📝 UNIFIED UPLOAD [${index + 1}] - Full extraction data:`,
-              response,
-            );
-
-            const result = {
-              text_content: response.text_content ?? "",
-              page_count:
-                typeof response.page_count === "number"
-                  ? response.page_count
-                  : parseInt(response.page_count) || 1,
-              metadata: "metadata" in response ? response.metadata : {},
-              financial_data:
-                "financial_data" in response ? response.financial_data : null,
-              document_type: "company_extract",
-              file_name: file.name,
-            };
-
-            console.log(
-              `📋 UNIFIED UPLOAD [${index + 1}] - Processed result:`,
-              result,
-            );
-            return result;
-          } else {
-            console.log(
-              `📄 UNIFIED UPLOAD [${
-                index + 1
-              }] - Non-PDF file, skipping extraction: ${file.name}`,
-            );
-
-            const result = {
-              text_content:
-                "Document uploaded successfully. AI extraction not available for this file type.",
-              status: "uploaded_no_extraction",
-              success: false,
-              document_type: "other",
-              file_name: file.name,
-              page_count: 1,
-              metadata: {},
-              financial_data: null,
-            };
-
-            console.log(
-              `📋 UNIFIED UPLOAD [${index + 1}] - Non-PDF result:`,
-              result,
-            );
-            return result;
-          }
-        }),
-      );
-
-      console.log("\n🎉 UNIFIED UPLOAD - All files processed successfully!");
-      console.log("📊 UNIFIED UPLOAD - Processing summary:", {
-        total_files: results.length,
-        pdf_files: results.filter((r) => r.document_type === "company_extract")
-          .length,
-        other_files: results.filter((r) => r.document_type === "other").length,
-        total_pages: results.reduce((sum, r) => sum + (r.page_count || 0), 0),
+      const results = fileArr.map((file) => {
+        return {
+          text_content: "Document uploaded successfully. Backend will process this during generation.",
+          status: "pending_backend_extraction",
+          success: true,
+          document_type: "company_extract",
+          file_name: file.name,
+          page_count: 1,
+          metadata: {},
+          financial_data: null,
+        };
       });
-      console.log("📋 UNIFIED UPLOAD - All results:", results);
 
-      // Attempt to autofill company profile fields from the first extraction metadata
-      console.log("\n🔍 UNIFIED UPLOAD - Checking for autofill data...");
-      const firstPdfResult = results.find(
-        (r) => r.document_type === "company_extract",
-      );
+      setForm((prev) => {
+        return {
+          ...prev,
+          businessDocuments: [...(prev.businessDocuments || []), ...fileArr],
+          uploaded_file: [...(prev.uploaded_file || []), ...results],
+        };
+      });
 
-      if (firstPdfResult) {
-        console.log(
-          "📊 UNIFIED UPLOAD - Found PDF extraction data for autofill:",
-          firstPdfResult,
-        );
-        const md = firstPdfResult.metadata || {};
-        console.log("🔍 UNIFIED UPLOAD - Metadata for autofill:", md);
-
-        const business_name = md.business_name || md.denominazione || "";
-        const location = md.address || md.sede_legale || "";
-        const company_id =
-          md.vat_number || md.piva || md.codice_fiscale || md.company_id || "";
-        const founders = Array.isArray(md.founders)
-          ? md.founders.join(", ")
-          : md.founders || md.soci || md.amministratori || "";
-        const establishment_date =
-          md.establishment_date ||
-          md.data_costituzione ||
-          md.data_iscrizione ||
-          "";
-
-        console.log("📝 UNIFIED UPLOAD - Extracted fields for autofill:", {
-          business_name,
-          location,
-          company_id,
-          founders,
-          establishment_date,
-        });
-
-        setForm((prev) => {
-          const updatedForm = {
-            ...prev,
-            businessDocuments: [...(prev.businessDocuments || []), ...fileArr],
-            uploaded_file: [...(prev.uploaded_file || []), ...results],
-            // Profile autofill (non-destructive)
-            businessName: prev.businessName || business_name,
-            location: prev.location || location,
-            extractedCompanyId: prev.extractedCompanyId || company_id,
-            extractedCompanyName: prev.extractedCompanyName || business_name,
-            extractedFounders: prev.extractedFounders || founders,
-            extractedEstablishmentDate:
-              prev.extractedEstablishmentDate || establishment_date,
-          };
-
-          console.log("💾 UNIFIED UPLOAD - Updated form state:", {
-            total_business_documents:
-              updatedForm.businessDocuments?.length || 0,
-            total_uploaded_files: updatedForm.uploaded_file?.length || 0,
-            businessName: updatedForm.businessName,
-            location: updatedForm.location,
-            extractedCompanyId: updatedForm.extractedCompanyId,
-            extractedCompanyName: updatedForm.extractedCompanyName,
-            extractedFounders: updatedForm.extractedFounders,
-            extractedEstablishmentDate: updatedForm.extractedEstablishmentDate,
-          });
-
-          return updatedForm;
-        });
-
-        console.log("✅ UNIFIED UPLOAD - Form updated with autofill data");
-      } else {
-        console.log(
-          "⚠️ UNIFIED UPLOAD - No PDF extraction data found, adding files without autofill",
-        );
-
-        // If no PDF extraction data, just add files
-        setForm((prev) => {
-          const updatedForm = {
-            ...prev,
-            businessDocuments: [...(prev.businessDocuments || []), ...fileArr],
-            uploaded_file: [...(prev.uploaded_file || []), ...results],
-          };
-
-          console.log("💾 UNIFIED UPLOAD - Updated form state (no autofill):", {
-            total_business_documents:
-              updatedForm.businessDocuments?.length || 0,
-            total_uploaded_files: updatedForm.uploaded_file?.length || 0,
-          });
-
-          return updatedForm;
-        });
-
-        console.log("✅ UNIFIED UPLOAD - Form updated without autofill");
-      }
-
-      console.log(
-        "\n🎆 UNIFIED UPLOAD - Upload process completed successfully!",
-      );
       setUploadSuccess(true);
-
-      // Reset input value so user can re-upload same file names if needed
-      if (unifiedFileInputRef.current) {
-        unifiedFileInputRef.current.value = "";
-        console.log("🔄 UNIFIED UPLOAD - File input reset for future uploads");
-      }
-
-      console.log("✅ UNIFIED UPLOAD - Process finished, UI updated");
+      if (unifiedFileInputRef.current) unifiedFileInputRef.current.value = "";
     } catch (error) {
-      console.error("\n❌ UNIFIED UPLOAD - Upload process failed!");
-      console.error("🚨 UNIFIED UPLOAD - Error details:", error);
-      console.error("🚨 UNIFIED UPLOAD - Error type:", typeof error);
-      console.error(
-        "🚨 UNIFIED UPLOAD - Error message:",
-        error instanceof Error ? error.message : String(error),
-      );
-
-      // Log additional error context if available
-      if (error && typeof error === "object") {
-        if ("status" in error)
-          console.error(
-            "🚨 UNIFIED UPLOAD - Error status:",
-            (error as any).status,
-          );
-        if ("data" in error)
-          console.error("🚨 UNIFIED UPLOAD - Error data:", (error as any).data);
-        if ("stack" in error)
-          console.error(
-            "🚨 UNIFIED UPLOAD - Error stack:",
-            (error as any).stack,
-          );
-      }
-
+      console.error("❌ UNIFIED UPLOAD - Storage failed:", error);
       alert("Failed to upload files. Please try again.");
     } finally {
-      console.log(
-        "\n🏁 UNIFIED UPLOAD - Finally block executed, cleaning up...",
-      );
       setIsUploading(false);
-      console.log(
-        "🔄 UNIFIED UPLOAD - Upload state reset (isUploading = false)",
-      );
     }
-
-    console.log(
-      "\n🏁 UNIFIED UPLOAD - handleUnifiedFileUpload function completed",
-    );
   };
 
   const removeFile = () => {
