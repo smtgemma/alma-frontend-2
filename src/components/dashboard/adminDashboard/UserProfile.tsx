@@ -56,7 +56,6 @@ const UserProfile = ({ id }: { id: string }) => {
   console.log(subscriptionDetails.data);
 
   const handleViewPresentation = (plan: any) => {
-    console.log("Admin Dashboard Plan Data:", plan);
     setSelectedPlanId(plan.id);
     setSelectedPlan(plan);
     setIsSlideModalOpen(true);

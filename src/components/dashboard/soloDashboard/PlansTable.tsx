@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 import DashboardLoading from "./DashboardLoading";
 import PlanSlideModal from "@/components/common/PlanSlideModal";
+import useAuthUser from "@/hooks/useGetMe";
 
 interface Plan {
   id: string;
@@ -45,6 +46,7 @@ export default function PlansTable() {
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [isSlideModalOpen, setIsSlideModalOpen] = useState(false);
   const { data, isLoading, error } = useGetMyBusinessPlanQuery({});
+  const { user } = useAuthUser();
   // Show loading state
   if (isLoading) {
     return (
@@ -229,12 +231,38 @@ export default function PlansTable() {
                     {getStatusBadge(plan.status)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Link
-                      href={`/approved-ai-plan/${plan.id}`}
-                      className="text-primary/80 underline hover:text-primary text-base font-medium"
-                    >
-                      Visualizza piano
-                    </Link>
+                    {(() => {
+                      // Check if user is USER role with INCOMPLETED plan and SOLO/TEAM subscription
+                      const isUserRole = user?.role === "USER";
+                      const isIncompleted = plan.status === "INCOMPLETED";
+                      const isRestrictedSubscription = [
+                        "SOLO",
+                        "TEAM_OWNER",
+                        "TEAM_MEMBER",
+                      ].includes(plan.subscriptionType);
+                      const shouldDisable =
+                        isUserRole && isIncompleted && isRestrictedSubscription;
+
+                      if (shouldDisable) {
+                        return (
+                          <span
+                            className="text-gray-400 cursor-not-allowed text-base font-medium"
+                            title="Il piano deve essere completato prima di poter visualizzare i dettagli"
+                          >
+                            Visualizza piano
+                          </span>
+                        );
+                      }
+
+                      return (
+                        <Link
+                          href={`/approved-ai-plan/${plan.id}`}
+                          className="text-primary/80 underline hover:text-primary text-base font-medium"
+                        >
+                          Visualizza piano
+                        </Link>
+                      );
+                    })()}
                   </td>
                 </tr>
               ))
